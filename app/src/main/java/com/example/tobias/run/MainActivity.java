@@ -11,6 +11,8 @@ package com.example.tobias.run;
  */
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -35,9 +37,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        initSharedPref();
+        initToolbar();
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
@@ -49,8 +50,7 @@ public class MainActivity extends AppCompatActivity {
             openFragment(menuItem);
         }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_menu);
+
 
         //On item selected in navigation view
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -107,6 +107,27 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Initializes shared preferences to the default values if none has been set before.
+     */
+    public void initSharedPref(){
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE);
+        //If distance_unit hasn't been initialized, set it to default value (km)
+        if (sharedPref.getString("distance_unit", null) == null){
+            sharedPref.edit().putString("distance_unit", "km").apply();
+        }
+    }
+
+    /**
+     * Set toolbar defined in xml layout as supprot action toolbar and add button to open DrawerLayout
+     */
+    public void initToolbar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_menu);
     }
 
 }

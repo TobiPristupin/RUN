@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="75dp"
+
             android:layout_centerVertical="true" />
 
         <TextView
@@ -28,6 +29,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="75dp"
             android:text="All Activities"
+            android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold"/>
 
@@ -39,12 +41,60 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10">
+        android:layout_weight="8">
+
+        <TextView
+            android:id="@+id/current_month_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="50dp"
+            android:text="January"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:id="@+id/distance_ran_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="49.3 km"
+                android:gravity="center" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:src="@drawable/circle"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="3 Activities"
+                android:gravity="center"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/textView" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:elevation="5dp"/>
+
 
     <ListView
+        android:id="@+id/history_listview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="85"></ListView>

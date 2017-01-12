@@ -2,5 +2,5 @@
     <string name="app_name">RUN.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="preference_key">run_shared_pref</string>
 </resources>
