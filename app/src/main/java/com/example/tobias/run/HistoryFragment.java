@@ -1,10 +1,12 @@
 package com.example.tobias.run;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +41,8 @@ public class HistoryFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_history, container, false);
         initSpinner();
         initListView();
+        initFab();
+
         return rootView;
     }
 
@@ -63,8 +67,11 @@ public class HistoryFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 /*Get currentlySelected TextView and set its color to white.Because of added complexity
                 when designing a custom layout file for the Spinner, decided to instead change the color on runtime*/
-                TextView selectedText = (TextView) spinner.getSelectedView();
-                selectedText.setTextColor(Color.parseColor("#FFFFFF"));
+                TextView selectedTextView = (TextView) spinner.getSelectedView();
+                if(selectedTextView != null){
+                    selectedTextView.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+
             }
 
             @Override
@@ -92,6 +99,21 @@ public class HistoryFragment extends Fragment {
         trackedRuns.add(new HistoryListItem(2, new Period(0, 22, 43, 0), new DateTime(2017, 1, 12, 0, 0), 2));
 
         return trackedRuns;
+    }
+
+    /**
+     * Sets Floating action Button callback
+     */
+    private void initFab(){
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_button);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), EditorActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }

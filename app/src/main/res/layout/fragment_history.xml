@@ -1,8 +1,8 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.example.tobias.run.HistoryFragment">
 
@@ -90,14 +90,25 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
-        android:elevation="5dp"/>
+        android:elevation="1dp"/>
 
 
     <ListView
         android:id="@+id/history_listview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="85"></ListView>
+        android:layout_weight="85"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:backgroundTint="@color/colorPrimaryDark"
+        android:src="@drawable/ic_content_add"
+        android:scaleType="center"
+        app:fabSize="normal" />
 
 
 
