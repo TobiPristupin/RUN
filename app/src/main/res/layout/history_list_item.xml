@@ -43,15 +43,20 @@
         android:layout_marginRight="20dp"
         tools:text="Sun, 1/8/2017"/>
 
-    <ImageView
-        android:id="@+id/favorite_button"
+    <RatingBar
+        android:id="@+id/rating_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:isIndicator="true"
+        android:numStars="3"
+        tools:rating="1"
+        android:stepSize="1"
+        style="?android:attr/ratingBarStyleSmall"
         tools:src="@drawable/ic_toggle_star_outline_red"
         android:layout_above="@id/date_text"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
-
+        android:layout_marginBottom="10dp"
         />
 
 </RelativeLayout>

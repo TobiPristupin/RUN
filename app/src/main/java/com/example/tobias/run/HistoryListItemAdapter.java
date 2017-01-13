@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import org.joda.time.Period;
@@ -70,12 +71,9 @@ public class HistoryListItemAdapter extends ArrayAdapter<HistoryListItem> {
         String dateText = formatter.print(currentItem.getDate());
         date.setText(dateText);
 
-        ImageView favorite = (ImageView) convertView.findViewById(R.id.favorite_button);
-        if (currentItem.isFavorite()){
-            favorite.setImageResource(R.drawable.ic_toggle_star);
-        } else {
-            favorite.setImageResource(R.drawable.ic_toggle_star_outline_red);
-        }
+        RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.rating_bar);
+        ratingBar.setRating(currentItem.getRating());
+
 
 
         return convertView;

@@ -13,13 +13,13 @@ public class HistoryListItem {
     private int distance;
     private Period time;
     private DateTime date;
-    private boolean isFavorite;
+    private int rating;
 
-    public HistoryListItem(int distance, Period time, DateTime date, boolean isFavorite){
+    public HistoryListItem(int distance, Period time, DateTime date, int rating){
         this.distance = distance;
         this.time = time;
         this.date = date;
-        this.isFavorite = isFavorite;
+        this.rating = rating;
     }
 
     public int getDistance(){
@@ -34,8 +34,8 @@ public class HistoryListItem {
         return date;
     }
 
-    public boolean isFavorite(){
-        return isFavorite;
+    public int getRating(){
+        return rating;
     }
 
 

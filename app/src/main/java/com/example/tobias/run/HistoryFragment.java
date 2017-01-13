@@ -89,7 +89,7 @@ public class HistoryFragment extends Fragment {
     private ArrayList<HistoryListItem> getTrackedRuns(){
         //TODO: Get Data from Db
         ArrayList<HistoryListItem> trackedRuns = new ArrayList<>();
-        trackedRuns.add(new HistoryListItem(2, new Period(0, 22, 43, 0), new DateTime(2017, 1, 12, 0, 0), false));
+        trackedRuns.add(new HistoryListItem(2, new Period(0, 22, 43, 0), new DateTime(2017, 1, 12, 0, 0), 2));
 
         return trackedRuns;
     }
