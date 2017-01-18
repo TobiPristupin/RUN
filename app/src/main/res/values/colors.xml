@@ -3,5 +3,5 @@
     <color name="colorPrimary">#F44336</color>
     <color name="colorPrimaryDark">#D32F2F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="tabIndicator">#EF5350</color>
+    <color name="LightGrey">#f5f5f5</color>
 </resources>

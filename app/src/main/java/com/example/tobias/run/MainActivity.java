@@ -23,10 +23,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 
 /**
- * MainAcitvity and entry-point of application.
+ * MainActivity and entry-point of application.
  */
 public class MainActivity extends AppCompatActivity {
 

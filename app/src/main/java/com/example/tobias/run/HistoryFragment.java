@@ -7,15 +7,20 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.sergiocasero.revealfab.RevealFAB;
 
 import org.joda.time.DateTime;
 import org.joda.time.Period;
@@ -23,7 +28,7 @@ import org.joda.time.Period;
 import java.util.ArrayList;
 
 /**
- * Fragment that displays actvities tracked, and can sort them by different criteria. Accesed via the DrawerLayout
+ * Fragment that displays activities tracked, and can sort them by different criteria. Accesed via the DrawerLayout
  * in MainActivity as History.
  */
 public class HistoryFragment extends Fragment {
@@ -31,7 +36,7 @@ public class HistoryFragment extends Fragment {
     private View rootView;
 
     public HistoryFragment(){
-        //Required empty constuctor.
+        //Required empty constructor.
     }
 
 
@@ -39,7 +44,7 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_history, container, false);
-        initSpinner();
+        initDateSpinner();
         initListView();
         initFab();
 
@@ -47,12 +52,12 @@ public class HistoryFragment extends Fragment {
     }
 
     /**
-     * Populates spinner, implements spinner callbacks and small runtime UI tweaks on spinner.
+     * Populates date spinner, implements spinner callbacks and small runtime UI tweaks on spinner.
      */
-    private void initSpinner(){
+    private void initDateSpinner(){
         final Spinner spinner = (Spinner) rootView.findViewById(R.id.date_spinner);
         //Spinner dropdown elements
-        String[] categories = new String[]{"Week", "Month", "Year", "All"};
+        String[] categories = new String[]{"All", "Week", "Month", "Year"};
         //Create adapter for Spinner
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item,
                 categories);
@@ -71,7 +76,6 @@ public class HistoryFragment extends Fragment {
                 if(selectedTextView != null){
                     selectedTextView.setTextColor(Color.parseColor("#FFFFFF"));
                 }
-
             }
 
             @Override
@@ -87,17 +91,17 @@ public class HistoryFragment extends Fragment {
         ArrayList<HistoryListItem> trackedRuns = getTrackedRuns();
         HistoryListItemAdapter adapter = new HistoryListItemAdapter(getContext(), trackedRuns);
         listView.setAdapter(adapter);
+        listView.setEmptyView(rootView.findViewById(R.id.empty_view));
     }
 
     /**
-     * Gets all tracked runs from sqlite Database, add thems in Arrraylist and returns them.
+     * Gets all tracked runs from sqlite Database, adds them in ArrayList and returns them.
      * @return ArrayList<historyListItems> trackedRuns
      */
     private ArrayList<HistoryListItem> getTrackedRuns(){
         //TODO: Get Data from Db
         ArrayList<HistoryListItem> trackedRuns = new ArrayList<>();
-        trackedRuns.add(new HistoryListItem(2, new Period(0, 22, 43, 0), new DateTime(2017, 1, 12, 0, 0), 2));
-
+        //trackedRuns.add(new HistoryListItem(2, new Period(0, 22, 43, 0), new DateTime(2017, 1, 12, 0, 0), 2));
         return trackedRuns;
     }
 
@@ -106,14 +110,18 @@ public class HistoryFragment extends Fragment {
      */
     private void initFab(){
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_button);
+        fab.setTransitionName("reveal");
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), EditorActivity.class);
+                Intent intent = new Intent(getContext(),EditorActivity.class);
                 startActivity(intent);
             }
         });
     }
+
+
+
 
 }

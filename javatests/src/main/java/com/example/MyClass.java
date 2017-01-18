@@ -12,8 +12,7 @@ import java.util.GregorianCalendar;
 public class MyClass {
 
     public static void main(String[] args){
-        DecimalFormat df = new DecimalFormat("0.00");
-        System.out.println(df.format(2.19));
+        System.out.println(new Tree(10).getInt());
 
     }
 }

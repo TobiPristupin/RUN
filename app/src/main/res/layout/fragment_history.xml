@@ -1,4 +1,5 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,21 +18,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="75dp"
-
+            android:layout_marginLeft="50dp"
             android:layout_centerVertical="true" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="75dp"
             android:text="All Activities"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textSize="15sp"
+            android:layout_marginRight="50dp" />
 
 
 
@@ -93,23 +91,54 @@
         android:elevation="1dp"/>
 
 
-    <ListView
-        android:id="@+id/history_listview"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="85"/>
+        android:layout_weight="85">
+        <ListView
+            android:id="@+id/history_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        app:backgroundTint="@color/colorPrimaryDark"
-        android:src="@drawable/ic_content_add"
-        android:scaleType="center"
-        app:fabSize="normal" />
+        <RelativeLayout
+            android:id="@+id/empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp">
 
+            <TextView
+                android:id="@+id/lonely_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="It's a bit lonely here..."
+                android:textSize="20sp"
+                android:textColor="@android:color/black"
+                android:layout_centerInParent="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Get up and running! start by adding a run with the plus button."
+                android:textSize="16sp"
+                android:layout_below="@id/lonely_text"/>
+        </RelativeLayout>
+
+      <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            app:backgroundTint="@color/colorPrimaryDark"
+            android:src="@drawable/ic_content_add"
+            android:scaleType="center"
+            app:fabSize="normal" />
+
+    </android.support.design.widget.CoordinatorLayout>
 
 
 </LinearLayout>
