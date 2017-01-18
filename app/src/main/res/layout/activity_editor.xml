@@ -24,11 +24,147 @@
         android:layout_height="match_parent"
         android:layout_margin="15dp"
         android:background="@android:color/white"
-        android:elevation="3dp">
+        android:orientation="vertical"
+        android:elevation="5dp">
+
+        <RelativeLayout
+            android:id="@+id/editor_distance_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/EditorItemHeight">
+
+            <ImageView
+                android:id="@+id/editor_image_distance"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_road"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/editor_image_distance"
+                android:layout_marginLeft="20dp"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:text="Distance"/>
+
+            <TextView
+                android:id="@+id/editor_distance_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="30dp"
+                android:text="None"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/editor_time_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/EditorItemHeight">
+
+            <ImageView
+                android:id="@+id/editor_image_time"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_timer"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/editor_image_time"
+                android:layout_marginLeft="20dp"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:text="Time"/>
+
+            <TextView
+                android:id="@+id/editor_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="30dp"
+                android:text="None"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/editor_date_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/EditorItemHeight">
+
+            <ImageView
+                android:id="@+id/editor_image_date"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_date_range"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/editor_image_date"
+                android:layout_marginLeft="20dp"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:text="Date"/>
+
+            <TextView
+                android:id="@+id/editor_date_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="30dp"
+                android:text="None"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/editor_rating_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/EditorItemHeight">
+
+            <ImageView
+                android:id="@+id/editor_image_rating"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_stars"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/editor_image_rating"
+                android:layout_marginLeft="20dp"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:text="Rating"/>
+
+            <TextView
+                android:id="@+id/editor_rating_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="30dp"
+                android:text="None"/>
+
+        </RelativeLayout>
 
 
     </LinearLayout>
-
 
 
 </LinearLayout>
