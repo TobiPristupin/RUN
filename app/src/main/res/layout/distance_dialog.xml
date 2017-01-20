@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+
+    <NumberPicker
+        android:id="@+id/distance_picker_whole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="50dp">
+    </NumberPicker>
+
+    <TextView
+        android:id="@+id/dialog_coma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:text=","
+        android:layout_toRightOf="@id/distance_picker_whole"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"/>
+
+    <NumberPicker
+        android:id="@+id/distance_picker_decimal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:layout_toRightOf="@id/dialog_coma"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp">
+    </NumberPicker>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/distance_picker_decimal"
+        android:layout_centerVertical="true"
+        android:textSize="16sp"
+        android:text="km"
+        android:layout_marginLeft="15dp"/>
+
+</RelativeLayout>
+

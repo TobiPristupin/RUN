@@ -30,7 +30,8 @@
         <RelativeLayout
             android:id="@+id/editor_distance_view"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/EditorItemHeight">
+            android:layout_height="@dimen/EditorItemHeight"
+            android:background="?attr/selectableItemBackground">
 
             <ImageView
                 android:id="@+id/editor_image_distance"
@@ -64,7 +65,8 @@
         <RelativeLayout
             android:id="@+id/editor_time_view"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/EditorItemHeight">
+            android:layout_height="@dimen/EditorItemHeight"
+            android:background="?attr/selectableItemBackground">
 
             <ImageView
                 android:id="@+id/editor_image_time"
@@ -98,7 +100,8 @@
         <RelativeLayout
             android:id="@+id/editor_date_view"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/EditorItemHeight">
+            android:layout_height="@dimen/EditorItemHeight"
+            android:background="?attr/selectableItemBackground">
 
             <ImageView
                 android:id="@+id/editor_image_date"
@@ -132,7 +135,8 @@
         <RelativeLayout
             android:id="@+id/editor_rating_view"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/EditorItemHeight">
+            android:layout_height="@dimen/EditorItemHeight"
+            android:background="?attr/selectableItemBackground">
 
             <ImageView
                 android:id="@+id/editor_image_rating"
