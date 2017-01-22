@@ -12,7 +12,9 @@ import java.util.GregorianCalendar;
 public class MyClass {
 
     public static void main(String[] args){
-        System.out.println(new Tree(10).getInt());
+        DateTime dt = new DateTime(2017, 1, 22, 0, 0, 0);
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("E, d/M/y");
+        System.out.println(dtf.print(dt));
 
     }
 }
