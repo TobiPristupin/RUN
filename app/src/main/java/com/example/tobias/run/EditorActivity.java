@@ -94,7 +94,6 @@ public class EditorActivity extends AppCompatActivity {
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        
     }
 
     public void setDistanceValue(String distanceText){

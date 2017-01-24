@@ -1,6 +1,7 @@
 package com.example.tobias.run;
 
 
+import android.content.SharedPreferences;
 import android.provider.BaseColumns;
 
 public class DatabaseContract {
@@ -14,5 +15,6 @@ public class DatabaseContract {
         public static final String DISTANCE = "distance";
         public static final String RATING = "rating";
         public static final String DATE = "date";
+        public static final String UNIT = "unit";
     }
 }
