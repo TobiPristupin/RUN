@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -64,6 +66,24 @@ public class EditorActivity extends AppCompatActivity {
         initRatingField();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home :
+                //If home button pressed close activity with no result.
+                finish();
+                break;
+
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.editor_toolbar_menu, menu);
+        return true;
+    }
+
     public void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.editor_toolbar);
         setSupportActionBar(toolbar);
@@ -72,6 +92,9 @@ public class EditorActivity extends AppCompatActivity {
             //If intent is sent with edit mode, change action bar title,
             getSupportActionBar().setTitle("Edit entry");
         }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        
     }
 
     public void setDistanceValue(String distanceText){
