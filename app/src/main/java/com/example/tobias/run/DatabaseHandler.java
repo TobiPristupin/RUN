@@ -1,5 +1,6 @@
 package com.example.tobias.run;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -23,7 +24,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String query = new StringBuilder().append("CREATE TABLE IF NOT EXISTS ")
                 .append(RunsContract.TABLE_NAME)
                 .append("(")
-                .append(RunsContract.ID).append(" INTEGER PRIMARY KEY AUTO_INCREMENT, ")
+                .append(RunsContract.ID).append(" INTEGER PRIMARY KEY, ")
                 .append(RunsContract.DATE).append(" INTEGER, ")
                 .append(RunsContract.DISTANCE).append(" INTEGER, ")
                 .append(RunsContract.TIME).append(" INTEGER, ")
@@ -42,7 +43,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void addRun(TrackedRun run){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
 
+        values.put(RunsContract.DATE, run.getDate());
+        values.put(RunsContract.DISTANCE, run.getDistance());
+        values.put(RunsContract.RATING, run.getRating());
+        values.put(RunsContract.UNIT, run.getUnit());
+        values.put(RunsContract.TIME, run.getTime());
+
+        db.insert(RunsContract.TABLE_NAME, null, values);
+        db.close();
     }
 }
 

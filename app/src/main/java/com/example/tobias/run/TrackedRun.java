@@ -10,7 +10,7 @@ import org.joda.time.Period;
  */
 public class TrackedRun {
 
-    private int _distance;
+    private double _distance;
     private long _time;
     private long _date;
     private int _rating;
@@ -28,9 +28,11 @@ public class TrackedRun {
         this._unit = unit;
     }
 
-    private int formatDistance(String distance){
-        distance = distance.replace(",", "");
-        return Integer.valueOf(distance) * 100; //Convert to metres
+    private double formatDistance(String distance){
+        //Double.ValueOf wont parse comma, but will parse dot.
+        distance = distance.replace(",", ".");
+        //Convert to whole number by moving comma and return
+        return (Double.valueOf(distance) * 100);
     }
 
     /**
@@ -73,7 +75,7 @@ public class TrackedRun {
         return dateTime.getMillis() / 1000;
     }
 
-    public int getDistance(){
+    public double getDistance(){
         return _distance;
     }
 

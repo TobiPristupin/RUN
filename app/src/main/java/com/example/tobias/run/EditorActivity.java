@@ -73,6 +73,9 @@ public class EditorActivity extends AppCompatActivity {
                 //If home button pressed close activity with no result.
                 finish();
                 break;
+            case R.id.editor_save :
+                new DatabaseHandler(activity).addRun(
+                        new TrackedRun("21,02", "02:22:03" , "Thu, 2/3/2017", "3", "km"));
 
         }
         return true;
