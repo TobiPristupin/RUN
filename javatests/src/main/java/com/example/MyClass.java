@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
 public class MyClass {
 
     public static void main(String[] args){
-        System.out.println(new Period(8523000).getSeconds());
+        "hola".replace("d", "p");
     }
 
 

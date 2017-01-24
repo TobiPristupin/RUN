@@ -5,9 +5,13 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
+import android.media.audiofx.BassBoost;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +23,7 @@ import android.widget.NumberPicker;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -26,6 +31,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 
 /**
  * Activity that allows user to complete distance, time, rating and date fields when adding /
@@ -40,6 +46,7 @@ public class EditorActivity extends AppCompatActivity {
     Activity activity;
     private final int DATE_DIALOG_ID = 999;
     private SharedPreferences sharedPref;
+    private static final String TAG = "EditorActivity";
 
 
     @Override
@@ -50,20 +57,11 @@ public class EditorActivity extends AppCompatActivity {
         this.sharedPref = getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE);
 
         initToolbar();
-        initFields();
-
-    }
-
-
-
-    /**
-     * Sets callbacks for all settings fields.
-     */
-    private void initFields(){
         initDistanceField();
         initTimeField();
         initDateField();
         initRatingField();
+
     }
 
     @Override
@@ -74,9 +72,15 @@ public class EditorActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.editor_save :
-                new DatabaseHandler(activity).addRun(
-                        new TrackedRun("21,02", "02:22:03" , "Thu, 2/3/2017", "3", "km"));
-
+                 if (addRecord()){
+                    Toast.makeText(activity, "Successfully Added", Toast.LENGTH_SHORT).show();
+                     Log.v(TAG, "Added record to database successfully.");
+                    finish();
+                } else {
+                     Toast.makeText(activity, "Fill in all the fields", Toast.LENGTH_SHORT).show();
+                     MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.error);
+                     mediaPlayer.start();
+                 }
         }
         return true;
     }
@@ -84,6 +88,39 @@ public class EditorActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.editor_toolbar_menu, menu);
+        return true;
+    }
+
+    /**
+     * Gets data inserted into views and adds it into database. If one of the fields hasn't been
+     * set, it displays a Toast message and returns.
+     */
+    private boolean addRecord(){
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_key),
+                Context.MODE_PRIVATE);
+        //Retrieve data from views
+        HashMap<String, String> data = new HashMap<>();
+        data.put("distance", ((TextView) findViewById(R.id.editor_distance_text)).getText().toString());
+        data.put("time", ((TextView) findViewById(R.id.editor_time_text)).getText().toString());
+        data.put("rating", ((TextView) findViewById(R.id.editor_rating_text)).getText().toString());
+        data.put("date", ((TextView) findViewById(R.id.editor_date_text)).getText().toString());
+        data.put("unit", sharedPref.getString("distance_unit", null));
+
+        for(String value : data.values()){
+            //If value hasn't been set yet and still equals to the default value
+            if (value.equals("None")){
+                return false;
+            }
+        }
+
+        //Add to db
+        new DatabaseHandler(activity).addRun(
+                new TrackedRun(data.get("distance"),
+                        data.get("time"),
+                        data.get("date"),
+                        data.get("rating"),
+                        data.get("unit"))
+        );
         return true;
     }
 

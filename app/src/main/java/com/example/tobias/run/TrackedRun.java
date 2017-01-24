@@ -31,6 +31,8 @@ public class TrackedRun {
     private double formatDistance(String distance){
         //Double.ValueOf wont parse comma, but will parse dot.
         distance = distance.replace(",", ".");
+        //Remove km or mi
+        distance = distance.replace("km", "").replace("mi", "").trim();
         //Convert to whole number by moving comma and return
         return (Double.valueOf(distance) * 100);
     }
