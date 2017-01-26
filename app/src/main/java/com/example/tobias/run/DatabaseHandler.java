@@ -2,9 +2,12 @@ package com.example.tobias.run;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.example.tobias.run.DatabaseContract.RunsContract;
+
+import java.util.ArrayList;
 
 
 /**
@@ -32,6 +35,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 .append(RunsContract.UNIT).append(" TEXT").append(")")
                 .toString();
         db.execSQL(query);
+        db.close();
     }
 
     @Override
@@ -54,6 +58,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.insert(RunsContract.TABLE_NAME, null, values);
         db.close();
+    }
+
+    public ArrayList<TrackedRun> getAllTrackedRuns(){
+        SQLiteDatabase db = getReadableDatabase();
+
+        String getAllQuery = "SELECT * FROM " + RunsContract.TABLE_NAME ;
+        Cursor cursor = db.rawQuery(getAllQuery, null);
+
+        ArrayList<TrackedRun> trackedRuns = new ArrayList<>();
+
+        if (cursor.moveToFirst()){
+            do {
+                trackedRuns.add(
+                        new TrackedRun( cursor.getInt(0), cursor.getLong(1), cursor.getDouble(2),
+                            cursor.getLong(3), cursor.getInt(4), cursor.getString(5))
+                );
+
+            } while(cursor.moveToNext());
+        }
+        db.close();
+
+        return trackedRuns;
     }
 }
 

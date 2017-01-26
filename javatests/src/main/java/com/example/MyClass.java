@@ -6,13 +6,13 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class MyClass {
 
     public static void main(String[] args){
-        "hola".replace("d", "p");
     }
 
 

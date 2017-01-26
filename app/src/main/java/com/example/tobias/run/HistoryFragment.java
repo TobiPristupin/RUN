@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -26,21 +29,29 @@ import java.util.ArrayList;
 public class HistoryFragment extends Fragment {
 
     private View rootView;
+    private HistoryListItemAdapter adapter;
+    private ArrayList<TrackedRun> trackedRuns;
 
     public HistoryFragment(){
         //Required empty constructor.
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_history, container, false);
+        trackedRuns = new DatabaseHandler(getContext()).getAllTrackedRuns();
         initDateSpinner();
         initListView();
         initFab();
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadRecords();
     }
 
     /**
@@ -80,22 +91,11 @@ public class HistoryFragment extends Fragment {
 
     private void initListView(){
         ListView listView = (ListView) rootView.findViewById(R.id.history_listview);
-        ArrayList<HistoryListItem> trackedRuns = getTrackedRuns();
-        HistoryListItemAdapter adapter = new HistoryListItemAdapter(getContext(), trackedRuns);
+        adapter = new HistoryListItemAdapter(getContext(), trackedRuns);
         listView.setAdapter(adapter);
         listView.setEmptyView(rootView.findViewById(R.id.empty_view));
     }
 
-    /**
-     * Gets all tracked runs from sqlite Database, adds them in ArrayList and returns them.
-     * @return ArrayList<historyListItems> trackedRuns
-     */
-    private ArrayList<HistoryListItem> getTrackedRuns(){
-        //TODO: Get Data from Db
-        ArrayList<HistoryListItem> trackedRuns = new ArrayList<>();
-        //trackedRuns.add(new HistoryListItem(2, new Period(0, 22, 43, 0), new DateTime(2017, 1, 12, 0, 0), 2));
-        return trackedRuns;
-    }
 
     /**
      * Sets Floating action Button callback
@@ -113,7 +113,18 @@ public class HistoryFragment extends Fragment {
         });
     }
 
-
-
+    /**
+     * Reloads records into list view. Because of countless bugs trying to add items dinamically,
+     * resorted to clearing the adapter and adding all the items again, which is not great for performance,
+     * and should eventually be refactored to a more efficient solution.
+     */
+    private void loadRecords() {
+        //TODO: Reformat for performance
+        adapter.clear();
+        for(TrackedRun tr : new DatabaseHandler(getContext()).getAllTrackedRuns()){
+            adapter.add(tr);
+        }
+        adapter.notifyDataSetChanged();
+    }
 
 }

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -23,11 +24,11 @@ import java.util.Locale;
 /**
  * Adapter for custom ListView in History Fragment.
  */
-public class HistoryListItemAdapter extends ArrayAdapter<HistoryListItem> {
+public class HistoryListItemAdapter extends ArrayAdapter<TrackedRun> {
 
     private Context context;
 
-    public HistoryListItemAdapter(Context context, ArrayList<HistoryListItem> items){
+    public HistoryListItemAdapter(Context context, ArrayList<TrackedRun> items){
         super(context, 0, items);
         this.context = context;
     }
@@ -46,7 +47,7 @@ public class HistoryListItemAdapter extends ArrayAdapter<HistoryListItem> {
         }
 
 
-        HistoryListItem currentItem = getItem(position);
+        TrackedRun currentItem = getItem(position);
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_key), Context.MODE_PRIVATE);
 
@@ -54,22 +55,24 @@ public class HistoryListItemAdapter extends ArrayAdapter<HistoryListItem> {
         //Set corresponding data on views.
         TextView distance = (TextView) convertView.findViewById(R.id.distance_text);
         DecimalFormat df = new DecimalFormat("0.00");
-        String distanceText = String.valueOf(df.format(currentItem.getDistance())) + " " +
+        String distanceText = String.valueOf(df.format(currentItem.getDistance() / 100)) + " " +
                 sharedPref.getString("distance_unit", null); //
-        // Shared Pref distance_unit is initialized by deafult to km and can be changed to mi in settings
+        // Shared Pref distance_unit is initialized by default to km and can be changed to mi in settings
         distance.setText(distanceText);
 
         TextView time = (TextView) convertView.findViewById(R.id.time_text);
-        Period period = currentItem.getTime();
+        long currentItemTime = currentItem.getTime();
+        Period period = new Period(currentItemTime);
         String timeText = String.format(Locale.US, "%02d", period.getHours()) + ":"
                 + String.format(Locale.US,"%02d", period.getMinutes()) + ":"
                  + String.format(Locale.US,"%02d", period.getSeconds());
         time.setText(timeText);
 
         TextView date = (TextView) convertView.findViewById(R.id.date_text);
-        DateTimeFormatter formatter = DateTimeFormat.forPattern("EEEE, e/MMM/YYYY");
-        String dateText = formatter.print(currentItem.getDate());
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("E, e/MMM/YYYY");
+        String dateText = formatter.print(new DateTime(currentItem.getDate() * 1000L));
         date.setText(dateText);
+
 
         RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.rating_bar);
         ratingBar.setRating(currentItem.getRating());

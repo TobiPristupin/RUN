@@ -15,6 +15,7 @@ public class TrackedRun {
     private long _date;
     private int _rating;
     private String _unit;
+    private Integer _id = null;
 
     /**
      * Values will be passed as gathered directly from editor activity fields (Strings), and will be converted
@@ -26,6 +27,20 @@ public class TrackedRun {
         this._date = formatDate(date);
         this._rating = Integer.valueOf(rating);
         this._unit = unit;
+    }
+
+    /**
+     *
+     * Values will be passed already formatted previously, as retrieved from database.
+     */
+    public TrackedRun(int id, long date, double distance, long time, int rating, String unit){
+        this._distance = distance;
+        this._time = time;
+        this._date = date;
+        this._rating = rating;
+        this._unit = unit;
+        //Id given by database.
+        this._id = id;
     }
 
     private double formatDistance(String distance){
@@ -77,6 +92,7 @@ public class TrackedRun {
         return dateTime.getMillis() / 1000;
     }
 
+
     public double getDistance(){
         return _distance;
     }
@@ -85,9 +101,7 @@ public class TrackedRun {
         return _time;
     }
 
-    public long getDate(){
-        return _date;
-    }
+    public long getDate(){ return _date; }
 
     public int getRating(){
         return _rating;
@@ -96,5 +110,7 @@ public class TrackedRun {
     public String getUnit(){
         return _unit;
     }
+
+    public int getId(){ return _id; }
 
 }

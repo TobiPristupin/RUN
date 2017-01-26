@@ -14,6 +14,8 @@ public class HistoryListItem {
     private Period time;
     private DateTime date;
     private int rating;
+    private String unit;
+    private int id;
 
     public HistoryListItem(int distance, Period time, DateTime date, int rating){
         this.distance = distance;
