@@ -4,6 +4,7 @@ package com.example.tobias.run;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringDef;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ import java.util.Locale;
 public class HistoryListItemAdapter extends ArrayAdapter<TrackedRun> {
 
     private Context context;
+    private TrackedRun currentItem;
+    private View rootView;
 
     public HistoryListItemAdapter(Context context, ArrayList<TrackedRun> items){
         super(context, 0, items);
@@ -39,46 +42,65 @@ public class HistoryListItemAdapter extends ArrayAdapter<TrackedRun> {
         LayoutInflater inflater = (LayoutInflater) getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        if (null == convertView) {
-            convertView = inflater.inflate(
+        rootView = convertView;
+        currentItem = getItem(position);
+
+        if (null == rootView) {
+            rootView = inflater.inflate(
                     R.layout.history_list_item,
                     parent,
                     false);
         }
 
 
-        TrackedRun currentItem = getItem(position);
+        //UI references
+        setDistanceText();
+        setTimeText();
+        setDateText();
+        setRatingText();
+
+        return rootView;
+    }
+
+    private void setDistanceText(){
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_key), Context.MODE_PRIVATE);
-
-
-        //Set corresponding data on views.
-        TextView distance = (TextView) convertView.findViewById(R.id.distance_text);
+        TextView distanceView = (TextView) rootView.findViewById(R.id.distance_text);
         DecimalFormat df = new DecimalFormat("0.00");
-        String distanceText = String.valueOf(df.format(currentItem.getDistance() / 100)) + " " +
-                sharedPref.getString("distance_unit", null); //
-        // Shared Pref distance_unit is initialized by default to km and can be changed to mi in settings
-        distance.setText(distanceText);
 
-        TextView time = (TextView) convertView.findViewById(R.id.time_text);
+        double distance = currentItem.getDistance() / 100; //Convert to km from m
+        String distanceText = df.format(distance) + " " + sharedPref.getString("distance_unit", null);
+
+        distanceView.setText(distanceText);
+    }
+
+    private void setTimeText(){
+        TextView timeView = (TextView) rootView.findViewById(R.id.time_text);
         long currentItemTime = currentItem.getTime();
+        //Create period to transform time in millis to formatted time.
         Period period = new Period(currentItemTime);
-        String timeText = String.format(Locale.US, "%02d", period.getHours()) + ":"
-                + String.format(Locale.US,"%02d", period.getMinutes()) + ":"
-                 + String.format(Locale.US,"%02d", period.getSeconds());
-        time.setText(timeText);
 
-        TextView date = (TextView) convertView.findViewById(R.id.date_text);
+        String timeText = new StringBuilder()
+            .append(String.format(Locale.US, "%02d", period.getHours()))
+                .append(":")
+                .append(String.format(Locale.US, "%02d", period.getMinutes()))
+                .append(":")
+                .append(String.format(Locale.US, "%02d", period.getSeconds())).toString();
+
+        timeView.setText(timeText);
+    }
+
+    private void setDateText(){
+        TextView dateView = (TextView) rootView.findViewById(R.id.date_text);
         DateTimeFormatter formatter = DateTimeFormat.forPattern("E, e/MMM/YYYY");
+        //Unix time is in milli, DateTime is in sec, so multiply by 1000 to convert
         String dateText = formatter.print(new DateTime(currentItem.getDate() * 1000L));
-        date.setText(dateText);
+        dateView.setText(dateText);
+    }
 
-
-        RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.rating_bar);
+    private void setRatingText(){
+        RatingBar ratingBar = (RatingBar) rootView.findViewById(R.id.rating_bar);
         ratingBar.setRating(currentItem.getRating());
-
-
-
-        return convertView;
     }
 }
+

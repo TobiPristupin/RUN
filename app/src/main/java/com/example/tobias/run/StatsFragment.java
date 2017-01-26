@@ -17,7 +17,7 @@ public class StatsFragment extends Fragment {
     private View rootView;
 
     public StatsFragment(){
-        //Required empty constuctor.
+        //Required empty constructor.
     }
 
 
