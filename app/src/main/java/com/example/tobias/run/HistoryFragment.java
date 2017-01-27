@@ -30,7 +30,6 @@ public class HistoryFragment extends Fragment {
 
     private View rootView;
     private HistoryListItemAdapter adapter;
-    private ArrayList<TrackedRun> trackedRuns;
 
     public HistoryFragment(){
         //Required empty constructor.
@@ -40,7 +39,6 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_history, container, false);
-        trackedRuns = new DatabaseHandler(getContext()).getAllTrackedRuns();
         initDateSpinner();
         initListView();
         initFab();
@@ -79,6 +77,8 @@ public class HistoryFragment extends Fragment {
                 if(selectedTextView != null){
                     selectedTextView.setTextColor(Color.parseColor("#FFFFFF"));
                 }
+                //Reload records into listview with new value set.
+                loadRecords();
             }
 
             @Override
@@ -91,6 +91,7 @@ public class HistoryFragment extends Fragment {
 
     private void initListView(){
         ListView listView = (ListView) rootView.findViewById(R.id.history_listview);
+        ArrayList<TrackedRun> trackedRuns = new DatabaseHandler(getContext()).getAllTrackedRuns();
         adapter = new HistoryListItemAdapter(getContext(), trackedRuns);
         listView.setAdapter(adapter);
         listView.setEmptyView(rootView.findViewById(R.id.empty_view));
@@ -114,17 +115,47 @@ public class HistoryFragment extends Fragment {
     }
 
     /**
-     * Reloads records into list view. Because of countless bugs trying to add items dinamically,
+     * Retrieves records from db according to dateSpinner value and populates listview.
+     * Because of countless bugs trying to add items dinamically,
      * resorted to clearing the adapter and adding all the items again, which is not great for performance,
      * and should eventually be refactored to a more efficient solution.
      */
     private void loadRecords() {
         //TODO: Reformat for performance
+        Spinner dateSpinner = (Spinner) rootView.findViewById(R.id.date_spinner);
+        String sortBy = dateSpinner.getSelectedItem().toString();
         adapter.clear();
-        for(TrackedRun tr : new DatabaseHandler(getContext()).getAllTrackedRuns()){
-            adapter.add(tr);
+
+        switch (sortBy){
+            case "All" :
+                for(TrackedRun tr : new DatabaseHandler(getContext()).getAllTrackedRuns()){
+                    adapter.add(tr);
+                }
+                adapter.notifyDataSetChanged();
+                break;
+
+            case "Week" :
+                for(TrackedRun tr : new DatabaseHandler(getContext()).getWeekTrackedRuns()){
+                    adapter.add(tr);
+                }
+                adapter.notifyDataSetChanged();
+                break;
+
+            case "Month" :
+                for(TrackedRun tr : new DatabaseHandler(getContext()).getMonthTrackedRuns()){
+                    adapter.add(tr);
+                }
+                adapter.notifyDataSetChanged();
+                break;
+
+            case "Year" :
+                for(TrackedRun tr : new DatabaseHandler(getContext()).getYearTrackedRuns()){
+                    adapter.add(tr);
+                }
+                adapter.notifyDataSetChanged();
+                break;
         }
-        adapter.notifyDataSetChanged();
+
     }
 
 }

@@ -8,9 +8,10 @@
 
     <ImageView
         android:id="@+id/running_image"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
         android:src="@drawable/ic_running"/>
 
     <TextView

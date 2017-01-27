@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.example.tobias.run.DatabaseContract.RunsContract;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 
 
@@ -18,7 +20,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "run.db";
 
-    public DatabaseHandler(Context context){
+    public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -35,7 +37,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 .append(RunsContract.UNIT).append(" TEXT").append(")")
                 .toString();
         db.execSQL(query);
-        db.close();
     }
 
     @Override
@@ -46,7 +47,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addRun(TrackedRun run){
+    public void addRun(TrackedRun run) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -60,24 +61,105 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public ArrayList<TrackedRun> getAllTrackedRuns(){
+    public ArrayList<TrackedRun> getAllTrackedRuns() {
         SQLiteDatabase db = getReadableDatabase();
 
-        String getAllQuery = "SELECT * FROM " + RunsContract.TABLE_NAME ;
+        String getAllQuery = "SELECT * FROM " + RunsContract.TABLE_NAME;
         Cursor cursor = db.rawQuery(getAllQuery, null);
 
+        ArrayList<TrackedRun> trackedRuns = retrieveAllCursorData(cursor);
+        db.close();
+
+        return trackedRuns;
+    }
+
+    public ArrayList<TrackedRun> getWeekTrackedRuns() {
+        long firstDayOfWeekTimestamp = new DateTime().withDayOfWeek(1).getMillis() / 1000;
+        long lastDayOfWeekTimestamp = new DateTime().withDayOfWeek(7).getMillis() / 1000;
+
+        String query = new StringBuilder()
+                .append("SELECT * FROM ")
+                .append(RunsContract.TABLE_NAME)
+                .append(" WHERE ")
+                .append(RunsContract.DATE)
+                .append(" BETWEEN ")
+                .append(firstDayOfWeekTimestamp)
+                .append(" AND ")
+                .append(lastDayOfWeekTimestamp).toString();
+
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor = database.rawQuery(query, null);
+
+        ArrayList<TrackedRun> trackedRuns = retrieveAllCursorData(cursor);
+        database.close();
+        return trackedRuns;
+    }
+
+    public ArrayList<TrackedRun> getMonthTrackedRuns() {
+        long firstDayOfMonthTimestamp = new DateTime().dayOfMonth().withMinimumValue().getMillis() / 1000;
+        long lastDayOfMonthTimestamp = new DateTime().dayOfMonth().withMaximumValue().getMillis() / 1000;
+
+        String query = new StringBuilder()
+                .append("SELECT * FROM ")
+                .append(RunsContract.TABLE_NAME)
+                .append(" WHERE ")
+                .append(RunsContract.DATE)
+                .append(" BETWEEN ")
+                .append(firstDayOfMonthTimestamp)
+                .append(" AND ")
+                .append(lastDayOfMonthTimestamp).toString();
+
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor = database.rawQuery(query, null);
+
+        ArrayList<TrackedRun> trackedRuns = retrieveAllCursorData(cursor);
+        database.close();
+        return trackedRuns;
+    }
+
+    public ArrayList<TrackedRun> getYearTrackedRuns() {
+        long firstDayOfYearTimestamp = new DateTime().dayOfYear().withMinimumValue().getMillis() / 1000;
+        long lastDayOfYearTimestamp = new DateTime().dayOfYear().withMaximumValue().getMillis() / 1000;
+
+        String query = new StringBuilder()
+                .append("SELECT * FROM ")
+                .append(RunsContract.TABLE_NAME)
+                .append(" WHERE ")
+                .append(RunsContract.DATE)
+                .append(" BETWEEN ")
+                .append(firstDayOfYearTimestamp)
+                .append(" AND ")
+                .append(lastDayOfYearTimestamp).toString();
+
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor = database.rawQuery(query, null);
+
+        ArrayList<TrackedRun> trackedRuns = retrieveAllCursorData(cursor);
+        database.close();
+        return trackedRuns;
+    }
+
+    /**
+     * Receives a Cursor object and retrieves its data into an Arraylist of TrackedRun.
+     * @param cursor
+     * @return Arraylist<TrackedRun>
+     */
+    private ArrayList<TrackedRun> retrieveAllCursorData(Cursor cursor) {
         ArrayList<TrackedRun> trackedRuns = new ArrayList<>();
 
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             do {
-                trackedRuns.add(
-                        new TrackedRun( cursor.getInt(0), cursor.getLong(1), cursor.getDouble(2),
-                            cursor.getLong(3), cursor.getInt(4), cursor.getString(5))
-                );
+                trackedRuns.add(new TrackedRun(
+                        cursor.getInt(cursor.getColumnIndex(RunsContract.ID)),
+                        cursor.getLong(cursor.getColumnIndex(RunsContract.DATE)),
+                        cursor.getDouble(cursor.getColumnIndex(RunsContract.DISTANCE)),
+                        cursor.getLong(cursor.getColumnIndex(RunsContract.TIME)),
+                        cursor.getInt(cursor.getColumnIndex(RunsContract.RATING)),
+                        cursor.getString(cursor.getColumnIndex(RunsContract.UNIT))
+                ));
+            } while (cursor.moveToNext());
 
-            } while(cursor.moveToNext());
         }
-        db.close();
 
         return trackedRuns;
     }
