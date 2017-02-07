@@ -3,24 +3,18 @@ package com.example.tobias.run;
 import android.app.*;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
-import android.media.audiofx.BassBoost;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.DatePicker;
-import android.widget.NumberPicker;
-import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +23,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -38,7 +31,7 @@ import java.util.HashMap;
  * editing a run. This class shows different dialogs to input the data, and implements the onClickListener
  * for the positive button to retrieve the data
  */
-public class EditorActivity extends AppCompatActivity {
+public class AddRunActivity extends AppCompatActivity {
 
     Activity activity;
     private final int DATE_DIALOG_ID = 999;
@@ -49,7 +42,7 @@ public class EditorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editor);
+        setContentView(R.layout.activity_add_run);
         this.activity = this;
         this.sharedPref = getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE);
 
@@ -133,15 +126,6 @@ public class EditorActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
-     /**
-     * Sets dateText param as text in TextView
-     * @param dateText formatted date value
-     */
-    public void setDateValue(String dateText) {
-        TextView dateTextView = (TextView) findViewById(R.id.editor_date_text);
-        dateTextView.setText(dateText);
-    }
-
     /**
      * AppTheme status bar color attr is set to transparent for the drawerLayout in main activity.
      * this activity uses the primary dark color as status bar color. This method sets it during runtime.
@@ -184,7 +168,9 @@ public class EditorActivity extends AppCompatActivity {
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     DateTimeFormatter formatter = DateTimeFormat.forPattern("E, d/M/y");
                     DateTime dateText = new DateTime(year, month + 1, dayOfMonth, 0, 0);
-                    setDateValue(formatter.print(dateText));
+
+                    TextView dateTextView = (TextView) findViewById(R.id.editor_date_text);
+                    dateTextView.setText(formatter.print(dateText));
                 }
             }, year, month, day);
         }

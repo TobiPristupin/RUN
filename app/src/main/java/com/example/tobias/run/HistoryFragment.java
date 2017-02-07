@@ -5,20 +5,19 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 
@@ -42,6 +41,7 @@ public class HistoryFragment extends Fragment {
         initDateSpinner();
         initListView();
         initFab();
+        initTopBar();
 
         return rootView;
     }
@@ -103,12 +103,11 @@ public class HistoryFragment extends Fragment {
      */
     private void initFab(){
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_button);
-        fab.setTransitionName("reveal");
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),EditorActivity.class);
+                Intent intent = new Intent(getContext(),AddRunActivity.class);
                 startActivity(intent);
             }
         });
@@ -156,6 +155,11 @@ public class HistoryFragment extends Fragment {
                 break;
         }
 
+    }
+
+    private void initTopBar(){
+        TextView currentMonthText = (TextView) rootView.findViewById(R.id.current_month_text);
+        currentMonthText.setText(new DateTime().monthOfYear().getAsText());
     }
 
 }

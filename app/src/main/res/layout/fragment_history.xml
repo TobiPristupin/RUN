@@ -48,7 +48,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="50dp"
-            android:text="January"/>
+            tools:text="January"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -95,12 +95,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="85">
-        <ListView
-            android:id="@+id/history_listview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:divider="@null"/>
 
         <RelativeLayout
             android:id="@+id/empty_view"
@@ -123,10 +117,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Get up and running! start by adding a run with the plus button."
+                android:text="Get up and running! start by adding a run with the + button."
                 android:textSize="16sp"
                 android:layout_below="@id/lonely_text"/>
         </RelativeLayout>
+
+        <ListView
+            android:id="@+id/history_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:divider="@null"
+            android:scrollbars="vertical"/>
 
       <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_button"
@@ -137,7 +139,8 @@
             app:backgroundTint="@color/colorPrimaryDark"
             android:src="@drawable/ic_content_add"
             android:scaleType="center"
-            app:fabSize="normal" />
+            app:fabSize="normal"
+            app:layout_anchorGravity="bottom|end|right" />
 
     </android.support.design.widget.CoordinatorLayout>
 
