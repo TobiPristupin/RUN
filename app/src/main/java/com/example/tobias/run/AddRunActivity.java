@@ -36,7 +36,7 @@ public class AddRunActivity extends AppCompatActivity {
     Activity activity;
     private final int DATE_DIALOG_ID = 999;
     private SharedPreferences sharedPref;
-    private static final String TAG = "EditorActivity";
+    private static final String TAG = "AddRunActivity";
 
 
     @Override
