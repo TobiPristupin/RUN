@@ -47,34 +47,19 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="20dp"
             tools:text="January"/>
 
-        <LinearLayout
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="30dp"
-            android:layout_centerVertical="true">
+            android:gravity="center"
+            android:textAlignment="gravity"
+            android:layout_marginRight="20dp"
+            android:text="Tobigol Software"
+            android:id="@+id/amount_activities_textview" />
 
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:gravity="center"
-                android:src="@drawable/circle"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Tobigol Software Solutions"
-                android:layout_marginLeft="10dp"
-                android:id="@+id/amount_activities_textview" />
-
-        </LinearLayout>
 
     </RelativeLayout>
 
@@ -110,7 +95,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_margin="15dp"
                 android:text="Get up and running! start by adding a run with the + button."
                 android:textSize="16sp"
                 android:layout_below="@id/lonely_text"/>

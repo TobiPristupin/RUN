@@ -98,8 +98,7 @@ public class HistoryFragment extends Fragment {
         adapter = new HistoryListItemAdapter(getContext(), trackedRuns, this, new HistoryListItemAdapter.OnOverflowButtonListener() {
             @Override
             public void onDeleteClick(int id) {
-                new DatabaseHandler(getContext()).deleteItem(id);
-                loadRecords();
+
             }
 
             @Override
