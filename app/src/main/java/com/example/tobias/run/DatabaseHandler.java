@@ -9,6 +9,7 @@ import com.example.tobias.run.DatabaseContract.RunsContract;
 
 import org.joda.time.DateTime;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 
@@ -162,6 +163,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         return trackedRuns;
+    }
+
+    public void deleteItem(int id){
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(RunsContract.TABLE_NAME, RunsContract.ID + " = ?", new String[] { String.valueOf(id) } );
+        db.close();
+    }
+
+    public int getAmountOfRecords(){
+        SQLiteDatabase database = getReadableDatabase();
+        String query = "SELECT * FROM " + RunsContract.TABLE_NAME;
+        Cursor cursor = database.rawQuery(query, null);
+        return cursor.getCount();
     }
 }
 

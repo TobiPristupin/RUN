@@ -6,10 +6,13 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -27,13 +30,22 @@ import java.util.Locale;
  */
 public class HistoryListItemAdapter extends ArrayAdapter<TrackedRun> {
 
+    public interface OnOverflowButtonListener {
+        void onDeleteClick(int id);
+        void onEditClick(int id);
+    }
+
+
     private Context context;
     private TrackedRun currentItem;
     private View rootView;
+    private OnOverflowButtonListener listener;
 
-    public HistoryListItemAdapter(Context context, ArrayList<TrackedRun> items){
+    public HistoryListItemAdapter(Context context, ArrayList<TrackedRun> items,
+                                  HistoryFragment historyFragment, OnOverflowButtonListener listener){
         super(context, 0, items);
         this.context = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -58,6 +70,7 @@ public class HistoryListItemAdapter extends ArrayAdapter<TrackedRun> {
         setTimeText();
         setDateText();
         setRatingText();
+        setOverflowMenu();
 
         return rootView;
     }
@@ -102,5 +115,36 @@ public class HistoryListItemAdapter extends ArrayAdapter<TrackedRun> {
         RatingBar ratingBar = (RatingBar) rootView.findViewById(R.id.rating_bar);
         ratingBar.setRating(currentItem.getRating());
     }
+
+    private void setOverflowMenu(){
+        final ImageButton button = (ImageButton) rootView.findViewById(R.id.overflow_icon);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                PopupMenu menu = new PopupMenu(getContext(), button);
+                menu.getMenuInflater().inflate(R.menu.list_item_overflow, menu.getMenu());
+                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        switch (item.getItemId()){
+
+                            case R.id.edit_button :
+                                listener.onEditClick(currentItem.getId());
+                                break;
+
+                            case R.id.delete_button :
+                                listener.onDeleteClick(currentItem.getId());
+                                break;
+                        }
+                        return true;
+                    }
+                });
+                menu.show();
+            }
+        });
+    }
+
 }
 

@@ -4,18 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="70dp"
-    android:minHeight="?attr/listPreferredItemHeight">
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:background="?attr/selectableItemBackground">
 
-    <ImageView
-        android:id="@+id/running_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <RatingBar
+        android:id="@+id/rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_running"/>
+        android:isIndicator="true"
+        android:numStars="3"
+        tools:rating="1"
+        android:stepSize="1"
+        style="?android:attr/ratingBarStyleSmall"
+        android:rotation="90"
+        />
 
     <TextView
-        android:layout_toRightOf="@id/running_image"
+        android:layout_toRightOf="@id/rating_bar"
         android:id="@+id/distance_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,7 +32,7 @@
         android:textColor="@android:color/black" />
 
     <TextView
-        android:layout_toRightOf="@id/running_image"
+        android:layout_toRightOf="@id/rating_bar"
         android:layout_below="@id/distance_text"
         android:layout_alignRight="@id/distance_text"
         android:layout_alignLeft="@id/distance_text"
@@ -44,20 +51,15 @@
         android:layout_marginRight="20dp"
         tools:text="Sun, 1/8/2017"/>
 
-    <RatingBar
-        android:id="@+id/rating_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:isIndicator="true"
-        android:numStars="3"
-        tools:rating="1"
-        android:stepSize="1"
-        style="?android:attr/ratingBarStyleSmall"
-        tools:src="@drawable/ic_toggle_star_outline_red"
-        android:layout_above="@id/date_text"
+    <ImageButton
+        android:id="@+id/overflow_icon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        />
+        android:src="@drawable/ic_more_horiz"
+        android:background="@android:color/transparent"
+        android:layout_above="@id/date_text" />
+
 
 </RelativeLayout>

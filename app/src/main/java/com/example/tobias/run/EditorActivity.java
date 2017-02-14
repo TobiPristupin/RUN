@@ -31,20 +31,21 @@ import java.util.HashMap;
  * editing a run. This class shows different dialogs to input the data, and implements the onClickListener
  * for the positive button to retrieve the data
  */
-public class AddRunActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity {
 
     Activity activity;
     private final int DATE_DIALOG_ID = 999;
     private SharedPreferences sharedPref;
-    private static final String TAG = "AddRunActivity";
+    private static final String TAG = "EditorActivity";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_run);
+        setContentView(R.layout.activity_editor);
         this.activity = this;
         this.sharedPref = getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE);
+
 
         initToolbar();
         initDistanceField();

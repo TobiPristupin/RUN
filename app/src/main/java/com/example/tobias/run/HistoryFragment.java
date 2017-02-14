@@ -18,6 +18,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 
@@ -29,6 +31,7 @@ public class HistoryFragment extends Fragment {
 
     private View rootView;
     private HistoryListItemAdapter adapter;
+    private ListView listView;
 
     public HistoryFragment(){
         //Required empty constructor.
@@ -90,11 +93,23 @@ public class HistoryFragment extends Fragment {
 
 
     private void initListView(){
-        ListView listView = (ListView) rootView.findViewById(R.id.history_listview);
+        listView = (ListView) rootView.findViewById(R.id.history_listview);
         ArrayList<TrackedRun> trackedRuns = new DatabaseHandler(getContext()).getAllTrackedRuns();
-        adapter = new HistoryListItemAdapter(getContext(), trackedRuns);
+        adapter = new HistoryListItemAdapter(getContext(), trackedRuns, this, new HistoryListItemAdapter.OnOverflowButtonListener() {
+            @Override
+            public void onDeleteClick(int id) {
+                new DatabaseHandler(getContext()).deleteItem(id);
+                loadRecords();
+            }
+
+            @Override
+            public void onEditClick(int id) {
+
+            }
+        });
         listView.setAdapter(adapter);
         listView.setEmptyView(rootView.findViewById(R.id.empty_view));
+
     }
 
 
@@ -107,7 +122,7 @@ public class HistoryFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),AddRunActivity.class);
+                Intent intent = new Intent(getContext(), EditorActivity.class);
                 startActivity(intent);
             }
         });
@@ -115,7 +130,7 @@ public class HistoryFragment extends Fragment {
 
     /**
      * Retrieves records from db according to dateSpinner value and populates listview.
-     * Because of countless bugs trying to add items dinamically,
+     * Because of countless bugs trying to add items dynamically,
      * resorted to clearing the adapter and adding all the items again, which is not great for performance,
      * and should eventually be refactored to a more efficient solution.
      */
@@ -159,7 +174,8 @@ public class HistoryFragment extends Fragment {
 
     private void initTopBar(){
         TextView currentMonthText = (TextView) rootView.findViewById(R.id.current_month_text);
-        currentMonthText.setText(new DateTime().monthOfYear().getAsText());
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("EEEE, MMMM d");
+        currentMonthText.setText(formatter.print(new DateTime()));
     }
 
 }

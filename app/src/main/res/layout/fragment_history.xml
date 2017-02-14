@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="30dp"
             tools:text="January"/>
 
         <LinearLayout
@@ -58,12 +58,6 @@
             android:layout_marginRight="30dp"
             android:layout_centerVertical="true">
 
-            <TextView
-                android:id="@+id/distance_ran_text"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="49.3 km"
-                android:gravity="center" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -75,10 +69,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="3 Activities"
                 android:gravity="center"
+                android:text="Tobigol Software Solutions"
                 android:layout_marginLeft="10dp"
-                android:id="@+id/textView" />
+                android:id="@+id/amount_activities_textview" />
 
         </LinearLayout>
 
