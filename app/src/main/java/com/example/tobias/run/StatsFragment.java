@@ -8,9 +8,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
+
+import cn.hugeterry.coordinatortablayout.CoordinatorTabLayout;
 
 /**
  * StatsFragment displays statistics of tracked runs with graphs. Can be accessed via DrawerLayout in MainActivity
@@ -29,13 +34,9 @@ public class StatsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_stats, container, false);
 
-        ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.stats_viewpager);
-        StatsPagerAdapter adapter = new StatsPagerAdapter(getChildFragmentManager());
-        viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.stats_tab_indicator);
-        tabLayout.setupWithViewPager(viewPager, true);
 
         return rootView;
     }
+
 }
