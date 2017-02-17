@@ -3,6 +3,7 @@ package com.example.tobias.run;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
@@ -29,7 +30,11 @@ public class StatsFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_stats, container, false);
 
         ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.stats_viewpager);
-        viewPager.setAdapter(new StatsPagerAdapter(getChildFragmentManager()));
+        StatsPagerAdapter adapter = new StatsPagerAdapter(getChildFragmentManager());
+        viewPager.setAdapter(adapter);
+
+        TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.stats_tab_indicator);
+        tabLayout.setupWithViewPager(viewPager, true);
 
         return rootView;
     }

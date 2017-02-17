@@ -26,6 +26,8 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import es.dmoral.toasty.Toasty;
+
 /**
  * Activity that allows user to complete distance, time, rating and date fields when adding /
  * editing a run. This class shows different dialogs to input the data, and implements the onClickListener
@@ -64,11 +66,11 @@ public class EditorActivity extends AppCompatActivity {
                 break;
             case R.id.editor_save:
                 if (addRecord()) {
-                    Toast.makeText(activity, "Successfully Added", Toast.LENGTH_SHORT).show();
+                    Toasty.success(activity, "Successfully Added", Toast.LENGTH_SHORT).show();
                     Log.v(TAG, "Added record to database successfully.");
                     finish();
                 } else {
-                    Toast.makeText(activity, "Fill in all the fields", Toast.LENGTH_SHORT).show();
+                    Toasty.warning(activity, "Fill in all the fields", Toast.LENGTH_SHORT).show();
                     MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.error);
                     mediaPlayer.start();
                 }
