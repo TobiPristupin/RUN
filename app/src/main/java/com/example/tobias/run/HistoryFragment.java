@@ -1,6 +1,8 @@
 package com.example.tobias.run;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -97,13 +99,12 @@ public class HistoryFragment extends Fragment {
         ArrayList<TrackedRun> trackedRuns = new DatabaseHandler(getContext()).getAllTrackedRuns();
         adapter = new HistoryListItemAdapter(getContext(), trackedRuns, this, new HistoryListItemAdapter.OnOverflowButtonListener() {
             @Override
-            public void onDeleteClick(int id) {
-
+            public void onDeleteClick(TrackedRun tr) {
+                showDeleteDialog(tr);
             }
 
             @Override
-            public void onEditClick(int id) {
-
+            public void onEditClick(TrackedRun tr) {
             }
         });
         listView.setAdapter(adapter);
@@ -175,6 +176,32 @@ public class HistoryFragment extends Fragment {
         TextView currentMonthText = (TextView) rootView.findViewById(R.id.current_month_text);
         DateTimeFormatter formatter = DateTimeFormat.forPattern("EEEE, MMMM d");
         currentMonthText.setText(formatter.print(new DateTime()));
+    }
+
+    private void showDeleteDialog(TrackedRun tr){
+        final TrackedRun trackedRun = tr;
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setMessage("Are you sure you want to delete?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteListItem(trackedRun);
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.create().show();
+    }
+
+    private void deleteListItem(TrackedRun tr){
+        new DatabaseHandler(getContext()).deleteItem(tr.getId());
+        loadRecords();
     }
 
 }

@@ -20,6 +20,7 @@
         <activity
             android:name=".EditorActivity"
             android:parentActivityName=".MainActivity" />
+        <activity android:name=".DetailRunActivity"></activity>
     </application>
 
 </manifest>
