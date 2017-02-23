@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="Edit (WIP)"
+        android:title="Edit"
         android:id="@+id/edit_button"/>
 
     <item
-        android:title="Delete (WIP)"
+        android:title="Delete"
         android:id="@+id/delete_button"/>
 
 </menu>

@@ -1,12 +1,14 @@
 package com.example.tobias.run;
 
-import android.app.*;
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -39,6 +41,7 @@ public class EditorActivity extends AppCompatActivity {
     private final int DATE_DIALOG_ID = 999;
     private SharedPreferences sharedPref;
     private static final String TAG = "EditorActivity";
+    private TrackedRun trackedRun;
 
 
     @Override
@@ -48,8 +51,18 @@ public class EditorActivity extends AppCompatActivity {
         this.activity = this;
         this.sharedPref = getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE);
 
+        Intent intent = getIntent();
+        trackedRun = (TrackedRun) intent.getParcelableExtra("TrackedRun");
 
         initToolbar();
+
+        //If tracked run has been passed via intent, init edit mode.
+        if (trackedRun != null){
+            setEditMode();
+        } else {
+            trackedRun = new TrackedRun();
+        }
+
         initDistanceField();
         initTimeField();
         initDateField();
@@ -86,34 +99,54 @@ public class EditorActivity extends AppCompatActivity {
 
     /**
      * Gets data inserted into views and adds it into database. If one of the fields hasn't been
-     * set, it displays a Toast message and returns.
+     * set, it returns false and exits without adding it.
      */
     private boolean addRecord() {
-        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_key),
-                Context.MODE_PRIVATE);
-        //Retrieve data from views
+        DatabaseHandler databaseHandler = new DatabaseHandler(this);
+
+        HashMap<String, String> values = retrieveDataFromViews();
+        if (!isDataComplete(values)){
+            return false;
+        }
+
+        trackedRun.setDistance(values.get("distance"));
+        trackedRun.setDate(values.get("date"));
+        trackedRun.setRating(values.get("rating"));
+        trackedRun.setUnit(values.get("unit"));
+        trackedRun.setTime(values.get("time"));
+
+        //If run hasn't been assigned an ID by entering into database, add it o database as new record
+        if (trackedRun.getId() == null){
+            databaseHandler.addRun(trackedRun);
+        } else {
+            databaseHandler.updateRun(trackedRun);
+        }
+
+        return true;
+    }
+
+    //Retrieves text from distance, time, ... TextViews
+    private HashMap<String, String> retrieveDataFromViews(){
         HashMap<String, String> data = new HashMap<>();
         data.put("distance", ((TextView) findViewById(R.id.editor_distance_text)).getText().toString());
         data.put("time", ((TextView) findViewById(R.id.editor_time_text)).getText().toString());
         data.put("rating", ((TextView) findViewById(R.id.editor_rating_text)).getText().toString());
         data.put("date", ((TextView) findViewById(R.id.editor_date_text)).getText().toString());
         data.put("unit", sharedPref.getString("distance_unit", null));
+        return data;
+    }
 
-        for (String value : data.values()) {
-            //If value hasn't been set yet and still equals to the default value
-            if (value.equals("None")) {
+    /**
+     * Checks if data retrieved is complete or is missing fields
+     * @param data
+     * @return
+     */
+    private boolean isDataComplete(HashMap<String, String> data){
+        for(String value : data.values()){
+            if (value.equals("None")){
                 return false;
             }
         }
-
-        //Add to db
-        new DatabaseHandler(activity).addRun(
-                new TrackedRun(data.get("distance"),
-                        data.get("time"),
-                        data.get("date"),
-                        data.get("rating"),
-                        data.get("unit"))
-        );
         return true;
     }
 
@@ -121,12 +154,24 @@ public class EditorActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.editor_toolbar);
         setSupportActionBar(toolbar);
         changeStatusBarColor();
-        if (getIntent().getBooleanExtra("edit_mode", false)) {
-            //If intent is sent with edit mode, change action bar title,
-            getSupportActionBar().setTitle("Edit entry");
-        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+    private void setEditMode(){
+        getSupportActionBar().setTitle("Edit Run");
+
+        String unit = sharedPref.getString("distance_unit", null);
+        String distanceText = TrackedRunConverter.distanceToString(trackedRun.getDistance(), unit);
+        ((TextView) findViewById(R.id.editor_distance_text)).setText(distanceText);
+
+        String dateText = TrackedRunConverter.dateToString(trackedRun.getDate());
+        ((TextView) findViewById(R.id.editor_date_text)).setText(dateText);
+
+        String timeText = TrackedRunConverter.timeToString(trackedRun.getTime());
+        ((TextView) findViewById(R.id.editor_time_text)).setText(timeText);
+
+        ((TextView) findViewById(R.id.editor_rating_text)).setText(String.valueOf(trackedRun.getRating()));
     }
 
     /**

@@ -105,6 +105,9 @@ public class HistoryFragment extends Fragment {
 
             @Override
             public void onEditClick(TrackedRun tr) {
+                Intent intent = new Intent(getContext(), EditorActivity.class);
+                intent.putExtra("TrackedRun", tr);
+                startActivity(intent);
             }
         });
         listView.setAdapter(adapter);

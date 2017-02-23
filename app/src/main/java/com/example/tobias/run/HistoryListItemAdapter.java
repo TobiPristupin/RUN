@@ -4,27 +4,17 @@ package com.example.tobias.run;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringDef;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * Adapter for custom ListView in History Fragment.
@@ -79,36 +69,20 @@ public class HistoryListItemAdapter extends ArrayAdapter<TrackedRun> {
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_key), Context.MODE_PRIVATE);
         TextView distanceView = (TextView) rootView.findViewById(R.id.distance_text);
-        DecimalFormat df = new DecimalFormat("0.00");
+        String unit = sharedPref.getString("distance_unit", null);
 
-        double distance = currentItem.getDistance() / 100; //Convert to km from m
-        String distanceText = df.format(distance) + " " + sharedPref.getString("distance_unit", null);
-
-        distanceView.setText(distanceText);
+        distanceView.setText(TrackedRunConverter.distanceToString(currentItem.getDistance(), unit));
     }
 
     private void setTimeText(final TrackedRun currentItem){
         TextView timeView = (TextView) rootView.findViewById(R.id.time_text);
         long currentItemTime = currentItem.getTime();
-        //Create period to transform time in millis to formatted time.
-        Period period = new Period(currentItemTime);
-
-        String timeText = new StringBuilder()
-            .append(String.format(Locale.US, "%02d", period.getHours()))
-                .append(":")
-                .append(String.format(Locale.US, "%02d", period.getMinutes()))
-                .append(":")
-                .append(String.format(Locale.US, "%02d", period.getSeconds())).toString();
-
-        timeView.setText(timeText);
+        timeView.setText(TrackedRunConverter.timeToString(currentItemTime));
     }
 
     private void setDateText(final TrackedRun currentItem){
         TextView dateView = (TextView) rootView.findViewById(R.id.date_text);
-        DateTimeFormatter formatter = DateTimeFormat.forPattern("E, e/MMM/YYYY");
-        //Unix time is in milli, DateTime is in sec, so multiply by 1000 to convert
-        String dateText = formatter.print(new DateTime(currentItem.getDate() * 1000L));
-        dateView.setText(dateText);
+        dateView.setText(TrackedRunConverter.dateToString(currentItem.getDate()));
     }
 
     private void setRatingText(final TrackedRun currentItem){

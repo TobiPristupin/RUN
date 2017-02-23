@@ -1,14 +1,14 @@
 package com.example.tobias.run;
 
-import org.joda.time.DateTime;
-import org.joda.time.Period;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Object to represent a new tracked run for storage in database. Handles conversion between
  * the data retrieved directly from editor activity fields to the appropiate format and
  * datatype for storage in the db.
  */
-public class TrackedRun {
+public class TrackedRun implements Parcelable {
 
     private double _distance;
     private long _time;
@@ -19,12 +19,12 @@ public class TrackedRun {
 
     /**
      * Values will be passed as gathered directly from editor activity fields (Strings), and will be converted
-     * for storage appropiately.
+     * for storage appropriately.
      */
     public TrackedRun(String distance, String time, String date, String rating, String unit){
-        this._distance = formatDistance(distance);
-        this._time = formatTime(time);
-        this._date = formatDate(date);
+        this._distance = TrackedRunConverter.distanceToDouble(distance);
+        this._time = TrackedRunConverter.timeToUnix(time);
+        this._date = TrackedRunConverter.dateToUnix(date);
         this._rating = Integer.valueOf(rating);
         this._unit = unit;
     }
@@ -43,54 +43,49 @@ public class TrackedRun {
         this._id = id;
     }
 
-    private double formatDistance(String distance){
-        //Double.ValueOf wont parse comma, but will parse dot.
-        distance = distance.replace(",", ".");
-        //Remove km or mi
-        distance = distance.replace("km", "").replace("mi", "").trim();
-        //Convert to whole number by moving comma and return
-        return (Double.valueOf(distance) * 100);
+    public TrackedRun(){
+
     }
 
-    /**
-     *
-     * @param time String value in the format of 00:00:00
-     * @return long time value in milliseconds
-     *
-     * Parses String time value and converts it into milliseconds.
-     */
-    private long formatTime(String time){
-        String[] timeUnits = new String[3];
-        //Split time into hours seconds minutes
-        timeUnits = time.split(":");
-        Period timePeriod = new Period()
-                .withHours(Integer.valueOf(timeUnits[0]))
-                .withMinutes(Integer.valueOf(timeUnits[1]))
-                .withSeconds(Integer.valueOf(timeUnits[2]));
-        //Return time in millis
-        return timePeriod.toStandardDuration().getMillis();
+    public TrackedRun(Parcel in) {
+        this._id = in.readInt();
+        this._date = in.readLong();
+        this._distance = in.readDouble();
+        this._time = in.readLong();
+        this._rating = in.readInt();
+        this._unit = in.readString();
     }
 
-    /**
-     * @param date String value in the format of (three letter day), (day of month), (month), (year),
-     *             such as Wed, 2, 3, 2017
-     * @return long date value in unix timestamp format
-     *
-     * Parses String date value and converts it into unix timestamp.
-     */
-    private long formatDate(String date){
-        //Remove irrelevant day information
-        date = date.split(",")[1].trim();
-        String[] dateUnits = new String[3];
-        //Split into year month day
-        dateUnits = date.split("/");
-        DateTime dateTime = new DateTime()
-                .withYear(Integer.valueOf(dateUnits[2]))
-                .withMonthOfYear(Integer.valueOf(dateUnits[1]))
-                .withDayOfMonth(Integer.valueOf(dateUnits[0]));
-        //Return time in seconds since epoch
-        return dateTime.getMillis() / 1000;
+    @Override
+    public int describeContents() {
+        return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(_id);
+        parcel.writeLong(_date);
+        parcel.writeDouble(_distance);
+        parcel.writeLong(_time);
+        parcel.writeInt(_rating);
+        parcel.writeString(_unit);
+    }
+
+    public static final Parcelable.Creator<TrackedRun> CREATOR = new Parcelable.Creator<TrackedRun>(){
+
+        @Override
+        public TrackedRun createFromParcel(Parcel parcel) {
+            return new TrackedRun(parcel);
+        }
+
+        @Override
+        public TrackedRun[] newArray(int i) {
+            return new TrackedRun[i];
+        }
+
+
+    };
+
 
 
     public double getDistance(){
@@ -111,6 +106,28 @@ public class TrackedRun {
         return _unit;
     }
 
-    public int getId(){ return _id; }
+    public Integer getId(){ return _id; }
+
+    public void setDistance(String distance){
+
+        _distance = TrackedRunConverter.distanceToDouble(distance);
+    }
+
+    public void setTime(String time){
+        _time = TrackedRunConverter.timeToUnix(time);
+    }
+
+    public void setDate(String date){
+        _date = TrackedRunConverter.dateToUnix(date);
+    }
+
+    public void setRating(String rating){
+        _rating = Integer.valueOf(rating);
+    }
+
+    public void setUnit(String unit){
+        _unit = unit;
+    }
+
 
 }

@@ -5,11 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import com.example.tobias.run.DatabaseContract.RunsContract;
 
 import org.joda.time.DateTime;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 
@@ -176,6 +176,39 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + RunsContract.TABLE_NAME;
         Cursor cursor = database.rawQuery(query, null);
         return cursor.getCount();
+    }
+
+    public boolean checkExists(int id){
+        SQLiteDatabase database = getReadableDatabase();
+        String query = new StringBuilder().append("SELECT * FROM ")
+                .append(RunsContract.TABLE_NAME)
+                .append(" WHERE ")
+                .append(RunsContract.ID)
+                .append(" = ")
+                .append(id).toString();
+
+        Cursor cursor = database.rawQuery(query, null);
+        if (cursor.getCount() <= 0){
+            database.close();
+            return false;
+        }
+
+        database.close();
+        return true;
+    }
+
+    public void updateRun(TrackedRun run){
+        SQLiteDatabase database = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(RunsContract.DATE, run.getDate());
+        values.put(RunsContract.DISTANCE, run.getDistance());
+        values.put(RunsContract.RATING, run.getRating());
+        values.put(RunsContract.UNIT, run.getUnit());
+        values.put(RunsContract.TIME, run.getTime());
+
+        database.update(RunsContract.TABLE_NAME, values, RunsContract.ID + " = ?",
+                new String[]{ String.valueOf(run.getId())});
     }
 }
 
