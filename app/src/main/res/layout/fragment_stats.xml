@@ -3,28 +3,166 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/LightGrey">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/stats_tab_indicator"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        app:tabGravity="center"
-        app:tabIndicatorHeight="0dp"
-        app:tabBackground="@drawable/tab_selector"
-        android:background="@color/colorPrimary"/>
+        android:layout_height="80dp"
+        style="@style/StatsFragmentButton">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/stats_viewpager"
+        <ImageView
+            android:id="@+id/stats_image1"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/ic_bar_graph_square"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/stats_text1"
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/stats_image1"
+            android:text="Mileage"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/stats_text1"
+            android:layout_toRightOf="@id/stats_image1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="7dp"
+            android:text="View your total mileage broken down into periods of time"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="45"/>
+        android:layout_height="80dp"
+        style="@style/StatsFragmentButton">
+
+        <ImageView
+            android:id="@+id/stats_image2"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/ic_medal"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/stats_text2"
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/stats_image2"
+            android:text="Personal Records"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/stats_text2"
+            android:layout_toRightOf="@id/stats_image2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="7dp"
+            android:text="View your personal records"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        style="@style/StatsFragmentButton">
+
+        <ImageView
+            android:id="@+id/stats_image3"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/ic_combined_graph"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/stats_text3"
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/stats_image3"
+            android:text="Tracked Workouts"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/stats_text3"
+            android:layout_toRightOf="@id/stats_image3"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="7dp"
+            android:text="View your tracked runs over time"/>
+
+
+    </RelativeLayout>
 
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="55">
+        android:layout_height="80dp"
+        style="@style/StatsFragmentButton">
+
+        <ImageView
+            android:id="@+id/stats_image4"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/ic_time_graph"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/stats_text4"
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/stats_image4"
+            android:text="Miscellanous Stats"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/stats_text4"
+            android:layout_toRightOf="@id/stats_image4"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="7dp"
+            android:text="View stats concerning your pace, steps and more"/>
+
+
+
     </RelativeLayout>
+
 
 </LinearLayout>

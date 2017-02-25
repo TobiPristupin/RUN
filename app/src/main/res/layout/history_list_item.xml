@@ -18,8 +18,7 @@
         tools:rating="1"
         android:stepSize="1"
         style="?android:attr/ratingBarStyleSmall"
-        android:rotation="90"
-        />
+        android:rotation="90"/>
 
     <TextView
         android:layout_toRightOf="@id/rating_bar"
