@@ -28,13 +28,20 @@
         android:id="@+id/mileage_tablayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="8">
+        android:layout_weight="8"
+        app:tabTextColor="@android:color/white"
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabIndicatorColor="@android:color/white"
+        app:tabIndicatorHeight="5dp"
+        app:tabMode="fixed"
+        android:background="@color/colorPrimaryDark">
     </android.support.design.widget.TabLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="50"></RelativeLayout>
+        android:layout_weight="50">
+    </RelativeLayout>
 
 
 

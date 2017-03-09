@@ -2,6 +2,9 @@ package com.example.tobias.run;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,15 +18,9 @@ public class StatsMileageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mileage);
+
         initToolbar();
-        ViewPager viewPager = (ViewPager) findViewById(R.id.mileage_viewpager);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.mileage_tablayout);
-
-        viewPager.setAdapter(new StatsPagerAdapter(getSupportFragmentManager()));
-
-        tabLayout.setupWithViewPager(viewPager);
-
-
+        initViewPager();
     }
 
     @Override
@@ -55,5 +52,50 @@ public class StatsMileageActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
     }
+
+    private void initViewPager(){
+        ViewPager viewPager = (ViewPager) findViewById(R.id.mileage_viewpager);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.mileage_tablayout);
+
+        viewPager.setAdapter(new StatsPagerAdapter(getSupportFragmentManager()));
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private class StatsPagerAdapter extends FragmentPagerAdapter {
+
+
+        private String[] tabTitles = new String[]{"Month", "Trimester", "Six Months", "Year"};
+
+        private StatsPagerAdapter(FragmentManager fm){
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position){
+                case 0 :
+                    return GraphFragment.newInstance(GraphVariants.BAR_GRAPH_MILEAGE_MONTH);
+                case 1 :
+                    return GraphFragment.newInstance(GraphVariants.BAR_GRAPH_MILEAGE_TRIMESTER);
+                case 2 :
+                    return GraphFragment.newInstance(GraphVariants.BAR_GRAPH_MILEAGE_HALFYEAR);
+                case 3 :
+                    return GraphFragment.newInstance(GraphVariants.BAR_GRAPH_MILEAGE_YEAR);
+            }
+
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
+    }
+
 
 }
