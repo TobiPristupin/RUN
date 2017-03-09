@@ -71,18 +71,18 @@ public class HistoryListItemAdapter extends ArrayAdapter<TrackedRun> {
         TextView distanceView = (TextView) rootView.findViewById(R.id.distance_text);
         String unit = sharedPref.getString("distance_unit", null);
 
-        distanceView.setText(TrackedRunConverter.distanceToString(currentItem.getDistance(), unit));
+        distanceView.setText(DateManager.distanceToString(currentItem.getDistance(), unit));
     }
 
     private void setTimeText(final TrackedRun currentItem){
         TextView timeView = (TextView) rootView.findViewById(R.id.time_text);
         long currentItemTime = currentItem.getTime();
-        timeView.setText(TrackedRunConverter.timeToString(currentItemTime));
+        timeView.setText(DateManager.timeToString(currentItemTime));
     }
 
     private void setDateText(final TrackedRun currentItem){
         TextView dateView = (TextView) rootView.findViewById(R.id.date_text);
-        dateView.setText(TrackedRunConverter.dateToString(currentItem.getDate()));
+        dateView.setText(DateManager.dateToString(currentItem.getDate()));
     }
 
     private void setRatingText(final TrackedRun currentItem){

@@ -9,6 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:id="@+id/stats_mileage_button"
         style="@style/StatsFragmentButton">
 
         <ImageView
@@ -24,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/stats_text1"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/stats_image1"
             android:text="Mileage"
@@ -48,6 +49,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:id="@+id/stats_records_button"
         style="@style/StatsFragmentButton">
 
         <ImageView
@@ -63,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/stats_text2"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/stats_image2"
             android:text="Personal Records"
@@ -87,6 +89,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:id="@+id/stats_workouts_button"
         style="@style/StatsFragmentButton">
 
         <ImageView
@@ -102,7 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/stats_text3"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/stats_image3"
             android:text="Tracked Workouts"
@@ -127,6 +130,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:id="@+id/stats_misc_button"
         style="@style/StatsFragmentButton">
 
         <ImageView

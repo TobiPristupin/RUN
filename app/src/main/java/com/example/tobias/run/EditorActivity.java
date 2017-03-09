@@ -156,19 +156,20 @@ public class EditorActivity extends AppCompatActivity {
         changeStatusBarColor();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
     }
 
     private void setEditMode(){
         getSupportActionBar().setTitle("Edit Run");
 
         String unit = sharedPref.getString("distance_unit", null);
-        String distanceText = TrackedRunConverter.distanceToString(trackedRun.getDistance(), unit);
+        String distanceText = DateManager.distanceToString(trackedRun.getDistance(), unit);
         ((TextView) findViewById(R.id.editor_distance_text)).setText(distanceText);
 
-        String dateText = TrackedRunConverter.dateToString(trackedRun.getDate());
+        String dateText = DateManager.dateToString(trackedRun.getDate());
         ((TextView) findViewById(R.id.editor_date_text)).setText(dateText);
 
-        String timeText = TrackedRunConverter.timeToString(trackedRun.getTime());
+        String timeText = DateManager.timeToString(trackedRun.getTime());
         ((TextView) findViewById(R.id.editor_time_text)).setText(timeText);
 
         ((TextView) findViewById(R.id.editor_rating_text)).setText(String.valueOf(trackedRun.getRating()));

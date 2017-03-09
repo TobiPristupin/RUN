@@ -22,9 +22,9 @@ public class TrackedRun implements Parcelable {
      * for storage appropriately.
      */
     public TrackedRun(String distance, String time, String date, String rating, String unit){
-        this._distance = TrackedRunConverter.distanceToDouble(distance);
-        this._time = TrackedRunConverter.timeToUnix(time);
-        this._date = TrackedRunConverter.dateToUnix(date);
+        this._distance = DateManager.distanceToDouble(distance);
+        this._time = DateManager.timeToUnix(time);
+        this._date = DateManager.dateToUnix(date);
         this._rating = Integer.valueOf(rating);
         this._unit = unit;
     }
@@ -110,15 +110,15 @@ public class TrackedRun implements Parcelable {
 
     public void setDistance(String distance){
 
-        _distance = TrackedRunConverter.distanceToDouble(distance);
+        _distance = DateManager.distanceToDouble(distance);
     }
 
     public void setTime(String time){
-        _time = TrackedRunConverter.timeToUnix(time);
+        _time = DateManager.timeToUnix(time);
     }
 
     public void setDate(String date){
-        _date = TrackedRunConverter.dateToUnix(date);
+        _date = DateManager.dateToUnix(date);
     }
 
     public void setRating(String rating){

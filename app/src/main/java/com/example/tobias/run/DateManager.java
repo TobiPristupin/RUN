@@ -9,9 +9,9 @@ import java.text.DecimalFormat;
 import java.util.Locale;
 
 /**
- * Handles conversion between TrackedRun values in String format and values in database input format.
+ * Contains methods to handle datetime and conversion between TrackedRun values in String format and values in database input format.
  */
-public class TrackedRunConverter {
+public class DateManager {
 
     /**
      *
@@ -107,6 +107,38 @@ public class TrackedRunConverter {
 
         return dateTime.getMillis() / 1000;
     }
+
+    public static long getStartOfWeek(){
+        long firstDayOfWeekTimestamp = new DateTime().withDayOfWeek(1).getMillis() / 1000;
+        return firstDayOfWeekTimestamp;
+    }
+
+    public static long getEndOfWeek(){
+        long lastDayOfWeekTimestamp = new DateTime().withDayOfWeek(7).getMillis() / 1000;
+        return lastDayOfWeekTimestamp;
+    }
+
+    public static long getStartOfMonth(){
+        long firstDayOfMonthTimestamp = new DateTime().dayOfMonth().withMinimumValue().getMillis() / 1000;
+        return firstDayOfMonthTimestamp;
+    }
+
+    public static long getEndOfMonth(){
+        long lastDayOfMonthTimestamp = new DateTime().dayOfMonth().withMaximumValue().getMillis() / 1000;
+        return lastDayOfMonthTimestamp;
+    }
+
+    public static long getStartOfYear(){
+        long firstDayOfYearTimestamp = new DateTime().dayOfYear().withMinimumValue().getMillis() / 1000;
+        return firstDayOfYearTimestamp;
+    }
+
+    public static long getEndOfYear(){
+        long lastDayOfYearTimestamp = new DateTime().dayOfYear().withMaximumValue().getMillis() / 1000;
+        return lastDayOfYearTimestamp;
+    }
+
+
 
 
 

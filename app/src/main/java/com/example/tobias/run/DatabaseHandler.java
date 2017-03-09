@@ -74,50 +74,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return trackedRuns;
     }
 
-    public ArrayList<TrackedRun> getWeekTrackedRuns() {
-        long firstDayOfWeekTimestamp = new DateTime().withDayOfWeek(1).getMillis() / 1000;
-        long lastDayOfWeekTimestamp = new DateTime().withDayOfWeek(7).getMillis() / 1000;
-
-        String query = new StringBuilder()
-                .append("SELECT * FROM ")
-                .append(RunsContract.TABLE_NAME)
-                .append(" WHERE ")
-                .append(RunsContract.DATE)
-                .append(" BETWEEN ")
-                .append(firstDayOfWeekTimestamp)
-                .append(" AND ")
-                .append(lastDayOfWeekTimestamp).toString();
-
-        SQLiteDatabase database = getReadableDatabase();
-        Cursor cursor = database.rawQuery(query, null);
-
-        ArrayList<TrackedRun> trackedRuns = retrieveAllCursorData(cursor);
-        database.close();
-        return trackedRuns;
-    }
-
-    public ArrayList<TrackedRun> getMonthTrackedRuns() {
-        long firstDayOfMonthTimestamp = new DateTime().dayOfMonth().withMinimumValue().getMillis() / 1000;
-        long lastDayOfMonthTimestamp = new DateTime().dayOfMonth().withMaximumValue().getMillis() / 1000;
-
-        String query = new StringBuilder()
-                .append("SELECT * FROM ")
-                .append(RunsContract.TABLE_NAME)
-                .append(" WHERE ")
-                .append(RunsContract.DATE)
-                .append(" BETWEEN ")
-                .append(firstDayOfMonthTimestamp)
-                .append(" AND ")
-                .append(lastDayOfMonthTimestamp).toString();
-
-        SQLiteDatabase database = getReadableDatabase();
-        Cursor cursor = database.rawQuery(query, null);
-
-        ArrayList<TrackedRun> trackedRuns = retrieveAllCursorData(cursor);
-        database.close();
-        return trackedRuns;
-    }
-
     public ArrayList<TrackedRun> getYearTrackedRuns() {
         long firstDayOfYearTimestamp = new DateTime().dayOfYear().withMinimumValue().getMillis() / 1000;
         long lastDayOfYearTimestamp = new DateTime().dayOfYear().withMaximumValue().getMillis() / 1000;
@@ -210,5 +166,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         database.update(RunsContract.TABLE_NAME, values, RunsContract.ID + " = ?",
                 new String[]{ String.valueOf(run.getId())});
     }
+
+    public ArrayList<TrackedRun> getTrackedRunsBetween(long dateStartPoint, long dateEndPoint){
+        SQLiteDatabase database = getReadableDatabase();
+        String query = new StringBuilder().append("SELECT * FROM ")
+                .append(RunsContract.TABLE_NAME)
+                .append(" WHERE ")
+                .append(RunsContract.DATE)
+                .append(" BETWEEN ")
+                .append(dateStartPoint)
+                .append(" AND ")
+                .append(dateEndPoint).toString();
+
+        Cursor cursor = database.rawQuery(query, null);
+        ArrayList<TrackedRun> values = retrieveAllCursorData(cursor);
+        database.close();
+        return values;
+    }
+
 }
 

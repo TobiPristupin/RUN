@@ -63,7 +63,7 @@ public class HistoryFragment extends Fragment {
     private void initDateSpinner(){
         final Spinner spinner = (Spinner) rootView.findViewById(R.id.date_spinner);
         //Spinner dropdown elements
-        String[] categories = new String[]{"All", "Week", "Month", "Year"};
+        String[] categories = new String[]{"Month", "Week", "Year", "All"};
         //Create adapter for Spinner
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item,
                 categories);
@@ -152,21 +152,27 @@ public class HistoryFragment extends Fragment {
                 break;
 
             case "Week" :
-                for(TrackedRun tr : new DatabaseHandler(getContext()).getWeekTrackedRuns()){
+                long startOfWeek = DateManager.getStartOfWeek();
+                long endOfWeek = DateManager.getEndOfWeek();
+                for(TrackedRun tr : new DatabaseHandler(getContext()).getTrackedRunsBetween(startOfWeek, endOfWeek)){
                     adapter.add(tr);
                 }
                 adapter.notifyDataSetChanged();
                 break;
 
             case "Month" :
-                for(TrackedRun tr : new DatabaseHandler(getContext()).getMonthTrackedRuns()){
+                long startOfMonth = DateManager.getStartOfMonth();
+                long endOfMonth = DateManager.getEndOfMonth();
+                for(TrackedRun tr : new DatabaseHandler(getContext()).getTrackedRunsBetween(startOfMonth, endOfMonth)){
                     adapter.add(tr);
                 }
                 adapter.notifyDataSetChanged();
                 break;
 
             case "Year" :
-                for(TrackedRun tr : new DatabaseHandler(getContext()).getYearTrackedRuns()){
+                long startOfYear = DateManager.getStartOfYear();
+                long endOfYear = DateManager.getEndOfYear();
+                for(TrackedRun tr : new DatabaseHandler(getContext()).getTrackedRunsBetween(startOfYear, endOfYear)){
                     adapter.add(tr);
                 }
                 adapter.notifyDataSetChanged();
