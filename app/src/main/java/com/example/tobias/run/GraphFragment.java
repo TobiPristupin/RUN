@@ -1,5 +1,6 @@
 package com.example.tobias.run;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,13 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.BarGraphSeries;
+import com.jjoe64.graphview.series.DataPoint;
 
 /**
  * Created by tobi on 3/7/17.
@@ -64,18 +61,29 @@ public class GraphFragment extends Fragment {
 
     private void initBarMileageMonth(){
         layout.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        LineChart lineChart = new LineChart(getContext());
-        lineChart.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        layout.addView(lineChart);
+        GraphView graphView = new GraphView(getContext());
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        graphView.setLayoutParams(layoutParams);
+        graphView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
 
-        List<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(1, 3));
-        entries.add(new Entry(2, 5));
-        LineDataSet dataSet = new LineDataSet(entries, "Label");
-        LineData lineData = new LineData(dataSet);
-        lineChart.setData(lineData);
-        lineChart.invalidate();
+
+        BarGraphSeries<DataPoint> dataSeries = new BarGraphSeries<>(new DataPoint[]{
+                new DataPoint(1, 3),
+                new DataPoint(2, 7),
+                new DataPoint(3, 2)
+        });
+
+        dataSeries.setTitle("test");
+        dataSeries.setColor(Color.WHITE);
+        dataSeries.setSpacing(10);
+        dataSeries.setDrawValuesOnTop(true);
+        dataSeries.setValuesOnTopColor(Color.WHITE);
+        dataSeries.setAnimated(true);
+
+        graphView.addSeries(dataSeries);
+
+        layout.addView(graphView);
     }
 
     private void initBarMileageTrimester(){
