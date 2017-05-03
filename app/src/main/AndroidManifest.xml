@@ -24,7 +24,9 @@
             android:name=".EditorActivity"
             android:parentActivityName=".MainActivity" />
 
-        <activity android:name=".StatsMileageActivity"></activity>
+        <activity android:name=".StatsMileageActivity">
+
+        </activity>
 
     </application>
 
