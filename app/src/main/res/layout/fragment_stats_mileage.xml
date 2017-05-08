@@ -7,7 +7,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"/>
+        android:layout_weight="4">
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/mileage_bargraph"
+            android:layout_margin="5dp">
+        </com.github.mikephil.charting.charts.BarChart>
+
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"

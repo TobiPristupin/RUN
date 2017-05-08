@@ -32,7 +32,7 @@ public class StatsFragment extends Fragment {
 
     private void initViewPager(){
         ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.stats_viewpager);
-        viewPager.setAdapter(new StatsFragmentPagerAdapter(getFragmentManager()));
+        viewPager.setAdapter(new StatsFragmentPagerAdapter(getChildFragmentManager()));
         InkPageIndicator pageIndicator = (InkPageIndicator) rootView.findViewById(R.id.stats_viewpager_indicator);
         pageIndicator.setViewPager(viewPager);
     }
