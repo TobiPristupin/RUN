@@ -1,13 +1,13 @@
-package com.example.tobias.run;
+package com.example.tobias.run.editorscreen;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.NumberPicker;
 import android.widget.RatingBar;
+
+import com.example.tobias.run.R;
 
 /**
  * Created by Tobias on 24/01/2017.

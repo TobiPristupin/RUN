@@ -1,4 +1,4 @@
-package com.example.tobias.run;
+package com.example.tobias.run.editorscreen;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -20,6 +20,11 @@ import android.widget.DatePicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.tobias.run.R;
+import com.example.tobias.run.data.DatabaseHandler;
+import com.example.tobias.run.helpers.DateManager;
+import com.example.tobias.run.data.TrackedRun;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;

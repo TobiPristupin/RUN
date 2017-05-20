@@ -1,4 +1,4 @@
-package com.example.tobias.run;
+package com.example.tobias.run.editorscreen;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
+
+import com.example.tobias.run.R;
 
 import java.text.DecimalFormat;
 

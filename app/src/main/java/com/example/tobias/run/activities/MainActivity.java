@@ -1,4 +1,4 @@
-package com.example.tobias.run;
+package com.example.tobias.run.activities;
 
 /**
  * RUN. application let's users track their running by adding them manually
@@ -23,6 +23,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+
+import com.example.tobias.run.historyscreen.HistoryFragment;
+import com.example.tobias.run.R;
+import com.example.tobias.run.statsscreen.StatsFragment;
 
 
 /**

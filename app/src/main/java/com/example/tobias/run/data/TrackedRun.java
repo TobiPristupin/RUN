@@ -1,7 +1,9 @@
-package com.example.tobias.run;
+package com.example.tobias.run.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.example.tobias.run.helpers.DateManager;
 
 /**
  * Object to represent a new tracked run for storage in database. Handles conversion between

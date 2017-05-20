@@ -1,4 +1,4 @@
-package com.example.tobias.run;
+package com.example.tobias.run.editorscreen;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+
+import com.example.tobias.run.R;
 
 /**
  * Dialog that allows user to set a distance value for a new tracked run. Sends data to parwnt Activity

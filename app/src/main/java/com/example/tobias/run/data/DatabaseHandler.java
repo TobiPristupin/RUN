@@ -1,4 +1,4 @@
-package com.example.tobias.run;
+package com.example.tobias.run.data;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.tobias.run.DatabaseContract.RunsContract;
+import com.example.tobias.run.data.DatabaseContract.RunsContract;
 
 import org.joda.time.DateTime;
 

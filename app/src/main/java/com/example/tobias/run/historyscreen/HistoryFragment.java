@@ -1,4 +1,4 @@
-package com.example.tobias.run;
+package com.example.tobias.run.historyscreen;
 
 
 import android.app.AlertDialog;
@@ -18,6 +18,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.example.tobias.run.R;
+import com.example.tobias.run.editorscreen.EditorActivity;
+import com.example.tobias.run.data.DatabaseHandler;
+import com.example.tobias.run.helpers.DateManager;
+import com.example.tobias.run.data.TrackedRun;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;

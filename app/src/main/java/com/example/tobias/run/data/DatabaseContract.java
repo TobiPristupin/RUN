@@ -1,7 +1,6 @@
-package com.example.tobias.run;
+package com.example.tobias.run.data;
 
 
-import android.content.SharedPreferences;
 import android.provider.BaseColumns;
 
 public class DatabaseContract {

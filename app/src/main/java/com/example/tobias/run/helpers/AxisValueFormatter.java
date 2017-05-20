@@ -1,4 +1,4 @@
-package com.example.tobias.run;
+package com.example.tobias.run.helpers;
 
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
