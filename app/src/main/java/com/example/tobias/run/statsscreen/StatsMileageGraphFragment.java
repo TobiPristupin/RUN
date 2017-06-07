@@ -74,6 +74,7 @@ public class StatsMileageGraphFragment extends Fragment {
         barChart.getXAxis().setValueFormatter(new AxisValueFormatter(values));
 
         barChart.animateXY(1500, 1500);
+        barChart.setTouchEnabled(false);
 
         barChart.setData(barData);
         barChart.invalidate();
