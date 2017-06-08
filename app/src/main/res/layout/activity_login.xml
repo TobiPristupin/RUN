@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.tobias.run.loginscreen.LoginActivity"
+    android:background="@color/lightPrimary">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_logo"
+        android:layout_marginTop="90dp"
+        android:layout_centerHorizontal="true"
+        android:text="RUN."
+        android:textColor="@android:color/white"
+        android:textSize="70sp"
+        android:textStyle="italic|bold" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_email"
+        android:layout_below="@id/login_logo"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        app:theme="@style/EditTextTheme"
+        android:textColorHint="@color/iron">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:hint="Email"
+            android:textColor="@android:color/white" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_password"
+        android:layout_below="@id/login_email"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        app:theme="@style/EditTextTheme"
+        android:textColorHint="@color/iron"
+        app:passwordToggleTint="@android:color/white">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:hint="Password"
+            android:textColor="@android:color/white" />
+
+    </android.support.design.widget.TextInputLayout>
+    
+    <android.support.v7.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_button"
+        android:layout_below="@id/login_password"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/colorPrimary"
+        android:text="Login"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:elevation="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_newaccount_button"
+        android:text="No account? Create one"
+        android:layout_below="@id/login_button"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/login_separator"
+        android:background="@android:color/white"
+        android:layout_below="@id/login_newaccount_button"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_google_button"
+        android:layout_below="@id/login_separator"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/colorPrimary"
+        android:text="Sign in with google"
+        android:drawableLeft="@drawable/ic_icons_google_50"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:elevation="5dp"/>
+
+
+
+
+</RelativeLayout>

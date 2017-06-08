@@ -12,6 +12,7 @@ package com.example.tobias.run.activities;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,7 +27,9 @@ import android.view.MenuItem;
 
 import com.example.tobias.run.historyscreen.HistoryFragment;
 import com.example.tobias.run.R;
+import com.example.tobias.run.loginscreen.LoginActivity;
 import com.example.tobias.run.statsscreen.StatsFragment;
+import com.google.firebase.auth.*;
 
 
 /**
@@ -35,12 +38,23 @@ import com.example.tobias.run.statsscreen.StatsFragment;
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        firebaseAuth = firebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+
+        if (firebaseUser == null) {
+            // Not logged in, launch the Log In activity
+            loadLogIn();
+        }
+
         initSharedPref();
         initToolbar();
 
@@ -64,6 +78,14 @@ public class MainActivity extends AppCompatActivity {
                  return true;
              }
          });
+    }
+
+    private void loadLogIn(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        //Flags prevent user from returning to MainActivity when pressing back button
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
 
