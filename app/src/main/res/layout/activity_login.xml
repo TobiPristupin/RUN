@@ -27,7 +27,8 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         app:theme="@style/EditTextTheme"
-        android:textColorHint="@color/iron">
+        android:textColorHint="@color/iron"
+        app:errorTextAppearance="@style/TextInputLayoutError">
 
         <EditText
             android:layout_width="match_parent"
@@ -48,7 +49,8 @@
         android:layout_marginRight="15dp"
         app:theme="@style/EditTextTheme"
         android:textColorHint="@color/iron"
-        app:passwordToggleTint="@android:color/white">
+        app:passwordToggleTint="@android:color/white"
+        app:errorTextAppearance="@style/TextInputLayoutError">
 
         <EditText
             android:layout_width="match_parent"

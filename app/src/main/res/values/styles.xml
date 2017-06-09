@@ -25,5 +25,10 @@
         <item name="colorButtonNormal">@color/iron</item>
     </style>
 
+    <style name="TextInputLayoutError" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
 
 </resources>
