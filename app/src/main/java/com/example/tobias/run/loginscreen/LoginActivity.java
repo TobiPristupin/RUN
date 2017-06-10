@@ -2,9 +2,9 @@ package com.example.tobias.run.loginscreen;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initLogInButton(){
-        AppCompatButton button = (AppCompatButton) findViewById(R.id.login_button);
+        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.login_button);
 
 
         //Error resets when text is inputted
