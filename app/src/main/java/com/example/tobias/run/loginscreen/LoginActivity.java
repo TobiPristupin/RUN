@@ -1,16 +1,22 @@
 package com.example.tobias.run.loginscreen;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.tobias.run.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -18,6 +24,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextInputLayout emailLayout;
     private TextInputLayout passwordLayout;
+    private FirebaseAuth firebaseAuth;
+    private static final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 
         emailLayout = (TextInputLayout) findViewById(R.id.login_email);
         passwordLayout = (TextInputLayout) findViewById(R.id.login_password);
+        firebaseAuth = FirebaseAuth.getInstance();
 
         changeStatusBarColor();
         initLogInButton();
@@ -89,29 +98,42 @@ public class LoginActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = emailLayout.getEditText().getText().toString();
-                String password = passwordLayout.getEditText().getText().toString();
+                String email = emailLayout.getEditText().getText().toString().trim();
+                String password = passwordLayout.getEditText().getText().toString().trim();
                 EmailValidator validator = EmailValidator.getInstance();
 
                 if (email.isEmpty()){
                     emailLayout.setError("Field is required");
                     return;
                 }
-
                 if (password.isEmpty()){
                     passwordLayout.setError("Field is required");
                     return;
                 }
-
                 if (!validator.isValid(email)){
                     emailLayout.setError("Invalid email");
                     return;
                 }
-
-                if (password.length() <= 3){
+                if (password.length() <= 6){
                     passwordLayout.setError("Password must be longer than 3 characters");
                     return;
                 }
+
+                firebaseAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()){
+                                    Log.d(TAG, "Firebase sign in with email successfull");
+                                } else {
+                                    Log.d(TAG, "Firebase sign in with email unsuccessful");
+                                }
+                            }
+                        });
+
+
+
+
 
 
             }

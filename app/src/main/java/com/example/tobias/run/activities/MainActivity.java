@@ -25,11 +25,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.tobias.run.historyscreen.HistoryFragment;
 import com.example.tobias.run.R;
+import com.example.tobias.run.historyscreen.HistoryFragment;
 import com.example.tobias.run.loginscreen.LoginActivity;
 import com.example.tobias.run.statsscreen.StatsFragment;
-import com.google.firebase.auth.*;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 /**
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
+    //Firebase request code
+    private static final int RC_SIGN_IN = 1516;
 
 
     @Override
@@ -48,12 +51,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         firebaseAuth = firebaseAuth.getInstance();
+        firebaseAuth.signOut();
         firebaseUser = firebaseAuth.getCurrentUser();
 
         if (firebaseUser == null) {
             // Not logged in, launch the Log In activity
-            loadLogIn();
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         }
+
 
         initSharedPref();
         initToolbar();
