@@ -2,4 +2,9 @@
     <string name="app_name">RUN.</string>
     <string name="preference_key">run_shared_pref</string>
     <string name="new_account"><u>New here? Sign up</u></string>
+
+    <string-array name="mileage_preference_values">
+        <item name="miles">Miles</item>
+        <item name="km">Kilometres</item>
+    </string-array>
 </resources>

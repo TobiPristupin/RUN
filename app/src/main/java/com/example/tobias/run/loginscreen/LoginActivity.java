@@ -1,5 +1,6 @@
 package com.example.tobias.run.loginscreen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.tobias.run.R;
+import com.example.tobias.run.activities.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -125,18 +127,23 @@ public class LoginActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()){
                                     Log.d(TAG, "Firebase sign in with email successfull");
+                                    loadMainActivity();
                                 } else {
                                     Log.d(TAG, "Firebase sign in with email unsuccessful");
+                                    passwordLayout.setError("Invalid Credentials");
+                                    return;
                                 }
                             }
                         });
-
-
-
-
-
-
             }
         });
+    }
+
+    private void loadMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        //Flags prevent user from returning to LoginActivity when pressing back button
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }
