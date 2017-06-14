@@ -33,10 +33,12 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
-            android:paddingBottom="15dp"
+            android:layout_marginTop="25dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="2dp"
             android:background="?attr/selectableItemBackground"
-            android:clickable="true">
+            android:clickable="true"
+            android:id="@+id/settings_distance_unit_button">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -50,6 +52,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/settings_distance_unit_value"
                 tools:text="Metric (km)"
                 android:layout_below="@id/settings_distance_unit_text"
                 android:layout_marginTop="7dp"
@@ -60,7 +63,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/iron" />
+            android:background="@color/iron"
+            android:layout_marginTop="2dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -69,20 +73,23 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="30dp"/>
+            android:layout_marginTop="25dp"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
             android:background="?attr/selectableItemBackground"
-            android:clickable="true">
+            android:clickable="true"
+            android:paddingBottom="10dp"
+            android:paddingTop="2dp"
+            android:id="@+id/settings_signout_button">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/settings_signout_text"
                 android:text="Sign Out"
-                android:layout_marginTop="35dp"
                 android:layout_marginLeft="15dp"
                 android:textSize="18sp"
                 android:textColor="@android:color/black"/>

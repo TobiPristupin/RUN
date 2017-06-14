@@ -1,13 +1,20 @@
 package com.example.tobias.run.settingsscreen;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.tobias.run.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -18,6 +25,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         initToolbar();
         initUnitText();
+        initButtons();
     }
 
 
@@ -39,7 +47,33 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void initUnitText(){
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE);
         TextView distanceUnit = (TextView) findViewById(R.id.settings_distance_unit_value);
-        distanceUnit.setText("Metric (km)");
+        if (sharedPref.getString(getString(R.string.preference_distance_unit_key), null).equals("km")){
+            distanceUnit.setText("Metric (km)");
+        } else {
+            distanceUnit.setText("Imperial (mi)");
+        }
     }
+
+    private void initButtons(){
+        RelativeLayout signOutButton = (RelativeLayout) findViewById(R.id.settings_signout_button);
+        signOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+                builder.setMessage("Are you sure you want to log out?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FirebaseAuth.getInstance().signOut();
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("No", null);
+                builder.create().show();
+            }
+        });
+    }
+
 }
