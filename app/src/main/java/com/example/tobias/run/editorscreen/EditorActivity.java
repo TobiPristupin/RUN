@@ -137,7 +137,7 @@ public class EditorActivity extends AppCompatActivity {
         data.put("time", ((TextView) findViewById(R.id.editor_time_text)).getText().toString());
         data.put("rating", ((TextView) findViewById(R.id.editor_rating_text)).getText().toString());
         data.put("date", ((TextView) findViewById(R.id.editor_date_text)).getText().toString());
-        data.put("unit", sharedPref.getString("distance_unit", null));
+        data.put("unit", sharedPref.getString(getString(R.string.preference_distance_unit_key), null));
         return data;
     }
 
@@ -167,7 +167,7 @@ public class EditorActivity extends AppCompatActivity {
     private void setEditMode(){
         getSupportActionBar().setTitle("Edit Run");
 
-        String unit = sharedPref.getString("distance_unit", null);
+        String unit = sharedPref.getString(getString(R.string.preference_distance_unit_key), null);
         String distanceText = DateManager.distanceToString(trackedRun.getDistance(), unit);
         ((TextView) findViewById(R.id.editor_distance_text)).setText(distanceText);
 

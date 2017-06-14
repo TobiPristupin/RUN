@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -20,10 +19,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.editorscreen.EditorActivity;
 import com.example.tobias.run.data.DatabaseHandler;
-import com.example.tobias.run.helpers.DateManager;
 import com.example.tobias.run.data.TrackedRun;
+import com.example.tobias.run.editorscreen.EditorActivity;
+import com.example.tobias.run.helpers.DateManager;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -40,6 +39,7 @@ public class HistoryFragment extends Fragment {
     private View rootView;
     private HistoryListItemAdapter adapter;
     private ListView listView;
+    private Spinner spinner;
 
     public HistoryFragment(){
         //Required empty constructor.
@@ -67,7 +67,8 @@ public class HistoryFragment extends Fragment {
      * Populates date spinner, implements spinner callbacks and small runtime UI tweaks on spinner.
      */
     private void initDateSpinner(){
-        final Spinner spinner = (Spinner) rootView.findViewById(R.id.date_spinner);
+        spinner = (Spinner) rootView.findViewById(R.id.date_spinner);
+
         //Spinner dropdown elements
         String[] categories = new String[]{"Month", "Week", "Year", "All"};
         //Create adapter for Spinner
@@ -75,9 +76,6 @@ public class HistoryFragment extends Fragment {
                 categories);
 
         spinner.setAdapter(spinnerAdapter);
-        /*Set color of spinner dropdown icon to white. Because of added complexity when designing a custom
-        layout file for the Spinner, decided to instead change the color on runtime*/
-        spinner.getBackground().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_ATOP);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -93,9 +91,7 @@ public class HistoryFragment extends Fragment {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
     }
 
@@ -145,8 +141,7 @@ public class HistoryFragment extends Fragment {
      */
     private void loadRecords() {
         //TODO: Reformat for performance
-        Spinner dateSpinner = (Spinner) rootView.findViewById(R.id.date_spinner);
-        String sortBy = dateSpinner.getSelectedItem().toString();
+        String sortBy = spinner.getSelectedItem().toString();
         adapter.clear();
 
         switch (sortBy){

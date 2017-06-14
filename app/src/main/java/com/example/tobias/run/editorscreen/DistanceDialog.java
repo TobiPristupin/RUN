@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.example.tobias.run.R;
 
 /**
- * Dialog that allows user to set a distance value for a new tracked run. Sends data to parwnt Activity
+ * Dialog that allows user to set a distance value for a new tracked run. Sends data to parent Activity
  * via onPositiveButtonListener.
  */
 
@@ -89,7 +89,7 @@ public class DistanceDialog {
      */
     private void initUnitText(){
         TextView unitText = (TextView) rootView.findViewById(R.id.distance_unit);
-        if(sharedPref.getString("distance_unit", null).equals("km")){
+        if(sharedPref.getString(activity.getString(R.string.preference_distance_unit_key), null).equals("km")){
             unitText.setText("km");
         } else {
             unitText.setText("mi");
@@ -102,7 +102,7 @@ public class DistanceDialog {
      */
     private String formatValues(){
         String distance = null;
-        if (sharedPref.getString("distance_unit", null).equals("km")){
+        if (sharedPref.getString(activity.getString(R.string.preference_distance_unit_key), null).equals("km")){
             distance = "" + numberPickerWhole.getValue() + ","
                     + numberPickerDecimal.getValue() + " km";
         } else {

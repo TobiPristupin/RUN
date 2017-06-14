@@ -22,12 +22,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.historyscreen.HistoryFragment;
 import com.example.tobias.run.loginscreen.LoginActivity;
+import com.example.tobias.run.settingsscreen.SettingsActivity;
 import com.example.tobias.run.statsscreen.StatsFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,8 +39,10 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
+    private FirebaseAuth.AuthStateListener authListener;
     //Firebase request code
     private static final int RC_SIGN_IN = 1516;
 
@@ -50,24 +52,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        firebaseAuth = firebaseAuth.getInstance();
-        firebaseAuth.signOut();
-        firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseAuth = FirebaseAuth.getInstance();
+        authListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null){
+                    firebaseUser = firebaseAuth.getCurrentUser();
+                    //Toast.makeText(MainActivity.this, firebaseUser.getDisplayName(), Toast.LENGTH_SHORT).show();
+                } else {
+                    loadLogIn();
+                }
+            }
+        };
 
-        if (firebaseUser == null) {
-            // Not logged in, launch the Log In activity
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        }
 
-
+        initDrawerLayout();
         initSharedPref();
         initToolbar();
-
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
         if (savedInstanceState == null) {
             //If app hasn't loaded the views previously
@@ -78,14 +80,34 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
+    }
+
+    private void initDrawerLayout(){
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+
         //On item selected in navigation view
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-             @Override
-             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                 openFragment(item);
-                 return true;
-             }
-         });
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                openFragment(item);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        firebaseAuth.removeAuthStateListener(authListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        firebaseAuth.addAuthStateListener(authListener);
     }
 
     private void loadLogIn(){
@@ -98,28 +120,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void openFragment(MenuItem menuItem){
-        boolean fragmentTransaction = false;
         Fragment newFragment = null;
 
         switch (menuItem.getItemId()){
             //If item selected id is menu_history, create new HistoryFragment in newFragment variable
             case R.id.menu_history :
-                fragmentTransaction = true;
                 newFragment = new HistoryFragment();
                 break;
             //...
             case R.id.menu_stats :
-                fragmentTransaction = true;
                 newFragment = new StatsFragment();
                 break;
             //...
             case R.id.menu_settings :
-                Log.i("Navigation View", "Settings");
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 break;
         }
 
-        //If fragmentTransaction was set to true (button was clicked in NavigationDrawer)
-        if (fragmentTransaction){
+        if (newFragment != null){
             //Replace content frame in activity_main.xml with newFragment
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, newFragment)
@@ -149,16 +167,17 @@ public class MainActivity extends AppCompatActivity {
     public void initSharedPref(){
         SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE);
         //If distance_unit hasn't been initialized, set it to default value (km)
-        if (sharedPref.getString("distance_unit", null) == null){
-            sharedPref.edit().putString("distance_unit", "km").apply();
+        if (sharedPref.getString(getString(R.string.preference_distance_unit_key), null) == null){
+            sharedPref.edit().putString(getString(R.string.preference_distance_unit_key), "km").apply();
         }
     }
 
+
     /**
-     * Set toolbar defined in xml layout as supprot action toolbar and add button to open DrawerLayout
+     * Set toolbar defined in xml layout as support action toolbar and add button to open DrawerLayout
      */
     public void initToolbar(){
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_menu);

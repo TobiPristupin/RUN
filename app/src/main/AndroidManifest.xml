@@ -10,17 +10,21 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.MainActivity"
-            android:screenOrientation="portrait">
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".editorscreen.EditorActivity"
             android:parentActivityName=".activities.MainActivity" />
-        <activity android:name=".loginscreen.LoginActivity"></activity>
+
+        <activity android:name=".loginscreen.LoginActivity" />
+
+        <activity android:name=".settingsscreen.SettingsActivity"
+            android:parentActivityName=".activities.MainActivity"/>
     </application>
 
 </manifest>

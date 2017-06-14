@@ -73,7 +73,7 @@ public class HistoryListItemAdapter extends ArrayAdapter<TrackedRun> {
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_key), Context.MODE_PRIVATE);
         TextView distanceView = (TextView) rootView.findViewById(R.id.distance_text);
-        String unit = sharedPref.getString("distance_unit", null);
+        String unit = sharedPref.getString(context.getString(R.string.preference_distance_unit_key), null);
 
         distanceView.setText(DateManager.distanceToString(currentItem.getDistance(), unit));
     }
