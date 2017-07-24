@@ -12,9 +12,17 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.activities.MainActivity;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -27,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout emailLayout;
     private TextInputLayout passwordLayout;
     private FirebaseAuth firebaseAuth;
+    private GoogleApiClient googleApiClient;
+    private static final int RC_SIGN_IN = 1516;
     private static final String TAG = "LoginActivity";
 
     @Override
@@ -40,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
 
         changeStatusBarColor();
         initLogInButton();
+        initGoogleLogIn();
     }
 
     @Override
@@ -117,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 if (password.length() <= 6){
-                    passwordLayout.setError("Password must be longer than 3 characters");
+                    passwordLayout.setError("Password must be longer than 6 characters");
                     return;
                 }
 
@@ -126,10 +137,10 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()){
-                                    Log.d(TAG, "Firebase sign in with email successfull");
+                                    Log.d(TAG, "FirebaseSignInEmail: successfull");
                                     loadMainActivity();
                                 } else {
-                                    Log.d(TAG, "Firebase sign in with email unsuccessful");
+                                    Log.d(TAG, "FirebaseSignInWithEmail: unsuccessful");
                                     passwordLayout.setError("Invalid Credentials");
                                     return;
                                 }
@@ -145,5 +156,48 @@ public class LoginActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+    private void initGoogleLogIn(){
+        GoogleSignInOptions googleSignIn = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        Log.d(TAG, "GoogleConnectionFailed: " + connectionResult);
+                        //TODO: Upgrade to toasty
+                        Toast.makeText(LoginActivity.this, "Unable to connect to google play services", Toast.LENGTH_SHORT);
+                    }
+                })
+                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignIn)
+                .build();
+
+        SignInButton googleBtn = (SignInButton) findViewById(R.id.login_google_button);
+        googleBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = result.getSignInAccount();
+                Toast.makeText(this, account.getDisplayName(), Toast.LENGTH_LONG);
+            }
+        }
     }
 }
