@@ -3,5 +3,6 @@
     <string name="preference_key">run_shared_pref</string>
     <string name="new_account"><u>New here? Sign up</u></string>
     <string name="preference_distance_unit_key">distance_unit</string>
+    <string name="web_client_id">596316385655-84kjtj7387oahdvcifhsdinl45sp6ios.apps.googleusercontent.com</string>
 
 </resources>

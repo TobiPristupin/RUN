@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordLayout = (TextInputLayout) findViewById(R.id.login_password);
         firebaseAuth = FirebaseAuth.getInstance();
 
-        changeStatusBarColor();
+        //changeStatusBarColor();
         initLogInButton();
         initGoogleLogIn();
     }
@@ -160,7 +160,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initGoogleLogIn(){
         GoogleSignInOptions googleSignIn = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken("596316385655-omsd3c538ik6vde6heaqfo2cjrrltbnn.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
@@ -193,11 +193,15 @@ public class LoginActivity extends AppCompatActivity {
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = result.getSignInAccount();
-                Toast.makeText(this, account.getDisplayName(), Toast.LENGTH_LONG);
-            }
+            handleGoogleSignInResult(result);
+        }
+    }
+
+    private void handleGoogleSignInResult(GoogleSignInResult result){
+        Log.d(TAG, "HandleGoogleSignInResultSuccess:" + result.isSuccess());
+        if (result.isSuccess()){
+            GoogleSignInAccount account = result.getSignInAccount();
+            Toast.makeText(this, account.getDisplayName(), Toast.LENGTH_LONG);
         }
     }
 }
