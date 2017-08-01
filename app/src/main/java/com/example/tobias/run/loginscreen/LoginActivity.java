@@ -1,6 +1,7 @@
 package com.example.tobias.run.loginscreen;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -25,10 +26,14 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.apache.commons.validator.routines.EmailValidator;
+
+import es.dmoral.toasty.Toasty;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -48,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
         passwordLayout = (TextInputLayout) findViewById(R.id.login_password);
         firebaseAuth = FirebaseAuth.getInstance();
 
-        //changeStatusBarColor();
         initLogInButton();
         initGoogleLogIn();
     }
@@ -58,26 +62,13 @@ public class LoginActivity extends AppCompatActivity {
         //User can't exit app by pressing back.
     }
 
-    /**
-     * AppTheme status bar color attr is set to transparent for the drawerLayout in main activity.
-     * this activity uses the primary dark color as status bar color. This method sets it during runtime.
-     */
-    private void changeStatusBarColor() {
-        Window window = getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-    }
-
     private void initLogInButton(){
         FloatingActionButton button = (FloatingActionButton) findViewById(R.id.login_button);
 
-
-        //Error resets when text is inputted
+        //EditText error resets everytime text is inputted
         emailLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -87,14 +78,12 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
 
         passwordLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -104,7 +93,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
 
@@ -114,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                 String email = emailLayout.getEditText().getText().toString().trim();
                 String password = passwordLayout.getEditText().getText().toString().trim();
                 EmailValidator validator = EmailValidator.getInstance();
+                //Validate if email and password fields meet requirements.
 
                 if (email.isEmpty()){
                     emailLayout.setError("Field is required");
@@ -132,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
+                //Sign in with validated data onto firebase. If successful load main activity.
                 firebaseAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -158,9 +148,10 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //Initializes everything related to Google Sign In
     private void initGoogleLogIn(){
         GoogleSignInOptions googleSignIn = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("596316385655-omsd3c538ik6vde6heaqfo2cjrrltbnn.apps.googleusercontent.com")
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -169,8 +160,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
                         Log.d(TAG, "GoogleConnectionFailed: " + connectionResult);
-                        //TODO: Upgrade to toasty
-                        Toast.makeText(LoginActivity.this, "Unable to connect to google play services", Toast.LENGTH_SHORT);
+                        Toasty.warning(LoginActivity.this, "Unable to connect to Google. Check your internet connection", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignIn)
@@ -201,7 +191,29 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(TAG, "HandleGoogleSignInResultSuccess:" + result.isSuccess());
         if (result.isSuccess()){
             GoogleSignInAccount account = result.getSignInAccount();
-            Toast.makeText(this, account.getDisplayName(), Toast.LENGTH_LONG);
+            firebaseAuthGoogleAccount(account);
         }
     }
+
+    //Called to authenticate succesful google log-in account into firebase to complete login flow.
+    private void firebaseAuthGoogleAccount(GoogleSignInAccount account){
+        Log.d(TAG, "FirebaseAuthGoogleAccount:" + account.getId());
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()){
+                    Log.d(TAG, "FirebaseSignInWithGoogleCredential:true");
+                    loadMainActivity();
+                } else {
+                    Log.w(TAG, "FirebaseSignInWithGoogleCredential:false " + task.getException());
+                    Toasty.warning(LoginActivity.this, "Authentication failed. Check your internet connection or try again").show();
+                }
+            }
+        });
+
+    }
+
 }
