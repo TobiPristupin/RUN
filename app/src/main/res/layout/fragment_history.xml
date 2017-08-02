@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="com.example.tobias.run.historyscreen.HistoryFragment">
+    tools:context="com.example.tobias.run.history.HistoryFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"

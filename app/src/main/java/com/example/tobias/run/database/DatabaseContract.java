@@ -1,4 +1,4 @@
-package com.example.tobias.run.data;
+package com.example.tobias.run.database;
 
 
 import android.provider.BaseColumns;

@@ -1,4 +1,4 @@
-package com.example.tobias.run.helpers;
+package com.example.tobias.run.utils;
 
 import org.joda.time.DateTime;
 import org.joda.time.Period;

@@ -1,4 +1,4 @@
-package com.example.tobias.run.statsscreen;
+package com.example.tobias.run.stats.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.helpers.AxisValueFormatter;
+import com.example.tobias.run.utils.AxisValueFormatter;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;

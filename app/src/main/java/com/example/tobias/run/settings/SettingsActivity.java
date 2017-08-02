@@ -1,4 +1,4 @@
-package com.example.tobias.run.settingsscreen;
+package com.example.tobias.run.settings;
 
 import android.app.AlertDialog;
 import android.content.Context;

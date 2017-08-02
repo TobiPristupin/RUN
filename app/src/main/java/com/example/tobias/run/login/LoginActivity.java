@@ -1,22 +1,19 @@
-package com.example.tobias.run.loginscreen;
+package com.example.tobias.run.login;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.activities.MainActivity;
+import com.example.tobias.run.app.MainActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -58,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
 
         initLogInButton();
         initGoogleLogIn();
+        initButtons();
     }
 
     @Override
@@ -78,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 emailLayout.setError(null);
+                emailLayout.setErrorEnabled(false);
             }
 
             @Override
@@ -93,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 passwordLayout.setError(null);
+                passwordLayout.setErrorEnabled(false);
             }
 
             @Override
@@ -109,18 +109,22 @@ public class LoginActivity extends AppCompatActivity {
                 //Validate if email and password fields meet requirements.
 
                 if (email.isEmpty()){
+                    emailLayout.setErrorEnabled(true);
                     emailLayout.setError("Field is required");
                     return;
                 }
                 if (password.isEmpty()){
+                    passwordLayout.setErrorEnabled(false);
                     passwordLayout.setError("Field is required");
                     return;
                 }
                 if (!validator.isValid(email)){
+                    emailLayout.setErrorEnabled(true);
                     emailLayout.setError("Invalid email");
                     return;
                 }
                 if (password.length() <= 6){
+                    passwordLayout.setErrorEnabled(false);
                     passwordLayout.setError("Password must be longer than 6 characters");
                     return;
                 }
@@ -233,6 +237,17 @@ public class LoginActivity extends AppCompatActivity {
 
     private void stopLoadingAnimation(){
         fabButton.showProgress(false);
+    }
+
+    private void initButtons(){
+        TextView newAccount = (TextView) findViewById(R.id.login_newaccount);
+        newAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, NewAccountActivity.class));
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+            }
+        });
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.tobias.run.historyscreen;
+package com.example.tobias.run.history.adapter;
 
 
 import android.content.Context;
@@ -15,8 +15,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.data.TrackedRun;
-import com.example.tobias.run.helpers.DateManager;
+import com.example.tobias.run.database.TrackedRun;
+import com.example.tobias.run.history.HistoryFragment;
+import com.example.tobias.run.utils.DateManager;
 
 import java.util.ArrayList;
 

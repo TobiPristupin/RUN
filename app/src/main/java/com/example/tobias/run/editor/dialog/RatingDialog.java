@@ -1,4 +1,4 @@
-package com.example.tobias.run.editorscreen;
+package com.example.tobias.run.editor.dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;

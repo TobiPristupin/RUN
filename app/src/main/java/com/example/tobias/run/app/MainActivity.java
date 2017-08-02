@@ -1,4 +1,4 @@
-package com.example.tobias.run.activities;
+package com.example.tobias.run.app;
 
 /**
  * RUN. application let's users track their running by adding them manually
@@ -9,6 +9,8 @@ package com.example.tobias.run.activities;
  *@version 1.0
  *@since 09/01/2017
  */
+
+//TODO: Add downwards and upwards animations when switching activities.
 
 
 import android.content.Context;
@@ -25,10 +27,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.historyscreen.HistoryFragment;
-import com.example.tobias.run.loginscreen.LoginActivity;
-import com.example.tobias.run.settingsscreen.SettingsActivity;
-import com.example.tobias.run.statsscreen.StatsFragment;
+import com.example.tobias.run.history.HistoryFragment;
+import com.example.tobias.run.login.LoginActivity;
+import com.example.tobias.run.settings.SettingsActivity;
+import com.example.tobias.run.stats.StatsFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

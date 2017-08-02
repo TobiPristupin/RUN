@@ -1,4 +1,4 @@
-package com.example.tobias.run.statsscreen;
+package com.example.tobias.run.stats;
 
 
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tobias.run.R;
+import com.example.tobias.run.stats.fragment.StatsMileageGraphFragment;
 import com.github.mikephil.charting.data.BarEntry;
 
 import java.util.ArrayList;
