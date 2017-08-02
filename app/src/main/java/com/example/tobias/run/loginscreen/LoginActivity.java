@@ -34,6 +34,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import es.dmoral.toasty.Toasty;
+import mbanje.kurt.fabbutton.FabButton;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -41,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout passwordLayout;
     private FirebaseAuth firebaseAuth;
     private GoogleApiClient googleApiClient;
+    private FabButton fabButton;
     private static final int RC_SIGN_IN = 1516;
     private static final String TAG = "LoginActivity";
 
@@ -52,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         emailLayout = (TextInputLayout) findViewById(R.id.login_email);
         passwordLayout = (TextInputLayout) findViewById(R.id.login_password);
         firebaseAuth = FirebaseAuth.getInstance();
+        fabButton = (FabButton) findViewById(R.id.login_button);
 
         initLogInButton();
         initGoogleLogIn();
@@ -63,7 +66,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initLogInButton(){
-        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.login_button);
+        //FloatingActionButton button = (FloatingActionButton) findViewById(R.id.login_button);
+
 
         //EditText error resets everytime text is inputted
         emailLayout.getEditText().addTextChangedListener(new TextWatcher() {
@@ -96,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        button.setOnClickListener(new View.OnClickListener() {
+        fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = emailLayout.getEditText().getText().toString().trim();
@@ -121,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
+                startLoadingAnimation();
                 //Sign in with validated data onto firebase. If successful load main activity.
                 firebaseAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
@@ -132,6 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                                 } else {
                                     Log.d(TAG, "FirebaseSignInWithEmail: unsuccessful");
                                     passwordLayout.setError("Invalid Credentials");
+                                    stopLoadingAnimation();
                                     return;
                                 }
                             }
@@ -141,6 +147,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loadMainActivity(){
+        stopLoadingAnimation();
         Intent intent = new Intent(this, MainActivity.class);
         //Flags prevent user from returning to LoginActivity when pressing back button
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -170,6 +177,7 @@ public class LoginActivity extends AppCompatActivity {
         googleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startLoadingAnimation();
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
@@ -192,6 +200,8 @@ public class LoginActivity extends AppCompatActivity {
         if (result.isSuccess()){
             GoogleSignInAccount account = result.getSignInAccount();
             firebaseAuthGoogleAccount(account);
+        } else {
+            stopLoadingAnimation();
         }
     }
 
@@ -209,11 +219,20 @@ public class LoginActivity extends AppCompatActivity {
                     loadMainActivity();
                 } else {
                     Log.w(TAG, "FirebaseSignInWithGoogleCredential:false " + task.getException());
+                    stopLoadingAnimation();
                     Toasty.warning(LoginActivity.this, "Authentication failed. Check your internet connection or try again").show();
                 }
             }
         });
 
+    }
+
+    private void startLoadingAnimation(){
+        fabButton.showProgress(true);
+    }
+
+    private void stopLoadingAnimation(){
+        fabButton.showProgress(false);
     }
 
 }
