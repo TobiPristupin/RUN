@@ -40,6 +40,7 @@ dependencies {
     compile 'commons-validator:commons-validator:1.6'
     compile 'com.android.support:preference-v7:24.2.1'
     compile 'mbanje.kurt:fabbutton:1.2.4@aar'
+    compile 'br.com.simplepass:loading-button-android:1.7.2'
     testCompile 'junit:junit:4.12'
 }
 

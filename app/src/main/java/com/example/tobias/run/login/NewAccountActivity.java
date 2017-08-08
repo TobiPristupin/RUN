@@ -31,6 +31,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import es.dmoral.toasty.Toasty;
 
 public class NewAccountActivity extends AppCompatActivity {
@@ -39,8 +40,10 @@ public class NewAccountActivity extends AppCompatActivity {
     private TextInputLayout passwordLayout;
     private TextInputLayout passwordLayout2;
     private FirebaseAuth firebaseAuth;
+    private CircularProgressButton createAccountButton;
     private static final String TAG = "NewAccountActivity";
     private static final int RC_SIGN_IN = 1379;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,7 @@ public class NewAccountActivity extends AppCompatActivity {
         passwordLayout = (TextInputLayout) findViewById(R.id.new_account_password1);
         passwordLayout2 = (TextInputLayout) findViewById(R.id.new_account_password2);
         firebaseAuth = FirebaseAuth.getInstance();
+        createAccountButton = (CircularProgressButton) findViewById(R.id.new_account_create_account_button);
 
         initCreateAccountButton();
         initGoogleLogIn();
@@ -62,11 +66,17 @@ public class NewAccountActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        createAccountButton.dispose();
+    }
+
     private void initCreateAccountButton() {
         //Configures all TextInputLayout to remove their errors every time text is inputted
         setLayoutErrorReset();
-
-        Button createAccountBtn = (Button) findViewById(R.id.new_account_create_account_button);
+        //Button createAccountBtn = (Button) findViewById(R.id.new_account_create_account_button);
+        CircularProgressButton createAccountBtn = (CircularProgressButton) findViewById(R.id.new_account_create_account_button);
         createAccountBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -213,6 +223,7 @@ public class NewAccountActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                createAccountButton.startAnimation();
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
@@ -236,7 +247,8 @@ public class NewAccountActivity extends AppCompatActivity {
             GoogleSignInAccount account = result.getSignInAccount();
             firebaseAuthGoogleAccount(account);
         } else {
-
+            Toasty.warning(NewAccountActivity.this, "Google sign in failed. Check your internet connection or try again").show();
+            createAccountButton.stopAnimation();
         }
     }
 
@@ -255,6 +267,7 @@ public class NewAccountActivity extends AppCompatActivity {
                         } else {
                             Log.w(TAG, "FirebaseSignInWithGoogleCredential:Unsuccessful " + task.getException());
                             Toasty.warning(NewAccountActivity.this, "Authentication failed. Check your internet connection or try again").show();
+                            createAccountButton.stopAnimation();
                         }
                     }
                 });

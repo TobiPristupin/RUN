@@ -112,13 +112,15 @@
 
     </android.support.design.widget.TextInputLayout>
 
-    <Button
+    <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
         android:id="@+id/new_account_create_account_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Create Account"
         android:background="@drawable/rounded_button"
         android:textColor="@color/colorPrimary"
+        app:spinning_bar_color="@color/colorPrimary"
+        app:spinning_bar_padding="5dp"
         android:layout_marginRight="48dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="48dp"

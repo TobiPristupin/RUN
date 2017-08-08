@@ -190,6 +190,7 @@ public class LoginActivity extends AppCompatActivity {
             GoogleSignInAccount account = result.getSignInAccount();
             firebaseAuthGoogleAccount(account);
         } else {
+            Toasty.warning(LoginActivity.this, "Google sign in failed. Check your internet connection or try again").show();
             stopLoadingAnimation();
         }
     }
