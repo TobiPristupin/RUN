@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.app.MainActivity;
+import com.example.tobias.run.utils.GoogleAuthManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -38,7 +39,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout emailLayout;
     private TextInputLayout passwordLayout;
     private FirebaseAuth firebaseAuth;
-    private GoogleApiClient googleApiClient;
     private FabButton fabButton;
     private static final int RC_SIGN_IN = 1516;
     private static final String TAG = "LoginActivity";
@@ -64,10 +64,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initLogInButton(){
-        //FloatingActionButton button = (FloatingActionButton) findViewById(R.id.login_button);
-
-
-        //EditText error resets everytime text is inputted
+        //EditText error resets every time text is inputted
         emailLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -136,11 +133,11 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()){
-                                    Log.d(TAG, "FirebaseSignInEmail: successfull");
+                                    Log.d(TAG, "FirebaseSignInEmail:successful");
                                     loadMainActivity();
                                 } else {
-                                    Log.d(TAG, "FirebaseSignInWithEmail: unsuccessful");
-                                    passwordLayout.setError("Invalid Credentials");
+                                    Log.d(TAG, "FirebaseSignInWithEmail:unsuccessful");
+                                    passwordLayout.setError("Invalid credentials");
                                     stopLoadingAnimation();
                                     return;
                                 }
@@ -157,32 +154,20 @@ public class LoginActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-    }
+}
 
     //Initializes everything related to Google Sign In
     private void initGoogleLogIn(){
-        GoogleSignInOptions googleSignIn = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        Log.d(TAG, "GoogleConnectionFailed: " + connectionResult);
-                        Toasty.warning(LoginActivity.this, "Unable to connect to Google. Check your internet connection", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignIn)
-                .build();
+        GoogleAuthManager authManager = new GoogleAuthManager(LoginActivity.this);
+        final GoogleApiClient apiClient = authManager.getApiClient(LoginActivity.this, authManager.getSignInOptions(),
+                TAG);
 
         SignInButton googleBtn = (SignInButton) findViewById(R.id.login_google_button);
         googleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startLoadingAnimation();
-                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
@@ -195,11 +180,11 @@ public class LoginActivity extends AppCompatActivity {
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleGoogleSignInResult(result);
+            handleGoogleResult(result);
         }
     }
 
-    private void handleGoogleSignInResult(GoogleSignInResult result){
+    private void handleGoogleResult(GoogleSignInResult result){
         Log.d(TAG, "HandleGoogleSignInResultSuccess:" + result.isSuccess());
         if (result.isSuccess()){
             GoogleSignInAccount account = result.getSignInAccount();
@@ -209,7 +194,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    //Called to authenticate succesful google log-in account into firebase to complete login flow.
+    //Called to authenticate successful google log-in account into firebase to complete login flow.
     private void firebaseAuthGoogleAccount(GoogleSignInAccount account){
         Log.d(TAG, "FirebaseAuthGoogleAccount:" + account.getId());
 
@@ -219,10 +204,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    Log.d(TAG, "FirebaseSignInWithGoogleCredential:true");
+                    Log.d(TAG, "FirebaseSignInWithGoogleCredential:Successful");
                     loadMainActivity();
                 } else {
-                    Log.w(TAG, "FirebaseSignInWithGoogleCredential:false " + task.getException());
+                    Log.w(TAG, "FirebaseSignInWithGoogleCredential:Unsuccessful " + task.getException());
                     stopLoadingAnimation();
                     Toasty.warning(LoginActivity.this, "Authentication failed. Check your internet connection or try again").show();
                 }

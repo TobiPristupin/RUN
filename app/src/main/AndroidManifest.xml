@@ -31,7 +31,8 @@
             android:parentActivityName=".app.MainActivity" />
         <activity
             android:name=".login.NewAccountActivity"
-            android:theme="@style/LoginTheme"/>
+            android:theme="@style/LoginTheme"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
