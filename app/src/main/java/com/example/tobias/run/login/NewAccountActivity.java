@@ -9,8 +9,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.app.MainActivity;
@@ -56,6 +54,8 @@ public class NewAccountActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         createAccountButton = (CircularProgressButton) findViewById(R.id.new_account_create_account_button);
 
+        //Configures all TextInputLayout to remove their errors every time text is inputted
+        setLayoutErrorReset();
         initCreateAccountButton();
         initGoogleLogIn();
     }
@@ -73,8 +73,6 @@ public class NewAccountActivity extends AppCompatActivity {
     }
 
     private void initCreateAccountButton() {
-        //Configures all TextInputLayout to remove their errors every time text is inputted
-        setLayoutErrorReset();
         //Button createAccountBtn = (Button) findViewById(R.id.new_account_create_account_button);
         CircularProgressButton createAccountBtn = (CircularProgressButton) findViewById(R.id.new_account_create_account_button);
         createAccountBtn.setOnClickListener(new View.OnClickListener() {

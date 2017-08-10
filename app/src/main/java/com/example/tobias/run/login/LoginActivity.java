@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
 
         initLogInButton();
         initGoogleLogIn();
-        initButtons();
+        initBottomButtons();
     }
 
     @Override
@@ -225,13 +225,22 @@ public class LoginActivity extends AppCompatActivity {
         fabButton.showProgress(false);
     }
 
-    private void initButtons(){
+    private void initBottomButtons(){
         TextView newAccount = (TextView) findViewById(R.id.login_newaccount);
         newAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(LoginActivity.this, NewAccountActivity.class));
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+            }
+        });
+
+        TextView forgotPassword = (TextView) findViewById(R.id.login_forgotpassword);
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
             }
         });
     }

@@ -11,6 +11,7 @@ package com.example.tobias.run.app;
  */
 
 //TODO: Add downwards and upwards animations when switching activities.
+//TODO: Toasty library has bug where text and icon have no padding. Check github to see if issue has been resolved or implement workaround.
 
 
 import android.content.Context;
