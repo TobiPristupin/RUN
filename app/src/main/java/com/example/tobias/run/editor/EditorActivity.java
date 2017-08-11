@@ -87,11 +87,11 @@ public class EditorActivity extends AppCompatActivity {
                 break;
             case R.id.editor_save:
                 if (addRecord()) {
-                    Toasty.success(activity, "Successfully Added", Toast.LENGTH_SHORT).show();
+                    Toasty.success(EditorActivity.this, "Successfully Added", Toast.LENGTH_SHORT).show();
                     Log.v(TAG, "Added record to database successfully.");
                     finish();
                 } else {
-                    Toasty.warning(activity, "Fill in all the fields", Toast.LENGTH_SHORT).show();
+                    Toasty.warning(EditorActivity.this, "Fill in all the fields", Toast.LENGTH_SHORT).show();
                     MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.error);
                     mediaPlayer.start();
                 }

@@ -12,7 +12,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.tobias.run.R;
@@ -23,8 +22,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.apache.commons.validator.routines.EmailValidator;
-
-import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import es.dmoral.toasty.Toasty;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
@@ -108,13 +105,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){
                     Log.d(TAG, "FirebaseSendResetEmail:Successful");
-                    sendButtonStopAnim();
                     Toasty.success(ForgotPasswordActivity.this, "Recovery email sent", Toast.LENGTH_SHORT).show();
+                    sendButtonStopAnim();
                 } else {
                     Log.d(TAG, "FirebaseSendResetEmail:Unsuccessful " + task.getException());
                     sendButtonStopAnim();
                     if (task.getException() instanceof FirebaseTooManyRequestsException){
-                        Toasty.warning(ForgotPasswordActivity.this, "Too many requests sent. Please try again ").show();
+                        Toasty.warning(ForgotPasswordActivity.this, "Too many requests sent. Please try again").show();
                         return;
                     }
                     Toasty.warning(ForgotPasswordActivity.this, "Email not sent. Please check your internet connection or try again").show();

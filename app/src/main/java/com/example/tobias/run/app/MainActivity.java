@@ -26,6 +26,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.history.HistoryFragment;
@@ -34,6 +35,8 @@ import com.example.tobias.run.settings.SettingsActivity;
 import com.example.tobias.run.stats.StatsFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import es.dmoral.toasty.Toasty;
 
 
 /**
@@ -62,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null){
                     firebaseUser = firebaseAuth.getCurrentUser();
-                    //Toast.makeText(MainActivity.this, firebaseUser.getDisplayName(), Toast.LENGTH_SHORT).show();
                 } else {
                     loadLogIn();
                 }
@@ -80,11 +82,6 @@ public class MainActivity extends AppCompatActivity {
             //Open History fragment setting it as default for startup.
             openFragment(menuItem);
         }
-
-
-
-
-
     }
 
     private void initDrawerLayout(){

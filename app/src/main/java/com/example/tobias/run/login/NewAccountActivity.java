@@ -1,5 +1,7 @@
 package com.example.tobias.run.login;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -9,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.app.MainActivity;
@@ -26,6 +29,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -38,7 +42,8 @@ public class NewAccountActivity extends AppCompatActivity {
     private TextInputLayout passwordLayout;
     private TextInputLayout passwordLayout2;
     private FirebaseAuth firebaseAuth;
-    private CircularProgressButton createAccountButton;
+    private Button createAccountButton;
+    private AVLoadingIndicatorView loadingIndicator;
     private static final String TAG = "NewAccountActivity";
     private static final int RC_SIGN_IN = 1379;
 
@@ -51,8 +56,9 @@ public class NewAccountActivity extends AppCompatActivity {
         emailLayout = (TextInputLayout) findViewById(R.id.new_account_email);
         passwordLayout = (TextInputLayout) findViewById(R.id.new_account_password1);
         passwordLayout2 = (TextInputLayout) findViewById(R.id.new_account_password2);
+        loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.new_account_loading_indicator);
         firebaseAuth = FirebaseAuth.getInstance();
-        createAccountButton = (CircularProgressButton) findViewById(R.id.new_account_create_account_button);
+        createAccountButton = (Button) findViewById(R.id.new_account_create_account_button);
 
         //Configures all TextInputLayout to remove their errors every time text is inputted
         setLayoutErrorReset();
@@ -66,16 +72,9 @@ public class NewAccountActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        createAccountButton.dispose();
-    }
 
     private void initCreateAccountButton() {
-        //Button createAccountBtn = (Button) findViewById(R.id.new_account_create_account_button);
-        CircularProgressButton createAccountBtn = (CircularProgressButton) findViewById(R.id.new_account_create_account_button);
-        createAccountBtn.setOnClickListener(new View.OnClickListener() {
+        createAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final String email = emailLayout.getEditText().getText().toString().trim();
@@ -221,7 +220,7 @@ public class NewAccountActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createAccountButton.startAnimation();
+                startLoadingAnim();
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
@@ -246,7 +245,7 @@ public class NewAccountActivity extends AppCompatActivity {
             firebaseAuthGoogleAccount(account);
         } else {
             Toasty.warning(NewAccountActivity.this, "Google sign in failed. Check your internet connection or try again").show();
-            createAccountButton.stopAnimation();
+            endLoadingAnim();
         }
     }
 
@@ -265,9 +264,27 @@ public class NewAccountActivity extends AppCompatActivity {
                         } else {
                             Log.w(TAG, "FirebaseSignInWithGoogleCredential:Unsuccessful " + task.getException());
                             Toasty.warning(NewAccountActivity.this, "Authentication failed. Check your internet connection or try again").show();
-                            createAccountButton.stopAnimation();
+                            endLoadingAnim();
                         }
                     }
                 });
+    }
+
+    private void startLoadingAnim(){
+        //Fade out animation
+        createAccountButton.animate().alpha(0.0f).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                //When button ends fading animation, start loading animation
+                loadingIndicator.smoothToShow();
+            }
+        });
+    }
+
+    private void endLoadingAnim(){
+        //Fade in
+        loadingIndicator.smoothToHide();
+        createAccountButton.animate().alpha(1.0f);
     }
 }
