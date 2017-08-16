@@ -42,6 +42,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         sendButton = (Button) findViewById(R.id.forgot_password_send_button);
         firebaseAuth = firebaseAuth.getInstance();
 
+        Toast.makeText(this, "Hello", Toast.LENGTH_SHORT).show();
+
         //Configures all TextInputLayout to remove their errors every time text is inputted
         setLayoutErrorReset();
         initSendButton();

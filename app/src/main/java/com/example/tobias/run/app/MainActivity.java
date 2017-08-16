@@ -17,18 +17,27 @@ package com.example.tobias.run.app;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.tobias.run.R;
+import com.example.tobias.run.database.FirebaseDatabaseManager;
 import com.example.tobias.run.history.HistoryFragment;
 import com.example.tobias.run.login.LoginActivity;
 import com.example.tobias.run.settings.SettingsActivity;
@@ -49,28 +58,25 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private FirebaseAuth.AuthStateListener authListener;
-    //Firebase request code
-    private static final int RC_SIGN_IN = 1516;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
         firebaseAuth = FirebaseAuth.getInstance();
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null){
-                    firebaseUser = firebaseAuth.getCurrentUser();
-                } else {
+                if (user == null){
                     loadLogIn();
                 }
             }
         };
-
+        firebaseUser = firebaseAuth.getCurrentUser();
 
         initDrawerLayout();
         initSharedPref();
@@ -81,12 +87,13 @@ public class MainActivity extends AppCompatActivity {
             MenuItem menuItem = navigationView.getMenu().findItem(R.id.menu_history);
             //Open History fragment setting it as default for startup.
             openFragment(menuItem);
+
+
         }
     }
 
     private void initDrawerLayout(){
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        //initNavHeader();
 
         //On item selected in navigation view
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -97,6 +104,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+//    private void initNavHeader(){
+//        View navHeader = navigationView.getHeaderView(0);
+//        ImageView userImage = (ImageView) navHeader.findViewById(R.id.navheader_user_image);
+//        RoundedBitmapDrawable bitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), firebaseUser.getPhotoUrl().toString());
+//        bitmapDrawable.setCircular(true);
+//        userImage.setImageDrawable(bitmapDrawable);
+//    }
 
     @Override
     protected void onPause() {

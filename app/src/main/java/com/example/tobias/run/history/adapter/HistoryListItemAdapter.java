@@ -36,9 +36,14 @@ public class HistoryListItemAdapter extends ArrayAdapter<TrackedRun> {
     private View rootView;
     private OnOverflowButtonListener listener;
 
-    public HistoryListItemAdapter(Context context, ArrayList<TrackedRun> items,
-                                  HistoryFragment historyFragment, OnOverflowButtonListener listener){
+    public HistoryListItemAdapter(Context context, ArrayList<TrackedRun> items, OnOverflowButtonListener listener){
         super(context, 0, items);
+        this.context = context;
+        this.listener = listener;
+    }
+
+    public HistoryListItemAdapter(Context context, OnOverflowButtonListener listener){
+        super(context, 0);
         this.context = context;
         this.listener = listener;
     }

@@ -58,10 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         initBottomButtons();
     }
 
-    @Override
-    public void onBackPressed() {
-        //User can't exit app by pressing back.
-    }
+
 
     private void initLogInButton(){
         //EditText error resets every time text is inputted

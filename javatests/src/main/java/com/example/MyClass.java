@@ -1,18 +1,16 @@
 package com.example;
 
+
+
 public class MyClass {
 
     public static void main(String[] args){
-        System.out.println(fact(4));
+        long a = 1502823080l;
+        System.out.println(java.lang.String.valueOf(a) + "@@");
     }
 
-    public static int fact(int input){
-        if (input == 1){
-            return input;
-        }
 
-        return input * fact(input - 1);
-    }
+
 
 
 }

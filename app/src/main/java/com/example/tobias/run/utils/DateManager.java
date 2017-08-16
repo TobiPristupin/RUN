@@ -15,13 +15,12 @@ public class DateManager {
 
     /**
      *
-     * @param distance in d*100
+     * @param distance in "5.5(f)"
      * @param unit
      * @return distance in the format of "1 km/mi"
      */
     public static String distanceToString(double distance, String unit){
         DecimalFormat df = new DecimalFormat("0.00");
-        distance = distance / 100; //Convert to km from m
         String distanceText = df.format(distance) + " " + unit;
         return distanceText;
     }
@@ -60,16 +59,15 @@ public class DateManager {
 
     /**
      *
-     * @param distance in format d*100
-     * @return distance in format 1 km/mi
+     * @param distance in format "5.5 km/mi"
+     * @return distance in format "5.5(f)"
      */
-    public static double distanceToDouble(String distance){
+    public static float distanceToFloat(String distance){
         //Double.ValueOf wont parse comma, but will parse dot.
         distance = distance.replace(",", ".");
         //Remove km or mi
         distance = distance.replace("km", "").replace("mi", "").trim();
-        //Convert to whole number by moving comma and return
-        return (Double.valueOf(distance) * 100);
+        return Float.parseFloat(distance);
     }
 
     /**

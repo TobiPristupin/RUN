@@ -52,16 +52,6 @@
             android:layout_marginLeft="20dp"
             tools:text="January"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:gravity="center"
-            android:textAlignment="gravity"
-            android:layout_marginRight="20dp"
-            android:text="Tobigol Software"
-            android:id="@+id/amount_activities_textview" />
-
 
     </RelativeLayout>
 
@@ -98,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:text="Get up and running! start by adding a run with the + button."
+                android:text="Get up and running! Start by adding a run with the + button."
                 android:textSize="16sp"
                 android:layout_below="@id/lonely_text"/>
         </RelativeLayout>

@@ -4,58 +4,46 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.tobias.run.utils.DateManager;
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 /**
  * Object to represent a new tracked run for storage in database. Handles conversion between
- * the data retrieved directly from editor activity fields to the appropiate format and
+ * the data retrieved directly from editor activity fields to the appropriate format and
  * datatype for storage in the db.
  */
 public class TrackedRun implements Parcelable {
+    //TODO: Remove ID field
 
-    private double _distance;
-    private long _time;
-    private long _date;
-    private int _rating;
-    private String _unit;
-    private Integer _id = null;
+    private float mDistance;
+    private long mTime;
+    private long mDate;
+    private int mRating;
+    private String mUnit;
+    private Integer mID = null;
 
-    /**
-     * Values will be passed as gathered directly from editor activity fields (Strings), and will be converted
-     * for storage appropriately.
-     */
-    public TrackedRun(String distance, String time, String date, String rating, String unit){
-        this._distance = DateManager.distanceToDouble(distance);
-        this._time = DateManager.timeToUnix(time);
-        this._date = DateManager.dateToUnix(date);
-        this._rating = Integer.valueOf(rating);
-        this._unit = unit;
+    public TrackedRun(int id, long date, float distance, long time, int rating, String unit){
+        this.mDistance = distance;
+        this.mTime = time;
+        this.mDate = date;
+        this.mRating = rating;
+        this.mUnit = unit;
+        this.mID = id;
     }
 
-    /**
-     *
-     * Values will be passed already formatted previously, as retrieved from database.
-     */
-    public TrackedRun(int id, long date, double distance, long time, int rating, String unit){
-        this._distance = distance;
-        this._time = time;
-        this._date = date;
-        this._rating = rating;
-        this._unit = unit;
-        //Id given by database.
-        this._id = id;
-    }
 
     public TrackedRun(){
+        // Default constructor required for firebase calls to DataSnapshot.getValue(User.class)
 
     }
 
     public TrackedRun(Parcel in) {
-        this._id = in.readInt();
-        this._date = in.readLong();
-        this._distance = in.readDouble();
-        this._time = in.readLong();
-        this._rating = in.readInt();
-        this._unit = in.readString();
+        this.mID = in.readInt();
+        this.mDate = in.readLong();
+        this.mDistance = in.readFloat();
+        this.mTime = in.readLong();
+        this.mRating = in.readInt();
+        this.mUnit = in.readString();
     }
 
     @Override
@@ -65,14 +53,15 @@ public class TrackedRun implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(_id);
-        parcel.writeLong(_date);
-        parcel.writeDouble(_distance);
-        parcel.writeLong(_time);
-        parcel.writeInt(_rating);
-        parcel.writeString(_unit);
+        parcel.writeInt(mID);
+        parcel.writeLong(mDate);
+        parcel.writeFloat(mDistance);
+        parcel.writeLong(mTime);
+        parcel.writeInt(mRating);
+        parcel.writeString(mUnit);
     }
 
+    @Exclude
     public static final Parcelable.Creator<TrackedRun> CREATOR = new Parcelable.Creator<TrackedRun>(){
 
         @Override
@@ -88,47 +77,37 @@ public class TrackedRun implements Parcelable {
 
     };
 
-
-
-    public double getDistance(){
-        return _distance;
+    public float getDistance(){
+        return mDistance;
     }
-
     public long getTime(){
-        return _time;
+        return mTime;
     }
-
-    public long getDate(){ return _date; }
-
+    public long getDate(){ return mDate; }
     public int getRating(){
-        return _rating;
+        return mRating;
     }
-
     public String getUnit(){
-        return _unit;
+        return mUnit;
     }
+    public Integer getId(){ return mID; }
 
-    public Integer getId(){ return _id; }
-
-    public void setDistance(String distance){
-
-        _distance = DateManager.distanceToDouble(distance);
+    /*When passing unformatted values (straight from EditorActivity) call setter methods instead of constructor.
+    These methods will convert the values to store them into the database. */
+    public void setDistance(float distance){
+        mDistance = distance;
     }
-
-    public void setTime(String time){
-        _time = DateManager.timeToUnix(time);
+    public void setTime(long time){
+        mTime = time;
     }
-
-    public void setDate(String date){
-        _date = DateManager.dateToUnix(date);
+    public void setDate(long date){
+        mDate = date;
     }
-
-    public void setRating(String rating){
-        _rating = Integer.valueOf(rating);
+    public void setRating(int rating){
+        mRating = rating;
     }
-
     public void setUnit(String unit){
-        _unit = unit;
+        mUnit = unit;
     }
 
 

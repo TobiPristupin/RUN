@@ -24,12 +24,21 @@ import com.example.tobias.run.database.TrackedRun;
 import com.example.tobias.run.editor.EditorActivity;
 import com.example.tobias.run.history.adapter.HistoryListItemAdapter;
 import com.example.tobias.run.utils.DateManager;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Fragment that displays activities tracked, and can sort them by different criteria. Accesed via the DrawerLayout
@@ -41,6 +50,11 @@ public class HistoryFragment extends Fragment {
     private HistoryListItemAdapter adapter;
     private ListView listView;
     private Spinner spinner;
+    private ArrayList<TrackedRun> trackedRuns;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseRef;
 
     public HistoryFragment(){
         //Required empty constructor.
@@ -50,18 +64,19 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_history, container, false);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseRef = firebaseDatabase.getReference("users/" + firebaseUser.getUid());
+        trackedRuns = new ArrayList<>();
+
         initDateSpinner();
         initListView();
         initFab();
         initTopBar();
 
         return rootView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadRecords();
     }
 
     /**
@@ -88,7 +103,7 @@ public class HistoryFragment extends Fragment {
                     selectedTextView.setTextColor(Color.parseColor("#FFFFFF"));
                 }
                 //Reload records into listview with new value set.
-                loadRecords();
+                loadRecordsListView();
             }
 
             @Override
@@ -99,8 +114,8 @@ public class HistoryFragment extends Fragment {
 
     private void initListView(){
         listView = (ListView) rootView.findViewById(R.id.history_listview);
-        ArrayList<TrackedRun> trackedRuns = new DatabaseHandler(getContext()).getAllTrackedRuns();
-        adapter = new HistoryListItemAdapter(getContext(), trackedRuns, this, new HistoryListItemAdapter.OnOverflowButtonListener() {
+
+        adapter = new HistoryListItemAdapter(getContext(), new HistoryListItemAdapter.OnOverflowButtonListener() {
             @Override
             public void onDeleteClick(TrackedRun tr) {
                 showDeleteDialog(tr);
@@ -115,6 +130,22 @@ public class HistoryFragment extends Fragment {
         });
         listView.setAdapter(adapter);
         listView.setEmptyView(rootView.findViewById(R.id.empty_view));
+
+        databaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot data : dataSnapshot.getChildren()){
+                    TrackedRun tr = data.getValue(TrackedRun.class);
+                    trackedRuns.add(tr);
+                }
+                loadRecordsListView();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
@@ -135,52 +166,33 @@ public class HistoryFragment extends Fragment {
     }
 
     /**
-     * Retrieves records from db according to dateSpinner value and populates listview.
-     * Because of countless bugs trying to add items dynamically,
-     * resorted to clearing the adapter and adding all the items again, which is not great for performance,
-     * and should eventually be refactored to a more efficient solution.
+     * Filters Tracked Runs according to date spinner and adds them to ListView
      */
-    private void loadRecords() {
-        //TODO: Reformat for performance
-        String sortBy = spinner.getSelectedItem().toString();
+    private void loadRecordsListView() {
         adapter.clear();
-
-        switch (sortBy){
-            case "All" :
-                for(TrackedRun tr : new DatabaseHandler(getContext()).getAllTrackedRuns()){
+        String sortBy = spinner.getSelectedItem().toString();
+        for (TrackedRun tr : trackedRuns){
+            switch (sortBy){
+                case "All" :
                     adapter.add(tr);
-                }
-                adapter.notifyDataSetChanged();
-                break;
-
-            case "Week" :
-                long startOfWeek = DateManager.getStartOfWeek();
-                long endOfWeek = DateManager.getEndOfWeek();
-                for(TrackedRun tr : new DatabaseHandler(getContext()).getTrackedRunsBetween(startOfWeek, endOfWeek)){
-                    adapter.add(tr);
-                }
-                adapter.notifyDataSetChanged();
-                break;
-
-            case "Month" :
-                long startOfMonth = DateManager.getStartOfMonth();
-                long endOfMonth = DateManager.getEndOfMonth();
-                for(TrackedRun tr : new DatabaseHandler(getContext()).getTrackedRunsBetween(startOfMonth, endOfMonth)){
-                    adapter.add(tr);
-                }
-                adapter.notifyDataSetChanged();
-                break;
-
-            case "Year" :
-                long startOfYear = DateManager.getStartOfYear();
-                long endOfYear = DateManager.getEndOfYear();
-                for(TrackedRun tr : new DatabaseHandler(getContext()).getTrackedRunsBetween(startOfYear, endOfYear)){
-                    adapter.add(tr);
-                }
-                adapter.notifyDataSetChanged();
-                break;
+                    break;
+                case "Week" :
+                    if (tr.getDate() >= DateManager.getStartOfWeek() && tr.getDate() <= DateManager.getEndOfWeek()){
+                        adapter.add(tr);
+                    }
+                    break;
+                case "Month" :
+                    if (tr.getDate() >= DateManager.getStartOfMonth() && tr.getDate() <= DateManager.getEndOfMonth()){
+                        adapter.add(tr);
+                    }
+                    break;
+                case "Year" :
+                    if (tr.getDate() >= DateManager.getStartOfYear() && tr.getDate() <= DateManager.getEndOfMonth()){
+                        adapter.add(tr);
+                    }
+                    break;
+            }
         }
-
     }
 
     private void initTopBar(){
@@ -188,6 +200,7 @@ public class HistoryFragment extends Fragment {
         DateTimeFormatter formatter = DateTimeFormat.forPattern("EEEE, MMMM d");
         currentMonthText.setText(formatter.print(new DateTime()));
     }
+
 
     private void showDeleteDialog(TrackedRun tr){
         final TrackedRun trackedRun = tr;
@@ -212,7 +225,6 @@ public class HistoryFragment extends Fragment {
 
     private void deleteListItem(TrackedRun tr){
         new DatabaseHandler(getContext()).deleteItem(tr.getId());
-        loadRecords();
     }
 
 }

@@ -79,7 +79,7 @@ public class DistanceDialog {
 
         numberPickerDecimal = (NumberPicker)
                 rootView.findViewById(R.id.distance_picker_decimal);
-        numberPickerDecimal.setMaxValue(99);
+        numberPickerDecimal.setMaxValue(10);
         numberPickerWhole.setMinValue(0);
         numberPickerWhole.setValue(1);
     }
@@ -109,6 +109,7 @@ public class DistanceDialog {
             distance = "" + numberPickerWhole.getValue() + ","
                     + numberPickerDecimal.getValue() + " mi";
         }
+
         return distance;
     }
 

@@ -60,6 +60,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.insert(RunsContract.TABLE_NAME, null, values);
         db.close();
+
+        new FirebaseDatabaseManager().addRun(run);
     }
 
     public ArrayList<TrackedRun> getAllTrackedRuns() {
@@ -74,27 +76,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return trackedRuns;
     }
 
-    public ArrayList<TrackedRun> getYearTrackedRuns() {
-        long firstDayOfYearTimestamp = new DateTime().dayOfYear().withMinimumValue().getMillis() / 1000;
-        long lastDayOfYearTimestamp = new DateTime().dayOfYear().withMaximumValue().getMillis() / 1000;
-
-        String query = new StringBuilder()
-                .append("SELECT * FROM ")
-                .append(RunsContract.TABLE_NAME)
-                .append(" WHERE ")
-                .append(RunsContract.DATE)
-                .append(" BETWEEN ")
-                .append(firstDayOfYearTimestamp)
-                .append(" AND ")
-                .append(lastDayOfYearTimestamp).toString();
-
-        SQLiteDatabase database = getReadableDatabase();
-        Cursor cursor = database.rawQuery(query, null);
-
-        ArrayList<TrackedRun> trackedRuns = retrieveAllCursorData(cursor);
-        database.close();
-        return trackedRuns;
-    }
 
     /**
      * Receives a Cursor object and retrieves its data into an Arraylist of TrackedRun.
@@ -109,12 +90,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 trackedRuns.add(new TrackedRun(
                         cursor.getInt(cursor.getColumnIndex(RunsContract.ID)),
                         cursor.getLong(cursor.getColumnIndex(RunsContract.DATE)),
-                        cursor.getDouble(cursor.getColumnIndex(RunsContract.DISTANCE)),
+                        cursor.getFloat(cursor.getColumnIndex(RunsContract.DISTANCE)),
                         cursor.getLong(cursor.getColumnIndex(RunsContract.TIME)),
                         cursor.getInt(cursor.getColumnIndex(RunsContract.RATING)),
                         cursor.getString(cursor.getColumnIndex(RunsContract.UNIT))
                 ));
             } while (cursor.moveToNext());
+
 
         }
 

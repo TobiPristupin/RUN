@@ -60,13 +60,14 @@ public class EditorActivity extends AppCompatActivity {
         this.sharedPref = getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE);
 
         Intent intent = getIntent();
-        trackedRun = (TrackedRun) intent.getParcelableExtra("TrackedRun");
+        trackedRun = intent.getParcelableExtra("TrackedRun");
 
         initToolbar();
 
         //If tracked run has been passed via intent, init edit mode.
         if (trackedRun != null){
             setEditMode();
+        //If no tracked run has been passed, leave activity in add new run mode.
         } else {
             trackedRun = new TrackedRun();
         }
@@ -88,7 +89,7 @@ public class EditorActivity extends AppCompatActivity {
             case R.id.editor_save:
                 if (addRecord()) {
                     Toasty.success(EditorActivity.this, "Successfully Added", Toast.LENGTH_SHORT).show();
-                    Log.v(TAG, "Added record to database successfully.");
+                    Log.d(TAG, "Added record to database successfully.");
                     finish();
                 } else {
                     Toasty.warning(EditorActivity.this, "Fill in all the fields", Toast.LENGTH_SHORT).show();
@@ -117,13 +118,14 @@ public class EditorActivity extends AppCompatActivity {
             return false;
         }
 
-        trackedRun.setDistance(values.get("distance"));
-        trackedRun.setDate(values.get("date"));
-        trackedRun.setRating(values.get("rating"));
+        trackedRun.setDistance(DateManager.distanceToFloat(values.get("distance")));
+        trackedRun.setDate(DateManager.dateToUnix(values.get("date")));
+        trackedRun.setRating(Integer.valueOf(values.get("rating")));
         trackedRun.setUnit(values.get("unit"));
-        trackedRun.setTime(values.get("time"));
+        trackedRun.setTime(DateManager.timeToUnix(values.get("time")));
 
-        //If run hasn't been assigned an ID by entering into database, add it o database as new record
+        //If run hasn't been assigned an ID, it's a new run and has to be added to the database.
+        // IF run has been assigned an ID, run has been added to database previously and has to be updated with the new data.
         if (trackedRun.getId() == null){
             databaseHandler.addRun(trackedRun);
         } else {

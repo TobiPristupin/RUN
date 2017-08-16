@@ -33,7 +33,8 @@
         android:background="@android:color/transparent"
         android:layout_toRightOf="@id/dialog_coma"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="15dp">
+        android:layout_marginLeft="15dp"
+        >
     </NumberPicker>
 
     <TextView
