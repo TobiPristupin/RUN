@@ -20,7 +20,7 @@ public class TrackedRun implements Parcelable {
     private long mDate;
     private int mRating;
     private String mUnit;
-    private Integer mID = null;
+    private String mID = null;
 
     public TrackedRun(int id, long date, float distance, long time, int rating, String unit){
         this.mDistance = distance;
@@ -28,7 +28,14 @@ public class TrackedRun implements Parcelable {
         this.mDate = date;
         this.mRating = rating;
         this.mUnit = unit;
-        this.mID = id;
+    }
+
+    public TrackedRun(long date, float distance, long time, int rating, String unit){
+        this.mDistance = distance;
+        this.mTime = time;
+        this.mDate = date;
+        this.mRating = rating;
+        this.mUnit = unit;
     }
 
 
@@ -38,7 +45,7 @@ public class TrackedRun implements Parcelable {
     }
 
     public TrackedRun(Parcel in) {
-        this.mID = in.readInt();
+        this.mID = in.readString();
         this.mDate = in.readLong();
         this.mDistance = in.readFloat();
         this.mTime = in.readLong();
@@ -53,7 +60,7 @@ public class TrackedRun implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(mID);
+        parcel.writeString(mID);
         parcel.writeLong(mDate);
         parcel.writeFloat(mDistance);
         parcel.writeLong(mTime);
@@ -90,7 +97,7 @@ public class TrackedRun implements Parcelable {
     public String getUnit(){
         return mUnit;
     }
-    public Integer getId(){ return mID; }
+    public String getId(){ return mID; }
 
     /*When passing unformatted values (straight from EditorActivity) call setter methods instead of constructor.
     These methods will convert the values to store them into the database. */
@@ -108,6 +115,9 @@ public class TrackedRun implements Parcelable {
     }
     public void setUnit(String unit){
         mUnit = unit;
+    }
+    public void setId(String pushKey){
+        mID = pushKey;
     }
 
 

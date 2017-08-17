@@ -60,8 +60,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.insert(RunsContract.TABLE_NAME, null, values);
         db.close();
-
-        new FirebaseDatabaseManager().addRun(run);
     }
 
     public ArrayList<TrackedRun> getAllTrackedRuns() {

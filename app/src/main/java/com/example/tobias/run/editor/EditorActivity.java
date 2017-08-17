@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.database.DatabaseHandler;
+import com.example.tobias.run.database.FirebaseDatabaseManager;
 import com.example.tobias.run.editor.dialog.DistanceDialog;
 import com.example.tobias.run.editor.dialog.RatingDialog;
 import com.example.tobias.run.editor.dialog.TimeDialog;
@@ -49,6 +50,7 @@ public class EditorActivity extends AppCompatActivity {
     private final int DATE_DIALOG_ID = 999;
     private SharedPreferences sharedPref;
     private static final String TAG = "EditorActivity";
+    private boolean isEditMode;
     private TrackedRun trackedRun;
 
 
@@ -66,9 +68,11 @@ public class EditorActivity extends AppCompatActivity {
 
         //If tracked run has been passed via intent, init edit mode.
         if (trackedRun != null){
+            isEditMode = true;
             setEditMode();
-        //If no tracked run has been passed, leave activity in add new run mode.
+        //If no tracked run has been passed, leave activity in "add new run" mode.
         } else {
+            isEditMode = false;
             trackedRun = new TrackedRun();
         }
 
@@ -87,7 +91,9 @@ public class EditorActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.editor_save:
-                if (addRecord()) {
+                HashMap<String, String> values = retrieveDataFromViews();
+                if(isDataComplete(values)) {
+                    addRecord(values);
                     Toasty.success(EditorActivity.this, "Successfully Added", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "Added record to database successfully.");
                     finish();
@@ -110,13 +116,8 @@ public class EditorActivity extends AppCompatActivity {
      * Gets data inserted into views and adds it into database. If one of the fields hasn't been
      * set, it returns false and exits without adding it.
      */
-    private boolean addRecord() {
-        DatabaseHandler databaseHandler = new DatabaseHandler(this);
-
-        HashMap<String, String> values = retrieveDataFromViews();
-        if (!isDataComplete(values)){
-            return false;
-        }
+    private void addRecord(HashMap<String, String> values) {
+        FirebaseDatabaseManager databaseManager = new FirebaseDatabaseManager();
 
         trackedRun.setDistance(DateManager.distanceToFloat(values.get("distance")));
         trackedRun.setDate(DateManager.dateToUnix(values.get("date")));
@@ -126,13 +127,11 @@ public class EditorActivity extends AppCompatActivity {
 
         //If run hasn't been assigned an ID, it's a new run and has to be added to the database.
         // IF run has been assigned an ID, run has been added to database previously and has to be updated with the new data.
-        if (trackedRun.getId() == null){
-            databaseHandler.addRun(trackedRun);
+        if (isEditMode){
+            databaseManager.updateRun(trackedRun);
         } else {
-            databaseHandler.updateRun(trackedRun);
+            databaseManager.addRun(trackedRun);
         }
-
-        return true;
     }
 
     //Retrieves text from distance, time, ... TextViews

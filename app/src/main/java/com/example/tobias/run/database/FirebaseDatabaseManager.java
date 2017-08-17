@@ -18,7 +18,18 @@ public class FirebaseDatabaseManager {
 
 
     public void addRun(TrackedRun run){
-        databaseRef.push().setValue(run);
+        DatabaseReference ref = databaseRef.push();
+        run.setId(ref.getKey());
+        System.out.println(ref.getKey());
+        ref.setValue(run);
+    }
+
+    public void deleteRun(TrackedRun run){
+        databaseRef.child(run.getId()).removeValue();
+    }
+
+    public void updateRun(TrackedRun run){
+        databaseRef.child(run.getId()).setValue(run);
     }
 
 }
