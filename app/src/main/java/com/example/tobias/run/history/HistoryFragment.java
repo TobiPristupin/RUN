@@ -19,7 +19,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.database.DatabaseHandler;
 import com.example.tobias.run.database.FirebaseDatabaseManager;
 import com.example.tobias.run.database.TrackedRun;
 import com.example.tobias.run.editor.EditorActivity;
@@ -27,12 +26,10 @@ import com.example.tobias.run.history.adapter.HistoryListItemAdapter;
 import com.example.tobias.run.utils.DateManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.joda.time.DateTime;
@@ -40,7 +37,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Fragment that displays activities tracked, and can sort them by different criteria. Accesed via the DrawerLayout

@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.database.DatabaseHandler;
 import com.example.tobias.run.database.FirebaseDatabaseManager;
 import com.example.tobias.run.editor.dialog.DistanceDialog;
 import com.example.tobias.run.editor.dialog.RatingDialog;
@@ -80,7 +79,6 @@ public class EditorActivity extends AppCompatActivity {
         initTimeField();
         initDateField();
         initRatingField();
-
     }
 
     @Override
@@ -119,10 +117,18 @@ public class EditorActivity extends AppCompatActivity {
     private void addRecord(HashMap<String, String> values) {
         FirebaseDatabaseManager databaseManager = new FirebaseDatabaseManager();
 
-        trackedRun.setDistance(DateManager.distanceToFloat(values.get("distance")));
+        if (sharedPref.getString(getString(R.string.preference_distance_unit_key), null).equals("km")){
+            float kmDistance = DateManager.distanceToFloat(values.get("distance"));
+            trackedRun.setDistanceKilometres(kmDistance);
+            trackedRun.setDistanceMiles(DateManager.kilometresToMiles(kmDistance));
+        } else {
+            float miDistance = DateManager.distanceToFloat(values.get("distance"));
+            trackedRun.setDistanceMiles(miDistance);
+            trackedRun.setDistanceKilometres(DateManager.milesToKilometers(miDistance));
+        }
+
         trackedRun.setDate(DateManager.dateToUnix(values.get("date")));
         trackedRun.setRating(Integer.valueOf(values.get("rating")));
-        trackedRun.setUnit(values.get("unit"));
         trackedRun.setTime(DateManager.timeToUnix(values.get("time")));
 
         //If run hasn't been assigned an ID, it's a new run and has to be added to the database.
@@ -141,7 +147,6 @@ public class EditorActivity extends AppCompatActivity {
         data.put("time", ((TextView) findViewById(R.id.editor_time_text)).getText().toString());
         data.put("rating", ((TextView) findViewById(R.id.editor_rating_text)).getText().toString());
         data.put("date", ((TextView) findViewById(R.id.editor_date_text)).getText().toString());
-        data.put("unit", sharedPref.getString(getString(R.string.preference_distance_unit_key), null));
         return data;
     }
 
@@ -172,7 +177,13 @@ public class EditorActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Edit Run");
 
         String unit = sharedPref.getString(getString(R.string.preference_distance_unit_key), null);
-        String distanceText = DateManager.distanceToString(trackedRun.getDistance(), unit);
+        String distanceText;
+        if (unit.equals("km")){
+            distanceText = DateManager.distanceToString(trackedRun.getDistanceKilometres(), unit);
+        } else {
+            distanceText = DateManager.distanceToString(trackedRun.getDistanceMiles(), unit);
+        }
+
         ((TextView) findViewById(R.id.editor_distance_text)).setText(distanceText);
 
         String dateText = DateManager.dateToString(trackedRun.getDate());

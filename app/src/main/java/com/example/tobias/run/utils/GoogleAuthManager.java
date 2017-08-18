@@ -16,7 +16,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import es.dmoral.toasty.Toasty;
 
 /**
- * Created by Tobi on 8/8/2017.
+ * Utils class for Google Sign In  Auth process.
  */
 
 public class GoogleAuthManager {

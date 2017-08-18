@@ -3,9 +3,7 @@ package com.example.tobias.run.database;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.tobias.run.utils.DateManager;
 import com.google.firebase.database.Exclude;
-import com.google.firebase.database.IgnoreExtraProperties;
 
 /**
  * Object to represent a new tracked run for storage in database. Handles conversion between
@@ -15,29 +13,22 @@ import com.google.firebase.database.IgnoreExtraProperties;
 public class TrackedRun implements Parcelable {
     //TODO: Remove ID field
 
-    private float mDistance;
+    private float mDistanceKilometres;
+    private float mDistanceMiles;
     private long mTime;
     private long mDate;
     private int mRating;
-    private String mUnit;
+
     private String mID = null;
 
-    public TrackedRun(int id, long date, float distance, long time, int rating, String unit){
-        this.mDistance = distance;
+    public TrackedRun(int id, long date, float distanceKilometres, float distanceMiles, long time, int rating, String unit){
+        this.mDistanceKilometres = distanceKilometres;
+        this.mDistanceMiles = distanceMiles;
         this.mTime = time;
         this.mDate = date;
         this.mRating = rating;
-        this.mUnit = unit;
-    }
 
-    public TrackedRun(long date, float distance, long time, int rating, String unit){
-        this.mDistance = distance;
-        this.mTime = time;
-        this.mDate = date;
-        this.mRating = rating;
-        this.mUnit = unit;
     }
-
 
     public TrackedRun(){
         // Default constructor required for firebase calls to DataSnapshot.getValue(User.class)
@@ -47,10 +38,10 @@ public class TrackedRun implements Parcelable {
     public TrackedRun(Parcel in) {
         this.mID = in.readString();
         this.mDate = in.readLong();
-        this.mDistance = in.readFloat();
+        this.mDistanceKilometres = in.readFloat();
         this.mTime = in.readLong();
         this.mRating = in.readInt();
-        this.mUnit = in.readString();
+        this.mDistanceMiles = in.readFloat();
     }
 
     @Override
@@ -62,10 +53,10 @@ public class TrackedRun implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(mID);
         parcel.writeLong(mDate);
-        parcel.writeFloat(mDistance);
+        parcel.writeFloat(mDistanceKilometres);
         parcel.writeLong(mTime);
         parcel.writeInt(mRating);
-        parcel.writeString(mUnit);
+        parcel.writeFloat(mDistanceMiles);
     }
 
     @Exclude
@@ -81,11 +72,13 @@ public class TrackedRun implements Parcelable {
             return new TrackedRun[i];
         }
 
-
     };
 
-    public float getDistance(){
-        return mDistance;
+    public float getDistanceKilometres(){
+        return mDistanceKilometres;
+    }
+    public float getDistanceMiles(){
+        return mDistanceMiles;
     }
     public long getTime(){
         return mTime;
@@ -94,15 +87,13 @@ public class TrackedRun implements Parcelable {
     public int getRating(){
         return mRating;
     }
-    public String getUnit(){
-        return mUnit;
-    }
     public String getId(){ return mID; }
 
-    /*When passing unformatted values (straight from EditorActivity) call setter methods instead of constructor.
-    These methods will convert the values to store them into the database. */
-    public void setDistance(float distance){
-        mDistance = distance;
+    public void setDistanceKilometres(float distanceKilometres){
+        mDistanceKilometres = distanceKilometres;
+    }
+    public void setDistanceMiles(float distanceMiles){
+        mDistanceMiles = distanceMiles;
     }
     public void setTime(long time){
         mTime = time;
@@ -112,9 +103,6 @@ public class TrackedRun implements Parcelable {
     }
     public void setRating(int rating){
         mRating = rating;
-    }
-    public void setUnit(String unit){
-        mUnit = unit;
     }
     public void setId(String pushKey){
         mID = pushKey;

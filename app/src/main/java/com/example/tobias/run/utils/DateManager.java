@@ -25,7 +25,6 @@ public class DateManager {
         return distanceText;
     }
 
-
     /**
      *
      * @param time in unix timestamp format
@@ -136,7 +135,13 @@ public class DateManager {
         return lastDayOfYearTimestamp;
     }
 
+    public static float kilometresToMiles(float km){
+        return km * 0.621371f;
+    }
 
+    public static float milesToKilometers(float mi){
+        return mi * 1.60934f;
+    }
 
 
 

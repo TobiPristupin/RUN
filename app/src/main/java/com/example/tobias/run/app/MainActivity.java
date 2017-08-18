@@ -44,6 +44,7 @@ import com.example.tobias.run.settings.SettingsActivity;
 import com.example.tobias.run.stats.StatsFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import es.dmoral.toasty.Toasty;
 
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         firebaseAuth = FirebaseAuth.getInstance();
@@ -181,10 +183,10 @@ public class MainActivity extends AppCompatActivity {
      */
     public void initSharedPref(){
         SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE);
-        //If distance_unit hasn't been initialized, set it to default value (km)
+        //If distance_unit hasn't been initialized, set it to default value (mi)
         if (sharedPref.getString(getString(R.string.preference_distance_unit_key), null) == null){
-            sharedPref.edit().putString(getString(R.string.preference_distance_unit_key), "km").apply();
-        }
+            sharedPref.edit().putString(getString(R.string.preference_distance_unit_key), "mi").apply();
+      }
     }
 
 

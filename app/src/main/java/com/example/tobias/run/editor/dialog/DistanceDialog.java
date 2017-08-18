@@ -89,11 +89,7 @@ public class DistanceDialog {
      */
     private void initUnitText(){
         TextView unitText = (TextView) rootView.findViewById(R.id.distance_unit);
-        if(sharedPref.getString(activity.getString(R.string.preference_distance_unit_key), null).equals("km")){
-            unitText.setText("km");
-        } else {
-            unitText.setText("mi");
-        }
+        unitText.setText(sharedPref.getString(activity.getString(R.string.preference_distance_unit_key), null));
     }
 
     /**
@@ -102,14 +98,8 @@ public class DistanceDialog {
      */
     private String formatValues(){
         String distance = null;
-        if (sharedPref.getString(activity.getString(R.string.preference_distance_unit_key), null).equals("km")){
-            distance = "" + numberPickerWhole.getValue() + ","
-                    + numberPickerDecimal.getValue() + " km";
-        } else {
-            distance = "" + numberPickerWhole.getValue() + ","
-                    + numberPickerDecimal.getValue() + " mi";
-        }
-
+        distance = "" + numberPickerWhole.getValue() + "." + numberPickerDecimal.getValue() + " " +
+                sharedPref.getString(activity.getString(R.string.preference_distance_unit_key), null);
         return distance;
     }
 

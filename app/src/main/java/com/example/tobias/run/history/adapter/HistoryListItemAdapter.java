@@ -80,8 +80,11 @@ public class HistoryListItemAdapter extends ArrayAdapter<TrackedRun> {
                 context.getString(R.string.preference_key), Context.MODE_PRIVATE);
         TextView distanceView = (TextView) rootView.findViewById(R.id.distance_text);
         String unit = sharedPref.getString(context.getString(R.string.preference_distance_unit_key), null);
-
-        distanceView.setText(DateManager.distanceToString(currentItem.getDistance(), unit));
+        if (unit.equals("km")){
+            distanceView.setText(DateManager.distanceToString(currentItem.getDistanceKilometres(), unit));
+        } else {
+            distanceView.setText(DateManager.distanceToString(currentItem.getDistanceMiles(), unit));
+        }
     }
 
     private void setTimeText(final TrackedRun currentItem){
