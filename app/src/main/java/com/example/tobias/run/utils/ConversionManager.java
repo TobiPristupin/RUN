@@ -1,6 +1,7 @@
 package com.example.tobias.run.utils;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -9,9 +10,9 @@ import java.text.DecimalFormat;
 import java.util.Locale;
 
 /**
- * Contains methods to handle datetime and conversion between TrackedRun values in String format and values in database input format.
+ * Utils class to handel conversions and formatting
  */
-public class DateManager {
+public class ConversionManager {
 
     /**
      *
@@ -106,7 +107,8 @@ public class DateManager {
     }
 
     public static long getStartOfWeek(){
-        long firstDayOfWeekTimestamp = new DateTime().withDayOfWeek(1).getMillis() / 1000;
+        LocalDate today = new LocalDate();
+        long firstDayOfWeekTimestamp = today.dayOfWeek().withMinimumValue().toDateTimeAtStartOfDay().getMillis() / 1000;
         return firstDayOfWeekTimestamp;
     }
 

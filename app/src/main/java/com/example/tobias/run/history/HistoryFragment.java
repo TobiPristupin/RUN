@@ -9,12 +9,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -22,8 +24,8 @@ import com.example.tobias.run.R;
 import com.example.tobias.run.database.FirebaseDatabaseManager;
 import com.example.tobias.run.database.TrackedRun;
 import com.example.tobias.run.editor.EditorActivity;
-import com.example.tobias.run.history.adapter.HistoryListItemAdapter;
-import com.example.tobias.run.utils.DateManager;
+import com.example.tobias.run.history.adapter.HistoryRecyclerViewAdapter;
+import com.example.tobias.run.utils.ConversionManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,10 +47,12 @@ import java.util.ArrayList;
 public class HistoryFragment extends Fragment {
 
     private View rootView;
-    private HistoryListItemAdapter adapter;
-    private ListView listView;
+    private HistoryRecyclerViewAdapter adapter;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
     private Spinner spinner;
-    private ArrayList<TrackedRun> trackedRuns;
+    private ArrayList<TrackedRun> trackedRunsToDisplay; //Tracked runs that should be displayed according to dateSpinner
+    private ArrayList<TrackedRun> allTrackedRuns; //All tracked runs retrieved from database.
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
@@ -68,11 +72,12 @@ public class HistoryFragment extends Fragment {
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseRef = firebaseDatabase.getReference("users/" + firebaseUser.getUid());
-        trackedRuns = new ArrayList<>();
+        trackedRunsToDisplay = new ArrayList<>();
+        allTrackedRuns = new ArrayList<>();
         databaseManager = new FirebaseDatabaseManager();
 
         initDateSpinner();
-        initListView();
+        initRecyclerView();
         initFab();
         initTopBar();
 
@@ -112,37 +117,28 @@ public class HistoryFragment extends Fragment {
     }
 
 
-    private void initListView(){
-        listView = (ListView) rootView.findViewById(R.id.history_listview);
+    private void initRecyclerView(){
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.history_recyclerview);
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        adapter = new HistoryRecyclerViewAdapter(getContext(), trackedRunsToDisplay);
+        recyclerView.setAdapter(adapter);
 
-        adapter = new HistoryListItemAdapter(getContext(), new HistoryListItemAdapter.OnOverflowButtonListener() {
-            @Override
-            public void onDeleteClick(TrackedRun tr) {
-                showDeleteDialog(tr);
-            }
-
-            @Override
-            public void onEditClick(TrackedRun tr) {
-                Intent intent = new Intent(getContext(), EditorActivity.class);
-                intent.putExtra("TrackedRun", tr);
-                startActivity(intent);
-            }
-        });
-        listView.setAdapter(adapter);
-        listView.setEmptyView(rootView.findViewById(R.id.empty_view));
+        //TODO: Add empty view
 
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 /*
-                *Can't check if run has already been added to trackedRuns using trackedRuns.contains() because firebase database always creates a new
-                *object with the retrieved data. The data fields may already have been added to trackedRuns but.contains() returns false because
+                *Can't check if run has already been added to trackedRunsToDisplay using trackedRunsToDisplay.contains() because firebase database always creates a new
+                *object with the retrieved data. The data fields may already have been added to trackedRunsToDisplay but.contains() returns false because
                 *its a different object with same data. Workaround is to clear tracked runs .
                 */
-                trackedRuns.clear();
+                allTrackedRuns.clear();
                 for(DataSnapshot data : dataSnapshot.getChildren()){
                     TrackedRun tr = data.getValue(TrackedRun.class);
-                    trackedRuns.add(tr);
+                    allTrackedRuns.add(tr);
                 }
                 loadRecordsListView();
             }
@@ -160,7 +156,7 @@ public class HistoryFragment extends Fragment {
      * Sets Floating action Button callback
      */
     private void initFab(){
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_button);
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.history_fab_button);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,37 +168,42 @@ public class HistoryFragment extends Fragment {
     }
 
     /**
-     * Filters Tracked Runs according to date spinner and adds them to ListView
+     * Filters All Tracked Runs according to date spinner and adds them to tracked runs to display.
      */
     private void loadRecordsListView() {
-        adapter.clear();
         String sortBy = spinner.getSelectedItem().toString();
-        for (TrackedRun tr : trackedRuns){
+        trackedRunsToDisplay.clear();
+        for (TrackedRun tr : allTrackedRuns){
             switch (sortBy){
                 case "All" :
-                    adapter.add(tr);
+                    trackedRunsToDisplay.add(tr);
                     break;
                 case "Week" :
-                    if (tr.getDate() >= DateManager.getStartOfWeek() && tr.getDate() <= DateManager.getEndOfWeek()){
-                        adapter.add(tr);
+                    System.out.println(tr.getDistanceMiles());
+                    System.out.println(tr.getDate());
+                    System.out.println(ConversionManager.getStartOfWeek());
+                    System.out.println(ConversionManager.getEndOfWeek());
+                    if (tr.getDate() >= ConversionManager.getStartOfWeek() && tr.getDate() <= ConversionManager.getEndOfWeek()){
+                        trackedRunsToDisplay.add(tr);
                     }
                     break;
                 case "Month" :
-                    if (tr.getDate() >= DateManager.getStartOfMonth() && tr.getDate() <= DateManager.getEndOfMonth()){
-                        adapter.add(tr);
+                    if (tr.getDate() >= ConversionManager.getStartOfMonth() && tr.getDate() <= ConversionManager.getEndOfMonth()){
+                        trackedRunsToDisplay.add(tr);
                     }
                     break;
                 case "Year" :
-                    if (tr.getDate() >= DateManager.getStartOfYear() && tr.getDate() <= DateManager.getEndOfMonth()){
-                        adapter.add(tr);
+                    if (tr.getDate() >= ConversionManager.getStartOfYear() && tr.getDate() <= ConversionManager.getEndOfMonth()){
+                        trackedRunsToDisplay.add(tr);
                     }
                     break;
             }
         }
+        adapter.notifyDataSetChanged();
     }
 
     private void initTopBar(){
-        TextView currentMonthText = (TextView) rootView.findViewById(R.id.current_month_text);
+        TextView currentMonthText = (TextView) rootView.findViewById(R.id.history_date_text);
         DateTimeFormatter formatter = DateTimeFormat.forPattern("EEEE, MMMM d");
         currentMonthText.setText(formatter.print(new DateTime()));
     }
