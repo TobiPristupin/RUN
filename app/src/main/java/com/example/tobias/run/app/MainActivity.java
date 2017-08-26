@@ -88,8 +88,6 @@ public class MainActivity extends AppCompatActivity {
             MenuItem menuItem = navigationView.getMenu().findItem(R.id.menu_history);
             //Open History fragment setting it as default for startup.
             openFragment(menuItem);
-
-
         }
     }
 

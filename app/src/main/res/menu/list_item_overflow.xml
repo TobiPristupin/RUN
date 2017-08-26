@@ -3,10 +3,10 @@
 
     <item
         android:title="Edit"
-        android:id="@+id/edit_button"/>
+        android:id="@+id/menu_overflow_edit_button"/>
 
     <item
         android:title="Delete"
-        android:id="@+id/delete_button"/>
+        android:id="@+id/menu_overflow_delete_button"/>
 
 </menu>

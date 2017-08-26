@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.support.v7.widget.RecyclerView.ItemDecoration.*;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.database.FirebaseDatabaseManager;
@@ -26,6 +28,7 @@ import com.example.tobias.run.database.TrackedRun;
 import com.example.tobias.run.editor.EditorActivity;
 import com.example.tobias.run.history.adapter.HistoryRecyclerViewAdapter;
 import com.example.tobias.run.utils.ConversionManager;
+import com.example.tobias.run.utils.VerticalDividerItemDecoration;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -119,10 +122,24 @@ public class HistoryFragment extends Fragment {
 
     private void initRecyclerView(){
         recyclerView = (RecyclerView) rootView.findViewById(R.id.history_recyclerview);
-        layoutManager = new LinearLayoutManager(getContext());
+        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        adapter = new HistoryRecyclerViewAdapter(getContext(), trackedRunsToDisplay);
+        VerticalDividerItemDecoration dividerItemDecoration = new VerticalDividerItemDecoration(30);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        adapter = new HistoryRecyclerViewAdapter(getContext(), trackedRunsToDisplay, new HistoryRecyclerViewAdapter.OnOverflowButtonListener() {
+            @Override
+            public void onDeleteClick(TrackedRun tr) {
+                showDeleteDialog(tr);
+            }
+
+            @Override
+            public void onEditClick(TrackedRun tr) {
+                Intent intent = new Intent(getContext(), EditorActivity.class);
+                intent.putExtra("TrackedRun", tr);
+                startActivity(intent);
+            }
+        });
         recyclerView.setAdapter(adapter);
 
         //TODO: Add empty view
@@ -179,10 +196,6 @@ public class HistoryFragment extends Fragment {
                     trackedRunsToDisplay.add(tr);
                     break;
                 case "Week" :
-                    System.out.println(tr.getDistanceMiles());
-                    System.out.println(tr.getDate());
-                    System.out.println(ConversionManager.getStartOfWeek());
-                    System.out.println(ConversionManager.getEndOfWeek());
                     if (tr.getDate() >= ConversionManager.getStartOfWeek() && tr.getDate() <= ConversionManager.getEndOfWeek()){
                         trackedRunsToDisplay.add(tr);
                     }
