@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="2.34 km"
-            android:textColor="@color/black"
+            android:textColor="@android:color/black"
             android:textSize="16sp"
             tools:layout_constraintTop_creator="1"
             android:layout_marginTop="8dp"

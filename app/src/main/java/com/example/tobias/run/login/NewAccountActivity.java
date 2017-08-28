@@ -32,8 +32,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.apache.commons.validator.routines.EmailValidator;
-
-import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import es.dmoral.toasty.Toasty;
 
 public class NewAccountActivity extends AppCompatActivity {

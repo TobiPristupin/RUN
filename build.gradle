@@ -4,7 +4,7 @@ buildscript {
     repositories {
         jcenter()
         maven {
-            url  "http://dl.bintray.com/sergiocasero/maven"
+            url "http://dl.bintray.com/sergiocasero/maven"
         }
     }
     dependencies {
@@ -21,6 +21,7 @@ allprojects {
         jcenter()
         maven { url "https://jitpack.io" }
         maven { url 'https://maven.fabric.io/public' }
+        maven { url "https://maven.google.com" }
     }
 }
 

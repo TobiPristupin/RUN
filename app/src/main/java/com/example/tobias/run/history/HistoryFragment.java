@@ -31,6 +31,7 @@ import com.example.tobias.run.utils.ConversionManager;
 import com.example.tobias.run.utils.VerticalDividerItemDecoration;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,6 +43,9 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+
+import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
 
 /**
  * Fragment that displays activities tracked, and can sort them by different criteria. Accesed via the DrawerLayout
@@ -111,7 +115,7 @@ public class HistoryFragment extends Fragment {
                     selectedTextView.setTextColor(Color.parseColor("#FFFFFF"));
                 }
                 //Reload records into listview with new value set.
-                loadRecordsListView();
+                loadRecordsRecyclerView();
             }
 
             @Override
@@ -127,6 +131,9 @@ public class HistoryFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         VerticalDividerItemDecoration dividerItemDecoration = new VerticalDividerItemDecoration(30);
         recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setItemAnimator(new OvershootInRightAnimator());
+        recyclerView.getItemAnimator().setAddDuration(500);
+        recyclerView.getItemAnimator().setRemoveDuration(500);
         adapter = new HistoryRecyclerViewAdapter(getContext(), trackedRunsToDisplay, new HistoryRecyclerViewAdapter.OnOverflowButtonListener() {
             @Override
             public void onDeleteClick(TrackedRun tr) {
@@ -148,16 +155,16 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 /*
-                *Can't check if run has already been added to trackedRunsToDisplay using trackedRunsToDisplay.contains() because firebase database always creates a new
-                *object with the retrieved data. The data fields may already have been added to trackedRunsToDisplay but.contains() returns false because
-                *its a different object with same data. Workaround is to clear tracked runs .
+                *Can't check if run has already been added to allTrackedRuns using .contains() because firebase database always creates a new
+                *object with the retrieved data. The data fields may already have been added but.contains() returns false because
+                *its a different object with same data. Workaround is to clear list.
                 */
                 allTrackedRuns.clear();
                 for(DataSnapshot data : dataSnapshot.getChildren()){
                     TrackedRun tr = data.getValue(TrackedRun.class);
                     allTrackedRuns.add(tr);
                 }
-                loadRecordsListView();
+                loadRecordsRecyclerView();
             }
 
             @Override
@@ -167,7 +174,6 @@ public class HistoryFragment extends Fragment {
         });
 
     }
-
 
     /**
      * Sets Floating action Button callback
@@ -185,34 +191,55 @@ public class HistoryFragment extends Fragment {
     }
 
     /**
-     * Filters All Tracked Runs according to date spinner and adds them to tracked runs to display.
+     * Add all tracked runs according to date spinner criteria. If run doesn't meet new criteria
+     * and has been previously added, remove.
      */
-    private void loadRecordsListView() {
+    private void loadRecordsRecyclerView() {
         String sortBy = spinner.getSelectedItem().toString();
-        trackedRunsToDisplay.clear();
         for (TrackedRun tr : allTrackedRuns){
             switch (sortBy){
                 case "All" :
-                    trackedRunsToDisplay.add(tr);
+                    if (!containsRun(trackedRunsToDisplay, tr)){
+                        addRun(tr);
+                    }
                     break;
                 case "Week" :
+                    //If run meets date criteria and hasn't been added previously then add.
                     if (tr.getDate() >= ConversionManager.getStartOfWeek() && tr.getDate() <= ConversionManager.getEndOfWeek()){
-                        trackedRunsToDisplay.add(tr);
+                        if (!containsRun(trackedRunsToDisplay, tr)){
+                            addRun(tr);
+                        }
+                    } else { //If run doesn't meet criteria and has been added, remove.
+                        if (containsRun(trackedRunsToDisplay, tr)){
+                            removeRunFromDisplay(tr);
+                        }
                     }
                     break;
                 case "Month" :
-                    if (tr.getDate() >= ConversionManager.getStartOfMonth() && tr.getDate() <= ConversionManager.getEndOfMonth()){
-                        trackedRunsToDisplay.add(tr);
+                    if (tr.getDate() >= ConversionManager.getStartOfMonth() && tr.getDate() <= ConversionManager.getEndOfMonth()) {
+                        if (!containsRun(trackedRunsToDisplay, tr)) {
+                            addRun(tr);
+                        }
+                    } else {
+                        if (containsRun(trackedRunsToDisplay, tr)) {
+                            removeRunFromDisplay(tr);
+                        }
                     }
+
                     break;
                 case "Year" :
-                    if (tr.getDate() >= ConversionManager.getStartOfYear() && tr.getDate() <= ConversionManager.getEndOfMonth()){
-                        trackedRunsToDisplay.add(tr);
+                    if (tr.getDate() >= ConversionManager.getStartOfYear() && tr.getDate() <= ConversionManager.getEndOfYear()){
+                        if (!containsRun(trackedRunsToDisplay, tr)){
+                            addRun(tr);
+                        }
+                    } else {
+                        if (containsRun(trackedRunsToDisplay, tr)){
+                            removeRunFromDisplay(tr);
+                        }
                     }
                     break;
             }
         }
-        adapter.notifyDataSetChanged();
     }
 
     private void initTopBar(){
@@ -229,7 +256,7 @@ public class HistoryFragment extends Fragment {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                databaseManager.deleteRun(tr);
+                removeRunPermanently(tr);
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -241,6 +268,55 @@ public class HistoryFragment extends Fragment {
 
         builder.create().show();
     }
+
+    /**
+     * Checks if TrackedRun is in ArrayList. Different from ArrayList .contains() method because containsRun
+     * compares if ID of run is the same, while contains compares if the object has the same reference, which may result
+     * in an incorrect result when Firebase Database returns a new object reference, but with the same data.
+     * @param arrayList
+     * @param trackedRun
+     * @return
+     */
+    private boolean containsRun(ArrayList<TrackedRun> arrayList, TrackedRun trackedRun){
+        Iterator<TrackedRun> iterator = arrayList.iterator();
+        while (iterator.hasNext()){
+            TrackedRun iteratorTrackedRun = iterator.next();
+            if (iteratorTrackedRun.getId().equals(trackedRun.getId())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void addRun(TrackedRun trackedRun){
+        trackedRunsToDisplay.add(trackedRun);
+        adapter.notifyItemInserted(trackedRunsToDisplay.indexOf(trackedRun));
+    }
+
+    /**
+     * Removes run from trackedRunsToDisplay, notifies adapter its removal. Does not remove
+     * from database.
+     * @param trackedRun
+     */
+    private void removeRunFromDisplay(TrackedRun trackedRun){
+        int index = trackedRunsToDisplay.indexOf(trackedRun);
+        trackedRunsToDisplay.remove(trackedRun);
+        adapter.notifyItemRemoved(index);
+    }
+
+    /**
+     * Removes run from allTrackedRuns, trackedRunsToDisplay, notifies the adapter its removal and removes
+     * from database.
+     * @param trackedRun
+     */
+    private void removeRunPermanently(TrackedRun trackedRun){
+        allTrackedRuns.remove(trackedRun);
+        int index = trackedRunsToDisplay.indexOf(trackedRun);
+        trackedRunsToDisplay.remove(trackedRun);
+        adapter.notifyItemRemoved(index);
+        databaseManager.deleteRun(trackedRun);
+    }
+
 
 
 }
