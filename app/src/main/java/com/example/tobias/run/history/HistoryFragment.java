@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -36,6 +37,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import org.joda.time.DateTime;
@@ -45,6 +47,7 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
 
 /**
@@ -83,8 +86,8 @@ public class HistoryFragment extends Fragment {
         allTrackedRuns = new ArrayList<>();
         databaseManager = new FirebaseDatabaseManager();
 
-        initDateSpinner();
         initRecyclerView();
+        initDateSpinner();
         initFab();
         initTopBar();
 
@@ -126,14 +129,18 @@ public class HistoryFragment extends Fragment {
 
     private void initRecyclerView(){
         recyclerView = (RecyclerView) rootView.findViewById(R.id.history_recyclerview);
+
         layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
+
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         VerticalDividerItemDecoration dividerItemDecoration = new VerticalDividerItemDecoration(30);
         recyclerView.addItemDecoration(dividerItemDecoration);
+
         recyclerView.setItemAnimator(new OvershootInRightAnimator());
         recyclerView.getItemAnimator().setAddDuration(500);
         recyclerView.getItemAnimator().setRemoveDuration(500);
+
         adapter = new HistoryRecyclerViewAdapter(getContext(), trackedRunsToDisplay, new HistoryRecyclerViewAdapter.OnOverflowButtonListener() {
             @Override
             public void onDeleteClick(TrackedRun tr) {
@@ -147,7 +154,10 @@ public class HistoryFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        recyclerView.setAdapter(adapter);
+        AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(adapter);
+        animationAdapter.setDuration(500);
+        animationAdapter.setFirstOnly(false);
+        recyclerView.setAdapter(animationAdapter);
 
         //TODO: Add empty view
 
@@ -179,13 +189,34 @@ public class HistoryFragment extends Fragment {
      * Sets Floating action Button callback
      */
     private void initFab(){
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.history_fab_button);
+        final FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.history_fab_button);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), EditorActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                switch (newState){
+                    case RecyclerView.SCROLL_STATE_IDLE :
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                fab.show();
+                            }
+                        }, 1000);
+                        break;
+                    default :
+                        fab.hide();
+                        break;
+                }
+                super.onScrollStateChanged(recyclerView, newState);
             }
         });
     }
