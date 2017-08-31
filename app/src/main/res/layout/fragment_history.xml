@@ -74,6 +74,7 @@
         android:src="@drawable/ic_content_add"
         android:scaleType="center"
         app:fabSize="normal"
+        android:transitionName="fab_editor_transition"
         app:layout_anchorGravity="bottom|end|right"
         tools:layout_conversion_absoluteX="339dp"
         tools:layout_conversion_absoluteY="586dp"
@@ -93,24 +94,6 @@
         app:layout_constraintGuide_percent="0.08"
         tools:layout_editor_absoluteY="52dp"
         tools:layout_editor_absoluteX="0dp" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/history_recyclerview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:padding="10dp"
-        android:scrollbars="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/history_divider"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_conversion_absoluteHeight="553dp"
-        tools:layout_conversion_absoluteWidth="411dp"
-        tools:layout_conversion_absoluteX="0dp"
-        tools:layout_conversion_absoluteY="104dp" />
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -134,6 +117,24 @@
             android:backgroundTintMode="src_atop" />
 
     </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/history_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/history_divider"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_conversion_absoluteHeight="553dp"
+        tools:layout_conversion_absoluteWidth="411dp"
+        tools:layout_conversion_absoluteX="0dp"
+        tools:layout_conversion_absoluteY="104dp" />
 
 
 </android.support.constraint.ConstraintLayout>

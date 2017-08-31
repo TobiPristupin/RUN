@@ -1,6 +1,7 @@
 package com.example.tobias.run.history;
 
 
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,7 +10,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -195,7 +198,10 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), EditorActivity.class);
-                startActivity(intent);
+                String transitionName = fab.getTransitionName();
+                ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                        (View) fab, transitionName);
+                startActivity(intent, activityOptions.toBundle());
             }
         });
 
@@ -210,7 +216,7 @@ public class HistoryFragment extends Fragment {
                             public void run() {
                                 fab.show();
                             }
-                        }, 1000);
+                        }, 500);
                         break;
                     default :
                         fab.hide();

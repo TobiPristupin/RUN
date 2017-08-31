@@ -1,5 +1,8 @@
 package com.example.tobias.run.editor;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.TimeInterpolator;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -8,15 +11,25 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.animation.FastOutLinearInInterpolator;
+import android.transition.*;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,10 +73,11 @@ public class EditorActivity extends AppCompatActivity {
         this.activity = this;
         this.sharedPref = getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE);
 
+        initToolbar();
+
+
         Intent intent = getIntent();
         trackedRun = intent.getParcelableExtra("TrackedRun");
-
-        initToolbar();
 
         //If tracked run has been passed via intent, init edit mode.
         if (trackedRun != null){
@@ -79,6 +93,7 @@ public class EditorActivity extends AppCompatActivity {
         initTimeField();
         initDateField();
         initRatingField();
+        animateViewsEntrance();
     }
 
     @Override
@@ -86,7 +101,7 @@ public class EditorActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 //If home button pressed close activity with no result.
-                finish();
+                supportFinishAfterTransition();
                 break;
             case R.id.editor_save:
                 HashMap<String, String> values = retrieveDataFromViews();
@@ -297,6 +312,21 @@ public class EditorActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void animateViewsEntrance() {
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.content_main);
+        for (int i = 0; i < linearLayout.getChildCount(); i++) {
+            View child = linearLayout.getChildAt(i);
+            child.animate()
+                    .setDuration(750)
+                    .alpha(1.0f);
+
+        }
+    }
+
+
+
 
 
 }

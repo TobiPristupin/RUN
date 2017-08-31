@@ -16,16 +16,19 @@
         android:layout_height="?attr/actionBarSize"
         app:title="Add Manual Entry"
         app:titleTextColor="@android:color/white"
-        android:background="@color/colorPrimary"/>
+        android:background="@color/colorPrimary"
+        android:transitionName="fab_editor_transition"/>
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/editor_container"
         android:layout_margin="15dp"
-        android:background="@android:color/white"
+        android:background="@drawable/mild_rounded_button"
+        android:elevation="5dp"
         android:orientation="vertical"
-        android:elevation="5dp">
+        android:alpha="0">
 
         <RelativeLayout
             android:id="@+id/editor_distance_view"
@@ -40,16 +43,16 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
-                android:src="@drawable/ic_road"/>
+                android:src="@drawable/ic_road" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/editor_image_distance"
-                android:layout_marginLeft="20dp"
                 android:layout_centerVertical="true"
-                android:textSize="16sp"
-                android:text="Distance"/>
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@id/editor_image_distance"
+                android:text="Distance"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/editor_distance_text"
@@ -58,7 +61,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"
-                android:text="None"/>
+                android:text="None" />
 
         </RelativeLayout>
 
@@ -75,16 +78,16 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
-                android:src="@drawable/ic_timer"/>
+                android:src="@drawable/ic_timer" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/editor_image_time"
-                android:layout_marginLeft="20dp"
                 android:layout_centerVertical="true"
-                android:textSize="16sp"
-                android:text="Time"/>
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@id/editor_image_time"
+                android:text="Time"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/editor_time_text"
@@ -93,7 +96,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"
-                android:text="None"/>
+                android:text="None" />
 
         </RelativeLayout>
 
@@ -110,16 +113,16 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
-                android:src="@drawable/ic_date_range"/>
+                android:src="@drawable/ic_date_range" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/editor_image_date"
-                android:layout_marginLeft="20dp"
                 android:layout_centerVertical="true"
-                android:textSize="16sp"
-                android:text="Date"/>
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@id/editor_image_date"
+                android:text="Date"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/editor_date_text"
@@ -128,7 +131,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"
-                android:text="None"/>
+                android:text="None" />
 
         </RelativeLayout>
 
@@ -145,16 +148,17 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
-                android:src="@drawable/ic_stars"/>
+                android:src="@drawable/ic_stars"
+                android:transitionName="fab_editor_transition"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/editor_image_rating"
-                android:layout_marginLeft="20dp"
                 android:layout_centerVertical="true"
-                android:textSize="16sp"
-                android:text="Rating"/>
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@id/editor_image_rating"
+                android:text="Rating"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/editor_rating_text"
@@ -163,7 +167,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"
-                android:text="None"/>
+                android:text="None" />
 
         </RelativeLayout>
 
