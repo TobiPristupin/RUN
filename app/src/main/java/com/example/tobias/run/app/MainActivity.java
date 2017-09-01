@@ -68,16 +68,18 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         firebaseAuth = FirebaseAuth.getInstance();
+        final FirebaseUser user = firebaseAuth.getCurrentUser();
+        if (user == null){
+            loadLogIn();
+        }
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user == null){
                     loadLogIn();
                 }
             }
         };
-        firebaseUser = firebaseAuth.getCurrentUser();
 
         initDrawerLayout();
         initSharedPref();
@@ -89,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
             //Open History fragment setting it as default for startup.
             openFragment(menuItem);
         }
+
     }
 
     private void initDrawerLayout(){
@@ -122,6 +125,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         firebaseAuth.addAuthStateListener(authListener);
+        MenuItem menuItem = navigationView.getMenu().findItem(R.id.menu_history);
+        //Open History fragment setting it as default for startup.
+        openFragment(menuItem);
     }
 
     private void loadLogIn(){
