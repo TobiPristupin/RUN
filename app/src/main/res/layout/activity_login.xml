@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_background"
-    android:backgroundTint="@color/colorPrimary"
-    android:backgroundTintMode="multiply"
+    android:background="@color/colorPrimary"
     tools:context="com.example.tobias.run.login.LoginActivity">
 
     <TextView

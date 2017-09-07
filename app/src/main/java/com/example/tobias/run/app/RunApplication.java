@@ -1,7 +1,10 @@
 package com.example.tobias.run.app;
 
 import android.app.Application;
+import android.content.Intent;
 
+import com.example.tobias.run.login.LoginActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 /**
@@ -15,5 +18,17 @@ public class RunApplication extends Application {
     public void onCreate() {
         super.onCreate();
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        if (FirebaseAuth.getInstance().getCurrentUser() == null){
+            loadLogIn();
+        }
+
+    }
+
+    private void loadLogIn(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        //Flags prevent user from returning to MainActivity when pressing back button
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }

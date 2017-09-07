@@ -124,16 +124,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-        <Spinner
-            android:id="@+id/date_spinner"
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/history_date_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
             android:layout_marginLeft="50dp"
-            android:backgroundTint="@android:color/white"
-            android:backgroundTintMode="src_atop"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="51dp" />
+            android:layout_alignParentLeft="true"
+            app:ms_background_color="@color/colorPrimary"
+            app:ms_text_color="@android:color/white"
+            app:ms_arrow_tint="@android:color/white"
+            android:ellipsize="none"
+            />
 
     </RelativeLayout>
 

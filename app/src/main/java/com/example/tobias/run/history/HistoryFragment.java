@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,6 +44,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -63,7 +66,7 @@ public class HistoryFragment extends Fragment {
     private HistoryRecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private Spinner spinner;
+    private MaterialSpinner dateSpinner;
     private ArrayList<TrackedRun> trackedRunsToDisplay; //Tracked runs that should be displayed according to dateSpinner
     private ArrayList<TrackedRun> allTrackedRuns; //All tracked runs retrieved from database.
     private FirebaseAuth firebaseAuth;
@@ -74,6 +77,12 @@ public class HistoryFragment extends Fragment {
 
     public HistoryFragment(){
         //Required empty constructor.
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("History");
     }
 
     @Nullable
@@ -90,6 +99,7 @@ public class HistoryFragment extends Fragment {
         databaseManager = new FirebaseDatabaseManager();
 
         initRecyclerView();
+        initFirebaseDatabase();
         initDateSpinner();
         initFab();
         initTopBar();
@@ -97,38 +107,66 @@ public class HistoryFragment extends Fragment {
         return rootView;
     }
 
-    /**
-     * Populates date spinner, implements spinner callbacks and small runtime UI tweaks on spinner.
-     */
     private void initDateSpinner(){
-        spinner = (Spinner) rootView.findViewById(R.id.date_spinner);
-
-        //Spinner dropdown elements
-        String[] categories = new String[]{"Month", "Week", "Year", "All"};
-        //Create adapter for Spinner
-        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item,
-                categories);
-
-        spinner.setAdapter(spinnerAdapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        dateSpinner = (MaterialSpinner) rootView.findViewById(R.id.history_date_spinner);
+        dateSpinner.setItems("Month", "Week", "Year", "All");
+        dateSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                /*Get currentlySelected TextView and set its color to white.Because of added complexity
-                when designing a custom layout file for the Spinner, decided to instead change the color on runtime*/
-                TextView selectedTextView = (TextView) spinner.getSelectedView();
-                if(selectedTextView != null){
-                    selectedTextView.setTextColor(Color.parseColor("#FFFFFF"));
-                }
-                //Reload records into listview with new value set.
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 loadRecordsRecyclerView();
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
         });
     }
 
+    private void initFirebaseDatabase(){
+//        databaseRef.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                TrackedRun tr = dataSnapshot.getValue(TrackedRun.class);
+//                if (!containsRun(allTrackedRuns, tr)){
+//                    allTrackedRuns.add(tr);
+//                }
+//                loadRecordsRecyclerView();
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+
+//        databaseRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                allTrackedRuns.clear();
+//                for (DataSnapshot data : dataSnapshot.getChildren()){
+//                    TrackedRun tr = data.getValue(TrackedRun.class);
+//                    allTrackedRuns.add(tr);
+//                }
+//                loadRecordsRecyclerView();
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+    }
 
     private void initRecyclerView(){
         recyclerView = (RecyclerView) rootView.findViewById(R.id.history_recyclerview);
@@ -163,29 +201,6 @@ public class HistoryFragment extends Fragment {
         recyclerView.setAdapter(animationAdapter);
 
         //TODO: Add empty view
-
-        databaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                /*
-                *Can't check if run has already been added to allTrackedRuns using .contains() because firebase database always creates a new
-                *object with the retrieved data. The data fields may already have been added but.contains() returns false because
-                *its a different object with same data. Workaround is to clear list.
-                */
-                allTrackedRuns.clear();
-                for(DataSnapshot data : dataSnapshot.getChildren()){
-                    TrackedRun tr = data.getValue(TrackedRun.class);
-                    allTrackedRuns.add(tr);
-                }
-                loadRecordsRecyclerView();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
     }
 
     /**
@@ -198,10 +213,16 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), EditorActivity.class);
-                String transitionName = fab.getTransitionName();
-                ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
-                        (View) fab, transitionName);
-                startActivity(intent, activityOptions.toBundle());
+                //Shared transition animations not implemented below api 21
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                    String transitionName = fab.getTransitionName();
+                    ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                            (View) fab, transitionName);
+                    startActivity(intent, activityOptions.toBundle());
+                } else {
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -232,7 +253,8 @@ public class HistoryFragment extends Fragment {
      * and has been previously added, remove.
      */
     private void loadRecordsRecyclerView() {
-        String sortBy = spinner.getSelectedItem().toString();
+        String sortBy = dateSpinner.getItems().get(dateSpinner.getSelectedIndex()).toString();
+        trackedRunsToDisplay.clear();
         for (TrackedRun tr : allTrackedRuns){
             switch (sortBy){
                 case "All" :
@@ -315,15 +337,23 @@ public class HistoryFragment extends Fragment {
      * @return
      */
     private boolean containsRun(ArrayList<TrackedRun> arrayList, TrackedRun trackedRun){
-        Iterator<TrackedRun> iterator = arrayList.iterator();
-        while (iterator.hasNext()){
-            TrackedRun iteratorTrackedRun = iterator.next();
-            if (iteratorTrackedRun.getId().equals(trackedRun.getId())){
+        for (TrackedRun tr : arrayList){
+            if (tr.getId().equals(trackedRun.getId())){
                 return true;
             }
         }
         return false;
     }
+
+    private TrackedRun getRunFromId(ArrayList<TrackedRun> arrayList, String id){
+        for (TrackedRun tr : arrayList){
+            if (tr.getId().equals(id)){
+                return tr;
+            }
+        }
+        return null;
+    }
+
 
     private void addRun(TrackedRun trackedRun){
         trackedRunsToDisplay.add(trackedRun);
@@ -342,8 +372,7 @@ public class HistoryFragment extends Fragment {
     }
 
     /**
-     * Removes run from allTrackedRuns, trackedRunsToDisplay, notifies the adapter its removal and removes
-     * from database.
+     * Removes run from database.
      * @param trackedRun
      */
     private void removeRunPermanently(TrackedRun trackedRun){
@@ -353,6 +382,8 @@ public class HistoryFragment extends Fragment {
         adapter.notifyItemRemoved(index);
         databaseManager.deleteRun(trackedRun);
     }
+
+
 
 
 

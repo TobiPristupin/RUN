@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private FirebaseAuth firebaseAuth;
-    private FirebaseUser firebaseUser;
     private FirebaseAuth.AuthStateListener authListener;
 
     @Override
@@ -115,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
 //        userImage.setImageDrawable(bitmapDrawable);
 //    }
 
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -125,16 +125,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         firebaseAuth.addAuthStateListener(authListener);
-        MenuItem menuItem = navigationView.getMenu().findItem(R.id.menu_history);
-        //Open History fragment setting it as default for startup.
-        openFragment(menuItem);
     }
 
-    private void loadLogIn(){
-        Intent intent = new Intent(this, LoginActivity.class);
+    public void loadLogIn(){
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         //Flags prevent user from returning to MainActivity when pressing back button
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 

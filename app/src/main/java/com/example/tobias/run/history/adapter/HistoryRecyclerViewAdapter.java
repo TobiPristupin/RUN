@@ -68,8 +68,8 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
     }
 
     @Override
-    public void onBindViewHolder(final HistoryViewHolder holder, final int position) {
-        TrackedRun trackedRun = trackedRuns.get(position);
+    public void onBindViewHolder(final HistoryViewHolder holder, int position) {
+        TrackedRun trackedRun = trackedRuns.get(holder.getAdapterPosition());
         holder.ratingBar.setRating(trackedRun.getRating());
         holder.date.setText(ConversionManager.dateToString(trackedRun.getDate()));
         holder.time.setText(ConversionManager.timeToString(trackedRun.getTime()));
@@ -77,7 +77,7 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
         holder.overflowIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showPopupMenu(holder, position);
+                showPopupMenu(holder, holder.getAdapterPosition());
             }
         });
     }
