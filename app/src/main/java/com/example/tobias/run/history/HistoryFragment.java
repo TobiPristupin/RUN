@@ -19,6 +19,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,7 @@ import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
 
 /**
- * Fragment that displays activities tracked, and can sort them by different criteria. Accesed via the DrawerLayout
+ * Fragment that displays activities tracked, and can sort them by different criteria. Accessed via the DrawerLayout
  * in MainActivity as History.
  */
 public class HistoryFragment extends Fragment {
@@ -109,6 +110,7 @@ public class HistoryFragment extends Fragment {
 
     private void initDateSpinner(){
         dateSpinner = (MaterialSpinner) rootView.findViewById(R.id.history_date_spinner);
+        dateSpinner.setEllipsize(TextUtils.TruncateAt.START);
         dateSpinner.setItems("Month", "Week", "Year", "All");
         dateSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
@@ -116,6 +118,7 @@ public class HistoryFragment extends Fragment {
                 loadRecordsRecyclerView();
             }
         });
+
     }
 
     private void initFirebaseDatabase(){

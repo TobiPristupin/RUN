@@ -127,18 +127,12 @@
         <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/history_date_spinner"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            app:ms_background_color="@color/colorPrimary"
-            app:ms_text_color="@android:color/white"
             app:ms_arrow_tint="@android:color/white"
-            android:ellipsize="none"
-            />
-
+            app:ms_background_color="@color/colorPrimary"
+            app:ms_text_color="@android:color/white" />
     </RelativeLayout>
 
 

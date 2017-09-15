@@ -3,6 +3,7 @@ package com.example.tobias.run.settings;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.tobias.run.R;
+import com.example.tobias.run.app.MainActivity;
+import com.example.tobias.run.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -67,6 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         FirebaseAuth.getInstance().signOut();
+                        loadLogIn();
                         finish();
                     }
                 });
@@ -74,6 +78,14 @@ public class SettingsActivity extends AppCompatActivity {
                 builder.create().show();
             }
         });
+    }
+
+    private void loadLogIn(){
+        Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+        //Flags prevent user from returning to MainActivity when pressing back button
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
 }

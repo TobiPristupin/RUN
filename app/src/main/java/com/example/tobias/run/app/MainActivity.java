@@ -10,9 +10,6 @@ package com.example.tobias.run.app;
  *@since 09/01/2017
  */
 
-//TODO: Add downwards and upwards animations when switching activities.
-//TODO: Toasty library has bug where text and icon have no padding. Check github to see if issue has been resolved or implement workaround.
-
 
 import android.content.Context;
 import android.content.Intent;
@@ -128,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadLogIn(){
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         //Flags prevent user from returning to MainActivity when pressing back button
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
