@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -143,11 +144,12 @@ public class ForgotPasswordFragment  extends Fragment{
     }
 
     private void initReturnButton(){
-        Button returnButton = (Button) rootView.findViewById(R.id.forgot_password_back_button);
-        returnButton.setOnClickListener(new View.OnClickListener() {
+        Button button = (Button) rootView.findViewById(R.id.forgot_password_return);
+        final ViewPager viewPager = (ViewPager) ((LoginActivity) getActivity()).findViewById(R.id.login_viewpager);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO
+                viewPager.setCurrentItem(1);
             }
         });
     }

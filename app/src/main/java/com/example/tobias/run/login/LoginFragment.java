@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -229,10 +230,11 @@ public class LoginFragment extends Fragment {
 
     private void initBottomButtons(){
         TextView newAccount = (TextView) rootView.findViewById(R.id.login_newaccount);
+        final ViewPager viewPager = (ViewPager) ((LoginActivity) getActivity()).findViewById(R.id.login_viewpager);
         newAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO
+                viewPager.setCurrentItem(2);
             }
         });
 
@@ -240,7 +242,7 @@ public class LoginFragment extends Fragment {
         forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO
+                viewPager.setCurrentItem(0);
             }
         });
     }

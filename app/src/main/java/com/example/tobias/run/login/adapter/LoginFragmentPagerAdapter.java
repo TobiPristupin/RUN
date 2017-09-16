@@ -3,6 +3,7 @@ package com.example.tobias.run.login.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.tobias.run.login.ForgotPasswordFragment;
 import com.example.tobias.run.login.LoginFragment;
@@ -12,7 +13,7 @@ import com.example.tobias.run.login.NewAccountFragment;
  * Created by Tobi on 9/15/2017.
  */
 
-public class LoginFragmentPagerAdapter extends FragmentPagerAdapter {
+public class LoginFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     private final static int ITEMS = 3;
 

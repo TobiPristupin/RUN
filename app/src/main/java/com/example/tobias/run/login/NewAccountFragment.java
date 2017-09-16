@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -72,6 +73,7 @@ public class NewAccountFragment extends Fragment {
         setLayoutErrorReset();
         initCreateAccountButton();
         initGoogleLogIn();
+        initReturnButton();
 
         return rootView;
     }
@@ -287,5 +289,16 @@ public class NewAccountFragment extends Fragment {
         //Fade in
         loadingIndicator.smoothToHide();
         createAccountButton.animate().alpha(1.0f);
+    }
+
+    private void initReturnButton(){
+        Button button = (Button) rootView.findViewById(R.id.new_account_return);
+        final ViewPager viewPager = (ViewPager) ((LoginActivity) getActivity()).findViewById(R.id.login_viewpager);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewPager.setCurrentItem(1);
+            }
+        });
     }
 }

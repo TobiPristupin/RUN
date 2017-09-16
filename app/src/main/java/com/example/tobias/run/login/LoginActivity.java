@@ -19,6 +19,7 @@ import com.example.tobias.run.R;
 import com.example.tobias.run.app.MainActivity;
 import com.example.tobias.run.login.adapter.LoginFragmentPagerAdapter;
 import com.example.tobias.run.utils.GoogleAuthManager;
+import com.example.tobias.run.utils.LoginPageTransformer;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -26,6 +27,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.lang.reflect.Field;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -44,12 +47,17 @@ public class LoginActivity extends AppCompatActivity {
         apiClient = authManager.getApiClient(LoginActivity.this, signInOptions, TAG);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.login_viewpager);
+        viewPager.setPageTransformer(false, new LoginPageTransformer());
         viewPager.setAdapter(new LoginFragmentPagerAdapter(getSupportFragmentManager()));
         viewPager.setCurrentItem(1);
+
+
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
+
+        //TODO: Make google buttons fabs with loading anims?
 
     }
 
