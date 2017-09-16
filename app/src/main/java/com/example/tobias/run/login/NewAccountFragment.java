@@ -2,23 +2,27 @@ package com.example.tobias.run.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.app.MainActivity;
 import com.example.tobias.run.utils.GoogleAuthManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
@@ -32,42 +36,44 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.apache.commons.validator.routines.EmailValidator;
+
 import es.dmoral.toasty.Toasty;
 
-public class NewAccountActivity extends AppCompatActivity {
+/**
+ * Created by Tobi on 9/15/2017.
+ */
 
+public class NewAccountFragment extends Fragment {
+
+    private View rootView;
     private TextInputLayout emailLayout;
     private TextInputLayout passwordLayout;
     private TextInputLayout passwordLayout2;
     private FirebaseAuth firebaseAuth;
     private Button createAccountButton;
     private AVLoadingIndicatorView loadingIndicator;
-    private static final String TAG = "NewAccountActivity";
+    private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 1379;
 
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_account);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_new_account, container, false);
 
-        emailLayout = (TextInputLayout) findViewById(R.id.new_account_email);
-        passwordLayout = (TextInputLayout) findViewById(R.id.new_account_password1);
-        passwordLayout2 = (TextInputLayout) findViewById(R.id.new_account_password2);
-        loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.new_account_loading_indicator);
+        emailLayout = (TextInputLayout) rootView.findViewById(R.id.new_account_email);
+        passwordLayout = (TextInputLayout) rootView.findViewById(R.id.new_account_password1);
+        passwordLayout2 = (TextInputLayout) rootView.findViewById(R.id.new_account_password2);
+        loadingIndicator = (AVLoadingIndicatorView) rootView.findViewById(R.id.new_account_loading_indicator);
         firebaseAuth = FirebaseAuth.getInstance();
-        createAccountButton = (Button) findViewById(R.id.new_account_create_account_button);
+        createAccountButton = (Button) rootView.findViewById(R.id.new_account_create_account_button);
 
         //Configures all TextInputLayout to remove their errors every time text is inputted
         setLayoutErrorReset();
         initCreateAccountButton();
         initGoogleLogIn();
-    }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+        return rootView;
     }
 
 
@@ -83,7 +89,7 @@ public class NewAccountActivity extends AppCompatActivity {
                 if (validateFields(email, password, password2)){
                     //Matching passwords have been validated, no need to pass both.
                     firebaseCreateAccount(email, password);
-              }
+                }
 
             }
         });
@@ -180,13 +186,13 @@ public class NewAccountActivity extends AppCompatActivity {
             return false;
         }
 
-    return true;
+        return true;
 
     }
 
     private void firebaseCreateAccount(String email, String password){
         firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(NewAccountActivity.this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
@@ -194,14 +200,14 @@ public class NewAccountActivity extends AppCompatActivity {
                             loadMainActivity();
                         } else {
                             Log.d(TAG, "FirebaseCreateUserWithEmail:Unsuccessful " + task.getException());
-                            Toasty.warning(NewAccountActivity.this, "Unable to create new account").show();
+                            Toasty.warning(getContext(), "Unable to create new account").show();
                         }
                     }
                 });
     }
 
     private void loadMainActivity(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(getContext(), MainActivity.class);
         //Flags prevent user from returning to LoginActivity when pressing back button
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -210,11 +216,8 @@ public class NewAccountActivity extends AppCompatActivity {
 
     //Initializes everything related to Google Sign In
     private void initGoogleLogIn(){
-        GoogleAuthManager googleAuthManager = new GoogleAuthManager(NewAccountActivity.this);
-        final GoogleApiClient apiClient = googleAuthManager.getApiClient(NewAccountActivity.this, googleAuthManager.getSignInOptions(),
-                TAG);
-
-        SignInButton signInButton = (SignInButton) findViewById(R.id.new_account_google_button);
+        final GoogleApiClient apiClient = ((LoginActivity) getActivity()).getGoogleApiClient();
+        SignInButton signInButton = (SignInButton) rootView.findViewById(R.id.new_account_google_button);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -227,7 +230,7 @@ public class NewAccountActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
@@ -242,7 +245,7 @@ public class NewAccountActivity extends AppCompatActivity {
             GoogleSignInAccount account = result.getSignInAccount();
             firebaseAuthGoogleAccount(account);
         } else {
-            Toasty.warning(NewAccountActivity.this, "Google sign in failed. Check your internet connection or try again").show();
+            Toasty.warning(getContext(), "Google sign in failed. Check your internet connection or try again").show();
             endLoadingAnim();
         }
     }
@@ -253,7 +256,7 @@ public class NewAccountActivity extends AppCompatActivity {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
@@ -261,7 +264,7 @@ public class NewAccountActivity extends AppCompatActivity {
                             loadMainActivity();
                         } else {
                             Log.w(TAG, "FirebaseSignInWithGoogleCredential:Unsuccessful " + task.getException());
-                            Toasty.warning(NewAccountActivity.this, "Authentication failed. Check your internet connection or try again").show();
+                            Toasty.warning(getContext(), "Authentication failed. Check your internet connection or try again").show();
                             endLoadingAnim();
                         }
                     }

@@ -7,7 +7,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.login.NewAccountActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;

@@ -3,14 +3,17 @@ package com.example.tobias.run.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -22,38 +25,38 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.apache.commons.validator.routines.EmailValidator;
+
 import es.dmoral.toasty.Toasty;
 
-public class ForgotPasswordActivity extends AppCompatActivity {
+/**
+ * Created by Tobi on 9/15/2017.
+ */
 
+public class ForgotPasswordFragment  extends Fragment{
+
+    private View rootView;
     private AVLoadingIndicatorView loadingIndicator;
     private TextInputLayout emailLayout;
     private FirebaseAuth firebaseAuth;
     private Button sendButton;
-    private static final String TAG = "ForgotPasswordActivity";
+    private static final String TAG = "LoginActivity";
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forgot_password);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_forgot_password, container, false);
 
-        loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.forgot_password_loading_indicator);
-        emailLayout = (TextInputLayout) findViewById(R.id.forgot_password_email);
-        sendButton = (Button) findViewById(R.id.forgot_password_send_button);
+        loadingIndicator = (AVLoadingIndicatorView) rootView.findViewById(R.id.forgot_password_loading_indicator);
+        emailLayout = (TextInputLayout) rootView.findViewById(R.id.forgot_password_email);
+        sendButton = (Button) rootView.findViewById(R.id.forgot_password_send_button);
         firebaseAuth = firebaseAuth.getInstance();
-
-        Toast.makeText(this, "Hello", Toast.LENGTH_SHORT).show();
 
         //Configures all TextInputLayout to remove their errors every time text is inputted
         setLayoutErrorReset();
         initSendButton();
         initReturnButton();
-    }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+        return rootView;
     }
 
     private void initSendButton(){
@@ -107,16 +110,16 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){
                     Log.d(TAG, "FirebaseSendResetEmail:Successful");
-                    Toasty.success(ForgotPasswordActivity.this, "Recovery email sent", Toast.LENGTH_SHORT).show();
+                    Toasty.success(getContext(), "Recovery email sent", Toast.LENGTH_SHORT).show();
                     sendButtonStopAnim();
                 } else {
                     Log.d(TAG, "FirebaseSendResetEmail:Unsuccessful " + task.getException());
                     sendButtonStopAnim();
                     if (task.getException() instanceof FirebaseTooManyRequestsException){
-                        Toasty.warning(ForgotPasswordActivity.this, "Too many requests sent. Please try again").show();
+                        Toasty.warning(getContext(), "Too many requests sent. Please try again").show();
                         return;
                     }
-                    Toasty.warning(ForgotPasswordActivity.this, "Email not sent. Please check your internet connection or try again").show();
+                    Toasty.warning(getContext(), "Email not sent. Please check your internet connection or try again").show();
                 }
             }
         });
@@ -140,12 +143,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     }
 
     private void initReturnButton(){
-        Button returnButton = (Button) findViewById(R.id.forgot_password_back_button);
+        Button returnButton = (Button) rootView.findViewById(R.id.forgot_password_back_button);
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ForgotPasswordActivity.this, LoginActivity.class));
-                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                //TODO
             }
         });
     }

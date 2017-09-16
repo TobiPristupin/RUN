@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.app.MainActivity;
 import com.example.tobias.run.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
