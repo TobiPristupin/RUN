@@ -33,9 +33,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
-/**
- * MainActivity and entry-point of application.
- */
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
@@ -48,13 +45,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.navigation_view);
         firebaseAuth = FirebaseAuth.getInstance();
         final FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user == null){
-            loadLogIn();
-        }
+
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -64,15 +57,23 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        initDrawerLayout();
-        initSharedPref();
-        initToolbar();
+        if (user == null){
+            loadLogIn();
+        } else {
+            drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+            navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
-        if (savedInstanceState == null) {
-            //If app hasn't loaded the views previously
-            MenuItem menuItem = navigationView.getMenu().findItem(R.id.menu_history);
-            //Open History fragment setting it as default for startup.
-            openFragment(menuItem);
+            initDrawerLayout();
+            initSharedPref();
+            initToolbar();
+
+            if (savedInstanceState == null) {
+                //If app hasn't loaded the views previously
+                MenuItem menuItem = navigationView.getMenu().findItem(R.id.menu_history);
+                //Open History fragment setting it as default for startup.
+                openFragment(menuItem);
+            }
+
         }
 
     }
@@ -112,10 +113,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadLogIn(){
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         //Flags prevent user from returning to MainActivity when pressing back button
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        System.out.println(intent);
         startActivity(intent);
     }
 

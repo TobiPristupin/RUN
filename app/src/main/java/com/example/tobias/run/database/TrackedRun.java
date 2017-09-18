@@ -18,7 +18,6 @@ public class TrackedRun implements Parcelable {
     private long mTime;
     private long mDate;
     private int mRating;
-
     private String mID = null;
 
     public TrackedRun(int id, long date, float distanceKilometres, float distanceMiles, long time, int rating, String unit){
@@ -42,6 +41,21 @@ public class TrackedRun implements Parcelable {
         this.mTime = in.readLong();
         this.mRating = in.readInt();
         this.mDistanceMiles = in.readFloat();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        TrackedRun run = (TrackedRun) obj;
+        if (this.getId().equals(run.getId())) return false;
+        if (this.getDate() != run.getDate()) return false;
+        if (this.getDistanceKilometres() != run.getDistanceKilometres()) return false;
+        if (this.getRating() != run.getRating()) return false;
+        if (this.getTime() != run.getTime()) return false;
+
+        return true;
     }
 
     @Override

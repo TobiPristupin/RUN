@@ -20,7 +20,6 @@ public class FirebaseDatabaseManager {
     public void addRun(TrackedRun run){
         DatabaseReference ref = databaseRef.push();
         run.setId(ref.getKey());
-        System.out.println(ref.getKey());
         ref.setValue(run);
     }
 

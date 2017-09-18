@@ -1,4 +1,4 @@
-package com.example.tobias.run.utils;
+package com.example.tobias.run.login;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
