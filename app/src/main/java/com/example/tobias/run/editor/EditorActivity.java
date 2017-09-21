@@ -1,8 +1,5 @@
 package com.example.tobias.run.editor;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.TimeInterpolator;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -12,23 +9,14 @@ import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
-import android.transition.*;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AnimationUtils;
-import android.view.animation.Interpolator;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -36,12 +24,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.database.FirebaseDatabaseManager;
+import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.editor.dialog.DistanceDialog;
 import com.example.tobias.run.editor.dialog.RatingDialog;
 import com.example.tobias.run.editor.dialog.TimeDialog;
 import com.example.tobias.run.utils.ConversionManager;
-import com.example.tobias.run.database.TrackedRun;
+import com.example.tobias.run.data.TrackedRun;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -146,6 +134,8 @@ public class EditorActivity extends AppCompatActivity {
         trackedRun.setDate(ConversionManager.dateToUnix(values.get("date")));
         trackedRun.setRating(Integer.valueOf(values.get("rating")));
         trackedRun.setTime(ConversionManager.timeToUnix(values.get("time")));
+        trackedRun.setMilePace(ConversionManager.getPace(trackedRun.getDistanceMiles(), trackedRun.getTime()));
+        trackedRun.setKmPace(ConversionManager.getPace(trackedRun.getDistanceKilometres(), trackedRun.getTime()));
 
         //If run hasn't been assigned an ID, it's a new run and has to be added to the database.
         // IF run has been assigned an ID, run has been added to database previously and has to be updated with the new data.

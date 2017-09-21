@@ -1,4 +1,4 @@
-package com.example.tobias.run.database;
+package com.example.tobias.run.data;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

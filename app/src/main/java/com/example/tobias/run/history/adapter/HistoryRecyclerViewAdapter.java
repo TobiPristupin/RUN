@@ -15,12 +15,10 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.database.FirebaseDatabaseManager;
-import com.example.tobias.run.database.TrackedRun;
+import com.example.tobias.run.data.TrackedRun;
 import com.example.tobias.run.utils.ConversionManager;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Adapter for custom RecyclerView in History Fragment.

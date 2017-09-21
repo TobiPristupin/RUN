@@ -3,7 +3,7 @@ package com.example.tobias.run.utils;
 import android.support.annotation.Nullable;
 import android.support.v7.util.DiffUtil;
 
-import com.example.tobias.run.database.TrackedRun;
+import com.example.tobias.run.data.TrackedRun;
 
 import java.util.ArrayList;
 

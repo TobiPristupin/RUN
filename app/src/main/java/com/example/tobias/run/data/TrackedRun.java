@@ -1,9 +1,12 @@
-package com.example.tobias.run.database;
+package com.example.tobias.run.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.tobias.run.utils.ConversionManager;
 import com.google.firebase.database.Exclude;
+
+import org.joda.time.Period;
 
 /**
  * Object to represent a new tracked run for storage in database. Handles conversion between
@@ -11,27 +14,28 @@ import com.google.firebase.database.Exclude;
  * datatype for storage in the db.
  */
 public class TrackedRun implements Parcelable {
-    //TODO: Remove ID field
 
     private float mDistanceKilometres;
     private float mDistanceMiles;
     private long mTime;
     private long mDate;
     private int mRating;
+    private long mMilePace;
+    private long mKilometrePace;
     private String mID = null;
 
-    public TrackedRun(int id, long date, float distanceKilometres, float distanceMiles, long time, int rating, String unit){
+    public TrackedRun(long date, float distanceKilometres, float distanceMiles, long time, int rating){
         this.mDistanceKilometres = distanceKilometres;
         this.mDistanceMiles = distanceMiles;
         this.mTime = time;
         this.mDate = date;
         this.mRating = rating;
-
+        this.mMilePace = ConversionManager.getPace(mDistanceMiles, mTime);
+        this.mKilometrePace = ConversionManager.getPace(mDistanceKilometres, mTime);
     }
 
     public TrackedRun(){
         // Default constructor required for firebase calls to DataSnapshot.getValue(User.class)
-
     }
 
     public TrackedRun(Parcel in) {
@@ -41,6 +45,8 @@ public class TrackedRun implements Parcelable {
         this.mTime = in.readLong();
         this.mRating = in.readInt();
         this.mDistanceMiles = in.readFloat();
+        this.mMilePace = in.readLong();
+        this.mKilometrePace = in.readLong();
     }
 
     @Override
@@ -54,6 +60,7 @@ public class TrackedRun implements Parcelable {
         if (this.getDistanceKilometres() != run.getDistanceKilometres()) return false;
         if (this.getRating() != run.getRating()) return false;
         if (this.getTime() != run.getTime()) return false;
+        //No need to check for mile or km pace because pace is computed off time and distance.
 
         return true;
     }
@@ -71,6 +78,8 @@ public class TrackedRun implements Parcelable {
         parcel.writeLong(mTime);
         parcel.writeInt(mRating);
         parcel.writeFloat(mDistanceMiles);
+        parcel.writeLong(mMilePace);
+        parcel.writeLong(mKilometrePace);
     }
 
     @Exclude
@@ -102,8 +111,16 @@ public class TrackedRun implements Parcelable {
         return mRating;
     }
     public String getId(){ return mID; }
+    public long getMilePace(){
+        return mMilePace;
+    }
+    public long getKmPace() {
+        return mKilometrePace;
+    }
 
-    public void setDistanceKilometres(float distanceKilometres){
+
+
+    public void setDistanceKilometres(float distanceKilometres) {
         mDistanceKilometres = distanceKilometres;
     }
     public void setDistanceMiles(float distanceMiles){
@@ -120,6 +137,12 @@ public class TrackedRun implements Parcelable {
     }
     public void setId(String pushKey){
         mID = pushKey;
+    }
+    public void setMilePace(long milePace){
+        mMilePace = milePace;
+    }
+    public void setKmPace(long kmPace) {
+        mKilometrePace = kmPace;
     }
 
 

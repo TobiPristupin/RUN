@@ -48,7 +48,7 @@ public class ConversionManager {
     /**
      *
      * @param date in unix timestamp
-     * @return date in format "E, e/d/y"
+     * @return date in format "E, d/M/y"
      */
     public static String dateToString(long date){
         DateTimeFormatter formatter = DateTimeFormat.forPattern("E, d/M/y");
@@ -104,6 +104,21 @@ public class ConversionManager {
                 .withDayOfMonth(Integer.valueOf(dateUnits[0]));
 
         return dateTime.getMillis() / 1000;
+    }
+
+    /**
+     *
+     * @param distance distance in any format.
+     * @param unixTime time of run in unix timestamp format
+     * @return pace per unit of distance in unix timestamp format
+     */
+    public static long getPace(float distance, long unixTime){
+        //Period is inputted time in millis and converts it to hh:mm:ss
+        Period period = new Period(unixTime);
+        float timeInSeconds = period.getHours() * 3600f + period.getMinutes() * 60f + period.getSeconds();
+        float pace = timeInSeconds / distance;
+        //Multiply pace by 1000 to convert it to millis from seconds.
+        return (long) pace * 1000;
     }
 
     public static long getStartOfWeek(){
