@@ -1,5 +1,11 @@
 package com.example.tobias.run.utils;
 
+import android.support.annotation.Nullable;
+
+import com.example.tobias.run.data.TrackedRun;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
@@ -7,6 +13,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Locale;
 
 /**
@@ -119,6 +127,23 @@ public class ConversionManager {
         float pace = timeInSeconds / distance;
         //Multiply pace by 1000 to convert it to millis from seconds.
         return (long) pace * 1000;
+    }
+
+    /**
+     *
+     * @param trackedRuns
+     * @param predicate
+     * @return filtered ArrayList
+     */
+    public static ArrayList<TrackedRun> filterRun(ArrayList<TrackedRun> trackedRuns, Predicate predicate){
+        ArrayList<TrackedRun> filteredList = new ArrayList<>();
+        for (TrackedRun tr : trackedRuns){
+            if (predicate.evaluate(tr)){
+                filteredList.add(tr);
+            }
+        }
+
+        return filteredList;
     }
 
     public static long getStartOfWeek(){

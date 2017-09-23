@@ -24,14 +24,19 @@ import android.widget.TextView;
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.TrackedRun;
+import com.example.tobias.run.data.TrackedRunPredicates;
 import com.example.tobias.run.editor.EditorActivity;
 import com.example.tobias.run.history.adapter.HistoryRecyclerViewAdapter;
 import com.example.tobias.run.utils.ConversionManager;
 import com.example.tobias.run.utils.VerticalDividerItemDecoration;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import org.joda.time.DateTime;
@@ -54,8 +59,7 @@ public class HistoryFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private MaterialSpinner dateSpinner;
-    private ArrayList<TrackedRun> trackedRunsToDisplay; //Tracked runs that should be displayed according to dateSpinner
-    private ArrayList<TrackedRun> allTrackedRuns; //All tracked runs retrieved from database.
+    private ArrayList<TrackedRun> trackedRuns;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
@@ -76,13 +80,11 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_history, container, false);
-
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseRef = firebaseDatabase.getReference("users/" + firebaseUser.getUid());
-        trackedRunsToDisplay = new ArrayList<>();
-        allTrackedRuns = new ArrayList<>();
+        trackedRuns = new ArrayList<>();
         databaseManager = new FirebaseDatabaseManager();
 
         initRecyclerView();
@@ -96,7 +98,6 @@ public class HistoryFragment extends Fragment {
 
     private void initDateSpinner(){
         dateSpinner = (MaterialSpinner) rootView.findViewById(R.id.history_date_spinner);
-        dateSpinner.setEllipsize(TextUtils.TruncateAt.START);
         dateSpinner.setItems("Month", "Week", "Year", "All");
         dateSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
@@ -112,9 +113,7 @@ public class HistoryFragment extends Fragment {
 //            @Override
 //            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 //                TrackedRun tr = dataSnapshot.getValue(TrackedRun.class);
-//                if (!containsRun(allTrackedRuns, tr)){
-//                    allTrackedRuns.add(tr);
-//                }
+//                trackedRuns.add(tr);
 //                loadRecordsRecyclerView();
 //            }
 //
@@ -125,7 +124,7 @@ public class HistoryFragment extends Fragment {
 //
 //            @Override
 //            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
+//                loadRecordsRecyclerView();
 //            }
 //
 //            @Override
@@ -139,22 +138,22 @@ public class HistoryFragment extends Fragment {
 //            }
 //        });
 
-//        databaseRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                allTrackedRuns.clear();
-//                for (DataSnapshot data : dataSnapshot.getChildren()){
-//                    TrackedRun tr = data.getValue(TrackedRun.class);
-//                    allTrackedRuns.add(tr);
-//                }
-//                loadRecordsRecyclerView();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
+        databaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                trackedRuns.clear();
+                for (DataSnapshot data : dataSnapshot.getChildren()){
+                    trackedRuns.add(data.getValue(TrackedRun.class));
+                }
+                loadRecordsRecyclerView();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private void initRecyclerView(){
@@ -171,7 +170,7 @@ public class HistoryFragment extends Fragment {
         recyclerView.getItemAnimator().setAddDuration(500);
         recyclerView.getItemAnimator().setRemoveDuration(500);
 
-        adapter = new HistoryRecyclerViewAdapter(getContext(), trackedRunsToDisplay, new HistoryRecyclerViewAdapter.OnOverflowButtonListener() {
+        adapter = new HistoryRecyclerViewAdapter(getContext(), trackedRuns, new HistoryRecyclerViewAdapter.OnOverflowButtonListener() {
             @Override
             public void onDeleteClick(TrackedRun tr) {
                 showDeleteDialog(tr);
@@ -184,6 +183,7 @@ public class HistoryFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
         AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(adapter);
         animationAdapter.setDuration(500);
         animationAdapter.setFirstOnly(false);
@@ -237,56 +237,20 @@ public class HistoryFragment extends Fragment {
         });
     }
 
-    /**
-     * Add all tracked runs according to date spinner criteria. If run doesn't meet new criteria
-     * and has been previously added, remove.
-     */
     private void loadRecordsRecyclerView() {
-        String sortBy = dateSpinner.getItems().get(dateSpinner.getSelectedIndex()).toString();
-        trackedRunsToDisplay.clear();
-        for (TrackedRun tr : allTrackedRuns){
-            switch (sortBy){
-                case "All" :
-                    if (!containsRun(trackedRunsToDisplay, tr)){
-                        addRun(tr);
-                    }
-                    break;
-                case "Week" :
-                    //If run meets date criteria and hasn't been added previously then add.
-                    if (tr.getDate() >= ConversionManager.getStartOfWeek() && tr.getDate() <= ConversionManager.getEndOfWeek()){
-                        if (!containsRun(trackedRunsToDisplay, tr)){
-                            addRun(tr);
-                        }
-                    } else { //If run doesn't meet criteria and has been added, remove.
-                        if (containsRun(trackedRunsToDisplay, tr)){
-                            removeRunFromDisplay(tr);
-                        }
-                    }
-                    break;
-                case "Month" :
-                    if (tr.getDate() >= ConversionManager.getStartOfMonth() && tr.getDate() <= ConversionManager.getEndOfMonth()) {
-                        if (!containsRun(trackedRunsToDisplay, tr)) {
-                            addRun(tr);
-                        }
-                    } else {
-                        if (containsRun(trackedRunsToDisplay, tr)) {
-                            removeRunFromDisplay(tr);
-                        }
-                    }
-
-                    break;
-                case "Year" :
-                    if (tr.getDate() >= ConversionManager.getStartOfYear() && tr.getDate() <= ConversionManager.getEndOfYear()){
-                        if (!containsRun(trackedRunsToDisplay, tr)){
-                            addRun(tr);
-                        }
-                    } else {
-                        if (containsRun(trackedRunsToDisplay, tr)){
-                            removeRunFromDisplay(tr);
-                        }
-                    }
-                    break;
-            }
+        String filter = dateSpinner.getItems().get(dateSpinner.getSelectedIndex()).toString();
+        switch (filter){
+            case "Week" :
+                adapter.updateItems(ConversionManager.filterRun(trackedRuns, TrackedRunPredicates.isRunFromWeek()));
+                break;
+            case "Month" :
+                adapter.updateItems(ConversionManager.filterRun(trackedRuns, TrackedRunPredicates.isRunFromMonth()));
+                break;
+            case "Year" :
+                adapter.updateItems(ConversionManager.filterRun(trackedRuns, TrackedRunPredicates.isRunFromYear()));
+                break;
+            case "All" :
+                adapter.updateItems(trackedRuns);
         }
     }
 
@@ -317,58 +281,8 @@ public class HistoryFragment extends Fragment {
         builder.create().show();
     }
 
-    /**
-     * Checks if TrackedRun is in ArrayList. Different from ArrayList .contains() method because containsRun
-     * compares if ID of run is the same, while contains compares if the object has the same reference, which may result
-     * in an incorrect result when Firebase Database returns a new object reference, but with the same data.
-     * @param arrayList
-     * @param trackedRun
-     * @return
-     */
-    private boolean containsRun(ArrayList<TrackedRun> arrayList, TrackedRun trackedRun){
-        for (TrackedRun tr : arrayList){
-            if (tr.getId().equals(trackedRun.getId())){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private TrackedRun getRunFromId(ArrayList<TrackedRun> arrayList, String id){
-        for (TrackedRun tr : arrayList){
-            if (tr.getId().equals(id)){
-                return tr;
-            }
-        }
-        return null;
-    }
-
-
-    private void addRun(TrackedRun trackedRun){
-        trackedRunsToDisplay.add(trackedRun);
-        adapter.notifyItemInserted(trackedRunsToDisplay.indexOf(trackedRun));
-    }
-
-    /**
-     * Removes run from trackedRunsToDisplay, notifies adapter its removal. Does not remove
-     * from database.
-     * @param trackedRun
-     */
-    private void removeRunFromDisplay(TrackedRun trackedRun){
-        int index = trackedRunsToDisplay.indexOf(trackedRun);
-        trackedRunsToDisplay.remove(trackedRun);
-        adapter.notifyItemRemoved(index);
-    }
-
-    /**
-     * Removes run from database.
-     * @param trackedRun
-     */
     private void removeRunPermanently(TrackedRun trackedRun){
-        allTrackedRuns.remove(trackedRun);
-        int index = trackedRunsToDisplay.indexOf(trackedRun);
-        trackedRunsToDisplay.remove(trackedRun);
-        adapter.notifyItemRemoved(index);
+        trackedRuns.remove(trackedRun);
         databaseManager.deleteRun(trackedRun);
     }
 

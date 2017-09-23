@@ -1,4 +1,4 @@
-package com.example.tobias.run.utils;
+package com.example.tobias.run.data;
 
 import android.support.annotation.Nullable;
 import android.support.v7.util.DiffUtil;
