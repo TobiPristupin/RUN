@@ -27,19 +27,17 @@ import java.util.ArrayList;
  */
 public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecyclerViewAdapter.HistoryViewHolder> {
 
-    public interface OnOverflowButtonListener {
-        void onDeleteClick(TrackedRun tr);
-        void onEditClick(TrackedRun tr);
-    }
-
     private ArrayList<TrackedRun> trackedRuns = new ArrayList<>();
     private Context context;
-    private OnOverflowButtonListener listener;
+    private SharedPreferences sharedPref;
 
-    public HistoryRecyclerViewAdapter(Context context, ArrayList<TrackedRun> trackedRuns, OnOverflowButtonListener listener){
+    public HistoryRecyclerViewAdapter(Context context, ArrayList<TrackedRun> trackedRuns){
+        /*Creating new ArrayList and adding instead of copying reference because changes made on adapter's trackedRuns should not affect
+        HistoryFragment trackedRuns.*/
         this.trackedRuns.addAll(trackedRuns);
         this.context = context;
-        this.listener = listener;
+        this.sharedPref = context.getSharedPreferences(
+                context.getString(R.string.preference_key), Context.MODE_PRIVATE);
     }
 
     @Override
@@ -55,12 +53,7 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
         holder.date.setText(ConversionManager.dateToString(trackedRun.getDate()));
         holder.time.setText(ConversionManager.timeToString(trackedRun.getTime()));
         setDistanceText(trackedRun, holder);
-        holder.overflowIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPopupMenu(holder, holder.getAdapterPosition());
-            }
-        });
+        setPaceText(trackedRun, holder);
     }
 
     public void updateItems(ArrayList<TrackedRun> newList){
@@ -72,29 +65,7 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
         diffResult.dispatchUpdatesTo(this);
     }
 
-    private void showPopupMenu(final HistoryViewHolder holder, final int position){
-        final PopupMenu popupMenu = new PopupMenu(context, holder.overflowIcon);
-        popupMenu.getMenuInflater().inflate(R.menu.list_item_overflow, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem){
-                switch (menuItem.getItemId()){
-                    case R.id.menu_overflow_delete_button :
-                        listener.onDeleteClick(trackedRuns.get(position));
-                        break;
-                    case R.id.menu_overflow_edit_button :
-                        listener.onEditClick(trackedRuns.get(position));
-                        break;
-                }
-                return true;
-            }
-        });
-        popupMenu.show();
-    }
-
     private void setDistanceText(TrackedRun currentItem, HistoryViewHolder holder){
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                context.getString(R.string.preference_key), Context.MODE_PRIVATE);
         String unit = sharedPref.getString(context.getString(R.string.preference_distance_unit_key), null);
         if (unit.equals("km")){
             holder.distance.setText(ConversionManager.distanceToString(currentItem.getDistanceKilometres(), unit));
@@ -102,6 +73,17 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
             holder.distance.setText(ConversionManager.distanceToString(currentItem.getDistanceMiles(), unit));
         }
     }
+
+    private void setPaceText(TrackedRun currentItem, HistoryViewHolder holder){
+        String unit = sharedPref.getString(context.getString(R.string.preference_distance_unit_key), null);
+        if (unit.equals("km")){
+            holder.pace.setText(ConversionManager.paceToString(currentItem.getKmPace(), "km"));
+        } else {
+            holder.pace.setText(ConversionManager.paceToString(currentItem.getMilePace(), "mi"));
+        }
+    }
+
+
 
     @Override
     public int getItemCount() {
@@ -114,7 +96,7 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
         public TextView distance;
         public TextView time;
         public TextView date;
-        public ImageView overflowIcon;
+        public TextView pace;
 
         public HistoryViewHolder(View view){
             super(view);
@@ -122,7 +104,7 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
             distance = (TextView) view.findViewById(R.id.list_item_distance_text);
             time = (TextView) view.findViewById(R.id.list_item_time_text);
             date = (TextView) view.findViewById(R.id.list_item_date_text);
-            overflowIcon = (ImageButton)  view.findViewById(R.id.list_item_overflow_icon);
+            pace = (TextView) view.findViewById(R.id.list_item_pace_text);
         }
     }
 }

@@ -13,6 +13,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
@@ -44,11 +45,11 @@ public class ConversionManager {
         Period period = new Period(time);
 
         String timeText = new StringBuilder()
-                .append(String.format(Locale.US, "%02d", period.getHours()))
+                .append(String.format(Locale.getDefault(), "%02d", period.getHours()))
                 .append(":")
-                .append(String.format(Locale.US, "%02d", period.getMinutes()))
+                .append(String.format(Locale.getDefault(), "%02d", period.getMinutes()))
                 .append(":")
-                .append(String.format(Locale.US, "%02d", period.getSeconds())).toString();
+                .append(String.format(Locale.getDefault(), "%02d", period.getSeconds())).toString();
 
         return timeText;
     }
@@ -127,6 +128,32 @@ public class ConversionManager {
         float pace = timeInSeconds / distance;
         //Multiply pace by 1000 to convert it to millis from seconds.
         return (long) pace * 1000;
+    }
+
+    /**
+     *
+     * @param paceTimeUnix pace in unix timestamp form
+     * @param unit
+     * @return pace in format mm:ss/unit or hh:mm:ss/unit if the pace contains hours.
+     */
+    public static String paceToString(long paceTimeUnix, String unit){
+        Period period = new Period(paceTimeUnix);
+        String paceText = new StringBuilder()
+                .append(String.format(Locale.getDefault(), "%02d", period.getMinutes()))
+                .append(":")
+                .append(String.format(Locale.getDefault(), "%02d", period.getSeconds()))
+                .append("/")
+                .append(unit).toString();
+
+        if (period.getHours() > 0){
+            String hoursText = new StringBuilder()
+                    .append(String.format(Locale.getDefault(), "%02d", period.getHours()))
+                    .append(":")
+                    .append(paceText).toString();
+            return hoursText;
+        }
+
+        return paceText;
     }
 
     /**

@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
@@ -45,6 +46,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 
+import es.dmoral.toasty.Toasty;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
 
@@ -109,35 +111,6 @@ public class HistoryFragment extends Fragment {
     }
 
     private void initFirebaseDatabase(){
-//        databaseRef.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                TrackedRun tr = dataSnapshot.getValue(TrackedRun.class);
-//                trackedRuns.add(tr);
-//                loadRecordsRecyclerView();
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//                loadRecordsRecyclerView();
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -150,7 +123,8 @@ public class HistoryFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toasty.warning(getContext(), "Error while fetching data from online database. The data shown might not be updated. Check your internet connection.",
+                        Toast.LENGTH_LONG).show();
             }
         });
 
@@ -170,19 +144,8 @@ public class HistoryFragment extends Fragment {
         recyclerView.getItemAnimator().setAddDuration(500);
         recyclerView.getItemAnimator().setRemoveDuration(500);
 
-        adapter = new HistoryRecyclerViewAdapter(getContext(), trackedRuns, new HistoryRecyclerViewAdapter.OnOverflowButtonListener() {
-            @Override
-            public void onDeleteClick(TrackedRun tr) {
-                showDeleteDialog(tr);
-            }
+        adapter = new HistoryRecyclerViewAdapter(getContext(), trackedRuns);
 
-            @Override
-            public void onEditClick(TrackedRun tr) {
-                Intent intent = new Intent(getContext(), EditorActivity.class);
-                intent.putExtra("TrackedRun", tr);
-                startActivity(intent);
-            }
-        });
 
         AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(adapter);
         animationAdapter.setDuration(500);
