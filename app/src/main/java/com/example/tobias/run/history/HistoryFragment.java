@@ -2,8 +2,6 @@ package com.example.tobias.run.history;
 
 
 import android.app.ActivityOptions;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,15 +10,19 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
@@ -32,7 +34,6 @@ import com.example.tobias.run.utils.ConversionManager;
 import com.example.tobias.run.utils.VerticalDividerItemDecoration;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,7 +47,6 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 
-import es.dmoral.toasty.Toasty;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
 
@@ -54,19 +54,22 @@ import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
  * Fragment that displays activities tracked, and can sort them by different criteria. Accessed via the DrawerLayout
  * in MainActivity as History.
  */
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends Fragment implements HistoryRecyclerViewAdapter.OnItemClicked{
 
     private View rootView;
     private HistoryRecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private MaterialSpinner dateSpinner;
-    private ArrayList<TrackedRun> trackedRuns;
-    private FirebaseAuth firebaseAuth;
+    private ArrayList<TrackedRun> trackedRuns =  new ArrayList<>();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseUser firebaseUser;
-    private FirebaseDatabase firebaseDatabase;
-    private FirebaseDatabaseManager databaseManager;
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private FirebaseDatabaseManager databaseManager = new FirebaseDatabaseManager();
     private DatabaseReference databaseRef;
+    private ActionModeCallback modeCallback = new ActionModeCallback();
+    private ActionMode actionMode;
+    private RelativeLayout spinnerLayout;
 
     public HistoryFragment(){
         //Required empty constructor.
@@ -82,12 +85,9 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_history, container, false);
-        firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-        firebaseDatabase = FirebaseDatabase.getInstance();
         databaseRef = firebaseDatabase.getReference("users/" + firebaseUser.getUid());
-        trackedRuns = new ArrayList<>();
-        databaseManager = new FirebaseDatabaseManager();
+        spinnerLayout = rootView.findViewById(R.id.history_spinner_layout);
 
         initRecyclerView();
         initFirebaseDatabase();
@@ -123,8 +123,7 @@ public class HistoryFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toasty.warning(getContext(), "Error while fetching data from online database. The data shown might not be updated. Check your internet connection.",
-                        Toast.LENGTH_LONG).show();
+
             }
         });
 
@@ -137,14 +136,13 @@ public class HistoryFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        VerticalDividerItemDecoration dividerItemDecoration = new VerticalDividerItemDecoration(30);
+        VerticalDividerItemDecoration dividerItemDecoration = new VerticalDividerItemDecoration(50);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         recyclerView.setItemAnimator(new OvershootInRightAnimator());
         recyclerView.getItemAnimator().setAddDuration(500);
         recyclerView.getItemAnimator().setRemoveDuration(500);
-
-        adapter = new HistoryRecyclerViewAdapter(getContext(), trackedRuns);
+        adapter = new HistoryRecyclerViewAdapter(getContext(), trackedRuns, this);
 
 
         AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(adapter);
@@ -155,12 +153,47 @@ public class HistoryFragment extends Fragment {
         //TODO: Add empty view
     }
 
+    @Override
+    public void onClick(int position) {
+        if (actionMode != null){
+            toggleSelection(position);
+        }
+    }
+
+    @Override
+    public boolean onLongClick(int position) {
+        if (actionMode == null){
+            actionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(modeCallback);
+            setActiveActionModeBackground(true);
+        }
+
+        toggleSelection(position);
+        return true;
+    }
+
+    /**
+     * Toggle the selection state of an item.
+     *
+     * If the item was the last one in the selection and is unselected, the selection is stopped.
+     * Note that the selection must already be started (actionMode must not be null).
+     */
+    private void toggleSelection(int position){
+        adapter.toggleSelection(position);
+        int selectedItemCount = adapter.getSelectedItemCount();
+
+        if (selectedItemCount == 0) {
+            actionMode.finish();
+        } else {
+            actionMode.setTitle(String.valueOf(selectedItemCount));
+            actionMode.invalidate();
+        }
+    }
+
     /**
      * Sets Floating action Button callback
      */
     private void initFab(){
         final FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.history_fab_button);
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,34 +256,70 @@ public class HistoryFragment extends Fragment {
         currentMonthText.setText(formatter.print(new DateTime()));
     }
 
-
-    private void showDeleteDialog(final TrackedRun tr){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        builder.setMessage("Are you sure you want to delete?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                removeRunPermanently(tr);
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        builder.create().show();
-    }
-
     private void removeRunPermanently(TrackedRun trackedRun){
         trackedRuns.remove(trackedRun);
         databaseManager.deleteRun(trackedRun);
     }
 
+    /**
+     * Sets activated background color for DateSpinner, SpinnerLayout and status bar (API + 16) when action mode is created.
+     */
+    private void setActiveActionModeBackground(boolean activated){
+        Window window = getActivity().getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
+        if (activated){
+            spinnerLayout.setBackgroundColor(getResources().getColor(R.color.actionMode));
+            dateSpinner.setBackgroundColor(getResources().getColor(R.color.actionMode));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                window.setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+            }
+        } else {
+            spinnerLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            dateSpinner.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+            }
+        }
 
+    }
+
+    private class ActionModeCallback implements ActionMode.Callback {
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate (R.menu.history_selected_item_menu, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+//            switch (item.getItemId()) {
+//                case R.id.menu_remove:
+//                    // TODO: actually remove items
+//                    Log.d(TAG, "menu_remove");
+//                    mode.finish();
+//                    return true;
+//
+//                default:
+//                    return false;
+//            }
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            setActiveActionModeBackground(false);
+            adapter.clearSelection();
+            actionMode = null;
+        }
+    }
 
 
 }

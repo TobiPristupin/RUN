@@ -3,15 +3,12 @@ package com.example.tobias.run.history.adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -25,17 +22,24 @@ import java.util.ArrayList;
 /**
  * Adapter for custom RecyclerView in History Fragment.
  */
-public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecyclerViewAdapter.HistoryViewHolder> {
+public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecyclerViewAdapter.HistoryViewHolder> {
+
+    public interface OnItemClicked {
+        void onClick(int position);
+        boolean onLongClick(int position);
+    }
 
     private ArrayList<TrackedRun> trackedRuns = new ArrayList<>();
     private Context context;
     private SharedPreferences sharedPref;
+    private OnItemClicked clickListener;
 
-    public HistoryRecyclerViewAdapter(Context context, ArrayList<TrackedRun> trackedRuns){
+    public HistoryRecyclerViewAdapter(Context context, ArrayList<TrackedRun> trackedRuns, OnItemClicked clickListener){
         /*Creating new ArrayList and adding instead of copying reference because changes made on adapter's trackedRuns should not affect
         HistoryFragment trackedRuns.*/
         this.trackedRuns.addAll(trackedRuns);
         this.context = context;
+        this.clickListener = clickListener;
         this.sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_key), Context.MODE_PRIVATE);
     }
@@ -48,12 +52,18 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
 
     @Override
     public void onBindViewHolder(final HistoryViewHolder holder, int position) {
-        TrackedRun trackedRun = trackedRuns.get(holder.getAdapterPosition());
+        final TrackedRun trackedRun = trackedRuns.get(holder.getAdapterPosition());
         holder.ratingBar.setRating(trackedRun.getRating());
         holder.date.setText(ConversionManager.dateToString(trackedRun.getDate()));
         holder.time.setText(ConversionManager.timeToString(trackedRun.getTime()));
         setDistanceText(trackedRun, holder);
         setPaceText(trackedRun, holder);
+
+        if (isSelected(holder.getAdapterPosition())){
+            holder.layout.setBackgroundColor(context.getResources().getColor(R.color.selectedColor));
+        } else {
+            holder.layout.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.gradient_bg_white_grey));
+        }
     }
 
     public void updateItems(ArrayList<TrackedRun> newList){
@@ -90,13 +100,14 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
         return trackedRuns.size();
     }
 
-    public class HistoryViewHolder extends RecyclerView.ViewHolder {
+    public class HistoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         public RatingBar ratingBar;
         public TextView distance;
         public TextView time;
         public TextView date;
         public TextView pace;
+        public ConstraintLayout layout;
 
         public HistoryViewHolder(View view){
             super(view);
@@ -105,7 +116,25 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
             time = (TextView) view.findViewById(R.id.list_item_time_text);
             date = (TextView) view.findViewById(R.id.list_item_date_text);
             pace = (TextView) view.findViewById(R.id.list_item_pace_text);
+            layout = view.findViewById(R.id.list_item_layout);
+
+            view.setOnClickListener(this);
+            view.setOnLongClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            clickListener.onLongClick(getAdapterPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            return clickListener.onLongClick(getAdapterPosition());
+        }
+
+
     }
+
+
 }
 

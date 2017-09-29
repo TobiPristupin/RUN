@@ -25,11 +25,11 @@ import android.widget.Toast;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
+import com.example.tobias.run.data.TrackedRun;
 import com.example.tobias.run.editor.dialog.DistanceDialog;
 import com.example.tobias.run.editor.dialog.RatingDialog;
 import com.example.tobias.run.editor.dialog.TimeDialog;
 import com.example.tobias.run.utils.ConversionManager;
-import com.example.tobias.run.data.TrackedRun;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -63,7 +63,6 @@ public class EditorActivity extends AppCompatActivity {
         this.sharedPref = getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE);
 
         initToolbar();
-
 
         Intent intent = getIntent();
         trackedRun = intent.getParcelableExtra("TrackedRun");
