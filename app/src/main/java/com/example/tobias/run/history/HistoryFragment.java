@@ -361,7 +361,14 @@ public class HistoryFragment extends Fragment implements HistoryRecyclerViewAdap
                     return true;
 
                 case R.id.selected_item_menu_edit :
-                    System.out.println("Edit");
+                    Intent intent = new Intent(getContext(), EditorActivity.class);
+                    ArrayList<TrackedRun> trackedRuns = getTrackedRunsFromIndex(adapter.getSelectedItems());
+                    /*Selected items size will always be 1 because when more than one run is selected edit
+                    functionality is disabled when selected items > 1.*/
+                    TrackedRun tr = getTrackedRunsFromIndex(adapter.getSelectedItems()).get(0);
+                    intent.putExtra(getString(R.string.trackedrun_intent_key), tr);
+                    startActivity(intent);
+
                     mode.finish();
                     return true;
 

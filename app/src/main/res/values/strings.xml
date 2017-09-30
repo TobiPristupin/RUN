@@ -4,6 +4,6 @@
     <string name="new_account">New here? Sign up</string>
     <string name="preference_distance_unit_key">distance_unit</string>
     <string name="forgot_password_return"><u>Return</u></string>
-
     <integer name="slide_animation_duration">300</integer>
+    <string name="trackedrun_intent_key">trackedRun</string>
 </resources>

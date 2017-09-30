@@ -65,7 +65,7 @@ public class EditorActivity extends AppCompatActivity {
         initToolbar();
 
         Intent intent = getIntent();
-        trackedRun = intent.getParcelableExtra("TrackedRun");
+        trackedRun = intent.getParcelableExtra(getString(R.string.trackedrun_intent_key));
 
         //If tracked run has been passed via intent, init edit mode.
         if (trackedRun != null){
