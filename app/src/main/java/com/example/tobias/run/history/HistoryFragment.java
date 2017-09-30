@@ -2,6 +2,7 @@ package com.example.tobias.run.history;
 
 
 import android.app.ActivityOptions;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -46,6 +48,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
@@ -54,7 +57,7 @@ import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
  * Fragment that displays activities tracked, and can sort them by different criteria. Accessed via the DrawerLayout
  * in MainActivity as History.
  */
-public class HistoryFragment extends Fragment implements HistoryRecyclerViewAdapter.OnItemClicked{
+public class HistoryFragment extends Fragment implements HistoryRecyclerViewAdapter.OnItemClicked {
 
     private View rootView;
     private HistoryRecyclerViewAdapter adapter;
@@ -136,7 +139,7 @@ public class HistoryFragment extends Fragment implements HistoryRecyclerViewAdap
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        VerticalDividerItemDecoration dividerItemDecoration = new VerticalDividerItemDecoration(50);
+        VerticalDividerItemDecoration dividerItemDecoration = new VerticalDividerItemDecoration(40);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         recyclerView.setItemAnimator(new OvershootInRightAnimator());
@@ -183,10 +186,18 @@ public class HistoryFragment extends Fragment implements HistoryRecyclerViewAdap
 
         if (selectedItemCount == 0) {
             actionMode.finish();
-        } else {
-            actionMode.setTitle(String.valueOf(selectedItemCount));
-            actionMode.invalidate();
+            return;
         }
+
+        //Can't use edit functionality when more than on item is selected so disable.
+        if (selectedItemCount > 1){
+            actionMode.getMenu().findItem(R.id.selected_item_menu_edit).setVisible(false);
+        } else {
+            actionMode.getMenu().findItem(R.id.selected_item_menu_edit).setVisible(true);
+        }
+
+        actionMode.setTitle(String.valueOf(selectedItemCount));
+        actionMode.invalidate();
     }
 
     /**
@@ -285,6 +296,49 @@ public class HistoryFragment extends Fragment implements HistoryRecyclerViewAdap
 
     }
 
+    private void showDeleteDialog(final List<Integer> selectedItems){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Delete");
+
+        if (selectedItems.size() > 1){
+            builder.setMessage("Are you sure you want to delete " + selectedItems.size() + " items? You won't be able to recover them.");
+        } else {
+            builder.setMessage("Are you sure you want to delete one item? You won't be able to recover it.");
+        }
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                deleteRunsPermanently(getTrackedRunsFromIndex(selectedItems));
+            }
+        });
+
+        builder.create().show();
+    }
+
+    private void deleteRunsPermanently(ArrayList<TrackedRun> trackedRunsToDelete){
+        for (TrackedRun tr : trackedRunsToDelete){
+            trackedRuns.remove(tr);
+            databaseManager.deleteRun(tr);
+        }
+    }
+
+    private ArrayList<TrackedRun> getTrackedRunsFromIndex(List<Integer> indexList){
+        ArrayList<TrackedRun> trackedRuns = new ArrayList<>();
+        for (Integer index : indexList){
+            trackedRuns.add(this.trackedRuns.get(index));
+        }
+        return trackedRuns;
+    }
+
+
     private class ActionModeCallback implements ActionMode.Callback {
 
         @Override
@@ -300,17 +354,20 @@ public class HistoryFragment extends Fragment implements HistoryRecyclerViewAdap
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-//            switch (item.getItemId()) {
-//                case R.id.menu_remove:
-//                    // TODO: actually remove items
-//                    Log.d(TAG, "menu_remove");
-//                    mode.finish();
-//                    return true;
-//
-//                default:
-//                    return false;
-//            }
-            return false;
+            switch (item.getItemId()) {
+                case R.id.selected_item_menu_delete:
+                    showDeleteDialog(adapter.getSelectedItems());
+                    mode.finish();
+                    return true;
+
+                case R.id.selected_item_menu_edit :
+                    System.out.println("Edit");
+                    mode.finish();
+                    return true;
+
+                default:
+                    return false;
+            }
         }
 
         @Override

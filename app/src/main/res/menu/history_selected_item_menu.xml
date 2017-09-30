@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/selected_item_menu_text"
-        android:title="Hola"/>
+        android:id="@+id/selected_item_menu_edit"
+        android:icon="@drawable/ic_edit"
+        android:title=""/>
+
+    <item
+        android:id="@+id/selected_item_menu_delete"
+        android:icon="@drawable/ic_delete"
+        android:title=""/>
 </menu>

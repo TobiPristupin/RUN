@@ -62,7 +62,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         if (isSelected(holder.getAdapterPosition())){
             holder.layout.setBackgroundColor(context.getResources().getColor(R.color.selectedColor));
         } else {
-            holder.layout.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.gradient_bg_white_grey));
+            holder.layout.setBackgroundColor(context.getResources().getColor(android.R.color.white));
         }
     }
 
