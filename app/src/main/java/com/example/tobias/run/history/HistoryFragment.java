@@ -57,7 +57,7 @@ import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
  * Fragment that displays activities tracked, and can sort them by different criteria. Accessed via the DrawerLayout
  * in MainActivity as History.
  */
-public class HistoryFragment extends Fragment implements HistoryRecyclerViewAdapter.OnItemClicked {
+public class HistoryFragment extends Fragment {
 
     private View rootView;
     private HistoryRecyclerViewAdapter adapter;
@@ -145,7 +145,25 @@ public class HistoryFragment extends Fragment implements HistoryRecyclerViewAdap
         recyclerView.setItemAnimator(new OvershootInRightAnimator());
         recyclerView.getItemAnimator().setAddDuration(500);
         recyclerView.getItemAnimator().setRemoveDuration(500);
-        adapter = new HistoryRecyclerViewAdapter(getContext(), trackedRuns, this);
+        adapter = new HistoryRecyclerViewAdapter(getContext(), trackedRuns, new HistoryRecyclerViewAdapter.OnItemClicked() {
+            @Override
+            public void onClick(int position) {
+                if (actionMode != null){
+                    toggleSelection(position);
+                }
+            }
+
+            @Override
+            public boolean onLongClick(int position) {
+                if (actionMode == null){
+                    actionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(modeCallback);
+                    setActiveActionModeBackground(true);
+                }
+
+                toggleSelection(position);
+                return true;
+            }
+        });
 
 
         AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(adapter);
@@ -154,24 +172,6 @@ public class HistoryFragment extends Fragment implements HistoryRecyclerViewAdap
         recyclerView.setAdapter(animationAdapter);
 
         //TODO: Add empty view
-    }
-
-    @Override
-    public void onClick(int position) {
-        if (actionMode != null){
-            toggleSelection(position);
-        }
-    }
-
-    @Override
-    public boolean onLongClick(int position) {
-        if (actionMode == null){
-            actionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(modeCallback);
-            setActiveActionModeBackground(true);
-        }
-
-        toggleSelection(position);
-        return true;
     }
 
     /**
@@ -267,13 +267,8 @@ public class HistoryFragment extends Fragment implements HistoryRecyclerViewAdap
         currentMonthText.setText(formatter.print(new DateTime()));
     }
 
-    private void removeRunPermanently(TrackedRun trackedRun){
-        trackedRuns.remove(trackedRun);
-        databaseManager.deleteRun(trackedRun);
-    }
-
     /**
-     * Sets activated background color for DateSpinner, SpinnerLayout and status bar (API + 16) when action mode is created.
+     * Sets activated background color for DateSpinner, SpinnerLayout and status bar (API + 19) when action mode is created.
      */
     private void setActiveActionModeBackground(boolean activated){
         Window window = getActivity().getWindow();
@@ -290,7 +285,7 @@ public class HistoryFragment extends Fragment implements HistoryRecyclerViewAdap
             spinnerLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             dateSpinner.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+                window.setStatusBarColor(getResources().getColor(android.R.color.transparent));
             }
         }
 

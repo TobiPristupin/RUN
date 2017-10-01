@@ -124,7 +124,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
 
         @Override
         public void onClick(View view) {
-            clickListener.onLongClick(getAdapterPosition());
+            clickListener.onClick(getAdapterPosition());
         }
 
         @Override

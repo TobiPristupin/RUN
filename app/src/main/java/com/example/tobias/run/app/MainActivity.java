@@ -23,6 +23,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.history.HistoryFragment;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authListener;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        final FirebaseUser user = firebaseAuth.getCurrentUser();
+        user = firebaseAuth.getCurrentUser();
 
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -61,11 +64,12 @@ public class MainActivity extends AppCompatActivity {
             loadLogIn();
         } else {
             drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-            navigationView = (NavigationView) findViewById(R.id.navigation_view);
+            navigationView = (NavigationView) findViewById(R.id.main_navigation_view);
 
             initDrawerLayout();
             initSharedPref();
             initToolbar();
+            initNavHeader();
 
             if (savedInstanceState == null) {
                 //If app hasn't loaded the views previously
@@ -91,13 +95,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    private void initNavHeader(){
-//        View navHeader = navigationView.getHeaderView(0);
-//        ImageView userImage = (ImageView) navHeader.findViewById(R.id.navheader_user_image);
-//        RoundedBitmapDrawable bitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), firebaseUser.getPhotoUrl().toString());
-//        bitmapDrawable.setCircular(true);
-//        userImage.setImageDrawable(bitmapDrawable);
-//    }
+    private void initNavHeader(){
+        NavigationView navigationView = findViewById(R.id.main_navigation_view);
+        View headerLayout = navigationView.getHeaderView(0);
+        ((TextView) headerLayout.findViewById(R.id.navheader_username_text)).setText(user.getDisplayName());
+        ((TextView) headerLayout.findViewById(R.id.navheader_email_text)).setText(user.getEmail());
+    }
 
 
     @Override
@@ -117,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
         //Flags prevent user from returning to MainActivity when pressing back button
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        System.out.println(intent);
         startActivity(intent);
     }
 
