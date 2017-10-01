@@ -14,6 +14,7 @@ package com.example.tobias.run.app;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -24,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tobias.run.R;
@@ -33,6 +35,8 @@ import com.example.tobias.run.settings.SettingsActivity;
 import com.example.tobias.run.stats.StatsFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.io.InputStream;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -100,6 +104,19 @@ public class MainActivity extends AppCompatActivity {
         View headerLayout = navigationView.getHeaderView(0);
         ((TextView) headerLayout.findViewById(R.id.navheader_username_text)).setText(user.getDisplayName());
         ((TextView) headerLayout.findViewById(R.id.navheader_email_text)).setText(user.getEmail());
+        Drawable userPhoto;
+
+        try {
+            //Convert user photo url into drawable
+            InputStream inputStream = getContentResolver().openInputStream(user.getPhotoUrl());
+            userPhoto = Drawable.createFromStream(inputStream, user.getPhotoUrl().toString());
+        } catch (Exception e) {
+            //If can't convert because there is no image available use default image
+            userPhoto = getResources().getDrawable(R.color.iron);
+        }
+
+        ((ImageView)headerLayout.findViewById(R.id.navheader_profile_image)).setImageDrawable(userPhoto);
+
     }
 
 
