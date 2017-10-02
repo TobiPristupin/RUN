@@ -46,7 +46,7 @@ public class NewAccountFragment extends Fragment {
     private TextInputLayout emailLayout;
     private TextInputLayout passwordLayout;
     private TextInputLayout passwordLayout2;
-    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private Button createAccountButton;
     private AVLoadingIndicatorView loadingIndicator;
     private static final String TAG = "LoginActivity";
@@ -62,7 +62,6 @@ public class NewAccountFragment extends Fragment {
         passwordLayout = (TextInputLayout) rootView.findViewById(R.id.new_account_password1);
         passwordLayout2 = (TextInputLayout) rootView.findViewById(R.id.new_account_password2);
         loadingIndicator = (AVLoadingIndicatorView) rootView.findViewById(R.id.new_account_loading_indicator);
-        firebaseAuth = FirebaseAuth.getInstance();
         createAccountButton = (Button) rootView.findViewById(R.id.new_account_create_account_button);
 
         //Configures all TextInputLayout to remove their errors every time text is inputted
@@ -231,7 +230,7 @@ public class NewAccountFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        // Result returned from launching the google sign in intent
         if (requestCode == RC_SIGN_IN){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleGoogleResult(result);
@@ -240,8 +239,8 @@ public class NewAccountFragment extends Fragment {
 
     private void handleGoogleResult(GoogleSignInResult result){
         if (result.isSuccess()){
-            GoogleSignInAccount account = result.getSignInAccount();
-            firebaseAuthGoogleAccount(account);
+            GoogleSignInAccount googleAccount = result.getSignInAccount();
+            firebaseAuthGoogleAccount(googleAccount);
         } else {
             Toasty.warning(getContext(), "Google sign in failed. Check your internet connection or try again").show();
             endLoadingAnim();

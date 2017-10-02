@@ -6,4 +6,5 @@
     <string name="forgot_password_return"><u>Return</u></string>
     <integer name="slide_animation_duration">300</integer>
     <string name="trackedrun_intent_key">trackedRun</string>
+    <string name="profileimage_uri_intent_key">profileImageUri</string>
 </resources>

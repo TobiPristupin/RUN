@@ -186,9 +186,10 @@ public class LoginFragment extends Fragment {
     private void handleGoogleResult(GoogleSignInResult result){
         Log.d(TAG, "HandleGoogleSignInResultSuccess:" + result.isSuccess());
         if (result.isSuccess()){
-            GoogleSignInAccount account = result.getSignInAccount();
-            firebaseAuthGoogleAccount(account);
+            GoogleSignInAccount googleAccount = result.getSignInAccount();
+            firebaseAuthGoogleAccount(googleAccount);
         } else {
+            Log.w(TAG, result.getStatus().toString());
             Toasty.warning(getContext(), "Google sign in failed. Check your internet connection or try again").show();
             stopLoadingAnimation();
         }
