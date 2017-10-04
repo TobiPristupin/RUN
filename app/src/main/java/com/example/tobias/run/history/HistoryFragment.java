@@ -88,6 +88,7 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_history, container, false);
+
         firebaseUser = firebaseAuth.getCurrentUser();
         databaseRef = firebaseDatabase.getReference("users/" + firebaseUser.getUid());
         spinnerLayout = rootView.findViewById(R.id.history_spinner_layout);
@@ -110,6 +111,7 @@ public class HistoryFragment extends Fragment {
                 loadRecordsRecyclerView();
             }
         });
+
 
     }
 
@@ -245,6 +247,10 @@ public class HistoryFragment extends Fragment {
     }
 
     private void loadRecordsRecyclerView() {
+        if (actionMode != null){  //Avoid user changing adapter's dataset with items selected
+            actionMode.finish();
+        }
+
         String filter = dateSpinner.getItems().get(dateSpinner.getSelectedIndex()).toString();
         switch (filter){
             case "Week" :
@@ -259,6 +265,18 @@ public class HistoryFragment extends Fragment {
             case "All" :
                 adapter.updateItems(trackedRuns);
         }
+
+        recyclerViewShowEmptyView(adapter.isDatasetEmpty());
+    }
+
+    private void recyclerViewShowEmptyView(boolean shouldShow){
+        View emptyView = rootView.findViewById(R.id.history_empty_view);
+        if (shouldShow){
+            emptyView.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        emptyView.setVisibility(View.GONE);
     }
 
     private void initTopBar(){
@@ -311,28 +329,20 @@ public class HistoryFragment extends Fragment {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                deleteRunsPermanently(getTrackedRunsFromIndex(selectedItems));
+                deleteRunsPermanently(adapter.getSelectedItems());
             }
         });
 
         builder.create().show();
     }
 
-    private void deleteRunsPermanently(ArrayList<TrackedRun> trackedRunsToDelete){
-        for (TrackedRun tr : trackedRunsToDelete){
+    private void deleteRunsPermanently(List<Integer> indexList){
+        for (Integer index : indexList){
+            TrackedRun tr = adapter.getDataset().get(index);
             trackedRuns.remove(tr);
             databaseManager.deleteRun(tr);
         }
     }
-
-    private ArrayList<TrackedRun> getTrackedRunsFromIndex(List<Integer> indexList){
-        ArrayList<TrackedRun> trackedRuns = new ArrayList<>();
-        for (Integer index : indexList){
-            trackedRuns.add(this.trackedRuns.get(index));
-        }
-        return trackedRuns;
-    }
-
 
     private class ActionModeCallback implements ActionMode.Callback {
 
@@ -357,10 +367,15 @@ public class HistoryFragment extends Fragment {
 
                 case R.id.selected_item_menu_edit :
                     Intent intent = new Intent(getContext(), EditorActivity.class);
-                    ArrayList<TrackedRun> trackedRuns = getTrackedRunsFromIndex(adapter.getSelectedItems());
-                    /*Selected items size will always be 1 because when more than one run is selected edit
-                    functionality is disabled when selected items > 1.*/
-                    TrackedRun tr = getTrackedRunsFromIndex(adapter.getSelectedItems()).get(0);
+//                    ArrayList<TrackedRun> trackedRuns = getTrackedRunsFromIndex(adapter.getSelectedItems());
+//
+//                    TrackedRun tr = getTrackedRunsFromIndex(adapter.getSelectedItems()).get(0);
+                    ArrayList<TrackedRun> adapterDataset = adapter.getDataset();
+                    /*Get first selected item from dataset.
+                    *Selected items size will always be 1 because when more than one run is selected edit
+//                  *functionality is disabled when selected items > 1.*/
+
+                    TrackedRun tr = adapterDataset.get(adapter.getSelectedItems().get(0));
                     intent.putExtra(getString(R.string.trackedrun_intent_key), tr);
                     startActivity(intent);
 

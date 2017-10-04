@@ -1,15 +1,13 @@
-
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+ <android.support.constraint.ConstraintLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.example.tobias.run.history.HistoryFragment"
     tools:layout_editor_absoluteY="25dp"
     tools:layout_editor_absoluteX="0dp">
-
 
 
     <TextView
@@ -35,36 +33,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintHorizontal_bias="0.0" />
-
-
-    <RelativeLayout
-        android:id="@+id/history_empty_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/history_divider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-
-        <TextView
-            android:id="@+id/lonely_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="It's a bit lonely here..."
-            android:textSize="20sp"
-            android:textColor="@android:color/black"
-            android:layout_centerInParent="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:text="Get up and running! Start by adding a run with the + button."
-            android:textSize="16sp"
-            android:layout_below="@id/lonely_text" />
-    </RelativeLayout>
-
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/history_fab_button"
@@ -95,48 +63,64 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="52dp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/history_recyclerview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:padding="10dp"
-        android:scrollbars="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/history_divider"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_conversion_absoluteHeight="553dp"
-        tools:layout_conversion_absoluteWidth="411dp"
-        tools:layout_conversion_absoluteX="0dp"
-        tools:layout_conversion_absoluteY="104dp" />
 
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:id="@+id/history_spinner_layout"
-        android:background="@color/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:id="@+id/history_empty_view"
+         android:text="empty"
+         android:textSize="30sp"
+         android:visibility="gone"
+         android:layout_marginRight="8dp"
+         app:layout_constraintRight_toRightOf="parent"
+         android:layout_marginLeft="8dp"
+         app:layout_constraintLeft_toLeftOf="parent"
+         app:layout_constraintTop_toTopOf="@+id/history_recyclerview"
+         android:layout_marginTop="8dp"
+         app:layout_constraintBottom_toBottomOf="@+id/history_recyclerview"
+         android:layout_marginBottom="8dp" />
 
-        <com.jaredrummler.materialspinner.MaterialSpinner
-            android:id="@+id/history_date_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="50dp"
-            android:layout_marginStart="50dp"
-            app:ms_arrow_tint="@android:color/white"
-            app:ms_background_color="@color/colorPrimary"
-            app:ms_text_color="@android:color/white" />
-    </RelativeLayout>
+     <RelativeLayout
+         android:id="@+id/history_spinner_layout"
+         android:layout_width="0dp"
+         android:layout_height="0dp"
+         android:background="@color/colorPrimary"
+         app:layout_constraintBottom_toTopOf="@+id/guideline2"
+         app:layout_constraintHorizontal_bias="1.0"
+         app:layout_constraintLeft_toLeftOf="parent"
+         app:layout_constraintRight_toRightOf="parent"
+         app:layout_constraintTop_toTopOf="parent"
+         app:layout_constraintVertical_bias="0.0">
 
+         <com.jaredrummler.materialspinner.MaterialSpinner
+             android:id="@+id/history_date_spinner"
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"
+             android:layout_alignParentLeft="true"
+             android:layout_alignParentStart="true"
+             android:layout_marginLeft="50dp"
+             android:layout_marginStart="50dp"
+             app:ms_arrow_tint="@android:color/white"
+             app:ms_background_color="@color/colorPrimary"
+             app:ms_text_color="@android:color/white" />
+     </RelativeLayout>
 
-</android.support.constraint.ConstraintLayout>
+     <android.support.v7.widget.RecyclerView
+         android:id="@+id/history_recyclerview"
+         android:layout_width="0dp"
+         android:layout_height="0dp"
+         android:clipToPadding="false"
+         android:padding="10dp"
+         android:scrollbars="vertical"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintHorizontal_bias="1.0"
+         app:layout_constraintLeft_toLeftOf="parent"
+         app:layout_constraintRight_toRightOf="parent"
+         app:layout_constraintTop_toTopOf="@+id/history_divider"
+         app:layout_constraintVertical_bias="0.0"
+         tools:layout_conversion_absoluteHeight="553dp"
+         tools:layout_conversion_absoluteWidth="411dp"
+         tools:layout_conversion_absoluteX="0dp"
+         tools:layout_conversion_absoluteY="104dp" />
+
+ </android.support.constraint.ConstraintLayout>

@@ -25,8 +25,8 @@ import java.util.ArrayList;
 public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecyclerViewAdapter.HistoryViewHolder> {
 
     public interface OnItemClicked {
-        void onClick(int position);
-        boolean onLongClick(int position);
+        void onClick(final int position);
+        boolean onLongClick(final int position);
     }
 
     private ArrayList<TrackedRun> trackedRuns = new ArrayList<>();
@@ -74,6 +74,14 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         this.trackedRuns.addAll(newList);
         diffResult.dispatchUpdatesTo(this);
     }
+    
+    public boolean isDatasetEmpty(){
+        return getItemCount() == 0;
+    }
+
+    public ArrayList<TrackedRun> getDataset(){
+        return this.trackedRuns;
+    }
 
     private void setDistanceText(TrackedRun currentItem, HistoryViewHolder holder){
         String unit = sharedPref.getString(context.getString(R.string.preference_distance_unit_key), null);
@@ -97,7 +105,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
 
     @Override
     public int getItemCount() {
-        return trackedRuns.size();
+        return this.trackedRuns.size();
     }
 
     public class HistoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
