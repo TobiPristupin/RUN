@@ -271,10 +271,12 @@ public class HistoryFragment extends Fragment {
         View emptyView = rootView.findViewById(R.id.history_empty_view);
         if (shouldShow){
             emptyView.setVisibility(View.VISIBLE);
+            emptyView.animate().setDuration(1000).setStartDelay(500).alpha(1.0f);
             return;
         }
 
         emptyView.setVisibility(View.GONE);
+        emptyView.animate().setDuration(500).alpha(0f);
     }
 
     private void initTopBar(){
