@@ -172,8 +172,6 @@ public class HistoryFragment extends Fragment {
         animationAdapter.setDuration(500);
         animationAdapter.setFirstOnly(false);
         recyclerView.setAdapter(animationAdapter);
-
-        //TODO: Add empty view
     }
 
     /**
@@ -247,10 +245,6 @@ public class HistoryFragment extends Fragment {
     }
 
     private void loadRecordsRecyclerView() {
-        if (actionMode != null){  //Avoid user changing adapter's dataset with items selected
-            actionMode.finish();
-        }
-
         String filter = dateSpinner.getItems().get(dateSpinner.getSelectedIndex()).toString();
         switch (filter){
             case "Week" :
@@ -264,6 +258,10 @@ public class HistoryFragment extends Fragment {
                 break;
             case "All" :
                 adapter.updateItems(trackedRuns);
+        }
+
+        if (actionMode != null){
+            actionMode.finish(); //avoid user changing dataset with selected runs
         }
 
         recyclerViewShowEmptyView(adapter.isDatasetEmpty());
@@ -329,19 +327,26 @@ public class HistoryFragment extends Fragment {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                deleteRunsPermanently(adapter.getSelectedItems());
+                deleteRunsPermanently(getTrackedRunsFromIndex(selectedItems));
             }
         });
 
         builder.create().show();
     }
 
-    private void deleteRunsPermanently(List<Integer> indexList){
-        for (Integer index : indexList){
-            TrackedRun tr = adapter.getDataset().get(index);
+    private void deleteRunsPermanently(ArrayList<TrackedRun> trackedRunsToDelete){
+        for (TrackedRun tr : trackedRunsToDelete){
             trackedRuns.remove(tr);
             databaseManager.deleteRun(tr);
         }
+    }
+
+    private ArrayList<TrackedRun> getTrackedRunsFromIndex(List<Integer> indexList){
+        ArrayList<TrackedRun> arrayList = new ArrayList<>();
+        for (Integer index : indexList){
+            arrayList.add(this.trackedRuns.get(index));
+        }
+        return arrayList;
     }
 
     private class ActionModeCallback implements ActionMode.Callback {
@@ -367,15 +372,10 @@ public class HistoryFragment extends Fragment {
 
                 case R.id.selected_item_menu_edit :
                     Intent intent = new Intent(getContext(), EditorActivity.class);
-//                    ArrayList<TrackedRun> trackedRuns = getTrackedRunsFromIndex(adapter.getSelectedItems());
-//
-//                    TrackedRun tr = getTrackedRunsFromIndex(adapter.getSelectedItems()).get(0);
-                    ArrayList<TrackedRun> adapterDataset = adapter.getDataset();
-                    /*Get first selected item from dataset.
-                    *Selected items size will always be 1 because when more than one run is selected edit
-//                  *functionality is disabled when selected items > 1.*/
-
-                    TrackedRun tr = adapterDataset.get(adapter.getSelectedItems().get(0));
+                    ArrayList<TrackedRun> trackedRuns = getTrackedRunsFromIndex(adapter.getSelectedItems());
+                    /*Selected items size will always be 1 because when more than one run is selected edit
+                    functionality is disabled when selected items > 1.*/
+                    TrackedRun tr = getTrackedRunsFromIndex(adapter.getSelectedItems()).get(0);
                     intent.putExtra(getString(R.string.trackedrun_intent_key), tr);
                     startActivity(intent);
 

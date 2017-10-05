@@ -3,6 +3,8 @@
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
+/.idea/dictionaries/
+/app/google-services.json
 .DS_Store
 /build
 /captures

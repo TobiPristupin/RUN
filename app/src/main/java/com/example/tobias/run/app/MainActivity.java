@@ -33,8 +33,10 @@ import com.example.tobias.run.history.HistoryFragment;
 import com.example.tobias.run.login.LoginActivity;
 import com.example.tobias.run.settings.SettingsActivity;
 import com.example.tobias.run.stats.StatsFragment;
+import com.example.tobias.run.utils.CircleTransform;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 
@@ -104,19 +106,14 @@ public class MainActivity extends AppCompatActivity {
         View headerLayout = navigationView.getHeaderView(0);
         ((TextView) headerLayout.findViewById(R.id.navheader_username_text)).setText(user.getDisplayName());
         ((TextView) headerLayout.findViewById(R.id.navheader_email_text)).setText(user.getEmail());
-        Drawable userPhoto;
 
-        try {
-            //Convert user photo url into drawable
-            InputStream inputStream = getContentResolver().openInputStream(user.getPhotoUrl());
-            userPhoto = Drawable.createFromStream(inputStream, user.getPhotoUrl().toString());
-        } catch (Exception e) {
-            //If can't convert because there is no image available use default image
-            userPhoto = getResources().getDrawable(R.color.iron);
-        }
+        ImageView profileImage = (ImageView) headerLayout.findViewById(R.id.navheader_profile_image);
 
-        ((ImageView)headerLayout.findViewById(R.id.navheader_profile_image)).setImageDrawable(userPhoto);
-
+        Picasso.with(MainActivity.this)
+                .load(user.getPhotoUrl())
+                .placeholder(R.color.iron)
+                .transform(new CircleTransform())
+                .into(profileImage);
     }
 
 
@@ -135,8 +132,8 @@ public class MainActivity extends AppCompatActivity {
     public void loadLogIn(){
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         //Flags prevent user from returning to MainActivity when pressing back button
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 

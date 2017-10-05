@@ -25,8 +25,8 @@ import java.util.ArrayList;
 public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecyclerViewAdapter.HistoryViewHolder> {
 
     public interface OnItemClicked {
-        void onClick(final int position);
-        boolean onLongClick(final int position);
+        void onClick(int position);
+        boolean onLongClick(int position);
     }
 
     private ArrayList<TrackedRun> trackedRuns = new ArrayList<>();
