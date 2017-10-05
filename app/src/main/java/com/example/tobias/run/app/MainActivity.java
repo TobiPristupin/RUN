@@ -14,6 +14,7 @@ package com.example.tobias.run.app;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -32,11 +33,10 @@ import com.example.tobias.run.history.HistoryFragment;
 import com.example.tobias.run.login.LoginActivity;
 import com.example.tobias.run.settings.SettingsActivity;
 import com.example.tobias.run.stats.StatsFragment;
-import com.example.tobias.run.utils.CircleTransform;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.squareup.picasso.Picasso;
 
+import java.io.InputStream;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseUser user;
-    private static final String TAG = "MainActivity";
-    private String googleProfileImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 //Open History fragment setting it as default for startup.
                 openFragment(menuItem);
             }
+
         }
 
     }
@@ -105,14 +104,19 @@ public class MainActivity extends AppCompatActivity {
         View headerLayout = navigationView.getHeaderView(0);
         ((TextView) headerLayout.findViewById(R.id.navheader_username_text)).setText(user.getDisplayName());
         ((TextView) headerLayout.findViewById(R.id.navheader_email_text)).setText(user.getEmail());
+        Drawable userPhoto;
 
-        ImageView profileImage = (ImageView) headerLayout.findViewById(R.id.navheader_profile_image);
+        try {
+            //Convert user photo url into drawable
+            InputStream inputStream = getContentResolver().openInputStream(user.getPhotoUrl());
+            userPhoto = Drawable.createFromStream(inputStream, user.getPhotoUrl().toString());
+        } catch (Exception e) {
+            //If can't convert because there is no image available use default image
+            userPhoto = getResources().getDrawable(R.color.iron);
+        }
 
-        Picasso.with(MainActivity.this)
-                .load(user.getPhotoUrl())
-                .placeholder(R.color.iron) //When using firebase sign in user won't have profile image, use placeholder instead.
-                .transform(new CircleTransform())
-                .into(profileImage);
+        ((ImageView)headerLayout.findViewById(R.id.navheader_profile_image)).setImageDrawable(userPhoto);
+
     }
 
 
@@ -131,8 +135,8 @@ public class MainActivity extends AppCompatActivity {
     public void loadLogIn(){
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         //Flags prevent user from returning to MainActivity when pressing back button
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 
