@@ -16,6 +16,7 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ViewUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -264,19 +265,26 @@ public class HistoryFragment extends Fragment {
             actionMode.finish(); //avoid user changing dataset with selected runs
         }
 
-        recyclerViewShowEmptyView(adapter.isDatasetEmpty());
+        View emptyViewImage = rootView.findViewById(R.id.history_empty_view_image);
+        View emptyViewHeader = rootView.findViewById(R.id.history_empty_view_header);
+        View emptyViewText = rootView.findViewById(R.id.history_empty_view_text);
+
+        recyclerViewAnimateEmptyView(adapter.isDatasetEmpty(), emptyViewHeader, emptyViewImage, emptyViewText);
     }
 
-    private void recyclerViewShowEmptyView(boolean shouldShow){
-        View emptyView = rootView.findViewById(R.id.history_empty_view);
+    private void recyclerViewAnimateEmptyView(boolean shouldShow, View... views){
         if (shouldShow){
-            emptyView.setVisibility(View.VISIBLE);
-            emptyView.animate().setDuration(1000).setStartDelay(500).alpha(1.0f);
-            return;
+            for (View view: views){
+                view.setVisibility(View.VISIBLE);
+                view.animate().setDuration(1000).setStartDelay(500).alpha(1.0f);
+            }
+        } else {
+            for (View view: views){
+                view.setVisibility(View.GONE);
+                view.animate().setDuration(500).alpha(0.0f);
+            }
         }
 
-        emptyView.setVisibility(View.GONE);
-        emptyView.animate().setDuration(500).alpha(0f);
     }
 
     private void initTopBar(){

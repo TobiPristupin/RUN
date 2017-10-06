@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="150dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/navheader_profile_image"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -16,7 +16,7 @@
         android:layout_marginTop="32dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@color/cardview_light_background" />
+        tools:src="@color/iron"/>
 
     <TextView
         android:layout_width="wrap_content"

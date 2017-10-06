@@ -47,6 +47,7 @@ dependencies {
     compile 'jp.wasabeef:recyclerview-animators:2.2.7'
     compile 'com.jaredrummler:material-spinner:1.2.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
     testCompile 'junit:junit:4.12'
 }
 

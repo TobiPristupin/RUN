@@ -14,7 +14,6 @@ package com.example.tobias.run.app;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -25,7 +24,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tobias.run.R;
@@ -33,12 +31,11 @@ import com.example.tobias.run.history.HistoryFragment;
 import com.example.tobias.run.login.LoginActivity;
 import com.example.tobias.run.settings.SettingsActivity;
 import com.example.tobias.run.stats.StatsFragment;
-import com.example.tobias.run.utils.CircleTransform;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
-import java.io.InputStream;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -107,12 +104,11 @@ public class MainActivity extends AppCompatActivity {
         ((TextView) headerLayout.findViewById(R.id.navheader_username_text)).setText(user.getDisplayName());
         ((TextView) headerLayout.findViewById(R.id.navheader_email_text)).setText(user.getEmail());
 
-        ImageView profileImage = (ImageView) headerLayout.findViewById(R.id.navheader_profile_image);
+        CircleImageView profileImage = (CircleImageView) headerLayout.findViewById(R.id.navheader_profile_image);
 
         Picasso.with(MainActivity.this)
                 .load(user.getPhotoUrl())
                 .placeholder(R.color.iron)
-                .transform(new CircleTransform())
                 .into(profileImage);
     }
 
