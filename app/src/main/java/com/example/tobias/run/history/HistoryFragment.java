@@ -16,7 +16,6 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.ViewUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -146,7 +145,7 @@ public class HistoryFragment extends Fragment {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         recyclerView.setItemAnimator(new OvershootInRightAnimator());
-        recyclerView.getItemAnimator().setAddDuration(500);
+        recyclerView.getItemAnimator().setAddDuration(750);
         recyclerView.getItemAnimator().setRemoveDuration(500);
         adapter = new HistoryRecyclerViewAdapter(getContext(), trackedRuns, new HistoryRecyclerViewAdapter.OnItemClicked() {
             @Override
@@ -261,18 +260,16 @@ public class HistoryFragment extends Fragment {
                 adapter.updateItems(trackedRuns);
         }
 
+        //avoid user changing filter with runs selected previously
         if (actionMode != null){
-            actionMode.finish(); //avoid user changing dataset with selected runs
+            actionMode.finish();
         }
 
-        View emptyViewImage = rootView.findViewById(R.id.history_empty_view_image);
-        View emptyViewHeader = rootView.findViewById(R.id.history_empty_view_header);
-        View emptyViewText = rootView.findViewById(R.id.history_empty_view_text);
-
-        recyclerViewAnimateEmptyView(adapter.isDatasetEmpty(), emptyViewHeader, emptyViewImage, emptyViewText);
+        //Show empty if adapter dataset is empty, show all text of empty view if zero runs have been added.
+        recyclerViewShowEmptyView(adapter.isDatasetEmpty(), trackedRuns.isEmpty());
     }
 
-    private void recyclerViewAnimateEmptyView(boolean shouldShow, View... views){
+    private void animateViews(boolean shouldShow, View... views){
         if (shouldShow){
             for (View view: views){
                 view.setVisibility(View.VISIBLE);
@@ -281,10 +278,27 @@ public class HistoryFragment extends Fragment {
         } else {
             for (View view: views){
                 view.setVisibility(View.GONE);
-                view.animate().setDuration(500).alpha(0.0f);
+                view.animate().setDuration(700).alpha(0.0f);
             }
         }
 
+    }
+
+    /**
+     * Shows recycler view empty view
+     * @param shouldShow true if should show message, false if should remove message
+     * @param longMessage true if should show long text description, false if shouldn't
+     */
+    private void recyclerViewShowEmptyView(boolean shouldShow, boolean longMessage){
+        View emptyViewImage = rootView.findViewById(R.id.history_empty_view_image);
+        View emptyViewHeader = rootView.findViewById(R.id.history_empty_view_header);
+        View emptyViewText = rootView.findViewById(R.id.history_empty_view_text);
+
+        if (longMessage){
+            animateViews(shouldShow, emptyViewHeader, emptyViewImage, emptyViewText);
+        } else {
+            animateViews(shouldShow, emptyViewHeader, emptyViewImage);
+        }
     }
 
     private void initTopBar(){

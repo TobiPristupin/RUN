@@ -1,9 +1,7 @@
 *.iml
 .gradle
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
-/.idea/dictionaries/
+/.idea/
 /app/google-services.json
 .DS_Store
 /build
