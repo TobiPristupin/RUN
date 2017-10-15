@@ -273,7 +273,7 @@ public class HistoryFragment extends Fragment {
         if (shouldShow){
             for (View view: views){
                 view.setVisibility(View.VISIBLE);
-                view.animate().setDuration(1000).setStartDelay(500).alpha(1.0f);
+                view.animate().setDuration(800).setStartDelay(500).alpha(1.0f);
             }
         } else {
             for (View view: views){
