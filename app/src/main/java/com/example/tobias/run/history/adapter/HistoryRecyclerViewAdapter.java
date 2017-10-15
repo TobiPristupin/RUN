@@ -16,6 +16,7 @@ import com.example.tobias.run.R;
 import com.example.tobias.run.data.DiffCallback;
 import com.example.tobias.run.data.TrackedRun;
 import com.example.tobias.run.utils.ConversionManager;
+import com.example.tobias.run.utils.SharedPreferencesManager;
 
 import java.util.ArrayList;
 
@@ -31,7 +32,6 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
 
     private ArrayList<TrackedRun> trackedRuns = new ArrayList<>();
     private Context context;
-    private SharedPreferences sharedPref;
     private OnItemClicked clickListener;
 
     public HistoryRecyclerViewAdapter(Context context, ArrayList<TrackedRun> trackedRuns, OnItemClicked clickListener){
@@ -40,8 +40,6 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         this.trackedRuns.addAll(trackedRuns);
         this.context = context;
         this.clickListener = clickListener;
-        this.sharedPref = context.getSharedPreferences(
-                context.getString(R.string.preference_key), Context.MODE_PRIVATE);
     }
 
     @Override
@@ -84,7 +82,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
     }
 
     private void setDistanceText(TrackedRun currentItem, HistoryViewHolder holder){
-        String unit = sharedPref.getString(context.getString(R.string.preference_distance_unit_key), null);
+        String unit = SharedPreferencesManager.getString(context, context.getString(R.string.preference_distance_unit_key));
         if (unit.equals("km")){
             holder.distance.setText(ConversionManager.distanceToString(currentItem.getDistanceKilometres(), unit));
         } else {
@@ -93,7 +91,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
     }
 
     private void setPaceText(TrackedRun currentItem, HistoryViewHolder holder){
-        String unit = sharedPref.getString(context.getString(R.string.preference_distance_unit_key), null);
+        String unit = SharedPreferencesManager.getString(context, context.getString(R.string.preference_distance_unit_key));
         if (unit.equals("km")){
             holder.pace.setText(ConversionManager.paceToString(currentItem.getKmPace(), "km"));
         } else {

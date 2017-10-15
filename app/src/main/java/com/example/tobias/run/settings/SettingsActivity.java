@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.login.LoginActivity;
+import com.example.tobias.run.utils.SharedPreferencesManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -52,9 +53,9 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void initUnitText(){
-        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE);
         TextView distanceUnit = (TextView) findViewById(R.id.settings_distance_unit_value);
-        if (sharedPref.getString(getString(R.string.preference_distance_unit_key), null).equals("km")){
+        if ( SharedPreferencesManager.getString(SettingsActivity.this,
+                getString(R.string.preference_distance_unit_key)).equals("km")){
             distanceUnit.setText("Metric (km)");
         } else {
             distanceUnit.setText("Imperial (mi)");

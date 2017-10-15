@@ -31,6 +31,7 @@ import com.example.tobias.run.history.HistoryFragment;
 import com.example.tobias.run.login.LoginActivity;
 import com.example.tobias.run.settings.SettingsActivity;
 import com.example.tobias.run.stats.StatsFragment;
+import com.example.tobias.run.utils.SharedPreferencesManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -180,10 +181,10 @@ public class MainActivity extends AppCompatActivity {
      * Initializes shared preferences to the default values if none has been set before.
      */
     public void initSharedPref(){
-        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE);
         //If distance_unit hasn't been initialized, set it to default value (mi)
-        if (sharedPref.getString(getString(R.string.preference_distance_unit_key), null) == null){
-            sharedPref.edit().putString(getString(R.string.preference_distance_unit_key), "mi").apply();
+        if (SharedPreferencesManager.getString(MainActivity.this, getString(R.string.preference_distance_unit_key)) == null){
+            SharedPreferencesManager.getSharedPreferences(MainActivity.this)
+                    .edit().putString(getString(R.string.preference_distance_unit_key), "mi").apply();
       }
     }
 

@@ -30,6 +30,7 @@ import com.example.tobias.run.editor.dialog.DistanceDialog;
 import com.example.tobias.run.editor.dialog.RatingDialog;
 import com.example.tobias.run.editor.dialog.TimeDialog;
 import com.example.tobias.run.utils.ConversionManager;
+import com.example.tobias.run.utils.SharedPreferencesManager;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -49,7 +50,6 @@ public class EditorActivity extends AppCompatActivity {
 
     Activity activity;
     private final int DATE_DIALOG_ID = 999;
-    private SharedPreferences sharedPref;
     private static final String TAG = "EditorActivity";
     private boolean isEditMode;
     private TrackedRun trackedRun;
@@ -60,7 +60,6 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
         this.activity = this;
-        this.sharedPref = getSharedPreferences(getString(R.string.preference_key), Context.MODE_PRIVATE);
 
         initToolbar();
 
@@ -120,7 +119,7 @@ public class EditorActivity extends AppCompatActivity {
     private void addRecord(HashMap<String, String> values) {
         FirebaseDatabaseManager databaseManager = new FirebaseDatabaseManager();
 
-        if (sharedPref.getString(getString(R.string.preference_distance_unit_key), null).equals("km")){
+        if (SharedPreferencesManager.getString(EditorActivity.this, getString(R.string.preference_distance_unit_key)).equals("km")){
             float kmDistance = ConversionManager.distanceToFloat(values.get("distance"));
             trackedRun.setDistanceKilometres(kmDistance);
             trackedRun.setDistanceMiles(ConversionManager.kilometresToMiles(kmDistance));
@@ -181,7 +180,7 @@ public class EditorActivity extends AppCompatActivity {
     private void setEditMode(){
         getSupportActionBar().setTitle("Edit Run");
 
-        String unit = sharedPref.getString(getString(R.string.preference_distance_unit_key), null);
+        String unit = SharedPreferencesManager.getString(EditorActivity.this, getString(R.string.preference_distance_unit_key));
         String distanceText;
         if (unit.equals("km")){
             distanceText = ConversionManager.distanceToString(trackedRun.getDistanceKilometres(), unit);

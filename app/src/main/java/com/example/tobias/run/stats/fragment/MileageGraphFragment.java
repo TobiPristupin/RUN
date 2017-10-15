@@ -65,6 +65,7 @@ public class MileageGraphFragment extends Fragment  {
     private void setGraphDataSet(){
         List<BarEntry> entriesList = getArguments().getParcelableArrayList(getString(R.string.graph_entries_key));
 
+
         BarDataSet dataset = new BarDataSet(entriesList, "Distance");
         dataset = formatDataSet(dataset);
 
@@ -104,6 +105,8 @@ public class MileageGraphFragment extends Fragment  {
         graph.setTouchEnabled(false);
 
         graph.setDrawGridBackground(false);
+
+        graph.setDescription(null);
     }
 
 }
