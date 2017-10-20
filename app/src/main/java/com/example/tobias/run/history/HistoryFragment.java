@@ -32,7 +32,7 @@ import com.example.tobias.run.data.TrackedRun;
 import com.example.tobias.run.data.TrackedRunPredicates;
 import com.example.tobias.run.editor.EditorActivity;
 import com.example.tobias.run.history.adapter.HistoryRecyclerViewAdapter;
-import com.example.tobias.run.utils.ConversionManager;
+import com.example.tobias.run.utils.TrackedRunManager;
 import com.example.tobias.run.utils.VerticalDividerItemDecoration;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -92,6 +92,7 @@ public class HistoryFragment extends Fragment {
         firebaseUser = firebaseAuth.getCurrentUser();
         databaseRef = firebaseDatabase.getReference("users/" + firebaseUser.getUid());
         spinnerLayout = rootView.findViewById(R.id.history_spinner_layout);
+
 
         initRecyclerView();
         initFirebaseDatabase();
@@ -248,13 +249,13 @@ public class HistoryFragment extends Fragment {
         String filter = dateSpinner.getItems().get(dateSpinner.getSelectedIndex()).toString();
         switch (filter){
             case "Week" :
-                adapter.updateItems(ConversionManager.filterRun(trackedRuns, TrackedRunPredicates.isRunFromWeek()));
+                adapter.updateItems(TrackedRunManager.filterRun(trackedRuns, TrackedRunPredicates.isRunFromWeek()));
                 break;
             case "Month" :
-                adapter.updateItems(ConversionManager.filterRun(trackedRuns, TrackedRunPredicates.isRunFromMonth()));
+                adapter.updateItems(TrackedRunManager.filterRun(trackedRuns, TrackedRunPredicates.isRunFromMonth()));
                 break;
             case "Year" :
-                adapter.updateItems(ConversionManager.filterRun(trackedRuns, TrackedRunPredicates.isRunFromYear()));
+                adapter.updateItems(TrackedRunManager.filterRun(trackedRuns, TrackedRunPredicates.isRunFromYear()));
                 break;
             case "All" :
                 adapter.updateItems(trackedRuns);
@@ -361,7 +362,7 @@ public class HistoryFragment extends Fragment {
     private void deleteRunsPermanently(ArrayList<TrackedRun> trackedRunsToDelete){
         for (TrackedRun tr : trackedRunsToDelete){
             trackedRuns.remove(tr);
-            databaseManager.deleteRun(tr);
+            databaseManager.remove(tr);
         }
     }
 

@@ -3,9 +3,7 @@ package com.example.tobias.run.editor;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -138,9 +136,9 @@ public class EditorActivity extends AppCompatActivity {
         //If run hasn't been assigned an ID, it's a new run and has to be added to the database.
         // IF run has been assigned an ID, run has been added to database previously and has to be updated with the new data.
         if (isEditMode){
-            databaseManager.updateRun(trackedRun);
+            databaseManager.update(trackedRun);
         } else {
-            databaseManager.addRun(trackedRun);
+            databaseManager.add(trackedRun);
         }
     }
 

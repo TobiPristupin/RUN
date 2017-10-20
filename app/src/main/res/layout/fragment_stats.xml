@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/LightGrey">
@@ -79,17 +78,30 @@
                         android:layout_weight="85"
                         android:id="@+id/stats_mileage_viewpager"/>
 
-                    <Button
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="15"
-                        android:text="View Fullscreen"
-                        android:textAlignment="textStart"
-                        android:layout_marginLeft="20dp"
-                        android:background="@android:color/white"
-                        android:textColor="@color/colorPrimaryDark"
-                        style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+                        android:background="@color/LightGrey"
+                        android:orientation="horizontal"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:clickable="true">
 
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_arrow_forward"
+                            android:layout_marginLeft="10dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Show More"
+                            android:textAlignment="textStart"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/colorPrimaryDark"
+                            style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+                    </LinearLayout>
 
                 </LinearLayout>
 

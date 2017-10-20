@@ -6,8 +6,6 @@ import android.os.Parcelable;
 import com.example.tobias.run.utils.ConversionManager;
 import com.google.firebase.database.Exclude;
 
-import org.joda.time.Period;
-
 /**
  * Object to represent a new tracked run for storage in database. Handles conversion between
  * the data retrieved directly from editor activity fields to the appropriate format and
@@ -34,6 +32,17 @@ public class TrackedRun implements Parcelable {
         this.mKilometrePace = ConversionManager.getPace(mDistanceKilometres, mTime);
     }
 
+    public TrackedRun(long date, float distanceKilometres, float distanceMiles, long time, int rating, String id){
+        this.mDistanceKilometres = distanceKilometres;
+        this.mDistanceMiles = distanceMiles;
+        this.mTime = time;
+        this.mDate = date;
+        this.mRating = rating;
+        this.mMilePace = ConversionManager.getPace(mDistanceMiles, mTime);
+        this.mKilometrePace = ConversionManager.getPace(mDistanceKilometres, mTime);
+        this.mID = id;
+    }
+
     public TrackedRun(){
         // Default constructor required for firebase calls to DataSnapshot.getValue(User.class)
     }
@@ -52,15 +61,16 @@ public class TrackedRun implements Parcelable {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (obj == null || this.getClass() != obj.getClass()) return false;
 
         TrackedRun run = (TrackedRun) obj;
-        if (this.getId().equals(run.getId())) return false;
+        if (!this.getId().equals(run.getId())) return false;
         if (this.getDate() != run.getDate()) return false;
         if (this.getDistanceKilometres() != run.getDistanceKilometres()) return false;
         if (this.getRating() != run.getRating()) return false;
         if (this.getTime() != run.getTime()) return false;
         //No need to check for mile or km pace because pace is computed off time and distance.
+
 
         return true;
     }
