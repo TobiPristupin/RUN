@@ -5,21 +5,22 @@ import com.example.tobias.run.data.TrackedRun;
 import org.apache.commons.collections.Predicate;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Tobi on 10/15/2017.
  */
 
-public class TrackedRunManager {
+public class TrackedRunUtils {
 
     /**
-     *
+     * Filters run given a predicate and a list of runs. Does not modify list of runs.
      * @param trackedRuns
      * @param predicate
      * @return filtered ArrayList
      */
-    public static ArrayList<TrackedRun> filterRun(ArrayList<TrackedRun> trackedRuns, Predicate predicate){
-        ArrayList<TrackedRun> filteredList = new ArrayList<>();
+    public static List<TrackedRun> filterRun(List<TrackedRun> trackedRuns, Predicate predicate){
+        List<TrackedRun> filteredList = new ArrayList<>();
         for (TrackedRun tr : trackedRuns){
             if (predicate.evaluate(tr)){
                 filteredList.add(tr);

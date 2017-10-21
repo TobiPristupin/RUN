@@ -29,25 +29,15 @@ import android.widget.TextView;
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.TrackedRun;
-import com.example.tobias.run.data.TrackedRunPredicates;
 import com.example.tobias.run.editor.EditorActivity;
 import com.example.tobias.run.history.adapter.HistoryRecyclerViewAdapter;
-import com.example.tobias.run.utils.TrackedRunManager;
 import com.example.tobias.run.utils.VerticalDividerItemDecoration;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
@@ -57,24 +47,22 @@ import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
  * Fragment that displays activities tracked, and can sort them by different criteria. Accessed via the DrawerLayout
  * in MainActivity as History.
  */
-public class HistoryFragment extends Fragment {
+public class HistoryFragmentView extends Fragment implements HistoryView {
 
     private View rootView;
     private HistoryRecyclerViewAdapter adapter;
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    private MaterialSpinner dateSpinner;
-    private ArrayList<TrackedRun> trackedRuns =  new ArrayList<>();
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private FirebaseUser firebaseUser;
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private FirebaseDatabaseManager databaseManager = new FirebaseDatabaseManager();
-    private DatabaseReference databaseRef;
     private ActionModeCallback modeCallback = new ActionModeCallback();
     private ActionMode actionMode;
-    private RelativeLayout spinnerLayout;
+    private HistoryPresenter presenter;
 
-    public HistoryFragment(){
+    private RecyclerView recyclerView;
+    private MaterialSpinner dateSpinner;
+    private View emptyViewImage;
+    private View emptyViewHeader;
+    private View emptyViewText;
+
+
+    public HistoryFragmentView(){
         //Required empty constructor.
     }
 
@@ -89,18 +77,25 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_history, container, false);
 
-        firebaseUser = firebaseAuth.getCurrentUser();
-        databaseRef = firebaseDatabase.getReference("users/" + firebaseUser.getUid());
-        spinnerLayout = rootView.findViewById(R.id.history_spinner_layout);
+        presenter = new HistoryPresenter(this, new FirebaseDatabaseManager());
+
+        emptyViewImage = rootView.findViewById(R.id.history_empty_view_image);
+        emptyViewHeader = rootView.findViewById(R.id.history_empty_view_header);
+        emptyViewText = rootView.findViewById(R.id.history_empty_view_text);
 
 
         initRecyclerView();
-        initFirebaseDatabase();
         initDateSpinner();
         initFab();
         initTopBar();
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroyView();
     }
 
     private void initDateSpinner(){
@@ -109,36 +104,15 @@ public class HistoryFragment extends Fragment {
         dateSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                loadRecordsRecyclerView();
+                presenter.onSpinnerItemSelected();
             }
         });
-
-
-    }
-
-    private void initFirebaseDatabase(){
-        databaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                trackedRuns.clear();
-                for (DataSnapshot data : dataSnapshot.getChildren()){
-                    trackedRuns.add(data.getValue(TrackedRun.class));
-                }
-                loadRecordsRecyclerView();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
     }
 
     private void initRecyclerView(){
         recyclerView = (RecyclerView) rootView.findViewById(R.id.history_recyclerview);
 
-        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -148,11 +122,13 @@ public class HistoryFragment extends Fragment {
         recyclerView.setItemAnimator(new OvershootInRightAnimator());
         recyclerView.getItemAnimator().setAddDuration(750);
         recyclerView.getItemAnimator().setRemoveDuration(500);
-        adapter = new HistoryRecyclerViewAdapter(getContext(), trackedRuns, new HistoryRecyclerViewAdapter.OnItemClicked() {
+        adapter = new HistoryRecyclerViewAdapter(getContext(), new HistoryRecyclerViewAdapter.OnItemClicked() {
             @Override
             public void onClick(int position) {
                 if (actionMode != null){
-                    toggleSelection(position);
+                    adapter.toggleSelection(position);
+                    presenter.toggleItemSelection(adapter.getSelectedItems());
+
                 }
             }
 
@@ -163,7 +139,8 @@ public class HistoryFragment extends Fragment {
                     setActiveActionModeBackground(true);
                 }
 
-                toggleSelection(position);
+                adapter.toggleSelection(position);
+                presenter.toggleItemSelection(adapter.getSelectedItems());
                 return true;
             }
         });
@@ -175,35 +152,6 @@ public class HistoryFragment extends Fragment {
         recyclerView.setAdapter(animationAdapter);
     }
 
-    /**
-     * Toggle the selection state of an item.
-     *
-     * If the item was the last one in the selection and is unselected, the selection is stopped.
-     * Note that the selection must already be started (actionMode must not be null).
-     */
-    private void toggleSelection(int position){
-        adapter.toggleSelection(position);
-        int selectedItemCount = adapter.getSelectedItemCount();
-
-        if (selectedItemCount == 0) {
-            actionMode.finish();
-            return;
-        }
-
-        //Can't use edit functionality when more than on item is selected so disable.
-        if (selectedItemCount > 1){
-            actionMode.getMenu().findItem(R.id.selected_item_menu_edit).setVisible(false);
-        } else {
-            actionMode.getMenu().findItem(R.id.selected_item_menu_edit).setVisible(true);
-        }
-
-        actionMode.setTitle(String.valueOf(selectedItemCount));
-        actionMode.invalidate();
-    }
-
-    /**
-     * Sets Floating action Button callback
-     */
     private void initFab(){
         final FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.history_fab_button);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -223,6 +171,7 @@ public class HistoryFragment extends Fragment {
             }
         });
 
+        //Hide fab when recycler view is scrolled in any direction
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -245,29 +194,107 @@ public class HistoryFragment extends Fragment {
         });
     }
 
-    private void loadRecordsRecyclerView() {
-        String filter = dateSpinner.getItems().get(dateSpinner.getSelectedIndex()).toString();
-        switch (filter){
-            case "Week" :
-                adapter.updateItems(TrackedRunManager.filterRun(trackedRuns, TrackedRunPredicates.isRunFromWeek()));
-                break;
-            case "Month" :
-                adapter.updateItems(TrackedRunManager.filterRun(trackedRuns, TrackedRunPredicates.isRunFromMonth()));
-                break;
-            case "Year" :
-                adapter.updateItems(TrackedRunManager.filterRun(trackedRuns, TrackedRunPredicates.isRunFromYear()));
-                break;
-            case "All" :
-                adapter.updateItems(trackedRuns);
-        }
+    private void initTopBar(){
+        TextView currentMonthText = (TextView) rootView.findViewById(R.id.history_date_text);
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("EEEE, MMMM d");
+        currentMonthText.setText(formatter.print(new DateTime()));
+    }
 
-        //avoid user changing filter with runs selected previously
+    @Override
+    public void finishActionMode() {
         if (actionMode != null){
             actionMode.finish();
         }
+    }
 
-        //Show empty if adapter dataset is empty, show all text of empty view if zero runs have been added.
-        recyclerViewShowEmptyView(adapter.isDatasetEmpty(), trackedRuns.isEmpty());
+    @Override
+    public void actionSetEditVisible(boolean visible) {
+        if (visible){
+            actionMode.getMenu().findItem(R.id.selected_item_menu_edit).setVisible(false);
+        } else {
+            actionMode.getMenu().findItem(R.id.selected_item_menu_edit).setVisible(true);
+        }
+    }
+
+    @Override
+    public void actionModeSetTitle(String title) {
+        actionMode.setTitle(title);
+    }
+
+    @Override
+    public void actionModeInvalidate() {
+        actionMode.invalidate();
+    }
+
+    @Override
+    public void setData(List<TrackedRun> data) {
+        adapter.updateItems(data);
+    }
+
+    @Override
+    public void showDeleteDialog(final List<Integer> selectedItems) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Delete");
+
+        if (selectedItems.size() > 1){
+            builder.setMessage("Are you sure you want to delete " + selectedItems.size() + " items? You won't be able to recover them.");
+        } else {
+            builder.setMessage("Are you sure you want to delete one item? You won't be able to recover it.");
+        }
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                presenter.onDeleteDialogYes(selectedItems);
+            }
+        });
+
+        builder.create().show();
+    }
+
+    /**
+     * @return current state of filter spinner
+     */
+    @Override
+    public String getDataFilter() {
+        return dateSpinner.getItems().get(dateSpinner.getSelectedIndex()).toString();
+    }
+
+    @Override
+    public void showEmptyView(boolean longMessage) {
+        if (longMessage){
+            animateViews(true, emptyViewHeader, emptyViewImage, emptyViewText);
+        } else {
+            animateViews(true, emptyViewHeader, emptyViewImage);
+        }
+    }
+
+    @Override
+    public void removeEmptyView() {
+        animateViews(false, emptyViewHeader, emptyViewImage, emptyViewText);
+    }
+
+    @Override
+    public boolean adapterIsDataSetEmpty() {
+        return adapter.isDatasetEmpty();
+    }
+
+    @Override
+    public void sendIntentEditorActivity(@Nullable TrackedRun runToEdit) {
+        Intent intent = new Intent(getContext(), EditorActivity.class);
+
+        if (runToEdit != null){
+            intent.putExtra(getString(R.string.trackedrun_intent_key), runToEdit);
+        }
+
+        startActivity(intent);
     }
 
     private void animateViews(boolean shouldShow, View... views){
@@ -286,32 +313,11 @@ public class HistoryFragment extends Fragment {
     }
 
     /**
-     * Shows recycler view empty view
-     * @param shouldShow true if should show message, false if should remove message
-     * @param longMessage true if should show long text description, false if shouldn't
-     */
-    private void recyclerViewShowEmptyView(boolean shouldShow, boolean longMessage){
-        View emptyViewImage = rootView.findViewById(R.id.history_empty_view_image);
-        View emptyViewHeader = rootView.findViewById(R.id.history_empty_view_header);
-        View emptyViewText = rootView.findViewById(R.id.history_empty_view_text);
-
-        if (longMessage){
-            animateViews(shouldShow, emptyViewHeader, emptyViewImage, emptyViewText);
-        } else {
-            animateViews(shouldShow, emptyViewHeader, emptyViewImage);
-        }
-    }
-
-    private void initTopBar(){
-        TextView currentMonthText = (TextView) rootView.findViewById(R.id.history_date_text);
-        DateTimeFormatter formatter = DateTimeFormat.forPattern("EEEE, MMMM d");
-        currentMonthText.setText(formatter.print(new DateTime()));
-    }
-
-    /**
      * Sets activated background color for DateSpinner, SpinnerLayout and status bar (API + 19) when action mode is created.
      */
     private void setActiveActionModeBackground(boolean activated){
+        RelativeLayout spinnerLayout = rootView.findViewById(R.id.history_spinner_layout);
+
         Window window = getActivity().getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -332,48 +338,6 @@ public class HistoryFragment extends Fragment {
 
     }
 
-    private void showDeleteDialog(final List<Integer> selectedItems){
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Delete");
-
-        if (selectedItems.size() > 1){
-            builder.setMessage("Are you sure you want to delete " + selectedItems.size() + " items? You won't be able to recover them.");
-        } else {
-            builder.setMessage("Are you sure you want to delete one item? You won't be able to recover it.");
-        }
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                deleteRunsPermanently(getTrackedRunsFromIndex(selectedItems));
-            }
-        });
-
-        builder.create().show();
-    }
-
-    private void deleteRunsPermanently(ArrayList<TrackedRun> trackedRunsToDelete){
-        for (TrackedRun tr : trackedRunsToDelete){
-            trackedRuns.remove(tr);
-            databaseManager.remove(tr);
-        }
-    }
-
-    private ArrayList<TrackedRun> getTrackedRunsFromIndex(List<Integer> indexList){
-        ArrayList<TrackedRun> arrayList = new ArrayList<>();
-        for (Integer index : indexList){
-            arrayList.add(this.trackedRuns.get(index));
-        }
-        return arrayList;
-    }
-
     private class ActionModeCallback implements ActionMode.Callback {
 
         @Override
@@ -391,19 +355,12 @@ public class HistoryFragment extends Fragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.selected_item_menu_delete:
-                    showDeleteDialog(adapter.getSelectedItems());
+                    presenter.onDeleteMenuClicked(adapter.getSelectedItems());
                     mode.finish();
                     return true;
 
                 case R.id.selected_item_menu_edit :
-                    Intent intent = new Intent(getContext(), EditorActivity.class);
-                    ArrayList<TrackedRun> trackedRuns = getTrackedRunsFromIndex(adapter.getSelectedItems());
-                    /*Selected items size will always be 1 because when more than one run is selected edit
-                    functionality is disabled when selected items > 1.*/
-                    TrackedRun tr = getTrackedRunsFromIndex(adapter.getSelectedItems()).get(0);
-                    intent.putExtra(getString(R.string.trackedrun_intent_key), tr);
-                    startActivity(intent);
-
+                    presenter.onEditMenuClicked(adapter.getSelectedItems());
                     mode.finish();
                     return true;
 

@@ -3,9 +3,7 @@ package com.example.tobias.run.data;
 import android.support.annotation.Nullable;
 import android.support.v7.util.DiffUtil;
 
-import com.example.tobias.run.data.TrackedRun;
-
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Tobi on 9/16/2017.
@@ -13,10 +11,10 @@ import java.util.ArrayList;
 
 public class DiffCallback extends DiffUtil.Callback {
 
-    private ArrayList<TrackedRun> newList;
-    private ArrayList<TrackedRun> oldList;
+    private List<TrackedRun> newList;
+    private List<TrackedRun> oldList;
 
-    public DiffCallback(ArrayList<TrackedRun> newList, ArrayList<TrackedRun> oldList){
+    public DiffCallback(List<TrackedRun> newList, List<TrackedRun> oldList){
         this.newList = newList;
         this.oldList = oldList;
     }

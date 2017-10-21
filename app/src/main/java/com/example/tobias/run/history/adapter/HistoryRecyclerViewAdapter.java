@@ -2,7 +2,6 @@ package com.example.tobias.run.history.adapter;
 
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +18,7 @@ import com.example.tobias.run.utils.ConversionManager;
 import com.example.tobias.run.utils.SharedPreferencesManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Adapter for custom RecyclerView in History Fragment.
@@ -34,10 +34,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
     private Context context;
     private OnItemClicked clickListener;
 
-    public HistoryRecyclerViewAdapter(Context context, ArrayList<TrackedRun> trackedRuns, OnItemClicked clickListener){
-        /*Creating new ArrayList and adding instead of copying reference because changes made on adapter's trackedRuns should not affect
-        HistoryFragment trackedRuns.*/
-        this.trackedRuns.addAll(trackedRuns);
+    public HistoryRecyclerViewAdapter(Context context, OnItemClicked clickListener){
         this.context = context;
         this.clickListener = clickListener;
     }
@@ -64,7 +61,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         }
     }
 
-    public void updateItems(ArrayList<TrackedRun> newList){
+    public void updateItems(List<TrackedRun> newList){
         final DiffCallback diff = new DiffCallback(newList, this.trackedRuns);
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diff);
 

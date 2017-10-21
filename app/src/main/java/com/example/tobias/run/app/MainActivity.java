@@ -11,9 +11,7 @@ package com.example.tobias.run.app;
  */
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -27,7 +25,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.history.HistoryFragment;
+import com.example.tobias.run.history.HistoryFragmentView;
 import com.example.tobias.run.login.LoginActivity;
 import com.example.tobias.run.settings.SettingsActivity;
 import com.example.tobias.run.stats.StatsFragment;
@@ -139,9 +137,9 @@ public class MainActivity extends AppCompatActivity {
         Fragment newFragment = null;
 
         switch (menuItem.getItemId()){
-            //If item selected id is menu_history, create new HistoryFragment in newFragment variable
+            //If item selected id is menu_history, create new HistoryFragmentView in newFragment variable
             case R.id.menu_history :
-                newFragment = new HistoryFragment();
+                newFragment = new HistoryFragmentView();
                 break;
             //...
             case R.id.menu_stats :

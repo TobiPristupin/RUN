@@ -1,6 +1,6 @@
 package com.example.tobias.run;
 
-import com.example.tobias.run.interfaces.Observable;
+import com.example.tobias.run.interfaces.ObservableDatabase;
 import com.example.tobias.run.interfaces.Observer;
 
 import org.junit.Assert;
@@ -17,7 +17,7 @@ public class ObserverTest {
 
     @Test public void observerShouldGetData() {
         Observer observer = new MockObserver("Hello");
-        Observable observable = new MockObservable("Hello");
+        ObservableDatabase observable = new MockObservable("Hello");
 
         observable.attachObserver(observer);
         observable.notifyUpdateObservers();
@@ -35,14 +35,14 @@ public class ObserverTest {
         }
 
         @Override
-        public void update(List<String> data) {
+        public void updateData(List<String> data) {
             if (string.equals(data.get(0))){
                 updateCalledWithData = true;
             }
         }
     }
 
-    private class MockObservable implements Observable<String> {
+    private class MockObservable implements ObservableDatabase<String> {
 
         private List<Observer> observers = new ArrayList<>();
         private List<String> data = new ArrayList<>();
@@ -64,8 +64,23 @@ public class ObserverTest {
         @Override
         public void notifyUpdateObservers() {
             for (Observer observer : observers){
-                observer.update(data);
+                observer.updateData(data);
             }
+        }
+
+        @Override
+        public void add(String data) {
+
+        }
+
+        @Override
+        public void remove(String data) {
+
+        }
+
+        @Override
+        public void update(String data) {
+
         }
     }
 }

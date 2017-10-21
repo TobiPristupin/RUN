@@ -2,7 +2,7 @@ package com.example.tobias.run.data;
 
 import android.util.Log;
 
-import com.example.tobias.run.interfaces.Observable;
+import com.example.tobias.run.interfaces.ObservableDatabase;
 import com.example.tobias.run.interfaces.Observer;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -15,7 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirebaseDatabaseManager implements Observable<TrackedRun>, Database<TrackedRun> {
+public class FirebaseDatabaseManager implements ObservableDatabase<TrackedRun> {
 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -62,7 +62,7 @@ public class FirebaseDatabaseManager implements Observable<TrackedRun>, Database
     @Override
     public void notifyUpdateObservers() {
         for (Observer<TrackedRun> observer : observerList){
-            observer.update(trackedRunList);
+            observer.updateData(trackedRunList);
         }
     }
 
