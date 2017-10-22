@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".app.MainActivity"
+            android:name=".app.MainActivityView"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,10 +22,10 @@
         </activity>
         <activity
             android:name=".editor.EditorActivity"
-            android:parentActivityName=".app.MainActivity" />
+            android:parentActivityName=".app.MainActivityView" />
         <activity
             android:name=".settings.SettingsActivity"
-            android:parentActivityName=".app.MainActivity" />
+            android:parentActivityName=".app.MainActivityView" />
         <activity
             android:name=".login.LoginActivity"
             android:screenOrientation="portrait"

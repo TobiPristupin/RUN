@@ -11,7 +11,8 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.utils.SharedPreferencesManager;
+import com.example.tobias.run.data.SharedPreferenceManager;
+import com.example.tobias.run.data.SharedPreferenceRepository;
 
 /**
  * Dialog that allows user to set a distance value for a new tracked run. Sends data to parent Activity
@@ -30,6 +31,7 @@ public class DistanceDialog {
     private NumberPicker numberPickerDecimal;
     private onPositiveButtonListener listener;
     private Activity activity;
+    private SharedPreferenceRepository preferenceManager = new SharedPreferenceManager((Context) activity);
 
     public DistanceDialog(Activity activity, onPositiveButtonListener listener){
         this.activity = activity;
@@ -86,7 +88,7 @@ public class DistanceDialog {
      */
     private void initUnitText(){
         TextView unitText = (TextView) rootView.findViewById(R.id.distance_unit);
-        unitText.setText(SharedPreferencesManager.getString(activity, activity.getString(R.string.preference_distance_unit_key)));
+        unitText.setText(preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY));
     }
 
     /**
@@ -96,7 +98,7 @@ public class DistanceDialog {
     private String formatValues(){
         String distance = null;
         distance = "" + numberPickerWhole.getValue() + "." + numberPickerDecimal.getValue() + " " +
-                SharedPreferencesManager.getString(activity, activity.getString(R.string.preference_distance_unit_key));
+                preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
         return distance;
     }
 

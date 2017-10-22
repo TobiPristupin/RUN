@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.app.MainActivity;
+import com.example.tobias.run.app.MainActivityView;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -150,7 +150,7 @@ public class LoginFragment extends Fragment {
 
     private void loadMainActivity(){
         stopLoadingAnimation();
-        Intent intent = new Intent(getContext(), MainActivity.class);
+        Intent intent = new Intent(getContext(), MainActivityView.class);
         //Flags prevent user from returning to LoginActivity when pressing back button
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

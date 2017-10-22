@@ -23,12 +23,13 @@ import android.widget.Toast;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
+import com.example.tobias.run.data.SharedPreferenceManager;
+import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.data.TrackedRun;
 import com.example.tobias.run.editor.dialog.DistanceDialog;
 import com.example.tobias.run.editor.dialog.RatingDialog;
 import com.example.tobias.run.editor.dialog.TimeDialog;
 import com.example.tobias.run.utils.ConversionManager;
-import com.example.tobias.run.utils.SharedPreferencesManager;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -46,20 +47,21 @@ import es.dmoral.toasty.Toasty;
  */
 public class EditorActivity extends AppCompatActivity {
 
-    Activity activity;
     private final int DATE_DIALOG_ID = 999;
     private static final String TAG = "EditorActivity";
     private boolean isEditMode;
     private TrackedRun trackedRun;
+    private SharedPreferenceRepository preferenceManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
-        this.activity = this;
 
         initToolbar();
+
+        preferenceManager = new SharedPreferenceManager(EditorActivity.this);
 
         Intent intent = getIntent();
         trackedRun = intent.getParcelableExtra(getString(R.string.trackedrun_intent_key));
@@ -117,7 +119,7 @@ public class EditorActivity extends AppCompatActivity {
     private void addRecord(HashMap<String, String> values) {
         FirebaseDatabaseManager databaseManager = new FirebaseDatabaseManager();
 
-        if (SharedPreferencesManager.getString(EditorActivity.this, getString(R.string.preference_distance_unit_key)).equals("km")){
+        if (preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY).equals("km")){
             float kmDistance = ConversionManager.distanceToFloat(values.get("distance"));
             trackedRun.setDistanceKilometres(kmDistance);
             trackedRun.setDistanceMiles(ConversionManager.kilometresToMiles(kmDistance));
@@ -178,7 +180,7 @@ public class EditorActivity extends AppCompatActivity {
     private void setEditMode(){
         getSupportActionBar().setTitle("Edit Run");
 
-        String unit = SharedPreferencesManager.getString(EditorActivity.this, getString(R.string.preference_distance_unit_key));
+        String unit = preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
         String distanceText;
         if (unit.equals("km")){
             distanceText = ConversionManager.distanceToString(trackedRun.getDistanceKilometres(), unit);
@@ -255,14 +257,14 @@ public class EditorActivity extends AppCompatActivity {
         field.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DistanceDialog dialog = new DistanceDialog(activity, new DistanceDialog.onPositiveButtonListener() {
+                DistanceDialog dialog = new DistanceDialog(EditorActivity.this, new DistanceDialog.onPositiveButtonListener() {
                     @Override
                     public void onClick(String distanceValue) {
                         TextView distanceTextView = (TextView) findViewById(R.id.editor_distance_text);
                         distanceTextView.setText(distanceValue);
                     }
                 });
-                dialog.makeDialog(activity).show();
+                dialog.makeDialog(EditorActivity.this).show();
             }
         });
         }
@@ -272,7 +274,7 @@ public class EditorActivity extends AppCompatActivity {
         field.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimeDialog timeDialog = new TimeDialog(activity, new TimeDialog.onPositiveButtonListener() {
+                TimeDialog timeDialog = new TimeDialog(EditorActivity.this, new TimeDialog.onPositiveButtonListener() {
                     @Override
                     public void onClick(String timeValue) {
                         TextView timeTextView = (TextView) findViewById(R.id.editor_time_text);
@@ -290,7 +292,7 @@ public class EditorActivity extends AppCompatActivity {
         field.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RatingDialog ratingDialog = new RatingDialog(activity, new RatingDialog.onPositiveButtonListener() {
+                RatingDialog ratingDialog = new RatingDialog(EditorActivity.this, new RatingDialog.onPositiveButtonListener() {
                     @Override
                     public void onClick(String ratingValue) {
                         TextView ratingTextView = (TextView) findViewById(R.id.editor_rating_text);

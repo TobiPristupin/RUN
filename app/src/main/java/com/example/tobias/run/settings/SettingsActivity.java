@@ -16,8 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.tobias.run.R;
+import com.example.tobias.run.data.SharedPreferenceManager;
+import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.login.LoginActivity;
-import com.example.tobias.run.utils.SharedPreferencesManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -54,8 +55,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void initUnitText(){
         TextView distanceUnit = (TextView) findViewById(R.id.settings_distance_unit_value);
-        if ( SharedPreferencesManager.getString(SettingsActivity.this,
-                getString(R.string.preference_distance_unit_key)).equals("km")){
+        SharedPreferenceRepository preferenceManager = new SharedPreferenceManager(SettingsActivity.this);
+        if (preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY).equals("km")){
             distanceUnit.setText("Metric (km)");
         } else {
             distanceUnit.setText("Imperial (mi)");
@@ -85,7 +86,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void loadLogIn(){
         Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-        //Flags prevent user from returning to MainActivity when pressing back button
+        //Flags prevent user from returning to MainActivityView when pressing back button
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

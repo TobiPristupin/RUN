@@ -45,7 +45,7 @@ import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
 
 /**
  * Fragment that displays activities tracked, and can sort them by different criteria. Accessed via the DrawerLayout
- * in MainActivity as History.
+ * in MainActivityView as History.
  */
 public class HistoryFragmentView extends Fragment implements HistoryView {
 

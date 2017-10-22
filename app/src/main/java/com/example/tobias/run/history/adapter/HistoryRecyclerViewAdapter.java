@@ -13,9 +13,10 @@ import android.widget.TextView;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.DiffCallback;
+import com.example.tobias.run.data.SharedPreferenceManager;
+import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.data.TrackedRun;
 import com.example.tobias.run.utils.ConversionManager;
-import com.example.tobias.run.utils.SharedPreferencesManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +34,12 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
     private ArrayList<TrackedRun> trackedRuns = new ArrayList<>();
     private Context context;
     private OnItemClicked clickListener;
+    private SharedPreferenceRepository preferenceManager;
 
     public HistoryRecyclerViewAdapter(Context context, OnItemClicked clickListener){
         this.context = context;
         this.clickListener = clickListener;
+        preferenceManager = new SharedPreferenceManager(context);
     }
 
     @Override
@@ -79,7 +82,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
     }
 
     private void setDistanceText(TrackedRun currentItem, HistoryViewHolder holder){
-        String unit = SharedPreferencesManager.getString(context, context.getString(R.string.preference_distance_unit_key));
+        String unit = preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
         if (unit.equals("km")){
             holder.distance.setText(ConversionManager.distanceToString(currentItem.getDistanceKilometres(), unit));
         } else {
@@ -88,7 +91,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
     }
 
     private void setPaceText(TrackedRun currentItem, HistoryViewHolder holder){
-        String unit = SharedPreferencesManager.getString(context, context.getString(R.string.preference_distance_unit_key));
+        String unit = preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
         if (unit.equals("km")){
             holder.pace.setText(ConversionManager.paceToString(currentItem.getKmPace(), "km"));
         } else {

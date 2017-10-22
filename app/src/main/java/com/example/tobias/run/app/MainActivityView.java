@@ -25,68 +25,55 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.tobias.run.R;
+import com.example.tobias.run.data.SharedPreferenceManager;
+import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.history.HistoryFragmentView;
 import com.example.tobias.run.login.LoginActivity;
 import com.example.tobias.run.settings.SettingsActivity;
 import com.example.tobias.run.stats.StatsFragment;
-import com.example.tobias.run.utils.SharedPreferencesManager;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivityView extends AppCompatActivity implements MainView {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener authListener;
-    private FirebaseUser user;
+    private MainPresenter presenter;
+    private Bundle savedInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        user = firebaseAuth.getCurrentUser();
+        SharedPreferenceRepository preferenceRepository = new SharedPreferenceManager(MainActivityView.this);
+        presenter = new MainPresenter(this, preferenceRepository);
 
-        authListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (user == null){
-                    loadLogIn();
-                }
-            }
-        };
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.main_navigation_view);
+        this.savedInstanceState = savedInstanceState;
 
-        if (user == null){
-            loadLogIn();
-        } else {
-            drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-            navigationView = (NavigationView) findViewById(R.id.main_navigation_view);
+        presenter.onCreateView();
+    }
 
-            initDrawerLayout();
-            initSharedPref();
-            initToolbar();
-            initNavHeader();
+    @Override
+    public void initViews() {
+        initDrawerLayout();
+        initToolbar();
+        initNavHeader();
+        presenter.initSharedPreferences();
 
-            if (savedInstanceState == null) {
-                //If app hasn't loaded the views previously
-                MenuItem menuItem = navigationView.getMenu().findItem(R.id.menu_history);
-                //Open History fragment setting it as default for startup.
-                openFragment(menuItem);
-            }
-
+        if (savedInstanceState == null) {
+            //If app hasn't loaded the views previously
+            MenuItem menuItem = navigationView.getMenu().findItem(R.id.menu_history);
+            //Open History fragment setting it as default for startup.
+            openFragment(menuItem);
         }
-
     }
 
     private void initDrawerLayout(){
-        //initNavHeader();
-
         //On item selected in navigation view
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -100,14 +87,14 @@ public class MainActivity extends AppCompatActivity {
     private void initNavHeader(){
         NavigationView navigationView = findViewById(R.id.main_navigation_view);
         View headerLayout = navigationView.getHeaderView(0);
-        ((TextView) headerLayout.findViewById(R.id.navheader_username_text)).setText(user.getDisplayName());
-        ((TextView) headerLayout.findViewById(R.id.navheader_email_text)).setText(user.getEmail());
+        ((TextView) headerLayout.findViewById(R.id.navheader_username_text)).setText(presenter.getUserDisplayName());
+        ((TextView) headerLayout.findViewById(R.id.navheader_email_text)).setText(presenter.getUserEmail());
 
         CircleImageView profileImage = (CircleImageView) headerLayout.findViewById(R.id.navheader_profile_image);
 
-        Picasso.with(MainActivity.this)
-                .load(user.getPhotoUrl())
-                .placeholder(R.color.iron)
+        Picasso.with(MainActivityView.this)
+                .load(presenter.getUserPhotoUrl())
+                .placeholder(android.R.color.darker_gray)
                 .into(profileImage);
     }
 
@@ -115,18 +102,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        firebaseAuth.removeAuthStateListener(authListener);
+        presenter.onPauseView();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        firebaseAuth.addAuthStateListener(authListener);
+        presenter.onResumeView();
     }
 
+    @Override
     public void loadLogIn(){
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-        //Flags prevent user from returning to MainActivity when pressing back button
+        Intent intent = new Intent(MainActivityView.this, LoginActivity.class);
+        //Flags prevent user from returning to MainActivityView when pressing back button
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -147,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             //...
             case R.id.menu_settings :
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                startActivity(new Intent(MainActivityView.this, SettingsActivity.class));
                 break;
         }
 
@@ -174,18 +162,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    /**
-     * Initializes shared preferences to the default values if none has been set before.
-     */
-    public void initSharedPref(){
-        //If distance_unit hasn't been initialized, set it to default value (mi)
-        if (SharedPreferencesManager.getString(MainActivity.this, getString(R.string.preference_distance_unit_key)) == null){
-            SharedPreferencesManager.getSharedPreferences(MainActivity.this)
-                    .edit().putString(getString(R.string.preference_distance_unit_key), "mi").apply();
-      }
-    }
-
 
     /**
      * Set toolbar defined in xml layout as support action toolbar and add button to open DrawerLayout
