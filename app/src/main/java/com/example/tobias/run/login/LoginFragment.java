@@ -2,34 +2,25 @@ package com.example.tobias.run.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.app.MainActivityView;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
-
-import org.apache.commons.validator.routines.EmailValidator;
 
 import es.dmoral.toasty.Toasty;
 import mbanje.kurt.fabbutton.FabButton;
@@ -38,9 +29,10 @@ import mbanje.kurt.fabbutton.FabButton;
  * Created by Tobi on 9/15/2017.
  */
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment implements LoginView {
 
     private View rootView;
+    private LoginPresenter presenter;
     private TextInputLayout emailLayout;
     private TextInputLayout passwordLayout;
     private FirebaseAuth firebaseAuth;
@@ -53,19 +45,90 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_login, container, false);
 
+        presenter = new LoginPresenter(this);
+
         emailLayout = (TextInputLayout) rootView.findViewById(R.id.login_email);
         passwordLayout = (TextInputLayout) rootView.findViewById(R.id.login_password);
         firebaseAuth = FirebaseAuth.getInstance();
         fabButton = (FabButton) rootView.findViewById(R.id.login_button);
 
-        initLogInButton();
+        initLogInFab();
+        initTextInputs();
         initGoogleLogIn();
         initBottomButtons();
         return rootView;
     }
 
-    private void initLogInButton(){
+    /**
+     * @param enabled Should be enabled to errors
+     * @param error Error message to be displayed
+     */
+    @Override
+    public void setEmailTextInputError(boolean enabled, @Nullable String error) {
+        emailLayout.setError(error);
+        emailLayout.setErrorEnabled(enabled);
+    }
+
+
+    /**
+     * @param enabled Should be enabled to errors
+     * @param error Error message to be displayed
+     */
+    @Override
+    public void setPasswordTextInputError(boolean enabled, @Nullable String error) {
+        passwordLayout.setError(error);
+        passwordLayout.setErrorEnabled(enabled);
+    }
+
+    @Override
+    public void sendIntentMainActivity() {
+        Intent intent = new Intent(getContext(), MainActivityView.class);
+        //Flags prevent user from returning to LoginActivity when pressing back button
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    @Override
+    public void startLoadingAnimation(){
+        fabButton.showProgress(true);
+    }
+
+    @Override
+    public void stopLoadingAnimation(){
+        fabButton.showProgress(false);
+    }
+
+    @Override
+    public void showUnexpectedLoginErrorToast() {
+        Toasty.warning(getContext(), "An error has occurred. Please try again", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void sendGoogleSignInIntent() {
+        GoogleApiClient apiClient = ((LoginActivity) getActivity()).getGoogleApiClient();
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void showGoogleSignInFailedToast() {
+        Toasty.warning(getContext(), "Google authentication failed. Check your internet connection or try again").show();
+    }
+
+    private void initLogInFab(){
         //EditText error resets every time text is inputted
+        fabButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = emailLayout.getEditText().getText().toString().trim();
+                String password = passwordLayout.getEditText().getText().toString().trim();
+                presenter.attemptEmailLogin(email, password);
+            }
+        });
+    }
+
+    private void initTextInputs(){
         emailLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -73,8 +136,7 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                emailLayout.setError(null);
-                emailLayout.setErrorEnabled(false);
+                presenter.onEmailTextInputTextChanged();
             }
 
             @Override
@@ -89,139 +151,40 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                passwordLayout.setError(null);
-                passwordLayout.setErrorEnabled(false);
+                presenter.onPasswordTextInputTextChanged();
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
             }
         });
-
-        fabButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = emailLayout.getEditText().getText().toString().trim();
-                String password = passwordLayout.getEditText().getText().toString().trim();
-                EmailValidator validator = EmailValidator.getInstance();
-                //Validate if email and password fields meet requirements.
-
-                if (email.isEmpty()){
-                    emailLayout.setErrorEnabled(true);
-                    emailLayout.setError("Field is required");
-                    return;
-                }
-                if (password.isEmpty()){
-                    passwordLayout.setErrorEnabled(false);
-                    passwordLayout.setError("Field is required");
-                    return;
-                }
-                if (!validator.isValid(email)){
-                    emailLayout.setErrorEnabled(true);
-                    emailLayout.setError("Invalid email");
-                    return;
-                }
-                if (password.length() <= 6){
-                    passwordLayout.setErrorEnabled(false);
-                    passwordLayout.setError("Password must be longer than 6 characters");
-                    return;
-                }
-
-                startLoadingAnimation();
-                //Sign in with validated data onto firebase. If successful load main activity.
-                firebaseAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()){
-                                    Log.d(TAG, "FirebaseSignInEmail:successful");
-                                    loadMainActivity();
-                                } else {
-                                    Log.d(TAG, "FirebaseSignInWithEmail:unsuccessful");
-                                    passwordLayout.setError("Invalid credentials");
-                                    stopLoadingAnimation();
-                                    return;
-                                }
-                            }
-                        });
-            }
-        });
-    }
-
-    private void loadMainActivity(){
-        stopLoadingAnimation();
-        Intent intent = new Intent(getContext(), MainActivityView.class);
-        //Flags prevent user from returning to LoginActivity when pressing back button
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
     }
 
     //Initializes everything related to Google Sign In
     private void initGoogleLogIn(){
-        final  GoogleApiClient apiClient = ((LoginActivity) getActivity()).getGoogleApiClient();
-
         SignInButton googleBtn = (SignInButton) rootView.findViewById(R.id.login_google_button);
         googleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startLoadingAnimation();
-                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
-                startActivityForResult(signInIntent, RC_SIGN_IN);
+                presenter.attemptGoogleLogin();
             }
         });
     }
 
+    /**
+     * Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleGoogleResult(result);
+            presenter.onGoogleSignInResult(result);
         }
-    }
-
-    private void handleGoogleResult(GoogleSignInResult result){
-        Log.d(TAG, "HandleGoogleSignInResultSuccess:" + result.isSuccess());
-        if (result.isSuccess()){
-            GoogleSignInAccount account = result.getSignInAccount();
-            firebaseAuthGoogleAccount(account);
-        } else {
-            Toasty.warning(getContext(), "Google sign in failed. Check your internet connection or try again").show();
-            stopLoadingAnimation();
-        }
-    }
-
-    //Called to authenticate successful google log-in account into firebase to complete login flow.
-    private void firebaseAuthGoogleAccount(GoogleSignInAccount account){
-        Log.d(TAG, "FirebaseAuthGoogleAccount:" + account.getId());
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            Log.d(TAG, "FirebaseSignInWithGoogleCredential:Successful");
-                            loadMainActivity();
-                        } else {
-                            Log.w(TAG, "FirebaseSignInWithGoogleCredential:Unsuccessful " + task.getException());
-                            stopLoadingAnimation();
-                            Toasty.warning(getContext(), "Authentication failed. Check your internet connection or try again").show();
-                        }
-                    }
-                });
-
-    }
-
-    private void startLoadingAnimation(){
-        fabButton.showProgress(true);
-    }
-
-    private void stopLoadingAnimation(){
-        fabButton.showProgress(false);
     }
 
     private void initBottomButtons(){

@@ -7,7 +7,7 @@ package com.example.tobias.run.app;
  *
  *@author Tobias Pristupin
  *@version 1.0
- *@since 09/01/2017
+ *@since January 9 2017
  */
 
 
@@ -55,7 +55,7 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         navigationView = (NavigationView) findViewById(R.id.main_navigation_view);
         this.savedInstanceState = savedInstanceState;
 
-        presenter.onCreateView();
+        presenter.authenticate();
     }
 
     @Override
@@ -119,7 +119,6 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
-
 
     public void openFragment(MenuItem menuItem){
         Fragment newFragment = null;

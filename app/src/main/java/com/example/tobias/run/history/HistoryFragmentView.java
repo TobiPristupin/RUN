@@ -208,7 +208,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     }
 
     @Override
-    public void actionSetEditVisible(boolean visible) {
+    public void actionModeSetEditVisible(boolean visible) {
         if (visible){
             actionMode.getMenu().findItem(R.id.selected_item_menu_edit).setVisible(false);
         } else {
@@ -226,11 +226,19 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
         actionMode.invalidate();
     }
 
+    /**
+     * Updates Recycler View's adapter data set with new data
+     * @param data
+     */
     @Override
     public void setData(List<TrackedRun> data) {
         adapter.updateItems(data);
     }
 
+    /**
+     * Dialog that asks the user for confirmation before deleting items.
+     * @param selectedItems selected items in adapter to be deleted
+     */
     @Override
     public void showDeleteDialog(final List<Integer> selectedItems) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());

@@ -64,6 +64,10 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         }
     }
 
+    /**
+     * Called from view to update data set. Uses diffUtil to calculate view updates
+     * @param newList
+     */
     public void updateItems(List<TrackedRun> newList){
         final DiffCallback diff = new DiffCallback(newList, this.trackedRuns);
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diff);

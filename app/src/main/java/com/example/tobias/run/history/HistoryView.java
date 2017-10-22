@@ -13,7 +13,7 @@ import java.util.List;
 public interface HistoryView {
 
     void finishActionMode();
-    void actionSetEditVisible(boolean visible);
+    void actionModeSetEditVisible(boolean visible);
     void actionModeSetTitle(String title);
     void actionModeInvalidate();
     void setData(List<TrackedRun> data);

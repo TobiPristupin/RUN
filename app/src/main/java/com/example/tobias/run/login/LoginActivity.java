@@ -25,9 +25,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        GoogleAuthManager authManager = new GoogleAuthManager(LoginActivity.this);
-        signInOptions = authManager.getSignInOptions();
-        apiClient = authManager.getApiClient(LoginActivity.this, signInOptions, TAG);
+        signInOptions = GoogleAuthManager.getSignInOptions(LoginActivity.this);
+        apiClient = GoogleAuthManager.getApiClient(LoginActivity.this, signInOptions, TAG);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.login_viewpager);
         viewPager.setPageTransformer(false, new LoginPageTransformer());

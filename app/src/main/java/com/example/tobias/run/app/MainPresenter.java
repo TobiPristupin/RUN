@@ -26,7 +26,7 @@ public class MainPresenter {
     }
 
 
-    public void onCreateView(){
+    public void authenticate(){
         initAuthStateListener();
 
         if (!userLoggedIn()){

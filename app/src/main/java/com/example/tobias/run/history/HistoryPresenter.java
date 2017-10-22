@@ -27,10 +27,14 @@ public class HistoryPresenter implements Observer<TrackedRun>{
     }
 
     public void onDestroyView(){
-        //Desubscribe from database
+        //Desubscribe from model observers list
         model.detachObserver(this);
     }
 
+    /**
+     * Called from model to to update data
+     * @param data
+     */
     @Override
     public void updateData(List<TrackedRun> data) {
         trackedRunList.clear();
@@ -42,6 +46,10 @@ public class HistoryPresenter implements Observer<TrackedRun>{
         updateViewData();
     }
 
+    /**
+     * Filters current data according to view's filter and sends it to the view.
+     * Then finishes action mode in view and shows the view's empty view if needed.
+     */
     public void updateViewData(){
         String filter = view.getDataFilter();
         List<TrackedRun> filteredTrackedRuns = new ArrayList<>();
@@ -92,9 +100,9 @@ public class HistoryPresenter implements Observer<TrackedRun>{
 
         //Can't use edit functionality when more than on item is selected so disable.
         if (selectedItemCount > 1){
-            view.actionSetEditVisible(true);
+            view.actionModeSetEditVisible(true);
         } else {
-            view.actionSetEditVisible(false);
+            view.actionModeSetEditVisible(false);
         }
 
         view.actionModeSetTitle(String.valueOf(selectedItemCount));

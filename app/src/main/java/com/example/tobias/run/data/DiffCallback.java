@@ -6,7 +6,7 @@ import android.support.v7.util.DiffUtil;
 import java.util.List;
 
 /**
- * Created by Tobi on 9/16/2017.
+ * Uses Diff algorithm to calculate necessary updates to recycler view items when modifying data set.
  */
 
 public class DiffCallback extends DiffUtil.Callback {
