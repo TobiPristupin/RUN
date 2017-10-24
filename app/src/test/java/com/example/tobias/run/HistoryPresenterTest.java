@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import com.example.tobias.run.data.TrackedRun;
 import com.example.tobias.run.history.HistoryPresenter;
 import com.example.tobias.run.history.HistoryView;
-import com.example.tobias.run.interfaces.ObservableDatabase;
+import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.interfaces.Observer;
 
 import org.junit.Assert;

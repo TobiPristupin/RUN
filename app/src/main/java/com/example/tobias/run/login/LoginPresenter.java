@@ -4,8 +4,8 @@ package com.example.tobias.run.login;
 import android.util.Log;
 
 import com.example.tobias.run.interfaces.AuthCallbacks;
-import com.example.tobias.run.login.auth.AuthManager;
-import com.example.tobias.run.login.auth.FirebaseAuthManager;
+import com.example.tobias.run.auth.AuthManager;
+import com.example.tobias.run.auth.FirebaseAuthManager;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.firebase.auth.AuthCredential;
@@ -15,7 +15,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import org.apache.commons.validator.routines.EmailValidator;
 
 
-public class LoginPresenter implements AuthCallbacks.LoginCallback {
+public class LoginPresenter {
 
     private LoginView view;
     public static final String TAG = "LoginPresenter";
@@ -34,13 +34,31 @@ public class LoginPresenter implements AuthCallbacks.LoginCallback {
 
     public void attemptEmailLogin(String email, String password){
         AuthManager authManager = new FirebaseAuthManager();
-        if (validateFields(email, password)) {
+
+        if (fieldsAreValid(email, password)) {
             view.startLoadingAnimation();
-            authManager.logInWithEmailAndPassword(email, password, this);
+
+            authManager.logInWithEmailAndPassword(email, password, new AuthCallbacks.LoginCallback() {
+                @Override
+                public void onLoginSuccess() {
+                    view.stopLoadingAnimation();
+                    view.sendIntentMainActivity();
+                }
+
+                @Override
+                public void onLoginFailed(Exception e) {
+                    view.stopLoadingAnimation();
+                    if (e instanceof FirebaseAuthInvalidCredentialsException){
+                        view.setPasswordTextInputError(true, "Invalid Credentials");
+                    } else {
+                        view.showUnexpectedLoginErrorToast();
+                    }
+                }
+            });
         }
     }
 
-    public void attemptGoogleLogin(){
+    public void onGoogleLogInClick(){
         view.startLoadingAnimation();
         view.sendGoogleSignInIntent();
     }
@@ -80,23 +98,7 @@ public class LoginPresenter implements AuthCallbacks.LoginCallback {
         });
     }
 
-    @Override
-    public void onLoginSuccess() {
-        view.stopLoadingAnimation();
-        view.sendIntentMainActivity();
-    }
-
-    @Override
-    public void onLoginFailed(Exception e) {
-        view.stopLoadingAnimation();
-        if (e instanceof FirebaseAuthInvalidCredentialsException){
-            view.setPasswordTextInputError(true, "Invalid Credentials");
-        } else {
-            view.showUnexpectedLoginErrorToast();
-        }
-    }
-
-    public boolean validateFields(String email, String password){
+    public boolean fieldsAreValid(String email, String password){
         EmailValidator validator = EmailValidator.getInstance();
 
         if (email.isEmpty()){

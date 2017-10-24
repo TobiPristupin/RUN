@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
 import com.example.tobias.run.R;
+import com.example.tobias.run.auth.GoogleAuthUtils;
 import com.example.tobias.run.login.adapter.LoginFragmentPagerAdapter;
 import com.example.tobias.run.utils.LoginPageTransformer;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -25,8 +26,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        signInOptions = GoogleAuthManager.getSignInOptions(LoginActivity.this);
-        apiClient = GoogleAuthManager.getApiClient(LoginActivity.this, signInOptions, TAG);
+        signInOptions = GoogleAuthUtils.getSignInOptions(LoginActivity.this);
+        apiClient = GoogleAuthUtils.getApiClient(LoginActivity.this, signInOptions, TAG);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.login_viewpager);
         viewPager.setPageTransformer(false, new LoginPageTransformer());

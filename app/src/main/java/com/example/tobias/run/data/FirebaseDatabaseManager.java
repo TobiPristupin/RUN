@@ -2,7 +2,6 @@ package com.example.tobias.run.data;
 
 import android.util.Log;
 
-import com.example.tobias.run.interfaces.ObservableDatabase;
 import com.example.tobias.run.interfaces.Observer;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,7 +24,12 @@ public class FirebaseDatabaseManager implements ObservableDatabase<TrackedRun> {
     private List<TrackedRun> trackedRunList = new ArrayList<>();
     private static final String TAG = "FirebaseDatabaseManager";
 
-    public FirebaseDatabaseManager(){
+    /**
+     * Add listener to online database. When this method isn't called, observable functionality cannot be used
+     * because there won't be data to send. Database functionality may still be used without a query listener.
+     */
+    @Override
+    public void startQuery(){
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

@@ -2,7 +2,7 @@ package com.example.tobias.run.history;
 
 import com.example.tobias.run.data.TrackedRun;
 import com.example.tobias.run.data.TrackedRunPredicates;
-import com.example.tobias.run.interfaces.ObservableDatabase;
+import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.interfaces.Observer;
 import com.example.tobias.run.utils.TrackedRunUtils;
 
@@ -23,6 +23,7 @@ public class HistoryPresenter implements Observer<TrackedRun>{
     public HistoryPresenter(HistoryView view, ObservableDatabase<TrackedRun> model){
         this.view = view;
         this.model = model;
+        this.model.startQuery();
         model.attachObserver(this);
     }
 

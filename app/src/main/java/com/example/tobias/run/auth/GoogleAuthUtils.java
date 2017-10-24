@@ -1,4 +1,4 @@
-package com.example.tobias.run.login;
+package com.example.tobias.run.auth;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -18,7 +18,7 @@ import es.dmoral.toasty.Toasty;
  * Utils class for Google Sign In Auth process.
  */
 
-public class GoogleAuthManager {
+public class GoogleAuthUtils {
 
     public static GoogleSignInOptions getSignInOptions(Context context){
         GoogleSignInOptions googleSignIn = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

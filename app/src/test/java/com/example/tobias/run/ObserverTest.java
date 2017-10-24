@@ -1,6 +1,6 @@
 package com.example.tobias.run;
 
-import com.example.tobias.run.interfaces.ObservableDatabase;
+import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.interfaces.Observer;
 
 import org.junit.Assert;

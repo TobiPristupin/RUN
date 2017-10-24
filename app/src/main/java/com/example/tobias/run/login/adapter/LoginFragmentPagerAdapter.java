@@ -2,12 +2,11 @@ package com.example.tobias.run.login.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.example.tobias.run.login.ForgotPasswordFragment;
-import com.example.tobias.run.login.LoginFragment;
-import com.example.tobias.run.login.NewAccountFragment;
+import com.example.tobias.run.login.fragments.ForgotPasswordFragmentView;
+import com.example.tobias.run.login.fragments.LoginFragmentView;
+import com.example.tobias.run.login.fragments.NewAccountFragment;
 
 /**
  * Created by Tobi on 9/15/2017.
@@ -30,9 +29,9 @@ public class LoginFragmentPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case 0 :
-                return new ForgotPasswordFragment();
+                return new ForgotPasswordFragmentView();
             case 1 :
-                return new LoginFragment();
+                return new LoginFragmentView();
             case 2 :
                 return new NewAccountFragment();
             default :

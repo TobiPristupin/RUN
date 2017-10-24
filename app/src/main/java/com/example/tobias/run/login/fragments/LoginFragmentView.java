@@ -1,4 +1,4 @@
-package com.example.tobias.run.login;
+package com.example.tobias.run.login.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,11 +16,13 @@ import android.widget.Toast;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.app.MainActivityView;
+import com.example.tobias.run.login.LoginActivity;
+import com.example.tobias.run.login.LoginPresenter;
+import com.example.tobias.run.login.LoginView;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.firebase.auth.FirebaseAuth;
 
 import es.dmoral.toasty.Toasty;
 import mbanje.kurt.fabbutton.FabButton;
@@ -29,16 +31,14 @@ import mbanje.kurt.fabbutton.FabButton;
  * Created by Tobi on 9/15/2017.
  */
 
-public class LoginFragment extends Fragment implements LoginView {
+public class LoginFragmentView extends Fragment implements LoginView {
 
     private View rootView;
     private LoginPresenter presenter;
     private TextInputLayout emailLayout;
     private TextInputLayout passwordLayout;
-    private FirebaseAuth firebaseAuth;
     private FabButton fabButton;
     private static final int RC_SIGN_IN = 1516;
-    private static final String TAG = "LoginActivity";
 
     @Nullable
     @Override
@@ -49,11 +49,10 @@ public class LoginFragment extends Fragment implements LoginView {
 
         emailLayout = (TextInputLayout) rootView.findViewById(R.id.login_email);
         passwordLayout = (TextInputLayout) rootView.findViewById(R.id.login_password);
-        firebaseAuth = FirebaseAuth.getInstance();
         fabButton = (FabButton) rootView.findViewById(R.id.login_button);
 
         initLogInFab();
-        initTextInputs();
+        setTextInputErrorReset();
         initGoogleLogIn();
         initBottomButtons();
         return rootView;
@@ -128,7 +127,7 @@ public class LoginFragment extends Fragment implements LoginView {
         });
     }
 
-    private void initTextInputs(){
+    private void setTextInputErrorReset(){
         emailLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -166,7 +165,7 @@ public class LoginFragment extends Fragment implements LoginView {
         googleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.attemptGoogleLogin();
+                presenter.onGoogleLogInClick();
             }
         });
     }
