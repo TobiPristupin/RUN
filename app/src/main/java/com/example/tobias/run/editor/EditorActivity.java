@@ -1,6 +1,5 @@
 package com.example.tobias.run.editor;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -45,13 +44,16 @@ import es.dmoral.toasty.Toasty;
  * editing a run. This class shows different dialogs to input the data, and implements the onClickListener
  * for the positive button to retrieve the data
  */
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements EditorView {
 
     private final int DATE_DIALOG_ID = 999;
-    private static final String TAG = "EditorActivity";
-    private boolean isEditMode;
-    private TrackedRun trackedRun;
     private SharedPreferenceRepository preferenceManager;
+    private EditorPresenter presenter;
+
+    public static final String DISTANCE_KEY = "distance";
+    public static final String RATING_KEY = "rating";
+    public static final String TIME_KEY = "time";
+    public static final String DATE_KEY = "date";
 
 
     @Override
@@ -61,20 +63,14 @@ public class EditorActivity extends AppCompatActivity {
 
         initToolbar();
 
+        SharedPreferenceRepository preferenceRepository = new SharedPreferenceManager(EditorActivity.this);
+        presenter = new EditorPresenter(this, preferenceRepository);
         preferenceManager = new SharedPreferenceManager(EditorActivity.this);
 
         Intent intent = getIntent();
-        trackedRun = intent.getParcelableExtra(getString(R.string.trackedrun_intent_key));
+        TrackedRun trackedRun = intent.getParcelableExtra(getString(R.string.trackedrun_intent_key));
 
-        //If tracked run has been passed via intent, init edit mode.
-        if (trackedRun != null){
-            isEditMode = true;
-            setEditMode();
-        //If no tracked run has been passed, leave activity in "add new run" mode.
-        } else {
-            isEditMode = false;
-            trackedRun = new TrackedRun();
-        }
+        presenter.onCreateView(trackedRun);
 
         initDistanceField();
         initTimeField();
@@ -84,26 +80,56 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     @Override
+    public void setEditMode(TrackedRun tr) {
+        getSupportActionBar().setTitle("Edit Run");
+
+        String unit = preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        String distanceText;
+        if (unit.equals("km")){
+            distanceText = ConversionManager.distanceToString(tr.getDistanceKilometres(), unit);
+        } else {
+            distanceText = ConversionManager.distanceToString(tr.getDistanceMiles(), unit);
+        }
+
+        ((TextView) findViewById(R.id.editor_distance_text)).setText(distanceText);
+
+        String dateText = ConversionManager.dateToString(tr.getDate());
+        ((TextView) findViewById(R.id.editor_date_text)).setText(dateText);
+
+        String timeText = ConversionManager.timeToString(tr.getTime());
+        ((TextView) findViewById(R.id.editor_time_text)).setText(timeText);
+
+        ((TextView) findViewById(R.id.editor_rating_text)).setText(String.valueOf(tr.getRating()));
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                //If home button pressed close activity with no result.
+                //If exit  button pressed close activity with no result.
                 supportFinishAfterTransition();
                 break;
             case R.id.editor_save:
-                HashMap<String, String> values = retrieveDataFromViews();
-                if(isDataComplete(values)) {
-                    addRecord(values);
-                    Toasty.success(EditorActivity.this, "Successfully Added", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "Added record to database successfully.");
-                    finish();
-                } else {
-                    Toasty.warning(EditorActivity.this, "Fill in all the fields", Toast.LENGTH_SHORT).show();
-                    MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.error);
-                    mediaPlayer.start();
-                }
+                presenter.onSaveButtonPressed();
         }
+
         return true;
+
+    }
+
+    @Override
+    public void finishView() {
+        supportFinishAfterTransition();
+    }
+
+    @Override
+    public void showAddedRunSuccessfullyToast() {
+        Toasty.success(EditorActivity.this, "Successfully Added", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showInvalidFieldsToast() {
+        Toasty.warning(EditorActivity.this, "Fill in all the fields", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -112,60 +138,15 @@ public class EditorActivity extends AppCompatActivity {
         return true;
     }
 
-    /**
-     * Gets data inserted into views and adds it into database. If one of the fields hasn't been
-     * set, it returns false and exits without adding it.
-     */
-    private void addRecord(HashMap<String, String> values) {
-        FirebaseDatabaseManager databaseManager = new FirebaseDatabaseManager();
-
-        if (preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY).equals("km")){
-            float kmDistance = ConversionManager.distanceToFloat(values.get("distance"));
-            trackedRun.setDistanceKilometres(kmDistance);
-            trackedRun.setDistanceMiles(ConversionManager.kilometresToMiles(kmDistance));
-        } else {
-            float miDistance = ConversionManager.distanceToFloat(values.get("distance"));
-            trackedRun.setDistanceMiles(miDistance);
-            trackedRun.setDistanceKilometres(ConversionManager.milesToKilometers(miDistance));
-        }
-
-        trackedRun.setDate(ConversionManager.dateToUnix(values.get("date")));
-        trackedRun.setRating(Integer.valueOf(values.get("rating")));
-        trackedRun.setTime(ConversionManager.timeToUnix(values.get("time")));
-        trackedRun.setMilePace(ConversionManager.getPace(trackedRun.getDistanceMiles(), trackedRun.getTime()));
-        trackedRun.setKmPace(ConversionManager.getPace(trackedRun.getDistanceKilometres(), trackedRun.getTime()));
-
-        //If run hasn't been assigned an ID, it's a new run and has to be added to the database.
-        // IF run has been assigned an ID, run has been added to database previously and has to be updated with the new data.
-        if (isEditMode){
-            databaseManager.update(trackedRun);
-        } else {
-            databaseManager.add(trackedRun);
-        }
-    }
-
     //Retrieves text from distance, time, ... TextViews
-    private HashMap<String, String> retrieveDataFromViews(){
+    @Override
+    public HashMap<String, String> retrieveDataFromViews(){
         HashMap<String, String> data = new HashMap<>();
-        data.put("distance", ((TextView) findViewById(R.id.editor_distance_text)).getText().toString());
-        data.put("time", ((TextView) findViewById(R.id.editor_time_text)).getText().toString());
-        data.put("rating", ((TextView) findViewById(R.id.editor_rating_text)).getText().toString());
-        data.put("date", ((TextView) findViewById(R.id.editor_date_text)).getText().toString());
+        data.put(DISTANCE_KEY, ((TextView) findViewById(R.id.editor_distance_text)).getText().toString());
+        data.put(TIME_KEY, ((TextView) findViewById(R.id.editor_time_text)).getText().toString());
+        data.put(RATING_KEY, ((TextView) findViewById(R.id.editor_rating_text)).getText().toString());
+        data.put(DATE_KEY, ((TextView) findViewById(R.id.editor_date_text)).getText().toString());
         return data;
-    }
-
-    /**
-     * Checks if data retrieved is complete or is missing fields
-     * @param data
-     * @return
-     */
-    private boolean isDataComplete(HashMap<String, String> data){
-        for(String value : data.values()){
-            if (value.equals("None")){
-                return false;
-            }
-        }
-        return true;
     }
 
     public void initToolbar() {
@@ -175,28 +156,6 @@ public class EditorActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
-    }
-
-    private void setEditMode(){
-        getSupportActionBar().setTitle("Edit Run");
-
-        String unit = preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
-        String distanceText;
-        if (unit.equals("km")){
-            distanceText = ConversionManager.distanceToString(trackedRun.getDistanceKilometres(), unit);
-        } else {
-            distanceText = ConversionManager.distanceToString(trackedRun.getDistanceMiles(), unit);
-        }
-
-        ((TextView) findViewById(R.id.editor_distance_text)).setText(distanceText);
-
-        String dateText = ConversionManager.dateToString(trackedRun.getDate());
-        ((TextView) findViewById(R.id.editor_date_text)).setText(dateText);
-
-        String timeText = ConversionManager.timeToString(trackedRun.getTime());
-        ((TextView) findViewById(R.id.editor_time_text)).setText(timeText);
-
-        ((TextView) findViewById(R.id.editor_rating_text)).setText(String.valueOf(trackedRun.getRating()));
     }
 
     /**

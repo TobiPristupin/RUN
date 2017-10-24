@@ -31,11 +31,12 @@ public class DistanceDialog {
     private NumberPicker numberPickerDecimal;
     private onPositiveButtonListener listener;
     private Activity activity;
-    private SharedPreferenceRepository preferenceManager = new SharedPreferenceManager((Context) activity);
+    private SharedPreferenceRepository preferenceManager;
 
     public DistanceDialog(Activity activity, onPositiveButtonListener listener){
         this.activity = activity;
         this.listener = listener;
+        this.preferenceManager = new SharedPreferenceManager((Context) activity);
     }
 
     public AlertDialog makeDialog(Activity activity){

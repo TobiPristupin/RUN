@@ -43,7 +43,7 @@ import es.dmoral.toasty.Toasty;
  * Created by Tobi on 9/15/2017.
  */
 
-public class NewAccountFragment extends Fragment implements NewAccountView {
+public class NewAccountFragmentView extends Fragment implements NewAccountView {
 
     private View rootView;
     private TextInputLayout emailLayout;

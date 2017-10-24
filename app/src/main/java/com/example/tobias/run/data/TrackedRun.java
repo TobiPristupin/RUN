@@ -28,8 +28,8 @@ public class TrackedRun implements Parcelable {
         this.mTime = time;
         this.mDate = date;
         this.mRating = rating;
-        this.mMilePace = ConversionManager.getPace(mDistanceMiles, mTime);
-        this.mKilometrePace = ConversionManager.getPace(mDistanceKilometres, mTime);
+        this.mMilePace = ConversionManager.calculatePace(mDistanceMiles, mTime);
+        this.mKilometrePace = ConversionManager.calculatePace(mDistanceKilometres, mTime);
     }
 
     public TrackedRun(long date, float distanceKilometres, float distanceMiles, long time, int rating, String id){
@@ -38,8 +38,8 @@ public class TrackedRun implements Parcelable {
         this.mTime = time;
         this.mDate = date;
         this.mRating = rating;
-        this.mMilePace = ConversionManager.getPace(mDistanceMiles, mTime);
-        this.mKilometrePace = ConversionManager.getPace(mDistanceKilometres, mTime);
+        this.mMilePace = ConversionManager.calculatePace(mDistanceMiles, mTime);
+        this.mKilometrePace = ConversionManager.calculatePace(mDistanceKilometres, mTime);
         this.mID = id;
     }
 

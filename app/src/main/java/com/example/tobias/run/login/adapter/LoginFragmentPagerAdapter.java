@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.tobias.run.login.fragments.ForgotPasswordFragmentView;
 import com.example.tobias.run.login.fragments.LoginFragmentView;
-import com.example.tobias.run.login.fragments.NewAccountFragment;
+import com.example.tobias.run.login.fragments.NewAccountFragmentView;
 
 /**
  * Created by Tobi on 9/15/2017.
@@ -33,7 +33,7 @@ public class LoginFragmentPagerAdapter extends FragmentStatePagerAdapter {
             case 1 :
                 return new LoginFragmentView();
             case 2 :
-                return new NewAccountFragment();
+                return new NewAccountFragmentView();
             default :
                 return null;
         }

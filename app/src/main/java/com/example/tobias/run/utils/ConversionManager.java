@@ -112,7 +112,7 @@ public class ConversionManager {
      * @param unixTime time of run in unix timestamp format
      * @return pace per unit of distance in unix timestamp format
      */
-    public static long getPace(float distance, long unixTime){
+    public static long calculatePace(float distance, long unixTime){
         //Period is inputted time in millis and converts it to hh:mm:ss
         Period period = new Period(unixTime);
         float timeInSeconds = period.getHours() * 3600f + period.getMinutes() * 60f + period.getSeconds();
