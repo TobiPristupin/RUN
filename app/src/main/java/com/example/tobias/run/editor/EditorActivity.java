@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -147,6 +148,12 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
         data.put(RATING_KEY, ((TextView) findViewById(R.id.editor_rating_text)).getText().toString());
         data.put(DATE_KEY, ((TextView) findViewById(R.id.editor_date_text)).getText().toString());
         return data;
+    }
+
+    @Override
+    public void vibrate() {
+        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        vibrator.vibrate(100);
     }
 
     public void initToolbar() {

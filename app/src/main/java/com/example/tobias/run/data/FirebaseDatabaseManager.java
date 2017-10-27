@@ -43,7 +43,7 @@ public class FirebaseDatabaseManager implements ObservableDatabase<TrackedRun> {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.w(TAG, "Query error " + databaseError.getMessage());
             }
 
         });
@@ -59,7 +59,7 @@ public class FirebaseDatabaseManager implements ObservableDatabase<TrackedRun> {
     public void detachObserver(Observer o) {
         //remove method returns false if object is not present.
         if (!observerList.remove(o)){
-            Log.d(TAG, "Attempting to remove not subscribed observer");
+            Log.d(TAG, "Attempting to remove observer not subscribed");
         }
     }
 

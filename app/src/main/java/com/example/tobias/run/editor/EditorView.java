@@ -19,4 +19,6 @@ public interface EditorView {
     void showInvalidFieldsToast();
 
     void finishView();
+
+    void vibrate();
 }

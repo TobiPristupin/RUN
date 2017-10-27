@@ -51,8 +51,7 @@ public class EditorPresenter {
             view.finishView();
         } else {
             view.showInvalidFieldsToast();
-            //TODO: Vibration?
-            //TODO: Logging
+            view.vibrate();
         }
     }
 
