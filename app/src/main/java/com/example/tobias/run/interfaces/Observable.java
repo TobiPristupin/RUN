@@ -11,5 +11,4 @@ public interface Observable {
     void detachObserver(Observer o);
 
     void notifyUpdateObservers();
-
 }

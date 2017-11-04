@@ -30,7 +30,7 @@ import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.history.HistoryFragmentView;
 import com.example.tobias.run.login.LoginActivity;
 import com.example.tobias.run.settings.SettingsActivity;
-import com.example.tobias.run.stats.StatsFragment;
+import com.example.tobias.run.stats.StatsFragmentView;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -130,7 +130,7 @@ public class MainActivityView extends AppCompatActivity implements MainView {
                 break;
             //...
             case R.id.menu_stats :
-                newFragment = new StatsFragment();
+                newFragment = new StatsFragmentView();
                 break;
             //...
             case R.id.menu_settings :

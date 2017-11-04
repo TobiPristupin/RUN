@@ -83,13 +83,15 @@ public class EditorPresenter {
     }
 
     private void addRunToDatabase(){
-        ObservableDatabase<TrackedRun> database = new FirebaseDatabaseManager();
+        ObservableDatabase<TrackedRun> database = FirebaseDatabaseManager.getInstance();
         if (isInEditMode){
             database.update(trackedRun);
         } else {
             database.add(trackedRun);
         }
     }
+
+    //TODO: refactor https://softwareengineering.stackexchange.com/questions/312520/in-mvp-pattern-should-the-view-instantiate-a-model-object-based-on-ui-contents
 
 
 }

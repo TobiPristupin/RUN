@@ -130,7 +130,7 @@ public class TrackedRun implements Parcelable {
 
 
 
-    public void setDistanceKilometres(float distanceKilometres) {
+    public void setDistanceKilometres(float distanceKilometres){
         mDistanceKilometres = distanceKilometres;
     }
     public void setDistanceMiles(float distanceMiles){

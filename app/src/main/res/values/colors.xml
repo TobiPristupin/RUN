@@ -9,6 +9,7 @@
     <color name="iron">#CCCCCC</color>
     <color name="Purple">#9C27B0</color>
     <color name="Orange">#FF9800</color>
+    <color name="DarkPink">#880E4F</color>
     <color name="selectedColor">#e0e0e0</color>
     <color name="actionMode">#D32F2F</color>
 </resources>

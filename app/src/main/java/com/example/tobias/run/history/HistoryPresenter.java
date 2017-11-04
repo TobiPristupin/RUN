@@ -1,8 +1,8 @@
 package com.example.tobias.run.history;
 
+import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.data.TrackedRun;
 import com.example.tobias.run.data.TrackedRunPredicates;
-import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.interfaces.Observer;
 import com.example.tobias.run.utils.TrackedRunUtils;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Tobi on 10/20/2017.
  */
 
-public class HistoryPresenter implements Observer<TrackedRun>{
+public class HistoryPresenter implements Observer<List<TrackedRun>>{
 
 
     private HistoryView view;
@@ -27,7 +27,7 @@ public class HistoryPresenter implements Observer<TrackedRun>{
         model.attachObserver(this);
     }
 
-    public void onDestroyView(){
+    public void onDetachView(){
         //Desubscribe from model observers list
         model.detachObserver(this);
     }

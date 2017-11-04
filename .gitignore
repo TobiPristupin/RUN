@@ -7,6 +7,6 @@
 /build
 /captures
 .externalNativeBuild
-/javatests/
 
-/javatests/src/main/java/com/example/MyClass.java
+/javatest/
+

@@ -20,9 +20,19 @@ public class FirebaseDatabaseManager implements ObservableDatabase<TrackedRun> {
     private FirebaseUser user = firebaseAuth.getCurrentUser();
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/");
-    private List<Observer<TrackedRun>> observerList = new ArrayList<>();
+    private List<Observer<List<TrackedRun>>> observerList = new ArrayList<>();
     private List<TrackedRun> trackedRunList = new ArrayList<>();
     private static final String TAG = "FirebaseDatabaseManager";
+
+    private static FirebaseDatabaseManager instance = new FirebaseDatabaseManager();
+
+    private FirebaseDatabaseManager(){
+        //Private Singleton constructor
+    }
+
+    public static FirebaseDatabaseManager getInstance() {
+        return instance;
+    }
 
     /**
      * Add listener to online database. When this method isn't called, observable functionality cannot be used
@@ -65,7 +75,7 @@ public class FirebaseDatabaseManager implements ObservableDatabase<TrackedRun> {
 
     @Override
     public void notifyUpdateObservers() {
-        for (Observer<TrackedRun> observer : observerList){
+        for (Observer<List<TrackedRun>> observer : observerList){
             observer.updateData(trackedRunList);
         }
     }

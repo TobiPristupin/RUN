@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
@@ -33,10 +32,6 @@ import com.example.tobias.run.editor.EditorActivity;
 import com.example.tobias.run.history.adapter.HistoryRecyclerViewAdapter;
 import com.example.tobias.run.utils.VerticalDividerItemDecoration;
 import com.jaredrummler.materialspinner.MaterialSpinner;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.util.List;
 
@@ -77,7 +72,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_history, container, false);
 
-        presenter = new HistoryPresenter(this, new FirebaseDatabaseManager());
+        presenter = new HistoryPresenter(this, FirebaseDatabaseManager.getInstance());
 
         emptyViewImage = rootView.findViewById(R.id.history_empty_view_image);
         emptyViewHeader = rootView.findViewById(R.id.history_empty_view_header);
@@ -87,15 +82,14 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
         initRecyclerView();
         initDateSpinner();
         initFab();
-        initTopBar();
 
         return rootView;
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        presenter.onDestroyView();
+    public void onDetach() {
+        super.onDetach();
+        presenter.onDetachView();
     }
 
     private void initDateSpinner(){
@@ -123,6 +117,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
         recyclerView.getItemAnimator().setAddDuration(750);
         recyclerView.getItemAnimator().setRemoveDuration(500);
         adapter = new HistoryRecyclerViewAdapter(getContext(), new HistoryRecyclerViewAdapter.OnItemClicked() {
+
             @Override
             public void onClick(int position) {
                 if (actionMode != null){
@@ -192,12 +187,6 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
-    }
-
-    private void initTopBar(){
-        TextView currentMonthText = (TextView) rootView.findViewById(R.id.history_date_text);
-        DateTimeFormatter formatter = DateTimeFormat.forPattern("EEEE, MMMM d");
-        currentMonthText.setText(formatter.print(new DateTime()));
     }
 
     @Override
