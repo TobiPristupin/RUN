@@ -57,13 +57,13 @@ public class HistoryPresenter implements Observer<List<TrackedRun>>{
 
         switch (filter){
             case "Week" :
-                filteredTrackedRuns.addAll(TrackedRunUtils.filterRun(trackedRunList, TrackedRunPredicates.isRunFromWeek()));
+                filteredTrackedRuns.addAll(TrackedRunUtils.filterList(trackedRunList, TrackedRunPredicates.isRunFromWeek()));
                 break;
             case "Month" :
-                filteredTrackedRuns.addAll(TrackedRunUtils.filterRun(trackedRunList, TrackedRunPredicates.isRunFromMonth()));
+                filteredTrackedRuns.addAll(TrackedRunUtils.filterList(trackedRunList, TrackedRunPredicates.isRunFromMonth()));
                 break;
             case "Year" :
-                filteredTrackedRuns.addAll(TrackedRunUtils.filterRun(trackedRunList, TrackedRunPredicates.isRunFromYear()));
+                filteredTrackedRuns.addAll(TrackedRunUtils.filterList(trackedRunList, TrackedRunPredicates.isRunFromYear()));
                 break;
             case "All" :
                 filteredTrackedRuns.addAll(trackedRunList);

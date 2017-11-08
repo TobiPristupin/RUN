@@ -1,8 +1,6 @@
 package com.example.tobias.run.stats;
 
-import com.github.mikephil.charting.data.BarEntry;
-
-import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Tobi on 10/29/2017.
@@ -10,13 +8,13 @@ import java.util.List;
 
 public interface StatsMileageView {
 
-    void setGraphMonthData(List<BarEntry> data);
+    void setGraphMonthData(Map<Integer, Float> data);
 
-    void setGraph3MonthData(List<BarEntry> data);
+    void setGraph3MonthData(Map<Integer, Float> data);
 
-    void setGraph6MonthData(List<BarEntry> data);
+    void setGraph6MonthData(Map<Integer, Float> data);
 
-    void setGraphYearData(List<BarEntry> data);
+    void setGraphYearData(Map<Integer, Float> data);
 
     void setGraphMonthXLabel(String[] values);
 
@@ -25,4 +23,6 @@ public interface StatsMileageView {
     void setGraph6MonthXLabel(String[] values);
 
     void setGraphYearXLabel(String[] values);
+
+    void updateTotalMileageText(String value);
 }

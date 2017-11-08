@@ -12,13 +12,17 @@ import android.view.ViewGroup;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
+import com.example.tobias.run.data.SharedPreferenceManager;
+import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.utils.AxisValueFormatter;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -33,6 +37,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     private BarChart barChart6Month;
     private BarChart barChartYear;
     private StatsMileagePresenter presenter;
+    private SharedPreferenceRepository sharedPrefRepository;
 
     @Nullable
     @Override
@@ -44,7 +49,8 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
         barChart6Month = (BarChart) ChartFactory.getChart(getContext(), ChartsEnum.MILEAGE_BAR_CHART);
         barChartYear = (BarChart) ChartFactory.getChart(getContext(), ChartsEnum.MILEAGE_BAR_CHART);
 
-        presenter = new StatsMileagePresenter(this, FirebaseDatabaseManager.getInstance());
+        sharedPrefRepository = new SharedPreferenceManager(getContext());
+        presenter = new StatsMileagePresenter(this, FirebaseDatabaseManager.getInstance(), sharedPrefRepository);
         
         initTabLayout();
         
@@ -64,10 +70,15 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
         tabLayout.setupWithViewPager(viewPager);
     }
 
+    @Override
+    public void updateTotalMileageText(String value) {
+
+    }
 
     @Override
-    public void setGraphMonthData(List<BarEntry> data) {
-        BarDataSet barDataSet = new BarDataSet(data, "Distance");
+    public void setGraphMonthData(Map<Integer, Float> data) {
+        String unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        BarDataSet barDataSet = new BarDataSet(mapToBarEntry(data), "Distance (" + unit + ")");
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkPink));
 
@@ -76,8 +87,9 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     }
 
     @Override
-    public void setGraph3MonthData(List<BarEntry> data) {
-        BarDataSet barDataSet = new BarDataSet(data, "Distance");
+    public void setGraph3MonthData(Map<Integer, Float> data) {
+        String unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        BarDataSet barDataSet = new BarDataSet(mapToBarEntry(data), "Distance (" + unit + ")");
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkPink));
 
@@ -86,8 +98,9 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     }
 
     @Override
-    public void setGraph6MonthData(List<BarEntry> data) {
-        BarDataSet barDataSet = new BarDataSet(data, "Distance");
+    public void setGraph6MonthData(Map<Integer, Float> data) {
+        String unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        BarDataSet barDataSet = new BarDataSet(mapToBarEntry(data), "Distance (" + unit + ")");
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkPink));
 
@@ -96,13 +109,23 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     }
 
     @Override
-    public void setGraphYearData(List<BarEntry> data) {
-        BarDataSet barDataSet = new BarDataSet(data, "Distance");
+    public void setGraphYearData(Map<Integer, Float> data) {
+        String unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        BarDataSet barDataSet = new BarDataSet(mapToBarEntry(data), "Distance (" + unit + ")");
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkPink));
 
         barChartYear.setData(new BarData(barDataSet));
         barChartYear.invalidate();
+    }
+
+    private List<BarEntry> mapToBarEntry(Map<Integer, Float> data){
+        List<BarEntry> barEntries = new ArrayList<>();
+        for (Map.Entry<Integer, Float> entry : data.entrySet()){
+            barEntries.add(new BarEntry(entry.getKey(), entry.getValue()));
+        }
+
+        return barEntries;
     }
 
     @Override
@@ -117,12 +140,12 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
     @Override
     public void setGraph6MonthXLabel(String[] values) {
-
+        barChart6Month.getXAxis().setValueFormatter(new AxisValueFormatter(values));
     }
 
     @Override
     public void setGraphYearXLabel(String[] values) {
-
+        barChartYear.getXAxis().setValueFormatter(new AxisValueFormatter(values));
     }
 
     private class MileagePagerAdapter extends PagerAdapter {

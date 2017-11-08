@@ -62,7 +62,9 @@ public class FirebaseDatabaseManager implements ObservableDatabase<TrackedRun> {
 
     @Override
     public void attachObserver(Observer o) {
-        observerList.add(o);
+        if (!observerList.contains(o)){
+            observerList.add(o);
+        }
     }
 
     @Override

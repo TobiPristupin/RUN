@@ -1,6 +1,8 @@
 package com.example.tobias.run.utils;
 
+import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.data.TrackedRun;
+import com.example.tobias.run.data.TrackedRunPredicates;
 
 import org.apache.commons.collections.Predicate;
 
@@ -19,7 +21,7 @@ public class TrackedRunUtils {
      * @param predicate
      * @return filtered ArrayList
      */
-    public static List<TrackedRun> filterRun(List<TrackedRun> trackedRuns, Predicate predicate){
+    public static List<TrackedRun> filterList(List<TrackedRun> trackedRuns, Predicate predicate){
         List<TrackedRun> filteredList = new ArrayList<>();
         for (TrackedRun tr : trackedRuns){
             if (predicate.evaluate(tr)){
@@ -36,7 +38,24 @@ public class TrackedRunUtils {
      * @param end
      * @return mileage in unit according to shared preferences.
      */
-    public static double getMileageBetween(long start, long end){
-        return 1;
+    public static float getMileageBetween(long start, long end, List<TrackedRun> data, SharedPreferenceRepository sharedPref){
+        List<TrackedRun> filteredList = new ArrayList<>();
+        filteredList.addAll(filterList(data, TrackedRunPredicates.isRunBetween(start, end)));
+
+        float mileage = 0;
+
+        for (TrackedRun tr : filteredList){
+            if (getDistanceUnit(sharedPref).equals("km")){
+                mileage += tr.getDistanceKilometres();
+            } else {
+                mileage += tr.getDistanceMiles();
+            }
+        }
+
+        return mileage;
+    }
+
+    private static String getDistanceUnit(SharedPreferenceRepository sharedPref){
+        return sharedPref.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
     }
 }

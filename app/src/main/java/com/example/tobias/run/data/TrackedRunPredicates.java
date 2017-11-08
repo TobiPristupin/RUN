@@ -1,6 +1,6 @@
 package com.example.tobias.run.data;
 
-import com.example.tobias.run.utils.ConversionManager;
+import com.example.tobias.run.utils.DateUtils;
 
 import org.apache.commons.collections.Predicate;
 
@@ -10,13 +10,23 @@ import org.apache.commons.collections.Predicate;
 
 public class TrackedRunPredicates {
 
+    public static Predicate isRunBetween(final long start, final long end){
+        return new Predicate() {
+            @Override
+            public boolean evaluate(Object object) {
+                TrackedRun tr = (TrackedRun) object;
+                return tr.getDate() >= start && tr.getDate() <= end;
+            };
+        };
+    }
+
     public static Predicate isRunFromWeek(){
         return new Predicate() {
             @Override
             public boolean evaluate(Object object) {
                 TrackedRun tr = (TrackedRun) object;
-                return tr.getDate() >= ConversionManager.getStartOfWeek()
-                        && tr.getDate() <= ConversionManager.getEndOfWeek();
+                return tr.getDate() >= DateUtils.getStartOfWeek()
+                        && tr.getDate() <= DateUtils.getEndOfWeek();
             }
         };
     }
@@ -26,8 +36,8 @@ public class TrackedRunPredicates {
             @Override
             public boolean evaluate(Object object) {
                 TrackedRun tr = (TrackedRun) object;
-                return tr.getDate() >= ConversionManager.getStartOfCurrentMonth()
-                        && tr.getDate() <= ConversionManager.getEndOfMonth();
+                return tr.getDate() >= DateUtils.getStartOfCurrentMonth()
+                        && tr.getDate() <= DateUtils.getEndOfCurrentMonth();
             }
         };
     }
@@ -37,19 +47,19 @@ public class TrackedRunPredicates {
             @Override
             public boolean evaluate(Object object) {
                 TrackedRun tr = (TrackedRun) object;
-                return tr.getDate() >= ConversionManager.getStartOfYear()
-                        && tr.getDate() <= ConversionManager.getEndOfYear();
+                return tr.getDate() >= DateUtils.getStartOfYear()
+                        && tr.getDate() <= DateUtils.getEndOfYear();
             }
         };
     }
 
-    public static Predicate isRunFromPast2Months(){
+    public static Predicate isRunFromPast3Months(){
         return new Predicate() {
             @Override
             public boolean evaluate(Object object) {
                 TrackedRun tr = (TrackedRun) object;
-                return tr.getDate() >= ConversionManager.getStartOfMonthMinusMonths(2)
-                        && tr.getDate() <= ConversionManager.getEndOfMonth();
+                return tr.getDate() >= DateUtils.getStartOfMonthMinusMonths(2)
+                        && tr.getDate() <= DateUtils.getEndOfCurrentMonth();
             }
         };
     }
@@ -59,8 +69,19 @@ public class TrackedRunPredicates {
             @Override
             public boolean evaluate(Object object) {
                 TrackedRun tr = (TrackedRun) object;
-                return tr.getDate() >= ConversionManager.getStartOfMonthMinusMonths(minus)
-                        && tr.getDate() <= ConversionManager.getEndOfMonthMinusMonths(minus);
+                return tr.getDate() >= DateUtils.getStartOfMonthMinusMonths(minus)
+                        && tr.getDate() <= DateUtils.getEndOfMonthMinusMonths(minus);
+            }
+        };
+    }
+
+    public static Predicate isRunFromPast6Months(){
+        return new Predicate() {
+            @Override
+            public boolean evaluate(Object object) {
+                TrackedRun tr = (TrackedRun) object;
+                return tr.getDate() >= DateUtils.getStartOfMonthMinusMonths(5)
+                        && tr.getDate() <= DateUtils.getEndOfCurrentMonth();
             }
         };
     }
