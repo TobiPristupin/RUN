@@ -23,6 +23,4 @@ public interface StatsMileageView {
     void setGraph6MonthXLabel(String[] values);
 
     void setGraphYearXLabel(String[] values);
-
-    void updateTotalMileageText(String value);
 }

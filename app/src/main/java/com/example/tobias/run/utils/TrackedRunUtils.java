@@ -55,6 +55,15 @@ public class TrackedRunUtils {
         return mileage;
     }
 
+    public static float addMileage(float[] mileage){
+        float sum = 0;
+        for (float f : mileage){
+            sum += f;
+        }
+
+        return sum;
+    }
+
     private static String getDistanceUnit(SharedPreferenceRepository sharedPref){
         return sharedPref.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
     }

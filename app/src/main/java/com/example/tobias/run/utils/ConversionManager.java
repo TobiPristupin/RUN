@@ -5,6 +5,7 @@ import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Locale;
 
@@ -144,6 +145,18 @@ public class ConversionManager {
         }
 
         return paceText;
+    }
+
+    public static int roundNumber(float x, int decimalPlaces){
+        BigDecimal bd = new BigDecimal(Float.toString(x));
+        bd = bd.setScale(decimalPlaces, BigDecimal.ROUND_HALF_UP);
+        return bd.intValue();
+    }
+
+    public static int roundNumber(double x, int decimalPlaces){
+        BigDecimal bd = new BigDecimal(Double.toString(x));
+        bd = bd.setScale(decimalPlaces, BigDecimal.ROUND_HALF_UP);
+        return bd.intValue();
     }
 
     public static float kilometresToMiles(float km){

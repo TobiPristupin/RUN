@@ -32,10 +32,12 @@ import java.util.Map;
 public class StatsFragmentMileageView extends Fragment implements StatsMileageView {
 
     private View rootView;
+
     private BarChart barChartMonth;
     private BarChart barChart3Month;
     private BarChart barChart6Month;
     private BarChart barChartYear;
+
     private StatsMileagePresenter presenter;
     private SharedPreferenceRepository sharedPrefRepository;
 
@@ -44,13 +46,14 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_stats_mileage, container, false);
 
+        sharedPrefRepository = new SharedPreferenceManager(getContext());
+        presenter = new StatsMileagePresenter(this, FirebaseDatabaseManager.getInstance(), sharedPrefRepository);
+
         barChartMonth = (BarChart) ChartFactory.getChart(getContext(), ChartsEnum.MILEAGE_BAR_CHART);
         barChart3Month = (BarChart) ChartFactory.getChart(getContext(), ChartsEnum.MILEAGE_BAR_CHART);
         barChart6Month = (BarChart) ChartFactory.getChart(getContext(), ChartsEnum.MILEAGE_BAR_CHART);
         barChartYear = (BarChart) ChartFactory.getChart(getContext(), ChartsEnum.MILEAGE_BAR_CHART);
 
-        sharedPrefRepository = new SharedPreferenceManager(getContext());
-        presenter = new StatsMileagePresenter(this, FirebaseDatabaseManager.getInstance(), sharedPrefRepository);
         
         initTabLayout();
         
@@ -68,10 +71,6 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
         ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.stats_mileage_viewpager);
         viewPager.setAdapter(new MileagePagerAdapter());
         tabLayout.setupWithViewPager(viewPager);
-    }
-
-    @Override
-    public void updateTotalMileageText(String value) {
 
     }
 

@@ -43,15 +43,13 @@ public class StatsMileagePresenter implements Observer<List<TrackedRun>> {
         updateBarChartYear();
     }
 
-
     public void onDetachView(){
         model.detachObserver(this);
     }
 
     private void updateBarChartMonth(){
 
-        float mileageSum = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfCurrentMonth(),
-                DateUtils.getEndOfCurrentMonth(), trackedRunList, sharedPrefRepository);
+        float mileageSum = getMonthMileage();
 
         if (mileageSum != 0){
             Map<Integer, Float> barEntries = putValuesIntoHashMap(mileageSum);
@@ -64,14 +62,11 @@ public class StatsMileagePresenter implements Observer<List<TrackedRun>> {
     }
 
     private void updateBarChart3Month(){
-        float mileage2MonthsPrevious = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfMonthMinusMonths(2),
-                DateUtils.getEndOfMonthMinusMonths(2), trackedRunList, sharedPrefRepository);
+        float mileage2MonthsPrevious = get3MonthsMileage()[0];
 
-        float mileagePreviousMonth = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfMonthMinusMonths(1),
-                DateUtils.getEndOfMonthMinusMonths(1), trackedRunList, sharedPrefRepository);
+        float mileagePreviousMonth = get3MonthsMileage()[1];
 
-        float mileageMonth = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfCurrentMonth(),
-                DateUtils.getEndOfCurrentMonth(), trackedRunList, sharedPrefRepository);
+        float mileageMonth = get3MonthsMileage()[2];
 
         if (mileage2MonthsPrevious + mileagePreviousMonth + mileageMonth != 0){
             Map<Integer, Float> barEntries = putValuesIntoHashMap(mileage2MonthsPrevious, mileagePreviousMonth, mileageMonth);
@@ -88,15 +83,11 @@ public class StatsMileagePresenter implements Observer<List<TrackedRun>> {
     }
 
     private void updateBarChart6Months(){
-        float mileageMonths1To2 = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfMonthMinusMonths(5),
-                DateUtils.getEndOfMonthMinusMonths(4), trackedRunList, sharedPrefRepository);
+        float mileageMonths1To2 = get6MonthsMileage()[0];
 
-        float mileageMonths3To4 = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfMonthMinusMonths(3),
-                DateUtils.getEndOfMonthMinusMonths(2), trackedRunList, sharedPrefRepository);
+        float mileageMonths3To4 = get6MonthsMileage()[1];
 
-        float mileageMonths5To6 = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfMonthMinusMonths(1),
-                DateUtils.getEndOfCurrentMonth(), trackedRunList, sharedPrefRepository);
-
+        float mileageMonths5To6 = get6MonthsMileage()[2];
         if (mileageMonths1To2 + mileageMonths3To4 + mileageMonths5To6 != 0){
             Map<Integer, Float> barEntries = putValuesIntoHashMap(mileageMonths1To2, mileageMonths3To4, mileageMonths5To6);
             view.setGraph6MonthData(barEntries);
@@ -113,14 +104,11 @@ public class StatsMileagePresenter implements Observer<List<TrackedRun>> {
     }
 
     private void updateBarChartYear(){
-        float mileageMonths1To4 = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfYear(),
-                DateUtils.getStartOfYearPlusMonths(4), trackedRunList, sharedPrefRepository);
+        float mileageMonths1To4 = getYearMileage()[0];
 
-        float mileageMonths4To8 = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfYearPlusMonths(4),
-                DateUtils.getStartOfYearPlusMonths(8), trackedRunList, sharedPrefRepository);
+        float mileageMonths4To8 = getYearMileage()[1];
 
-        float mileageMonths8To12 = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfYearPlusMonths(8),
-                DateUtils.getEndOfYear(), trackedRunList, sharedPrefRepository);
+        float mileageMonths8To12 = getYearMileage()[2];
 
         if (mileageMonths1To4 + mileageMonths4To8 + mileageMonths8To12 != 0){
             Map<Integer, Float> barEntries = putValuesIntoHashMap(mileageMonths1To4, mileageMonths4To8, mileageMonths8To12);
@@ -135,6 +123,52 @@ public class StatsMileagePresenter implements Observer<List<TrackedRun>> {
         };
 
         view.setGraphYearXLabel(xAxisLabelValues);
+    }
+
+    private float getMonthMileage(){
+        float mileageSum = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfCurrentMonth(),
+                DateUtils.getEndOfCurrentMonth(), trackedRunList, sharedPrefRepository);
+
+        return mileageSum;
+    }
+
+    private float[] get3MonthsMileage(){
+        float mileage2MonthsPrevious = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfMonthMinusMonths(2),
+                DateUtils.getEndOfMonthMinusMonths(2), trackedRunList, sharedPrefRepository);
+
+        float mileagePreviousMonth = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfMonthMinusMonths(1),
+                DateUtils.getEndOfMonthMinusMonths(1), trackedRunList, sharedPrefRepository);
+
+        float mileageMonth = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfCurrentMonth(),
+                DateUtils.getEndOfCurrentMonth(), trackedRunList, sharedPrefRepository);
+
+        return new float[] {mileage2MonthsPrevious, mileagePreviousMonth, mileageMonth};
+    }
+
+    private float[] get6MonthsMileage(){
+        float mileageMonths1To2 = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfMonthMinusMonths(5),
+                DateUtils.getEndOfMonthMinusMonths(4), trackedRunList, sharedPrefRepository);
+
+        float mileageMonths3To4 = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfMonthMinusMonths(3),
+                DateUtils.getEndOfMonthMinusMonths(2), trackedRunList, sharedPrefRepository);
+
+        float mileageMonths5To6 = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfMonthMinusMonths(1),
+                DateUtils.getEndOfCurrentMonth(), trackedRunList, sharedPrefRepository);
+
+        return new float[] {mileageMonths1To2, mileageMonths3To4, mileageMonths5To6};
+    }
+
+    private float[] getYearMileage(){
+        float mileageMonths1To4 = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfYear(),
+                DateUtils.getStartOfYearPlusMonths(4), trackedRunList, sharedPrefRepository);
+
+        float mileageMonths4To8 = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfYearPlusMonths(4),
+                DateUtils.getStartOfYearPlusMonths(8), trackedRunList, sharedPrefRepository);
+
+        float mileageMonths8To12 = TrackedRunUtils.getMileageBetween(DateUtils.getStartOfYearPlusMonths(8),
+                DateUtils.getEndOfYear(), trackedRunList, sharedPrefRepository);
+
+        return new float[] {mileageMonths1To4, mileageMonths4To8, mileageMonths8To12};
     }
 
     /**
@@ -153,6 +187,10 @@ public class StatsMileagePresenter implements Observer<List<TrackedRun>> {
 
 
         return map;
+    }
+
+    private String getDistanceUnit(){
+        return sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
     }
 
 
