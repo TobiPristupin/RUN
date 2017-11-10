@@ -1,4 +1,4 @@
-package com.example.tobias.run.stats;
+package com.example.tobias.run.stats.mileage;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +14,8 @@ import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.SharedPreferenceManager;
 import com.example.tobias.run.data.SharedPreferenceRepository;
+import com.example.tobias.run.stats.ChartFactory;
+import com.example.tobias.run.stats.ChartsEnum;
 import com.example.tobias.run.utils.AxisValueFormatter;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;

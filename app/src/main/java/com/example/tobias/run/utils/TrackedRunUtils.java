@@ -1,5 +1,7 @@
 package com.example.tobias.run.utils;
 
+import android.support.annotation.Nullable;
+
 import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.data.TrackedRun;
 import com.example.tobias.run.data.TrackedRunPredicates;
@@ -67,4 +69,61 @@ public class TrackedRunUtils {
     private static String getDistanceUnit(SharedPreferenceRepository sharedPref){
         return sharedPref.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
     }
+
+    public static String getDistanceText(TrackedRun currentItem, SharedPreferenceRepository sharedPref){
+        String text;
+        String unit = getDistanceUnit(sharedPref);
+
+        if (unit.equals("km")){
+            text = ConversionManager.distanceToString(currentItem.getDistanceKilometres(), unit);
+        } else {
+            text = ConversionManager.distanceToString(currentItem.getDistanceMiles(), unit);
+        }
+
+        return text;
+    }
+
+    public static String getPaceText(TrackedRun currentItem, SharedPreferenceRepository sharedPref){
+        String text;
+        String unit = getDistanceUnit(sharedPref);
+
+        if (unit.equals("km")){
+            text = ConversionManager.paceToString(currentItem.getKmPace(), "km");
+        } else {
+            text = ConversionManager.paceToString(currentItem.getMilePace(), "mi");
+        }
+
+        return text;
+    }
+
+    /**
+     * Returns the fastest run (less time) given a distance.
+     * @param distanceKilometers
+     * @return Fastest run (less time)
+     */
+    public static @Nullable TrackedRun getFastestRun(float distanceKilometers, List<TrackedRun> list){
+        TrackedRun fastest = null;
+
+        for (TrackedRun trackedRun : list){
+
+            //Runs that have time 0 will not be counted
+            if (trackedRun.getTime() == 0){
+                continue;
+            }
+
+            if (trackedRun.getDistanceKilometres() != distanceKilometers){
+                continue;
+            }
+
+            if (fastest == null){
+                fastest = trackedRun;
+            } else if (trackedRun.getTime() < fastest.getTime()){
+                fastest = trackedRun;
+            }
+
+        }
+
+        return fastest;
+    }
+
 }

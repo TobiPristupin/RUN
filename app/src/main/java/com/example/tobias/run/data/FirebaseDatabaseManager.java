@@ -16,10 +16,6 @@ import java.util.List;
 
 public class FirebaseDatabaseManager implements ObservableDatabase<TrackedRun> {
 
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private FirebaseUser user = firebaseAuth.getCurrentUser();
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/");
     private List<Observer<List<TrackedRun>>> observerList = new ArrayList<>();
     private List<TrackedRun> trackedRunList = new ArrayList<>();
     private static final String TAG = "FirebaseDatabaseManager";
@@ -40,6 +36,11 @@ public class FirebaseDatabaseManager implements ObservableDatabase<TrackedRun> {
      */
     @Override
     public void startQuery(){
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        DatabaseReference databaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/");
+
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -84,6 +85,11 @@ public class FirebaseDatabaseManager implements ObservableDatabase<TrackedRun> {
 
     @Override
     public void add(TrackedRun data) {
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        DatabaseReference databaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/");
+
         DatabaseReference ref = databaseRef.push();
         data.setId(ref.getKey());
         ref.setValue(data);
@@ -91,11 +97,21 @@ public class FirebaseDatabaseManager implements ObservableDatabase<TrackedRun> {
 
     @Override
     public void remove(TrackedRun data) {
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        DatabaseReference databaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/");
+
         databaseRef.child(data.getId()).removeValue();
     }
 
     @Override
     public void update(TrackedRun data) {
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        DatabaseReference databaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/");
+
         databaseRef.child(data.getId()).setValue(data);
     }
 }

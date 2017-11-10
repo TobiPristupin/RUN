@@ -12,20 +12,20 @@
 
         <fragment
             android:id="@+id/stats_mileage_fragment"
-            android:name="com.example.tobias.run.stats.StatsFragmentMileageView"
+            android:name="com.example.tobias.run.stats.mileage.StatsFragmentMileageView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/StatsCardHeight"
             android:layout_margin="10dp" />
 
         <fragment
-            android:id="@+id/stats_mileage_fragment2"
-            android:name="com.example.tobias.run.stats.StatsFragmentMileageView"
+            android:id="@+id/stats_prs_fragment"
+            android:name="com.example.tobias.run.stats.personalrecords.StatsFragmentPrsView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/StatsCardHeight"
             android:layout_margin="10dp" />
         <fragment
             android:id="@+id/stats_mileage_fragment3"
-            android:name="com.example.tobias.run.stats.StatsFragmentMileageView"
+            android:name="com.example.tobias.run.stats.mileage.StatsFragmentMileageView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/StatsCardHeight"
             android:layout_margin="10dp" />

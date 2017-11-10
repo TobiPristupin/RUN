@@ -17,6 +17,7 @@ import com.example.tobias.run.data.SharedPreferenceManager;
 import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.data.TrackedRun;
 import com.example.tobias.run.utils.ConversionManager;
+import com.example.tobias.run.utils.TrackedRunUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +55,8 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         holder.ratingBar.setRating(trackedRun.getRating());
         holder.date.setText(ConversionManager.dateToString(trackedRun.getDate()));
         holder.time.setText(ConversionManager.timeToString(trackedRun.getTime()));
-        setDistanceText(trackedRun, holder);
-        setPaceText(trackedRun, holder);
+        holder.distance.setText(TrackedRunUtils.getDistanceText(trackedRun, preferenceManager));
+        holder.pace.setText(TrackedRunUtils.getPaceText(trackedRun, preferenceManager));
 
         if (isSelected(holder.getAdapterPosition())){
             holder.layout.setBackgroundColor(context.getResources().getColor(R.color.selectedColor));
@@ -85,26 +86,6 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         return this.trackedRuns;
     }
 
-    private void setDistanceText(TrackedRun currentItem, HistoryViewHolder holder){
-        String unit = preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
-        if (unit.equals("km")){
-            holder.distance.setText(ConversionManager.distanceToString(currentItem.getDistanceKilometres(), unit));
-        } else {
-            holder.distance.setText(ConversionManager.distanceToString(currentItem.getDistanceMiles(), unit));
-        }
-    }
-
-    private void setPaceText(TrackedRun currentItem, HistoryViewHolder holder){
-        String unit = preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
-        if (unit.equals("km")){
-            holder.pace.setText(ConversionManager.paceToString(currentItem.getKmPace(), "km"));
-        } else {
-            holder.pace.setText(ConversionManager.paceToString(currentItem.getMilePace(), "mi"));
-        }
-    }
-
-
-
     @Override
     public int getItemCount() {
         return this.trackedRuns.size();
@@ -121,12 +102,12 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
 
         public HistoryViewHolder(View view){
             super(view);
-            ratingBar = (RatingBar) view.findViewById(R.id.list_item_rating_bar);
-            distance = (TextView) view.findViewById(R.id.list_item_distance_text);
-            time = (TextView) view.findViewById(R.id.list_item_time_text);
-            date = (TextView) view.findViewById(R.id.list_item_date_text);
-            pace = (TextView) view.findViewById(R.id.list_item_pace_text);
-            layout = view.findViewById(R.id.list_item_layout);
+            ratingBar = (RatingBar) view.findViewById(R.id.history_list_item_rating_bar);
+            distance = (TextView) view.findViewById(R.id.history_list_item_distance_text);
+            time = (TextView) view.findViewById(R.id.history_list_item_time_text);
+            date = (TextView) view.findViewById(R.id.history_list_item_date_text);
+            pace = (TextView) view.findViewById(R.id.history_list_item_pace_text);
+            layout = view.findViewById(R.id.history_list_item_layout);
 
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);

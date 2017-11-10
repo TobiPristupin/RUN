@@ -5,6 +5,7 @@ android {
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.example.tobias.run"
+        multiDexEnabled true
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1

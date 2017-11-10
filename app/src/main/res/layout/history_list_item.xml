@@ -13,11 +13,11 @@
         android:layout_height="70dp"
         android:minHeight="?attr/listPreferredItemHeight"
         android:background="@android:color/white"
-        android:id="@+id/list_item_layout">
+        android:id="@+id/history_list_item_layout">
 
 
         <RatingBar
-            android:id="@+id/list_item_rating_bar"
+            android:id="@+id/history_list_item_rating_bar"
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             tools:rating="1" />
 
         <TextView
-            android:id="@+id/list_item_distance_text"
+            android:id="@+id/history_list_item_distance_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="2.34 km"
@@ -41,42 +41,42 @@
             android:layout_marginTop="8dp"
             tools:layout_constraintLeft_creator="1"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/list_item_rating_bar"
+            app:layout_constraintLeft_toRightOf="@+id/history_list_item_rating_bar"
             android:layout_marginLeft="0dp" />
 
         <TextView
-            android:id="@+id/list_item_time_text"
+            android:id="@+id/history_list_item_time_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="00:11:23"
             tools:layout_constraintTop_creator="1"
             tools:layout_constraintRight_creator="1"
-            app:layout_constraintRight_toRightOf="@+id/list_item_distance_text"
+            app:layout_constraintRight_toRightOf="@+id/history_list_item_distance_text"
             android:layout_marginTop="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/list_item_distance_text"
+            app:layout_constraintTop_toBottomOf="@+id/history_list_item_distance_text"
             tools:layout_constraintLeft_creator="1"
-            app:layout_constraintLeft_toLeftOf="@+id/list_item_distance_text" />
+            app:layout_constraintLeft_toLeftOf="@+id/history_list_item_distance_text" />
 
         <TextView
-            android:id="@+id/list_item_date_text"
+            android:id="@+id/history_list_item_date_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="Sun, 1/8/2017"
             android:layout_marginRight="16dp"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="0dp"
-            app:layout_constraintBaseline_toBaselineOf="@id/list_item_distance_text"/>
+            app:layout_constraintBaseline_toBaselineOf="@id/history_list_item_distance_text"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/list_item_pace_text"
+            android:id="@+id/history_list_item_pace_text"
             tools:text="7:40/mi"
             android:textColor="@android:color/black"
             android:textSize="15sp"
-            app:layout_constraintBaseline_toBaselineOf="@id/list_item_time_text"
+            app:layout_constraintBaseline_toBaselineOf="@id/history_list_item_time_text"
             android:layout_marginRight="8dp"
-            app:layout_constraintRight_toRightOf="@+id/list_item_date_text" />
+            app:layout_constraintRight_toRightOf="@+id/history_list_item_date_text" />
 
     </android.support.constraint.ConstraintLayout>
 
