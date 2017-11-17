@@ -73,6 +73,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewAnimator.setDisplayedChild(tab.getPosition());
+                ((BarChart) viewAnimator.getCurrentView()).animateXY(800, 800);
             }
 
             @Override
@@ -94,6 +95,9 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
         viewAnimator.addView(barChart3Month);
         viewAnimator.addView(barChart6Month);
         viewAnimator.addView(barChartYear);
+
+        viewAnimator.setInAnimation(getContext(), R.anim.fade_in);
+        viewAnimator.setOutAnimation(getContext(), R.anim.fade_out);
     }
 
     /**
