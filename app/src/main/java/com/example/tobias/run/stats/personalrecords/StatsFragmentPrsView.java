@@ -3,6 +3,7 @@ package com.example.tobias.run.stats.personalrecords;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.PersonalRecord;
+import com.example.tobias.run.utils.VerticalDividerItemDecoration;
 
 import java.util.List;
 
@@ -56,6 +58,10 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
         RecyclerView recyclerView = rootView.findViewById(R.id.stats_prs_recyclerview);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        VerticalDividerItemDecoration dividerItemDecoration = new VerticalDividerItemDecoration(20);
+        recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
 

@@ -2,7 +2,11 @@ package com.example.tobias.run.stats;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +21,7 @@ import com.example.tobias.run.R;
 public class StatsFragmentView extends Fragment {
 
     private View rootView;
+    private static final int TAB_COUNT = 3;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -32,7 +37,46 @@ public class StatsFragmentView extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_stats, container, false);
+        initViewPager();
         return rootView;
+    }
+
+    private void initViewPager(){
+        TabLayout tabLayout = rootView.findViewById(R.id.stats_tab_layout);
+        ViewPager viewPager = rootView.findViewById(R.id.stats_viewpager);
+        viewPager.setAdapter(new StatsPagerAdapter(getChildFragmentManager()));
+        viewPager.setOffscreenPageLimit(TAB_COUNT);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private class StatsPagerAdapter extends FragmentPagerAdapter {
+
+        private String[] TAB_TITLES = {"Mileage", "PR's", "Distribution"};
+
+        public StatsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0 :
+                    return new StatsFragmentMileageView();
+                default :
+                    return new StatsFragmentMileageView();
+            }
+
+        }
+
+        @Override
+        public int getCount() {
+            return TAB_COUNT;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return TAB_TITLES[position];
+        }
     }
 
 

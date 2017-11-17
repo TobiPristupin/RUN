@@ -16,9 +16,9 @@ public class PersonalRecordUtils {
     public static String getPaceText(PersonalRecord currentItem, SharedPreferenceRepository sharedPref){
         String paceText;
         if (getDistanceUnit(sharedPref).equals("mi")){
-            paceText = ConversionManager.paceToString(currentItem.getMilePace(), "mi");
+            paceText = ConversionUtils.paceToString(currentItem.getTrackedRun().getMilePace(), "mi");
         } else {
-            paceText = ConversionManager.paceToString(currentItem.getKilometerPace(), "km");
+            paceText = ConversionUtils.paceToString(currentItem.getTrackedRun().getKmPace(), "km");
         }
 
         return paceText;
@@ -28,24 +28,17 @@ public class PersonalRecordUtils {
         String text;
         String distanceUnit = getDistanceUnit(sharedPref);
 
-        if (currentItem.showDistanceAsValue()){
-            if (distanceUnit.equals("mi")){
-                text = ConversionManager.distanceToString(currentItem.getDistanceMiles(), "mi");
-            } else {
-                text = ConversionManager.distanceToString(currentItem.getDistanceKilometers(), "km");
-            }
+        if (distanceUnit.equals("mi")){
+            text = ConversionUtils.paceToString(currentItem.getTrackedRun().getMilePace(), "mi");
         } else {
-            if (distanceUnit.equals("mi")){
-                text = ConversionManager.paceToString(currentItem.getMilePace(), "mi");
-            } else {
-                text = ConversionManager.paceToString(currentItem.getKilometerPace(), "km");
-            }
+            text = ConversionUtils.paceToString(currentItem.getTrackedRun().getKmPace(), "km");
         }
+
 
         return text;
     }
 
     public static String getDateText(PersonalRecord personalRecord){
-        return ConversionManager.dateToString(personalRecord.getDate());
+        return ConversionUtils.dateToString(personalRecord.getTrackedRun().getDate());
     }
 }

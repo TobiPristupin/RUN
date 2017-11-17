@@ -3,13 +3,11 @@ package com.example.tobias.run.editor;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,14 +20,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.SharedPreferenceManager;
 import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.data.TrackedRun;
 import com.example.tobias.run.editor.dialog.DistanceDialog;
 import com.example.tobias.run.editor.dialog.RatingDialog;
 import com.example.tobias.run.editor.dialog.TimeDialog;
-import com.example.tobias.run.utils.ConversionManager;
+import com.example.tobias.run.utils.ConversionUtils;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -87,17 +84,17 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
         String unit = preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
         String distanceText;
         if (unit.equals("km")){
-            distanceText = ConversionManager.distanceToString(tr.getDistanceKilometres(), unit);
+            distanceText = ConversionUtils.distanceToString(tr.getDistanceKilometres(), unit);
         } else {
-            distanceText = ConversionManager.distanceToString(tr.getDistanceMiles(), unit);
+            distanceText = ConversionUtils.distanceToString(tr.getDistanceMiles(), unit);
         }
 
         ((TextView) findViewById(R.id.editor_distance_text)).setText(distanceText);
 
-        String dateText = ConversionManager.dateToString(tr.getDate());
+        String dateText = ConversionUtils.dateToString(tr.getDate());
         ((TextView) findViewById(R.id.editor_date_text)).setText(dateText);
 
-        String timeText = ConversionManager.timeToString(tr.getTime());
+        String timeText = ConversionUtils.timeToString(tr.getTime());
         ((TextView) findViewById(R.id.editor_time_text)).setText(timeText);
 
         ((TextView) findViewById(R.id.editor_rating_text)).setText(String.valueOf(tr.getRating()));

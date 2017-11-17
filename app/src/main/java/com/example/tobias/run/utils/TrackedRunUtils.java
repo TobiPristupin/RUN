@@ -75,9 +75,9 @@ public class TrackedRunUtils {
         String unit = getDistanceUnit(sharedPref);
 
         if (unit.equals("km")){
-            text = ConversionManager.distanceToString(currentItem.getDistanceKilometres(), unit);
+            text = ConversionUtils.distanceToString(currentItem.getDistanceKilometres(), unit);
         } else {
-            text = ConversionManager.distanceToString(currentItem.getDistanceMiles(), unit);
+            text = ConversionUtils.distanceToString(currentItem.getDistanceMiles(), unit);
         }
 
         return text;
@@ -88,9 +88,9 @@ public class TrackedRunUtils {
         String unit = getDistanceUnit(sharedPref);
 
         if (unit.equals("km")){
-            text = ConversionManager.paceToString(currentItem.getKmPace(), "km");
+            text = ConversionUtils.paceToString(currentItem.getKmPace(), "km");
         } else {
-            text = ConversionManager.paceToString(currentItem.getMilePace(), "mi");
+            text = ConversionUtils.paceToString(currentItem.getMilePace(), "mi");
         }
 
         return text;
@@ -111,7 +111,7 @@ public class TrackedRunUtils {
                 continue;
             }
 
-            if (trackedRun.getDistanceKilometres() != distanceKilometers){
+            if (ConversionUtils.round(trackedRun.getDistanceKilometres(), 1) != distanceKilometers){
                 continue;
             }
 

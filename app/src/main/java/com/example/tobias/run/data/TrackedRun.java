@@ -3,7 +3,7 @@ package com.example.tobias.run.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.tobias.run.utils.ConversionManager;
+import com.example.tobias.run.utils.ConversionUtils;
 import com.google.firebase.database.Exclude;
 
 /**
@@ -28,8 +28,8 @@ public class TrackedRun implements Parcelable {
         this.mTime = time;
         this.mDate = date;
         this.mRating = rating;
-        this.mMilePace = ConversionManager.calculatePace(mDistanceMiles, mTime);
-        this.mKilometrePace = ConversionManager.calculatePace(mDistanceKilometres, mTime);
+        this.mMilePace = ConversionUtils.calculatePace(mDistanceMiles, mTime);
+        this.mKilometrePace = ConversionUtils.calculatePace(mDistanceKilometres, mTime);
     }
 
     public TrackedRun(long date, float distanceKilometres, float distanceMiles, long time, int rating, String id){
@@ -38,8 +38,8 @@ public class TrackedRun implements Parcelable {
         this.mTime = time;
         this.mDate = date;
         this.mRating = rating;
-        this.mMilePace = ConversionManager.calculatePace(mDistanceMiles, mTime);
-        this.mKilometrePace = ConversionManager.calculatePace(mDistanceKilometres, mTime);
+        this.mMilePace = ConversionUtils.calculatePace(mDistanceMiles, mTime);
+        this.mKilometrePace = ConversionUtils.calculatePace(mDistanceKilometres, mTime);
         this.mID = id;
     }
 
@@ -64,13 +64,13 @@ public class TrackedRun implements Parcelable {
         if (obj == null || this.getClass() != obj.getClass()) return false;
 
         TrackedRun run = (TrackedRun) obj;
+
         if (!this.getId().equals(run.getId())) return false;
         if (this.getDate() != run.getDate()) return false;
         if (this.getDistanceKilometres() != run.getDistanceKilometres()) return false;
         if (this.getRating() != run.getRating()) return false;
         if (this.getTime() != run.getTime()) return false;
         //No need to check for mile or km pace because pace is computed off time and distance.
-
 
         return true;
     }
@@ -92,6 +92,68 @@ public class TrackedRun implements Parcelable {
         parcel.writeLong(mKilometrePace);
     }
 
+    public float getDistanceKilometres(){
+        return mDistanceKilometres;
+    }
+
+    public float getDistanceMiles(){
+        return mDistanceMiles;
+    }
+
+    public long getTime(){
+        return mTime;
+    }
+
+    public long getDate(){ return mDate; }
+
+    public int getRating(){
+        return mRating;
+    }
+
+    public String getId(){ return mID; }
+
+    public long getMilePace(){
+        return mMilePace;
+    }
+
+    public long getKmPace() {
+        return mKilometrePace;
+    }
+
+    public void setDistanceKilometres(float distanceKilometres){
+        mDistanceKilometres = distanceKilometres;
+    }
+
+    public void setDistanceMiles(float distanceMiles){
+        mDistanceMiles = distanceMiles;
+    }
+
+    public void setTime(long time){
+        mTime = time;
+    }
+
+    public void setDate(long date){
+        mDate = date;
+    }
+
+    public void setRating(int rating){
+        mRating = rating;
+    }
+
+    public void setId(String pushKey){
+        mID = pushKey;
+    }
+
+    public void setMilePace(long milePace){
+        mMilePace = milePace;
+    }
+
+    public void setKmPace(long kmPace) {
+        mKilometrePace = kmPace;
+    }
+
+
+
     @Exclude
     public static final Parcelable.Creator<TrackedRun> CREATOR = new Parcelable.Creator<TrackedRun>(){
 
@@ -106,54 +168,5 @@ public class TrackedRun implements Parcelable {
         }
 
     };
-
-    public float getDistanceKilometres(){
-        return mDistanceKilometres;
-    }
-    public float getDistanceMiles(){
-        return mDistanceMiles;
-    }
-    public long getTime(){
-        return mTime;
-    }
-    public long getDate(){ return mDate; }
-    public int getRating(){
-        return mRating;
-    }
-    public String getId(){ return mID; }
-    public long getMilePace(){
-        return mMilePace;
-    }
-    public long getKmPace() {
-        return mKilometrePace;
-    }
-
-
-
-    public void setDistanceKilometres(float distanceKilometres){
-        mDistanceKilometres = distanceKilometres;
-    }
-    public void setDistanceMiles(float distanceMiles){
-        mDistanceMiles = distanceMiles;
-    }
-    public void setTime(long time){
-        mTime = time;
-    }
-    public void setDate(long date){
-        mDate = date;
-    }
-    public void setRating(int rating){
-        mRating = rating;
-    }
-    public void setId(String pushKey){
-        mID = pushKey;
-    }
-    public void setMilePace(long milePace){
-        mMilePace = milePace;
-    }
-    public void setKmPace(long kmPace) {
-        mKilometrePace = kmPace;
-    }
-
 
 }

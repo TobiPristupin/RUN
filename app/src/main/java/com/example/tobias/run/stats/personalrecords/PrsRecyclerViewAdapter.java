@@ -54,9 +54,6 @@ public class PrsRecyclerViewAdapter extends RecyclerView.Adapter<PrsRecyclerView
             holder.pace.setText(PersonalRecordUtils.getPaceText(personalRecord, sharedPref));
         } else {
             holder.imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_circle_red));
-            holder.value.setText("N/A");
-            holder.date.setText("N/A");
-            holder.pace.setText("N/A");
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.tobias.run.stats.mileage;
+package com.example.tobias.run.stats;
 
 import java.util.Map;
 

@@ -6,13 +6,14 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Locale;
 
 /**
  * Utils class to handel conversions and formatting
  */
-public class ConversionManager {
+public class ConversionUtils {
 
     /**
      *
@@ -147,16 +148,10 @@ public class ConversionManager {
         return paceText;
     }
 
-    public static int roundNumber(float x, int decimalPlaces){
-        BigDecimal bd = new BigDecimal(Float.toString(x));
-        bd = bd.setScale(decimalPlaces, BigDecimal.ROUND_HALF_UP);
-        return bd.intValue();
-    }
-
-    public static int roundNumber(double x, int decimalPlaces){
-        BigDecimal bd = new BigDecimal(Double.toString(x));
-        bd = bd.setScale(decimalPlaces, BigDecimal.ROUND_HALF_UP);
-        return bd.intValue();
+    public static float round(float x, int decimalPlaces){
+        BigDecimal a = new BigDecimal(x);
+        BigDecimal roundOff = a.setScale(decimalPlaces, RoundingMode.HALF_EVEN);
+        return roundOff.floatValue();
     }
 
     public static float kilometresToMiles(float km){

@@ -6,7 +6,7 @@ import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.data.TrackedRun;
-import com.example.tobias.run.utils.ConversionManager;
+import com.example.tobias.run.utils.ConversionUtils;
 
 import java.util.HashMap;
 
@@ -66,20 +66,20 @@ public class EditorPresenter {
 
     private void setDataIntoTrackedRun(HashMap<String, String> data){
         if (preferenceRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY).equals("km")){
-            float kmDistance = ConversionManager.distanceToFloat(data.get("distance"));
+            float kmDistance = ConversionUtils.distanceToFloat(data.get("distance"));
             trackedRun.setDistanceKilometres(kmDistance);
-            trackedRun.setDistanceMiles(ConversionManager.kilometresToMiles(kmDistance));
+            trackedRun.setDistanceMiles(ConversionUtils.kilometresToMiles(kmDistance));
         } else {
-            float miDistance = ConversionManager.distanceToFloat(data.get("distance"));
+            float miDistance = ConversionUtils.distanceToFloat(data.get("distance"));
             trackedRun.setDistanceMiles(miDistance);
-            trackedRun.setDistanceKilometres(ConversionManager.milesToKilometers(miDistance));
+            trackedRun.setDistanceKilometres(ConversionUtils.milesToKilometers(miDistance));
         }
 
-        trackedRun.setDate(ConversionManager.dateToUnix(data.get("date")));
+        trackedRun.setDate(ConversionUtils.dateToUnix(data.get("date")));
         trackedRun.setRating(Integer.valueOf(data.get("rating")));
-        trackedRun.setTime(ConversionManager.timeToUnix(data.get("time")));
-        trackedRun.setMilePace(ConversionManager.calculatePace(trackedRun.getDistanceMiles(), trackedRun.getTime()));
-        trackedRun.setKmPace(ConversionManager.calculatePace(trackedRun.getDistanceKilometres(), trackedRun.getTime()));
+        trackedRun.setTime(ConversionUtils.timeToUnix(data.get("time")));
+        trackedRun.setMilePace(ConversionUtils.calculatePace(trackedRun.getDistanceMiles(), trackedRun.getTime()));
+        trackedRun.setKmPace(ConversionUtils.calculatePace(trackedRun.getDistanceKilometres(), trackedRun.getTime()));
     }
 
     private void addRunToDatabase(){

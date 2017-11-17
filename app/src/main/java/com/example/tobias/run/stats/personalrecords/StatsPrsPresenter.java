@@ -36,11 +36,22 @@ public class StatsPrsPresenter implements Observer<List<TrackedRun>> {
     public void updateData(List<TrackedRun> data) {
         List<PersonalRecord> personalRecords = new ArrayList<>();
 
-        TrackedRun fastest400m = TrackedRunUtils.getFastestRun(.4f, data);
-        if (fastest400m == null){
-            personalRecords.add(new PersonalRecord.Builder(false, "400 Meters", false).build());
+        personalRecords.add(generateRecordFromDistance("Fastest 400m", .4f, data));
+        personalRecords.add(generateRecordFromDistance("Fastest 1000m", 1f, data));
+        personalRecords.add(generateRecordFromDistance("Fastest 5K", 5f, data));
+        personalRecords.add(generateRecordFromDistance("Fastest 10K", 10f, data));
+        personalRecords.add(generateRecordFromDistance("Fastest Half", 21f, data));
+        personalRecords.add(generateRecordFromDistance("Fastest Marathon", 42f, data));
+
+        view.setData(personalRecords);
+    }
+
+    private PersonalRecord generateRecordFromDistance(String title, float distance, List<TrackedRun> data){
+        TrackedRun fastestRun = TrackedRunUtils.getFastestRun(distance, data);
+        if (fastestRun == null){
+            return PersonalRecord.createNotAchievedRecord(title);
         } else {
-            personalRecords.add(new PersonalRecord.Builder(true, "400 Meters", false).build());
+            return PersonalRecord.createAchievedRecord(title, fastestRun);
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.tobias.run.stats.mileage;
+package com.example.tobias.run.stats;
 
 import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.data.SharedPreferenceRepository;

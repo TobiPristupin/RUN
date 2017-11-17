@@ -16,7 +16,7 @@ import com.example.tobias.run.data.DiffCallback;
 import com.example.tobias.run.data.SharedPreferenceManager;
 import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.data.TrackedRun;
-import com.example.tobias.run.utils.ConversionManager;
+import com.example.tobias.run.utils.ConversionUtils;
 import com.example.tobias.run.utils.TrackedRunUtils;
 
 import java.util.ArrayList;
@@ -53,8 +53,8 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
     public void onBindViewHolder(final HistoryViewHolder holder, int position) {
         final TrackedRun trackedRun = trackedRuns.get(holder.getAdapterPosition());
         holder.ratingBar.setRating(trackedRun.getRating());
-        holder.date.setText(ConversionManager.dateToString(trackedRun.getDate()));
-        holder.time.setText(ConversionManager.timeToString(trackedRun.getTime()));
+        holder.date.setText(ConversionUtils.dateToString(trackedRun.getDate()));
+        holder.time.setText(ConversionUtils.timeToString(trackedRun.getTime()));
         holder.distance.setText(TrackedRunUtils.getDistanceText(trackedRun, preferenceManager));
         holder.pace.setText(TrackedRunUtils.getPaceText(trackedRun, preferenceManager));
 
