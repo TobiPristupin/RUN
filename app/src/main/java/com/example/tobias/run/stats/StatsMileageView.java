@@ -23,4 +23,12 @@ public interface StatsMileageView {
     void setGraph6MonthXLabel(String[] values);
 
     void setGraphYearXLabel(String[] values);
+
+    void setTotalDistanceMonth(String text);
+
+    void setTotalDistance3Months(String text);
+
+    void setTotalDistance6Months(String text);
+
+    void setTotalDistanceYear(String text);
 }

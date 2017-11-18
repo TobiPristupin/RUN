@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.example.tobias.run.R;
@@ -38,7 +39,15 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     private BarChart barChart3Month;
     private BarChart barChart6Month;
     private BarChart barChartYear;
+
+    private String monthTotalDistance;
+    private String month3TotalDistance;
+    private String month6TotalDistance;
+    private String yearTotalDistance;
+
     private ViewAnimator viewAnimator;
+    private TextView totalDistanceTextView;
+    private TabLayout tabLayout;
 
     private StatsMileagePresenter presenter;
     private SharedPreferenceRepository sharedPrefRepository;
@@ -52,6 +61,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
         barChart3Month = styleBarChart(new BarChart(getContext()));
         barChart6Month = styleBarChart(new BarChart(getContext()));
         barChartYear = styleBarChart(new BarChart(getContext()));
+        totalDistanceTextView = rootView.findViewById(R.id.stats_mileage_totaldistance_text);
 
         initViewAnimator();
         initTabLayout();
@@ -63,7 +73,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     }
 
     private void initTabLayout(){
-        TabLayout tabLayout = rootView.findViewById(R.id.stats_mileage_tablayout);
+        tabLayout = rootView.findViewById(R.id.stats_mileage_tablayout);
         tabLayout.addTab(tabLayout.newTab().setText("Month"));
         tabLayout.addTab(tabLayout.newTab().setText("3Months"));
         tabLayout.addTab(tabLayout.newTab().setText("6Months"));
@@ -74,6 +84,21 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
             public void onTabSelected(TabLayout.Tab tab) {
                 viewAnimator.setDisplayedChild(tab.getPosition());
                 ((BarChart) viewAnimator.getCurrentView()).animateXY(800, 800);
+
+                switch (tab.getPosition()){
+                    case 0 :
+                        totalDistanceTextView.setText(monthTotalDistance);
+                        break;
+                    case 1 :
+                        totalDistanceTextView.setText(month3TotalDistance);
+                        break;
+                    case 2 :
+                        totalDistanceTextView.setText(month6TotalDistance);
+                        break;
+                    case 3 :
+                        totalDistanceTextView.setText(yearTotalDistance);
+                        break;
+                }
             }
 
             @Override
@@ -86,7 +111,6 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
             }
         });
-
     }
 
     private void initViewAnimator(){
@@ -211,4 +235,36 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
         barChartYear.getXAxis().setValueFormatter(new AxisValueFormatter(values));
     }
 
+    @Override
+    public void setTotalDistanceMonth(String text) {
+        monthTotalDistance = text;
+        //TODO: This comment is hard to understand.
+        /*
+         * When fragment is created, it calls initTabLayout, which creates a listener that sets the total
+         * distance text view text to monthTotalDistance when the tab is switched to position 0. The issue is
+         * that onCreateView and initTabLayout are called before presenter has time to retrieve data from network, so
+         * monthTotalDistance has yet to be initialized, and therefore the text set in totalDistanceTextView is null.
+         * The following lines of code set the textview's text as soon as the presenter updates the monthTotalDistance value
+         * to workaround the issue.
+         *
+         */
+        if (tabLayout.getSelectedTabPosition() == 0){
+            totalDistanceTextView.setText(monthTotalDistance);
+        }
+    }
+
+    @Override
+    public void setTotalDistance3Months(String text) {
+        month3TotalDistance = text;
+    }
+
+    @Override
+    public void setTotalDistance6Months(String text) {
+        month6TotalDistance = text;
+    }
+
+    @Override
+    public void setTotalDistanceYear(String text) {
+        yearTotalDistance = text;
+    }
 }

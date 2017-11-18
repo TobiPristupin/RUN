@@ -41,10 +41,25 @@ public class StatsMileagePresenter implements Observer<List<TrackedRun>> {
         updateBarChart3Month();
         updateBarChart6Months();
         updateBarChartYear();
+        updateTotalDistanceText();
     }
 
     public void onDetachView(){
         model.detachObserver(this);
+    }
+
+    public void updateTotalDistanceText(){
+        String mileageMonth = (int) getMonthMileage() + " " + getDistanceUnit();
+        view.setTotalDistanceMonth(mileageMonth);
+
+        String mileage3Months = (int) TrackedRunUtils.addMileage(get3MonthsMileage()) + " " + getDistanceUnit();
+        view.setTotalDistance3Months(mileage3Months);
+
+        String mileage6Months = (int) TrackedRunUtils.addMileage(get6MonthsMileage()) + " " + getDistanceUnit();
+        view.setTotalDistance6Months(mileage6Months);
+
+        String mileageYear = (int) TrackedRunUtils.addMileage(getYearMileage()) + " " + getDistanceUnit();
+        view.setTotalDistanceYear(mileageYear);
     }
 
     private void updateBarChartMonth(){
