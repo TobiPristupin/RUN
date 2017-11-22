@@ -8,13 +8,13 @@ import org.apache.commons.collections.Predicate;
  * Created by Tobi on 9/21/2017.
  */
 
-public class TrackedRunPredicates {
+public class RunPredicates {
 
     public static Predicate isRunBetween(final long start, final long end){
         return new Predicate() {
             @Override
             public boolean evaluate(Object object) {
-                TrackedRun tr = (TrackedRun) object;
+                Run tr = (Run) object;
                 return tr.getDate() >= start && tr.getDate() <= end;
             };
         };
@@ -24,7 +24,7 @@ public class TrackedRunPredicates {
         return new Predicate() {
             @Override
             public boolean evaluate(Object object) {
-                TrackedRun tr = (TrackedRun) object;
+                Run tr = (Run) object;
                 return tr.getDate() >= DateUtils.getStartOfWeek()
                         && tr.getDate() <= DateUtils.getEndOfWeek();
             }
@@ -35,7 +35,7 @@ public class TrackedRunPredicates {
         return new Predicate() {
             @Override
             public boolean evaluate(Object object) {
-                TrackedRun tr = (TrackedRun) object;
+                Run tr = (Run) object;
                 return tr.getDate() >= DateUtils.getStartOfCurrentMonth()
                         && tr.getDate() <= DateUtils.getEndOfCurrentMonth();
             }
@@ -46,7 +46,7 @@ public class TrackedRunPredicates {
         return new Predicate() {
             @Override
             public boolean evaluate(Object object) {
-                TrackedRun tr = (TrackedRun) object;
+                Run tr = (Run) object;
                 return tr.getDate() >= DateUtils.getStartOfYear()
                         && tr.getDate() <= DateUtils.getEndOfYear();
             }
@@ -57,7 +57,7 @@ public class TrackedRunPredicates {
         return new Predicate() {
             @Override
             public boolean evaluate(Object object) {
-                TrackedRun tr = (TrackedRun) object;
+                Run tr = (Run) object;
                 return tr.getDate() >= DateUtils.getStartOfMonthMinusMonths(2)
                         && tr.getDate() <= DateUtils.getEndOfCurrentMonth();
             }
@@ -68,7 +68,7 @@ public class TrackedRunPredicates {
         return new Predicate() {
             @Override
             public boolean evaluate(Object object) {
-                TrackedRun tr = (TrackedRun) object;
+                Run tr = (Run) object;
                 return tr.getDate() >= DateUtils.getStartOfMonthMinusMonths(minus)
                         && tr.getDate() <= DateUtils.getEndOfMonthMinusMonths(minus);
             }
@@ -79,7 +79,7 @@ public class TrackedRunPredicates {
         return new Predicate() {
             @Override
             public boolean evaluate(Object object) {
-                TrackedRun tr = (TrackedRun) object;
+                Run tr = (Run) object;
                 return tr.getDate() >= DateUtils.getStartOfMonthMinusMonths(5)
                         && tr.getDate() <= DateUtils.getEndOfCurrentMonth();
             }

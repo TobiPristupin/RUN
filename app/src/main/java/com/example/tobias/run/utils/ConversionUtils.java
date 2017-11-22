@@ -109,21 +109,6 @@ public class ConversionUtils {
 
     /**
      *
-     * @param distance distance in any format.
-     * @param unixTime time of run in unix timestamp format
-     * @return pace per unit of distance in unix timestamp format
-     */
-    public static long calculatePace(float distance, long unixTime){
-        //Period is inputted time in millis and converts it to hh:mm:ss
-        Period period = new Period(unixTime);
-        float timeInSeconds = period.getHours() * 3600f + period.getMinutes() * 60f + period.getSeconds();
-        float pace = timeInSeconds / distance;
-        //Multiply pace by 1000 to convert it to millis from seconds.
-        return (long) pace * 1000;
-    }
-
-    /**
-     *
      * @param paceTimeUnix pace in unix timestamp form
      * @param unit
      * @return pace in format mm:ss/unit or hh:mm:ss/unit if the pace contains hours.
@@ -148,20 +133,15 @@ public class ConversionUtils {
         return paceText;
     }
 
+    public static int ratingToInt(String rating){
+        return Integer.valueOf(rating);
+    }
+
     public static float round(float x, int decimalPlaces){
         BigDecimal a = new BigDecimal(x);
         BigDecimal roundOff = a.setScale(decimalPlaces, RoundingMode.HALF_EVEN);
         return roundOff.floatValue();
     }
-
-    public static float kilometresToMiles(float km){
-        return km * 0.621371f;
-    }
-
-    public static float milesToKilometers(float mi){
-        return mi * 1.60934f;
-    }
-
 
 
 }

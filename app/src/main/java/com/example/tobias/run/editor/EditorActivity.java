@@ -20,20 +20,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tobias.run.R;
+import com.example.tobias.run.data.Run;
 import com.example.tobias.run.data.SharedPreferenceManager;
 import com.example.tobias.run.data.SharedPreferenceRepository;
-import com.example.tobias.run.data.TrackedRun;
 import com.example.tobias.run.editor.dialog.DistanceDialog;
 import com.example.tobias.run.editor.dialog.RatingDialog;
 import com.example.tobias.run.editor.dialog.TimeDialog;
-import com.example.tobias.run.utils.ConversionUtils;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Calendar;
-import java.util.HashMap;
 
 import es.dmoral.toasty.Toasty;
 
@@ -48,12 +46,6 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
     private SharedPreferenceRepository preferenceManager;
     private EditorPresenter presenter;
 
-    public static final String DISTANCE_KEY = "distance";
-    public static final String RATING_KEY = "rating";
-    public static final String TIME_KEY = "time";
-    public static final String DATE_KEY = "date";
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,38 +58,15 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
         preferenceManager = new SharedPreferenceManager(EditorActivity.this);
 
         Intent intent = getIntent();
-        TrackedRun trackedRun = intent.getParcelableExtra(getString(R.string.trackedrun_intent_key));
+        Run run = intent.getParcelableExtra(getString(R.string.run_intent_key));
 
-        presenter.onCreateView(trackedRun);
+        presenter.onCreateView(run);
 
         initDistanceField();
         initTimeField();
         initDateField();
         initRatingField();
         animateViewsEntrance();
-    }
-
-    @Override
-    public void setEditMode(TrackedRun tr) {
-        getSupportActionBar().setTitle("Edit Run");
-
-        String unit = preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
-        String distanceText;
-        if (unit.equals("km")){
-            distanceText = ConversionUtils.distanceToString(tr.getDistanceKilometres(), unit);
-        } else {
-            distanceText = ConversionUtils.distanceToString(tr.getDistanceMiles(), unit);
-        }
-
-        ((TextView) findViewById(R.id.editor_distance_text)).setText(distanceText);
-
-        String dateText = ConversionUtils.dateToString(tr.getDate());
-        ((TextView) findViewById(R.id.editor_date_text)).setText(dateText);
-
-        String timeText = ConversionUtils.timeToString(tr.getTime());
-        ((TextView) findViewById(R.id.editor_time_text)).setText(timeText);
-
-        ((TextView) findViewById(R.id.editor_rating_text)).setText(String.valueOf(tr.getRating()));
     }
 
     @Override
@@ -136,15 +105,49 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
         return true;
     }
 
-    //Retrieves text from distance, time, ... TextViews
     @Override
-    public HashMap<String, String> retrieveDataFromViews(){
-        HashMap<String, String> data = new HashMap<>();
-        data.put(DISTANCE_KEY, ((TextView) findViewById(R.id.editor_distance_text)).getText().toString());
-        data.put(TIME_KEY, ((TextView) findViewById(R.id.editor_time_text)).getText().toString());
-        data.put(RATING_KEY, ((TextView) findViewById(R.id.editor_rating_text)).getText().toString());
-        data.put(DATE_KEY, ((TextView) findViewById(R.id.editor_date_text)).getText().toString());
-        return data;
+    public void setDistanceText(String text) {
+        ((TextView) findViewById(R.id.editor_distance_text)).setText(text);
+    }
+
+    @Override
+    public void setDateText(String text) {
+        ((TextView) findViewById(R.id.editor_date_text)).setText(text);
+    }
+
+    @Override
+    public void setTimeText(String text) {
+        ((TextView) findViewById(R.id.editor_time_text)).setText(text);
+    }
+
+    @Override
+    public void setRatingText(String text) {
+        ((TextView) findViewById(R.id.editor_rating_text)).setText(text);
+    }
+
+    @Override
+    public void setSupportActionBarTitle(String text) {
+        getSupportActionBar().setTitle(text);
+    }
+
+    @Override
+    public String getDistanceText() {
+        return ((TextView) findViewById(R.id.editor_distance_text)).getText().toString();
+    }
+
+    @Override
+    public String getDateText() {
+        return ((TextView) findViewById(R.id.editor_date_text)).getText().toString();
+    }
+
+    @Override
+    public String getTimeText() {
+        return ((TextView) findViewById(R.id.editor_time_text)).getText().toString();
+    }
+
+    @Override
+    public String getRatingText() {
+        return ((TextView) findViewById(R.id.editor_rating_text)).getText().toString();
     }
 
     @Override

@@ -4,11 +4,9 @@ import android.support.annotation.Nullable;
 
 import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.ObservableDatabase;
+import com.example.tobias.run.data.Run;
 import com.example.tobias.run.data.SharedPreferenceRepository;
-import com.example.tobias.run.data.TrackedRun;
 import com.example.tobias.run.utils.ConversionUtils;
-
-import java.util.HashMap;
 
 /**
  * Created by Tobi on 10/23/2017.
@@ -17,9 +15,9 @@ import java.util.HashMap;
 public class EditorPresenter {
 
     private EditorView view;
-    private TrackedRun trackedRun;
+    private Run runToEdit;
+    private boolean editMode;
     private SharedPreferenceRepository preferenceRepository;
-    private boolean isInEditMode = false;
 
     public EditorPresenter(EditorView view, SharedPreferenceRepository preferenceRepository) {
         this.view = view;
@@ -27,36 +25,63 @@ public class EditorPresenter {
     }
 
     /**
-     * If TrackedRun was passed, that means intent for activity was sent with a TrackedRun
-     * that should be edited. If trackedRunToEdit is null, a new TrackedRun should be created
+     * If Run was passed, that means intent for activity was sent with a Run
+     * that should be edited. If runToEdit is null, a new Run should be created
      * instead of modifying an existing one.
-     * @param trackedRunToEdit
+     * @param runToEdit
      */
-    public void onCreateView(@Nullable TrackedRun trackedRunToEdit){
-        if (trackedRunToEdit != null){
-            trackedRun = trackedRunToEdit;
-            view.setEditMode(trackedRun);
-            isInEditMode = true;
-        } else {
-            trackedRun = new TrackedRun();
+    public void onCreateView(@Nullable Run runToEdit){
+        if (runToEdit != null) {
+            this.runToEdit = runToEdit;
+            editMode = true;
+            setViewEditMode();
         }
+    }
+
+    private void setViewEditMode(){
+        String unit = preferenceRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+
+        String distanceText = ConversionUtils.distanceToString(runToEdit.getDistance(unit), unit);
+        view.setDistanceText(distanceText);
+
+        String dateText = ConversionUtils.dateToString(runToEdit.getDate());
+        view.setDateText(dateText);
+
+        String timeText = ConversionUtils.timeToString(runToEdit.getTime());
+        view.setTimeText(timeText);
+
+        view.setRatingText(String.valueOf(runToEdit.getRating()));
+
+        view.setSupportActionBarTitle("Edit Run");
     }
 
     public void onSaveButtonPressed(){
-        HashMap<String, String> data = view.retrieveDataFromViews();
-        if (isValid(data)){
-            setDataIntoTrackedRun(data);
-            addRunToDatabase();
-            view.showAddedRunSuccessfullyToast();
-            view.finishView();
-        } else {
+        String distanceText = view.getDistanceText();
+        String timeText = view.getTimeText();
+        String ratingText = view.getRatingText();
+        String dateText = view.getDateText();
+
+        if (!isValid(distanceText, timeText, ratingText, dateText)) {
             view.showInvalidFieldsToast();
             view.vibrate();
+            return;
         }
+
+        Run run;
+
+        if (editMode){
+            run = putDataIntoExistingRun(distanceText, ratingText, timeText, dateText);
+        } else {
+            run = createRunFromData(distanceText, ratingText, timeText, dateText);
+        }
+
+        addRunToDatabase(run);
+        view.showAddedRunSuccessfullyToast();
+        view.finishView();
     }
 
-    private boolean isValid(HashMap<String, String> data){
-        for(String value : data.values()){
+    private boolean isValid(String... values){
+        for(String value : values){
             if (value == null || value.equals("None")){
                 return false;
             }
@@ -64,34 +89,33 @@ public class EditorPresenter {
         return true;
     }
 
-    private void setDataIntoTrackedRun(HashMap<String, String> data){
-        if (preferenceRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY).equals("km")){
-            float kmDistance = ConversionUtils.distanceToFloat(data.get("distance"));
-            trackedRun.setDistanceKilometres(kmDistance);
-            trackedRun.setDistanceMiles(ConversionUtils.kilometresToMiles(kmDistance));
+    private Run createRunFromData(String distanceText, String ratingText, String timeText, String dateText){
+        Run run;
+        if (distanceText.contains("km")){
+            run = Run.withKilometers(dateText, distanceText, timeText, ratingText);
         } else {
-            float miDistance = ConversionUtils.distanceToFloat(data.get("distance"));
-            trackedRun.setDistanceMiles(miDistance);
-            trackedRun.setDistanceKilometres(ConversionUtils.milesToKilometers(miDistance));
+            run = Run.withMiles(dateText, distanceText, timeText, ratingText);
         }
 
-        trackedRun.setDate(ConversionUtils.dateToUnix(data.get("date")));
-        trackedRun.setRating(Integer.valueOf(data.get("rating")));
-        trackedRun.setTime(ConversionUtils.timeToUnix(data.get("time")));
-        trackedRun.setMilePace(ConversionUtils.calculatePace(trackedRun.getDistanceMiles(), trackedRun.getTime()));
-        trackedRun.setKmPace(ConversionUtils.calculatePace(trackedRun.getDistanceKilometres(), trackedRun.getTime()));
+        return run;
     }
 
-    private void addRunToDatabase(){
-        ObservableDatabase<TrackedRun> database = FirebaseDatabaseManager.getInstance();
-        if (isInEditMode){
-            database.update(trackedRun);
+    private Run putDataIntoExistingRun(String distanceText, String ratingText, String timeText, String dateText){
+        runToEdit.setDistance(distanceText);
+        runToEdit.setRating(ratingText);
+        runToEdit.setTime(timeText);
+        runToEdit.setDate(dateText);
+        return runToEdit;
+    }
+
+
+    private void addRunToDatabase(Run run){
+        ObservableDatabase<Run> database = FirebaseDatabaseManager.getInstance();
+        if (editMode){
+            database.update(run);
         } else {
-            database.add(trackedRun);
+            database.add(run);
         }
     }
-
-    //TODO: refactor https://softwareengineering.stackexchange.com/questions/312520/in-mvp-pattern-should-the-view-instantiate-a-model-object-based-on-ui-contents
-
 
 }

@@ -27,7 +27,7 @@ import android.widget.RelativeLayout;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
-import com.example.tobias.run.data.TrackedRun;
+import com.example.tobias.run.data.Run;
 import com.example.tobias.run.editor.EditorActivity;
 import com.example.tobias.run.history.adapter.HistoryRecyclerViewAdapter;
 import com.example.tobias.run.utils.VerticalDividerItemDecoration;
@@ -220,7 +220,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
      * @param data
      */
     @Override
-    public void setData(List<TrackedRun> data) {
+    public void setData(List<Run> data) {
         adapter.updateItems(data);
     }
 
@@ -284,11 +284,11 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     }
 
     @Override
-    public void sendIntentEditorActivity(@Nullable TrackedRun runToEdit) {
+    public void sendIntentEditorActivity(@Nullable Run runToEdit) {
         Intent intent = new Intent(getContext(), EditorActivity.class);
 
         if (runToEdit != null){
-            intent.putExtra(getString(R.string.trackedrun_intent_key), runToEdit);
+            intent.putExtra(getString(R.string.run_intent_key), runToEdit);
         }
 
         startActivity(intent);

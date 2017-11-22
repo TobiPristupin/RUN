@@ -2,7 +2,7 @@ package com.example.tobias.run.history;
 
 import android.support.annotation.Nullable;
 
-import com.example.tobias.run.data.TrackedRun;
+import com.example.tobias.run.data.Run;
 
 import java.util.List;
 
@@ -16,11 +16,11 @@ public interface HistoryView {
     void actionModeSetEditVisible(boolean visible);
     void actionModeSetTitle(String title);
     void actionModeInvalidate();
-    void setData(List<TrackedRun> data);
+    void setData(List<Run> data);
     boolean adapterIsDataSetEmpty();
     String getDataFilter();
     void showEmptyView(boolean longMessage);
     void removeEmptyView();
     void showDeleteDialog(List<Integer> selectedItems);
-    void sendIntentEditorActivity(@Nullable TrackedRun runToEdit);
+    void sendIntentEditorActivity(@Nullable Run runToEdit);
 }

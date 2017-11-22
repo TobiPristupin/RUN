@@ -1,10 +1,10 @@
 package com.example.tobias.run.history;
 
 import com.example.tobias.run.data.ObservableDatabase;
-import com.example.tobias.run.data.TrackedRun;
-import com.example.tobias.run.data.TrackedRunPredicates;
+import com.example.tobias.run.data.Run;
+import com.example.tobias.run.data.RunPredicates;
 import com.example.tobias.run.interfaces.Observer;
-import com.example.tobias.run.utils.TrackedRunUtils;
+import com.example.tobias.run.utils.RunUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,14 +13,14 @@ import java.util.List;
  * Created by Tobi on 10/20/2017.
  */
 
-public class HistoryPresenter implements Observer<List<TrackedRun>>{
+public class HistoryPresenter implements Observer<List<Run>>{
 
 
     private HistoryView view;
-    private List<TrackedRun> trackedRunList = new ArrayList<>();
-    private ObservableDatabase<TrackedRun> model;
+    private List<Run> runList = new ArrayList<>();
+    private ObservableDatabase<Run> model;
 
-    public HistoryPresenter(HistoryView view, ObservableDatabase<TrackedRun> model){
+    public HistoryPresenter(HistoryView view, ObservableDatabase<Run> model){
         this.view = view;
         this.model = model;
         this.model.startQuery();
@@ -37,9 +37,9 @@ public class HistoryPresenter implements Observer<List<TrackedRun>>{
      * @param data
      */
     @Override
-    public void updateData(List<TrackedRun> data) {
-        trackedRunList.clear();
-        trackedRunList.addAll(data);
+    public void updateData(List<Run> data) {
+        runList.clear();
+        runList.addAll(data);
         updateViewData();
     }
 
@@ -53,29 +53,29 @@ public class HistoryPresenter implements Observer<List<TrackedRun>>{
      */
     public void updateViewData(){
         String filter = view.getDataFilter();
-        List<TrackedRun> filteredTrackedRuns = new ArrayList<>();
+        List<Run> filteredRuns = new ArrayList<>();
 
         switch (filter){
             case "Week" :
-                filteredTrackedRuns.addAll(TrackedRunUtils.filterList(trackedRunList, TrackedRunPredicates.isRunFromWeek()));
+                filteredRuns.addAll(RunUtils.filterList(runList, RunPredicates.isRunFromWeek()));
                 break;
             case "Month" :
-                filteredTrackedRuns.addAll(TrackedRunUtils.filterList(trackedRunList, TrackedRunPredicates.isRunFromMonth()));
+                filteredRuns.addAll(RunUtils.filterList(runList, RunPredicates.isRunFromMonth()));
                 break;
             case "Year" :
-                filteredTrackedRuns.addAll(TrackedRunUtils.filterList(trackedRunList, TrackedRunPredicates.isRunFromYear()));
+                filteredRuns.addAll(RunUtils.filterList(runList, RunPredicates.isRunFromYear()));
                 break;
             case "All" :
-                filteredTrackedRuns.addAll(trackedRunList);
+                filteredRuns.addAll(runList);
         }
 
-        view.setData(filteredTrackedRuns);
+        view.setData(filteredRuns);
         //Exit selection state, user isn't allowed to change filter with selected items.
         view.finishActionMode();
 
         if (shouldShowEmptyView()){
             //If presenters's data set is empty, meaning that database has no items, message shown changes
-            boolean longMessage = trackedRunList.isEmpty();
+            boolean longMessage = runList.isEmpty();
             view.showEmptyView(longMessage);
         } else {
             view.removeEmptyView();
@@ -110,13 +110,13 @@ public class HistoryPresenter implements Observer<List<TrackedRun>>{
         view.actionModeInvalidate();
     }
 
-    public void deleteRun(TrackedRun run){
+    public void deleteRun(Run run){
         model.remove(run);
     }
 
     public void deleteRun(List<Integer> indexList){
         for (Integer index : indexList){
-            model.remove(trackedRunList.get(index));
+            model.remove(runList.get(index));
         }
     }
 
@@ -129,12 +129,12 @@ public class HistoryPresenter implements Observer<List<TrackedRun>>{
     }
 
     public void onEditMenuClicked(List<Integer> selectedItems){
-        /*Get selected tracked run from trackedRunList. Always get first item of adapter's selected
+        /*Get selected tracked run from runList. Always get first item of adapter's selected
         items because edit functionality will only be accessible to user when only one run is selected,
         so only one item will be in adapter's selected items.*/
-        TrackedRun trackedRun = trackedRunList.get(selectedItems.get(0));
-        //View will handle if trackedRun is null.
-        view.sendIntentEditorActivity(trackedRun);
+        Run run = runList.get(selectedItems.get(0));
+        //View will handle if run is null.
+        view.sendIntentEditorActivity(run);
     }
 
 

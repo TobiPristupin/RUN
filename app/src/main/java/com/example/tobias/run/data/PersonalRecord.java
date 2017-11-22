@@ -8,16 +8,16 @@ public class PersonalRecord {
 
     private boolean achieved;
     private String title;
-    private TrackedRun trackedRun;
+    private Run run;
 
-    private PersonalRecord(boolean achieved, String title, TrackedRun trackedRun) {
+    private PersonalRecord(boolean achieved, String title, Run run) {
         this.achieved = achieved;
         this.title = title;
-        this.trackedRun = trackedRun;
+        this.run = run;
     }
 
-    public static PersonalRecord createAchievedRecord(String title, TrackedRun trackedRun){
-        return new PersonalRecord(true, title, trackedRun);
+    public static PersonalRecord createAchievedRecord(String title, Run run){
+        return new PersonalRecord(true, title, run);
     }
 
     public static PersonalRecord createNotAchievedRecord(String title){
@@ -32,11 +32,11 @@ public class PersonalRecord {
         return title;
     }
 
-    public TrackedRun getTrackedRun() {
-        if (trackedRun == null){
+    public Run getRun() {
+        if (run == null){
             throw new IllegalStateException("This record isn't achieved, so it has no Tracked Run associated with it");
         }
 
-        return trackedRun;
+        return run;
     }
 }

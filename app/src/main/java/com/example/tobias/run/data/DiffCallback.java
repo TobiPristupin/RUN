@@ -11,10 +11,10 @@ import java.util.List;
 
 public class DiffCallback extends DiffUtil.Callback {
 
-    private List<TrackedRun> newList;
-    private List<TrackedRun> oldList;
+    private List<Run> newList;
+    private List<Run> oldList;
 
-    public DiffCallback(List<TrackedRun> newList, List<TrackedRun> oldList){
+    public DiffCallback(List<Run> newList, List<Run> oldList){
         this.newList = newList;
         this.oldList = oldList;
     }

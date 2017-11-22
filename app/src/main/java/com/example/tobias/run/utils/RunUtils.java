@@ -2,11 +2,12 @@ package com.example.tobias.run.utils;
 
 import android.support.annotation.Nullable;
 
+import com.example.tobias.run.data.Run;
+import com.example.tobias.run.data.RunPredicates;
 import com.example.tobias.run.data.SharedPreferenceRepository;
-import com.example.tobias.run.data.TrackedRun;
-import com.example.tobias.run.data.TrackedRunPredicates;
 
 import org.apache.commons.collections.Predicate;
+import org.joda.time.Period;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,17 +16,21 @@ import java.util.List;
  * Created by Tobi on 10/15/2017.
  */
 
-public class TrackedRunUtils {
+public class RunUtils {
+
+    private RunUtils(){
+        //Private constructor to ensure noninstantiability
+    }
 
     /**
      * Filters run given a predicate and a list of runs. Does not modify list of runs.
-     * @param trackedRuns
+     * @param runs
      * @param predicate
      * @return filtered ArrayList
      */
-    public static List<TrackedRun> filterList(List<TrackedRun> trackedRuns, Predicate predicate){
-        List<TrackedRun> filteredList = new ArrayList<>();
-        for (TrackedRun tr : trackedRuns){
+    public static List<Run> filterList(List<Run> runs, Predicate predicate){
+        List<Run> filteredList = new ArrayList<>();
+        for (Run tr : runs){
             if (predicate.evaluate(tr)){
                 filteredList.add(tr);
             }
@@ -40,13 +45,13 @@ public class TrackedRunUtils {
      * @param end
      * @return mileage in unit according to shared preferences.
      */
-    public static float getMileageBetween(long start, long end, List<TrackedRun> data, SharedPreferenceRepository sharedPref){
-        List<TrackedRun> filteredList = new ArrayList<>();
-        filteredList.addAll(filterList(data, TrackedRunPredicates.isRunBetween(start, end)));
+    public static float getMileageBetween(long start, long end, List<Run> data, SharedPreferenceRepository sharedPref){
+        List<Run> filteredList = new ArrayList<>();
+        filteredList.addAll(filterList(data, RunPredicates.isRunBetween(start, end)));
 
         float mileage = 0;
 
-        for (TrackedRun tr : filteredList){
+        for (Run tr : filteredList){
             if (getDistanceUnit(sharedPref).equals("km")){
                 mileage += tr.getDistanceKilometres();
             } else {
@@ -70,7 +75,7 @@ public class TrackedRunUtils {
         return sharedPref.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
     }
 
-    public static String getDistanceText(TrackedRun currentItem, SharedPreferenceRepository sharedPref){
+    public static String getDistanceText(Run currentItem, SharedPreferenceRepository sharedPref){
         String text;
         String unit = getDistanceUnit(sharedPref);
 
@@ -83,7 +88,7 @@ public class TrackedRunUtils {
         return text;
     }
 
-    public static String getPaceText(TrackedRun currentItem, SharedPreferenceRepository sharedPref){
+    public static String getPaceText(Run currentItem, SharedPreferenceRepository sharedPref){
         String text;
         String unit = getDistanceUnit(sharedPref);
 
@@ -101,24 +106,25 @@ public class TrackedRunUtils {
      * @param distanceKilometers
      * @return Fastest run (less time)
      */
-    public static @Nullable TrackedRun getFastestRun(float distanceKilometers, List<TrackedRun> list){
-        TrackedRun fastest = null;
+    public static @Nullable
+    Run getFastestRun(float distanceKilometers, List<Run> list){
+        Run fastest = null;
 
-        for (TrackedRun trackedRun : list){
+        for (Run run : list){
 
             //Runs that have time 0 will not be counted
-            if (trackedRun.getTime() == 0){
+            if (run.getTime() == 0){
                 continue;
             }
 
-            if (ConversionUtils.round(trackedRun.getDistanceKilometres(), 1) != distanceKilometers){
+            if (ConversionUtils.round(run.getDistanceKilometres(), 1) != distanceKilometers){
                 continue;
             }
 
             if (fastest == null){
-                fastest = trackedRun;
-            } else if (trackedRun.getTime() < fastest.getTime()){
-                fastest = trackedRun;
+                fastest = run;
+            } else if (run.getTime() < fastest.getTime()){
+                fastest = run;
             }
 
         }
@@ -126,4 +132,26 @@ public class TrackedRunUtils {
         return fastest;
     }
 
+    /**
+     *
+     * @param distance distance in any format.
+     * @param unixTime time of run in unix timestamp format
+     * @return pace per unit of distance in unix timestamp format
+     */
+    public static long calculatePace(float distance, long unixTime){
+        //Period is inputted time in millis and converts it to hh:mm:ss
+        Period period = new Period(unixTime);
+        float timeInSeconds = period.getHours() * 3600f + period.getMinutes() * 60f + period.getSeconds();
+        float pace = timeInSeconds / distance;
+        //Multiply pace by 1000 to convert it to millis from seconds.
+        return (long) pace * 1000;
+    }
+
+    public static float kilometresToMiles(float km){
+        return km * 0.621371f;
+    }
+
+    public static float milesToKilometers(float mi){
+        return mi * 1.60934f;
+    }
 }

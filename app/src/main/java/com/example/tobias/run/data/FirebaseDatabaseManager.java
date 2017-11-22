@@ -14,10 +14,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirebaseDatabaseManager implements ObservableDatabase<TrackedRun> {
+public class FirebaseDatabaseManager implements ObservableDatabase<Run> {
 
-    private List<Observer<List<TrackedRun>>> observerList = new ArrayList<>();
-    private List<TrackedRun> trackedRunList = new ArrayList<>();
+    private List<Observer<List<Run>>> observerList = new ArrayList<>();
+    private List<Run> runList = new ArrayList<>();
     private static final String TAG = "FirebaseDatabaseManager";
 
     private static FirebaseDatabaseManager instance = new FirebaseDatabaseManager();
@@ -44,10 +44,10 @@ public class FirebaseDatabaseManager implements ObservableDatabase<TrackedRun> {
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                trackedRunList.clear();
+                runList.clear();
                 for (DataSnapshot data : dataSnapshot.getChildren()){
-                    TrackedRun tr = data.getValue(TrackedRun.class);
-                    trackedRunList.add(tr);
+                    Run tr = data.getValue(Run.class);
+                    runList.add(tr);
                 }
                 notifyUpdateObservers();
             }
@@ -78,13 +78,13 @@ public class FirebaseDatabaseManager implements ObservableDatabase<TrackedRun> {
 
     @Override
     public void notifyUpdateObservers() {
-        for (Observer<List<TrackedRun>> observer : observerList){
-            observer.updateData(trackedRunList);
+        for (Observer<List<Run>> observer : observerList){
+            observer.updateData(runList);
         }
     }
 
     @Override
-    public void add(TrackedRun data) {
+    public void add(Run data) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -96,7 +96,7 @@ public class FirebaseDatabaseManager implements ObservableDatabase<TrackedRun> {
     }
 
     @Override
-    public void remove(TrackedRun data) {
+    public void remove(Run data) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -106,7 +106,7 @@ public class FirebaseDatabaseManager implements ObservableDatabase<TrackedRun> {
     }
 
     @Override
-    public void update(TrackedRun data) {
+    public void update(Run data) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();

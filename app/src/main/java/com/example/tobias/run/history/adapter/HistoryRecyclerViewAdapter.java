@@ -13,11 +13,11 @@ import android.widget.TextView;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.DiffCallback;
+import com.example.tobias.run.data.Run;
 import com.example.tobias.run.data.SharedPreferenceManager;
 import com.example.tobias.run.data.SharedPreferenceRepository;
-import com.example.tobias.run.data.TrackedRun;
 import com.example.tobias.run.utils.ConversionUtils;
-import com.example.tobias.run.utils.TrackedRunUtils;
+import com.example.tobias.run.utils.RunUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         boolean onLongClick(int position);
     }
 
-    private ArrayList<TrackedRun> trackedRuns = new ArrayList<>();
+    private ArrayList<Run> runs = new ArrayList<>();
     private Context context;
     private OnItemClicked clickListener;
     private SharedPreferenceRepository preferenceManager;
@@ -51,12 +51,12 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
 
     @Override
     public void onBindViewHolder(final HistoryViewHolder holder, int position) {
-        final TrackedRun trackedRun = trackedRuns.get(holder.getAdapterPosition());
-        holder.ratingBar.setRating(trackedRun.getRating());
-        holder.date.setText(ConversionUtils.dateToString(trackedRun.getDate()));
-        holder.time.setText(ConversionUtils.timeToString(trackedRun.getTime()));
-        holder.distance.setText(TrackedRunUtils.getDistanceText(trackedRun, preferenceManager));
-        holder.pace.setText(TrackedRunUtils.getPaceText(trackedRun, preferenceManager));
+        final Run run = runs.get(holder.getAdapterPosition());
+        holder.ratingBar.setRating(run.getRating());
+        holder.date.setText(ConversionUtils.dateToString(run.getDate()));
+        holder.time.setText(ConversionUtils.timeToString(run.getTime()));
+        holder.distance.setText(RunUtils.getDistanceText(run, preferenceManager));
+        holder.pace.setText(RunUtils.getPaceText(run, preferenceManager));
 
         if (isSelected(holder.getAdapterPosition())){
             holder.layout.setBackgroundColor(context.getResources().getColor(R.color.selectedColor));
@@ -69,12 +69,12 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
      * Called from view to update data set. Uses diffUtil to calculate view updates
      * @param newList
      */
-    public void updateItems(List<TrackedRun> newList){
-        final DiffCallback diff = new DiffCallback(newList, this.trackedRuns);
+    public void updateItems(List<Run> newList){
+        final DiffCallback diff = new DiffCallback(newList, this.runs);
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diff);
 
-        this.trackedRuns.clear();
-        this.trackedRuns.addAll(newList);
+        this.runs.clear();
+        this.runs.addAll(newList);
         diffResult.dispatchUpdatesTo(this);
     }
     
@@ -82,13 +82,13 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         return getItemCount() == 0;
     }
 
-    public ArrayList<TrackedRun> getDataset(){
-        return this.trackedRuns;
+    public ArrayList<Run> getDataset(){
+        return this.runs;
     }
 
     @Override
     public int getItemCount() {
-        return this.trackedRuns.size();
+        return this.runs.size();
     }
 
     public class HistoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
