@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import com.example.tobias.run.utils.ConversionUtils;
 import com.example.tobias.run.utils.RunUtils;
 import com.google.firebase.database.Exclude;
 
@@ -41,10 +40,10 @@ public class Run implements Parcelable, Comparable<Run> {
     }
 
     public static Run withKilometers(String date, String distanceKilometres, String time, String rating){
-        long d = ConversionUtils.dateToUnix(date);
-        float distance = ConversionUtils.distanceToFloat(distanceKilometres);
-        long t = ConversionUtils.timeToUnix(time);
-        int r = ConversionUtils.ratingToInt(rating);
+        long d = RunUtils.dateToUnix(date);
+        float distance = RunUtils.distanceToFloat(distanceKilometres);
+        long t = RunUtils.timeToUnix(time);
+        int r = RunUtils.ratingToInt(rating);
 
         return withKilometers(d, distance, t, r);
     }
@@ -58,10 +57,10 @@ public class Run implements Parcelable, Comparable<Run> {
     }
 
     public static Run withMiles(String date, String distanceMiles, String time, String rating){
-        long d = ConversionUtils.dateToUnix(date);
-        float distance = ConversionUtils.distanceToFloat(distanceMiles);
-        long t = ConversionUtils.timeToUnix(time);
-        int r = ConversionUtils.ratingToInt(rating);
+        long d = RunUtils.dateToUnix(date);
+        float distance = RunUtils.distanceToFloat(distanceMiles);
+        long t = RunUtils.timeToUnix(time);
+        int r = RunUtils.ratingToInt(rating);
 
         return withMiles(d, distance, t, r);
     }
@@ -148,7 +147,7 @@ public class Run implements Parcelable, Comparable<Run> {
             throw new IllegalArgumentException("Argument is not in kilometres");
         }
 
-        distanceKilometres = ConversionUtils.distanceToFloat(distanceText);
+        distanceKilometres = RunUtils.distanceToFloat(distanceText);
         distanceMiles = RunUtils.kilometresToMiles(distanceKilometres);
     }
 
@@ -162,7 +161,7 @@ public class Run implements Parcelable, Comparable<Run> {
             throw new IllegalArgumentException("Argument is not in miles");
         }
 
-        distanceMiles = ConversionUtils.distanceToFloat(distanceText);
+        distanceMiles = RunUtils.distanceToFloat(distanceText);
         distanceKilometres = RunUtils.milesToKilometers(distanceMiles);
     }
 
@@ -172,7 +171,7 @@ public class Run implements Parcelable, Comparable<Run> {
 
     @Exclude
     public void setTime(String timeText){
-        time = ConversionUtils.timeToUnix(timeText);
+        time = RunUtils.timeToUnix(timeText);
     }
 
     public void setDate(long date){
@@ -181,7 +180,7 @@ public class Run implements Parcelable, Comparable<Run> {
 
     @Exclude
     public void setDate(String dateText){
-        date = ConversionUtils.dateToUnix(dateText);
+        date = RunUtils.dateToUnix(dateText);
     }
 
     public void setRating(int rating){
@@ -190,7 +189,7 @@ public class Run implements Parcelable, Comparable<Run> {
 
     @Exclude
     public void setRating(String ratingText){
-        rating = ConversionUtils.ratingToInt(ratingText);
+        rating = RunUtils.ratingToInt(ratingText);
     }
 
     public void setId(String pushKey){

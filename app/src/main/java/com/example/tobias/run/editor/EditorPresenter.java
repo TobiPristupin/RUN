@@ -6,7 +6,7 @@ import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.data.Run;
 import com.example.tobias.run.data.SharedPreferenceRepository;
-import com.example.tobias.run.utils.ConversionUtils;
+import com.example.tobias.run.utils.RunUtils;
 
 /**
  * Created by Tobi on 10/23/2017.
@@ -41,13 +41,13 @@ public class EditorPresenter {
     private void setViewEditMode(){
         String unit = preferenceRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
 
-        String distanceText = ConversionUtils.distanceToString(runToEdit.getDistance(unit), unit);
+        String distanceText = RunUtils.distanceToString(runToEdit.getDistance(unit), unit);
         view.setDistanceText(distanceText);
 
-        String dateText = ConversionUtils.dateToString(runToEdit.getDate());
+        String dateText = RunUtils.dateToString(runToEdit.getDate());
         view.setDateText(dateText);
 
-        String timeText = ConversionUtils.timeToString(runToEdit.getTime());
+        String timeText = RunUtils.timeToString(runToEdit.getTime());
         view.setTimeText(timeText);
 
         view.setRatingText(String.valueOf(runToEdit.getRating()));
