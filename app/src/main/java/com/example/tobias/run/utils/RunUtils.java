@@ -93,7 +93,7 @@ public class RunUtils {
         String unit = getDistanceUnit(sharedPref);
 
         if (unit.equals("km")){
-            text = ConversionUtils.paceToString(currentItem.getKmPace(), "km");
+            text = ConversionUtils.paceToString(currentItem.getKilometrePace(), "km");
         } else {
             text = ConversionUtils.paceToString(currentItem.getMilePace(), "mi");
         }

@@ -77,14 +77,6 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         this.runs.addAll(newList);
         diffResult.dispatchUpdatesTo(this);
     }
-    
-    public boolean isDatasetEmpty(){
-        return getItemCount() == 0;
-    }
-
-    public ArrayList<Run> getDataset(){
-        return this.runs;
-    }
 
     @Override
     public int getItemCount() {

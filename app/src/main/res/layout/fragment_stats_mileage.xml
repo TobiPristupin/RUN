@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fillViewport="true"
     android:background="@color/LightGrey">
 
@@ -47,7 +48,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:text="121 KM"
+                    tools:text="121 KM"
                     android:textColor="@android:color/black"
                     android:textSize="30sp"
                     android:textStyle="bold" />

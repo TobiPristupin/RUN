@@ -117,7 +117,7 @@ public class Run implements Parcelable, Comparable<Run> {
         return milePace;
     }
 
-    public long getKmPace() {
+    public long getKilometrePace() {
         return kilometrePace;
     }
 
@@ -195,6 +195,26 @@ public class Run implements Parcelable, Comparable<Run> {
 
     public void setId(String pushKey){
         id = pushKey;
+    }
+
+
+    @Deprecated
+    /**
+     * Setter required for Firebase, should not be used by user as pace should never be set manually,
+     * only computed off distance and time values, to avoid inconsistencies.
+     */
+    public void setKilometrePace(long kmPace){
+        this.kilometrePace = kmPace;
+    }
+
+
+    @Deprecated
+    /**
+     * Setter required for Firebase, should not be used by user as pace should never be set manually,
+     * only computed off distance and time values, to avoid inconsistencies.
+     */
+    public void setMilePace(long milePace){
+        this.milePace = milePace;
     }
 
     //Compares by date

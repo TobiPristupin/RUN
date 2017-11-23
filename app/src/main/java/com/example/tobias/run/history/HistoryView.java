@@ -17,7 +17,6 @@ public interface HistoryView {
     void actionModeSetTitle(String title);
     void actionModeInvalidate();
     void setData(List<Run> data);
-    boolean adapterIsDataSetEmpty();
     String getDataFilter();
     void showEmptyView(boolean longMessage);
     void removeEmptyView();

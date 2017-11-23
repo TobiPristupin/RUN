@@ -123,7 +123,6 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
                 if (actionMode != null){
                     adapter.toggleSelection(position);
                     presenter.toggleItemSelection(adapter.getSelectedItems());
-
                 }
             }
 
@@ -167,7 +166,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
         });
 
         //Hide fab when recycler view is scrolled in any direction
-        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 switch (newState){
@@ -276,11 +275,6 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     @Override
     public void removeEmptyView() {
         animateViews(false, emptyViewHeader, emptyViewImage, emptyViewText);
-    }
-
-    @Override
-    public boolean adapterIsDataSetEmpty() {
-        return adapter.isDatasetEmpty();
     }
 
     @Override

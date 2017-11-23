@@ -7,6 +7,7 @@ import com.example.tobias.run.interfaces.Observer;
 import com.example.tobias.run.utils.RunUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,7 +18,8 @@ public class HistoryPresenter implements Observer<List<Run>>{
 
 
     private HistoryView view;
-    private List<Run> runList = new ArrayList<>();
+    private List<Run> allRunsList = new ArrayList<>(); //Holds all runs
+    private List<Run> displayedRunsList = new ArrayList<>(); //Holds all runs currently displayed in view
     private ObservableDatabase<Run> model;
 
     public HistoryPresenter(HistoryView view, ObservableDatabase<Run> model){
@@ -28,7 +30,7 @@ public class HistoryPresenter implements Observer<List<Run>>{
     }
 
     public void onDetachView(){
-        //Desubscribe from model observers list
+        //Unsubscribe from model observers list
         model.detachObserver(this);
     }
 
@@ -38,8 +40,8 @@ public class HistoryPresenter implements Observer<List<Run>>{
      */
     @Override
     public void updateData(List<Run> data) {
-        runList.clear();
-        runList.addAll(data);
+        allRunsList.clear();
+        allRunsList.addAll(data);
         updateViewData();
     }
 
@@ -53,29 +55,30 @@ public class HistoryPresenter implements Observer<List<Run>>{
      */
     public void updateViewData(){
         String filter = view.getDataFilter();
-        List<Run> filteredRuns = new ArrayList<>();
+        displayedRunsList.clear();
 
         switch (filter){
             case "Week" :
-                filteredRuns.addAll(RunUtils.filterList(runList, RunPredicates.isRunFromWeek()));
+                displayedRunsList.addAll(RunUtils.filterList(allRunsList, RunPredicates.isRunFromWeek()));
                 break;
             case "Month" :
-                filteredRuns.addAll(RunUtils.filterList(runList, RunPredicates.isRunFromMonth()));
+                displayedRunsList.addAll(RunUtils.filterList(allRunsList, RunPredicates.isRunFromMonth()));
                 break;
             case "Year" :
-                filteredRuns.addAll(RunUtils.filterList(runList, RunPredicates.isRunFromYear()));
+                displayedRunsList.addAll(RunUtils.filterList(allRunsList, RunPredicates.isRunFromYear()));
                 break;
             case "All" :
-                filteredRuns.addAll(runList);
+                displayedRunsList.addAll(allRunsList);
         }
 
-        view.setData(filteredRuns);
+        Collections.sort(displayedRunsList);
+        view.setData(displayedRunsList);
         //Exit selection state, user isn't allowed to change filter with selected items.
         view.finishActionMode();
 
         if (shouldShowEmptyView()){
             //If presenters's data set is empty, meaning that database has no items, message shown changes
-            boolean longMessage = runList.isEmpty();
+            boolean longMessage = allRunsList.isEmpty();
             view.showEmptyView(longMessage);
         } else {
             view.removeEmptyView();
@@ -83,7 +86,7 @@ public class HistoryPresenter implements Observer<List<Run>>{
     }
 
     private boolean shouldShowEmptyView(){
-        return view.adapterIsDataSetEmpty();
+        return displayedRunsList.isEmpty();
     }
 
     /**
@@ -116,7 +119,7 @@ public class HistoryPresenter implements Observer<List<Run>>{
 
     public void deleteRun(List<Integer> indexList){
         for (Integer index : indexList){
-            model.remove(runList.get(index));
+            model.remove(displayedRunsList.get(index));
         }
     }
 
@@ -129,10 +132,12 @@ public class HistoryPresenter implements Observer<List<Run>>{
     }
 
     public void onEditMenuClicked(List<Integer> selectedItems){
-        /*Get selected tracked run from runList. Always get first item of adapter's selected
-        items because edit functionality will only be accessible to user when only one run is selected,
-        so only one item will be in adapter's selected items.*/
-        Run run = runList.get(selectedItems.get(0));
+        /**
+         * Edit functionality will only be enabled when only one item is selected. Therefore,
+         * that item will always be in position 0 of selectedItems.
+         */
+        int index = selectedItems.get(0);
+        Run run = displayedRunsList.get(index);
         //View will handle if run is null.
         view.sendIntentEditorActivity(run);
     }

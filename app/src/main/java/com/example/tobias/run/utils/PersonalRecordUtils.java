@@ -18,7 +18,7 @@ public class PersonalRecordUtils {
         if (getDistanceUnit(sharedPref).equals("mi")){
             paceText = ConversionUtils.paceToString(currentItem.getRun().getMilePace(), "mi");
         } else {
-            paceText = ConversionUtils.paceToString(currentItem.getRun().getKmPace(), "km");
+            paceText = ConversionUtils.paceToString(currentItem.getRun().getKilometrePace(), "km");
         }
 
         return paceText;
@@ -31,7 +31,7 @@ public class PersonalRecordUtils {
         if (distanceUnit.equals("mi")){
             text = ConversionUtils.paceToString(currentItem.getRun().getMilePace(), "mi");
         } else {
-            text = ConversionUtils.paceToString(currentItem.getRun().getKmPace(), "km");
+            text = ConversionUtils.paceToString(currentItem.getRun().getKilometrePace(), "km");
         }
 
 
