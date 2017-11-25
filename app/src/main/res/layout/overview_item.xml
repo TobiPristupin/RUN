@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?selectableItemBackground">
+
+    <TextView
+        android:id="@+id/overview_item_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="16 mi" />
+
+    <TextView
+        android:id="@+id/overview_item_value_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="This month"
+        app:layout_constraintStart_toStartOf="@+id/overview_item_value"
+        app:layout_constraintTop_toBottomOf="@+id/overview_item_value" />
+
+    <TextView
+        android:id="@+id/overview_item_increase_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/Green"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@id/overview_item_value"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="+5" />
+
+    <TextView
+        android:id="@+id/overview_item_increase_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Than last Month"
+        app:layout_constraintEnd_toEndOf="@+id/overview_item_increase_value"
+        app:layout_constraintTop_toBottomOf="@+id/overview_item_increase_value" />
+
+</android.support.constraint.ConstraintLayout>

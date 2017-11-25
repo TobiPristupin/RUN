@@ -12,6 +12,8 @@
     <color name="Orange">#FF9800</color>
     <color name="selectedColor">#e0e0e0</color>
     <color name="actionMode">#D32F2F</color>
+    <color name="Green">#4CAF50</color>
+    <color name="Red">#FF5722</color>
 </resources>
 
 

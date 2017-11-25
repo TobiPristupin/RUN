@@ -36,8 +36,8 @@ public class RunPredicates {
             @Override
             public boolean evaluate(Object object) {
                 Run tr = (Run) object;
-                return tr.getDate() >= DateUtils.getStartOfCurrentMonth()
-                        && tr.getDate() <= DateUtils.getEndOfCurrentMonth();
+                return tr.getDate() >= DateUtils.getStartOfMonth()
+                        && tr.getDate() <= DateUtils.getEndOfMonth();
             }
         };
     }
@@ -58,8 +58,8 @@ public class RunPredicates {
             @Override
             public boolean evaluate(Object object) {
                 Run tr = (Run) object;
-                return tr.getDate() >= DateUtils.getStartOfMonthMinusMonths(2)
-                        && tr.getDate() <= DateUtils.getEndOfCurrentMonth();
+                return tr.getDate() >= DateUtils.getStartOfMonth(-2)
+                        && tr.getDate() <= DateUtils.getEndOfMonth();
             }
         };
     }
@@ -69,8 +69,8 @@ public class RunPredicates {
             @Override
             public boolean evaluate(Object object) {
                 Run tr = (Run) object;
-                return tr.getDate() >= DateUtils.getStartOfMonthMinusMonths(minus)
-                        && tr.getDate() <= DateUtils.getEndOfMonthMinusMonths(minus);
+                return tr.getDate() >= DateUtils.getStartOfMonth(-minus)
+                        && tr.getDate() <= DateUtils.getEndOfMonth(-minus);
             }
         };
     }
@@ -80,8 +80,8 @@ public class RunPredicates {
             @Override
             public boolean evaluate(Object object) {
                 Run tr = (Run) object;
-                return tr.getDate() >= DateUtils.getStartOfMonthMinusMonths(5)
-                        && tr.getDate() <= DateUtils.getEndOfCurrentMonth();
+                return tr.getDate() >= DateUtils.getStartOfMonth(-5)
+                        && tr.getDate() <= DateUtils.getEndOfMonth();
             }
         };
     }

@@ -22,9 +22,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -57,16 +55,19 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_stats_mileage, container, false);
 
+        sharedPrefRepository = new SharedPreferenceManager(getContext());
+
         barChartMonth = styleBarChart(new BarChart(getContext()));
         barChart3Month = styleBarChart(new BarChart(getContext()));
         barChart6Month = styleBarChart(new BarChart(getContext()));
         barChartYear = styleBarChart(new BarChart(getContext()));
         totalDistanceTextView = rootView.findViewById(R.id.stats_mileage_totaldistance_text);
 
+        initOverviewItems();
         initViewAnimator();
         initTabLayout();
 
-        sharedPrefRepository = new SharedPreferenceManager(getContext());
+
         presenter = new StatsMileagePresenter(this, FirebaseDatabaseManager.getInstance(), sharedPrefRepository);
 
         return rootView;
@@ -111,6 +112,38 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
             }
         });
+    }
+
+    private void initOverviewItems(){
+        String unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+
+        View overviewItemMonth = rootView.findViewById(R.id.stats_mileage_overview_item_month);
+        ((TextView) overviewItemMonth.findViewById(R.id.overview_item_value_text)).setText("This month");
+        ((TextView) overviewItemMonth.findViewById(R.id.overview_item_increase_text)).setText("Over last month");
+        ((TextView) overviewItemMonth.findViewById(R.id.overview_item_value)).setText(0 + unit);
+        ((TextView) overviewItemMonth.findViewById(R.id.overview_item_increase_value)).setText(0 + "+");
+        ((TextView) overviewItemMonth.findViewById(R.id.overview_item_increase_value)).setTextColor(getResources().getColor(R.color.Green));
+
+        View overviewItem3Months = rootView.findViewById(R.id.stats_mileage_overview_item_3months);
+        ((TextView) overviewItem3Months.findViewById(R.id.overview_item_value_text)).setText("This 3 months");
+        ((TextView) overviewItem3Months.findViewById(R.id.overview_item_increase_text)).setText("Over last 3 months");
+        ((TextView) overviewItem3Months.findViewById(R.id.overview_item_value)).setText(0 + unit);
+        ((TextView) overviewItem3Months.findViewById(R.id.overview_item_increase_value)).setText(0 + "+");
+        ((TextView) overviewItem3Months.findViewById(R.id.overview_item_increase_value)).setTextColor(getResources().getColor(R.color.Green));
+
+        View overviewItem6Months = rootView.findViewById(R.id.stats_mileage_overview_item_6months);
+        ((TextView) overviewItem6Months.findViewById(R.id.overview_item_value_text)).setText("This 6 months");
+        ((TextView) overviewItem6Months.findViewById(R.id.overview_item_increase_text)).setText("Over last 6 months");
+        ((TextView) overviewItem6Months.findViewById(R.id.overview_item_value)).setText(0 + unit);
+        ((TextView) overviewItem6Months.findViewById(R.id.overview_item_increase_value)).setText(0 + "+");
+        ((TextView) overviewItem6Months.findViewById(R.id.overview_item_increase_value)).setTextColor(getResources().getColor(R.color.Green));
+
+        View overviewItemYear = rootView.findViewById(R.id.stats_mileage_overview_item_year);
+        ((TextView) overviewItemYear.findViewById(R.id.overview_item_value_text)).setText("This year");
+        ((TextView) overviewItemYear.findViewById(R.id.overview_item_increase_text)).setText("Over last year");
+        ((TextView) overviewItemYear.findViewById(R.id.overview_item_value)).setText(0 + unit);
+        ((TextView) overviewItemYear.findViewById(R.id.overview_item_increase_value)).setText(0 + "+");
+        ((TextView) overviewItemYear.findViewById(R.id.overview_item_increase_value)).setTextColor(getResources().getColor(R.color.Green));
     }
 
     private void initViewAnimator(){
@@ -163,9 +196,9 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     }
 
     @Override
-    public void setGraphMonthData(Map<Integer, Float> data) {
+    public void setGraphMonthData(List<BarEntry> barEntries) {
         String unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
-        BarDataSet barDataSet = new BarDataSet(mapToBarEntry(data), "Distance (" + unit + ")");
+        BarDataSet barDataSet = new BarDataSet(barEntries, "Distance (" + unit + ")");
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkPink));
 
@@ -174,9 +207,9 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     }
 
     @Override
-    public void setGraph3MonthData(Map<Integer, Float> data) {
+    public void setGraph3MonthData(List<BarEntry> barEntries) {
         String unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
-        BarDataSet barDataSet = new BarDataSet(mapToBarEntry(data), "Distance (" + unit + ")");
+        BarDataSet barDataSet = new BarDataSet(barEntries, "Distance (" + unit + ")");
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkPink));
 
@@ -185,9 +218,9 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     }
 
     @Override
-    public void setGraph6MonthData(Map<Integer, Float> data) {
+    public void setGraph6MonthData(List<BarEntry> barEntries) {
         String unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
-        BarDataSet barDataSet = new BarDataSet(mapToBarEntry(data), "Distance (" + unit + ")");
+        BarDataSet barDataSet = new BarDataSet(barEntries, "Distance (" + unit + ")");
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkPink));
 
@@ -196,23 +229,14 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     }
 
     @Override
-    public void setGraphYearData(Map<Integer, Float> data) {
+    public void setGraphYearData(List<BarEntry> barEntries) {
         String unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
-        BarDataSet barDataSet = new BarDataSet(mapToBarEntry(data), "Distance (" + unit + ")");
+        BarDataSet barDataSet = new BarDataSet(barEntries, "Distance (" + unit + ")");
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkPink));
 
         barChartYear.setData(new BarData(barDataSet));
         barChartYear.invalidate();
-    }
-
-    private List<BarEntry> mapToBarEntry(Map<Integer, Float> data){
-        List<BarEntry> barEntries = new ArrayList<>();
-        for (Map.Entry<Integer, Float> entry : data.entrySet()){
-            barEntries.add(new BarEntry(entry.getKey(), entry.getValue()));
-        }
-
-        return barEntries;
     }
 
     @Override
@@ -237,16 +261,17 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
     @Override
     public void setTotalDistanceMonth(String text) {
+        ((TextView) rootView.findViewById(R.id.stats_mileage_overview_item_month).findViewById(R.id.overview_item_value))
+                .setText(text);
+
         monthTotalDistance = text;
-        //TODO: This comment is hard to understand.
-        /*
-         * When fragment is created, it calls initTabLayout, which creates a listener that sets the total
-         * distance text view text to monthTotalDistance when the tab is switched to position 0. The issue is
-         * that onCreateView and initTabLayout are called before presenter has time to retrieve data from network, so
-         * monthTotalDistance has yet to be initialized, and therefore the text set in totalDistanceTextView is null.
-         * The following lines of code set the textview's text as soon as the presenter updates the monthTotalDistance value
-         * to workaround the issue.
-         *
+        /**
+         * totalDistanceTextView text is updated when any tab is selected. Because presenter has a delay
+         * when retrieving data from the network, when tab 0 is selected the totalDistanceMonth text has not
+         * been initialized and so the textview's text is null. The following lines of code ensure that as soon
+         * as the presenter retrieves the data, the textview is updated. This code is not in the rest of the setDistance...
+         * methods because by the time the user switches to another tab, the presenter already updated
+         * all the totalDistance strings.
          */
         if (tabLayout.getSelectedTabPosition() == 0){
             totalDistanceTextView.setText(monthTotalDistance);
@@ -255,16 +280,55 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
     @Override
     public void setTotalDistance3Months(String text) {
+        ((TextView) rootView.findViewById(R.id.stats_mileage_overview_item_3months).findViewById(R.id.overview_item_value))
+                .setText(text);
         month3TotalDistance = text;
     }
 
     @Override
     public void setTotalDistance6Months(String text) {
+        ((TextView) rootView.findViewById(R.id.stats_mileage_overview_item_6months).findViewById(R.id.overview_item_value))
+                .setText(text);
         month6TotalDistance = text;
     }
 
     @Override
     public void setTotalDistanceYear(String text) {
+        ((TextView) rootView.findViewById(R.id.stats_mileage_overview_item_year).findViewById(R.id.overview_item_value))
+                .setText(text);
         yearTotalDistance = text;
+    }
+
+    @Override
+    public void setMonthIncreaseText(String text, boolean isIncrease) {
+        TextView textView = rootView.findViewById(R.id.stats_mileage_overview_item_month).findViewById(R.id.overview_item_increase_value);
+        setIncreaseText(text, isIncrease, textView);
+    }
+
+    @Override
+    public void set3MonthsIncreaseText(String text, boolean isIncrease) {
+        TextView textView = rootView.findViewById(R.id.stats_mileage_overview_item_3months).findViewById(R.id.overview_item_increase_value);
+        setIncreaseText(text, isIncrease, textView);
+    }
+
+    @Override
+    public void set6MonthsIncreaseText(String text, boolean isIncrease) {
+        TextView textView = rootView.findViewById(R.id.stats_mileage_overview_item_6months).findViewById(R.id.overview_item_increase_value);
+        setIncreaseText(text, isIncrease, textView);
+    }
+
+    @Override
+    public void setYearIncreaseText(String text, boolean isIncrease) {
+        TextView textView = rootView.findViewById(R.id.stats_mileage_overview_item_year).findViewById(R.id.overview_item_increase_value);
+        setIncreaseText(text, isIncrease, textView);
+    }
+
+    private void setIncreaseText(String text, boolean isIncrease, TextView textView){
+        textView.setText(text);
+        if (isIncrease){
+            textView.setTextColor(getResources().getColor(R.color.Green));
+        } else {
+            textView.setTextColor(getResources().getColor(R.color.Red));
+        }
     }
 }

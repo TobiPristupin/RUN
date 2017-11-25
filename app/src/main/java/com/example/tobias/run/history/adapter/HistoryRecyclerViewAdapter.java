@@ -54,8 +54,8 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         holder.ratingBar.setRating(run.getRating());
         holder.date.setText(RunUtils.dateToString(run.getDate()));
         holder.time.setText(RunUtils.timeToString(run.getTime()));
-        holder.distance.setText(RunUtils.getDistanceText(run, preferenceManager));
-        holder.pace.setText(RunUtils.getPaceText(run, preferenceManager));
+        holder.distance.setText(RunUtils.getDistanceText(run, getDistanceUnit()));
+        holder.pace.setText(RunUtils.getPaceText(run, getDistanceUnit()));
 
         if (isSelected(holder.getAdapterPosition())){
             holder.layout.setBackgroundColor(context.getResources().getColor(R.color.selectedColor));
@@ -75,6 +75,10 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         this.runs.clear();
         this.runs.addAll(newList);
         diffResult.dispatchUpdatesTo(this);
+    }
+
+    private String getDistanceUnit(){
+        return preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
     }
 
     @Override

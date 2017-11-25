@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 
 import com.example.tobias.run.data.Run;
 import com.example.tobias.run.data.RunPredicates;
-import com.example.tobias.run.data.SharedPreferenceRepository;
 
 import org.apache.commons.collections.Predicate;
 import org.joda.time.DateTime;
@@ -48,16 +47,16 @@ public class RunUtils {
      * Gets mileage between a period of time.
      * @param start time in unix timestamp
      * @param end
-     * @return mileage in unit according to shared preferences.
+     * @return mileage in unit
      */
-    public static float getMileageBetween(long start, long end, List<Run> data, SharedPreferenceRepository sharedPref){
+    public static float getMileageBetween(long start, long end, List<Run> data, String unit){
         List<Run> filteredList = new ArrayList<>();
         filteredList.addAll(filterList(data, RunPredicates.isRunBetween(start, end)));
 
         float mileage = 0;
 
         for (Run tr : filteredList){
-            if (getDistanceUnit(sharedPref).equals("km")){
+            if (unit.equals("km")){
                 mileage += tr.getDistanceKilometres();
             } else {
                 mileage += tr.getDistanceMiles();
@@ -76,13 +75,8 @@ public class RunUtils {
         return sum;
     }
 
-    private static String getDistanceUnit(SharedPreferenceRepository sharedPref){
-        return sharedPref.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
-    }
-
-    public static String getDistanceText(Run currentItem, SharedPreferenceRepository sharedPref){
+    public static String getDistanceText(Run currentItem, String unit){
         String text;
-        String unit = getDistanceUnit(sharedPref);
 
         if (unit.equals("km")){
             text = distanceToString(currentItem.getDistanceKilometres(), unit);
@@ -93,9 +87,8 @@ public class RunUtils {
         return text;
     }
 
-    public static String getPaceText(Run currentItem, SharedPreferenceRepository sharedPref){
+    public static String getPaceText(Run currentItem, String unit){
         String text;
-        String unit = getDistanceUnit(sharedPref);
 
         if (unit.equals("km")){
             text = paceToString(currentItem.getKilometrePace(), "km");
@@ -259,5 +252,10 @@ public class RunUtils {
 
     public static int ratingToInt(String rating){
         return Integer.valueOf(rating);
+    }
+
+    public static float round (float value, int precision) {
+        int scale = (int) Math.pow(10, precision);
+        return (float) Math.round(value * scale) / scale;
     }
 }
