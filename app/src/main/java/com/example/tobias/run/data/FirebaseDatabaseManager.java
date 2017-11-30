@@ -17,25 +17,13 @@ import java.util.List;
 public class FirebaseDatabaseManager implements ObservableDatabase<Run> {
 
     private List<Observer<List<Run>>> observerList = new ArrayList<>();
-    private List<Run> runList = new ArrayList<>();
+    private List<Run> cachedRuns = new ArrayList<>();
     private static final String TAG = "FirebaseDatabaseManager";
 
     private static FirebaseDatabaseManager instance = new FirebaseDatabaseManager();
 
     private FirebaseDatabaseManager(){
         //Private Singleton constructor
-    }
-
-    public static FirebaseDatabaseManager getInstance() {
-        return instance;
-    }
-
-    /**
-     * Add listener to online database. When this method isn't called, observable functionality cannot be used
-     * because there won't be data to send. Database functionality may still be used without a query listener.
-     */
-    @Override
-    public void startQuery(){
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -44,10 +32,10 @@ public class FirebaseDatabaseManager implements ObservableDatabase<Run> {
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                runList.clear();
+                cachedRuns.clear();
                 for (DataSnapshot data : dataSnapshot.getChildren()){
                     Run tr = data.getValue(Run.class);
-                    runList.add(tr);
+                    cachedRuns.add(tr);
                 }
                 notifyUpdateObservers();
             }
@@ -60,11 +48,15 @@ public class FirebaseDatabaseManager implements ObservableDatabase<Run> {
         });
     }
 
+    public static FirebaseDatabaseManager getInstance() {
+        return instance;
+    }
 
     @Override
     public void attachObserver(Observer o) {
         if (!observerList.contains(o)){
             observerList.add(o);
+            o.updateData(cachedRuns);
         }
     }
 
@@ -79,7 +71,7 @@ public class FirebaseDatabaseManager implements ObservableDatabase<Run> {
     @Override
     public void notifyUpdateObservers() {
         for (Observer<List<Run>> observer : observerList){
-            observer.updateData(runList);
+            observer.updateData(cachedRuns);
         }
     }
 

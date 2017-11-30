@@ -13,7 +13,7 @@
         android:id="@+id/history_fab_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:backgroundTint="@color/colorPrimaryDark"
+        app:backgroundTint="@color/DarkPink"
         android:src="@drawable/ic_content_add"
         android:scaleType="center"
         app:fabSize="normal"
@@ -124,7 +124,6 @@
          android:id="@+id/history_recyclerview"
          android:layout_width="0dp"
          android:layout_height="0dp"
-
          android:clipToPadding="false"
          android:padding="10dp"
          android:scrollbars="vertical"

@@ -1,4 +1,4 @@
-package com.example.tobias.run.stats;
+package com.example.tobias.run.stats.mileage;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -69,6 +69,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
 
         presenter = new StatsMileagePresenter(this, FirebaseDatabaseManager.getInstance(), sharedPrefRepository);
+
 
         return rootView;
     }

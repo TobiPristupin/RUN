@@ -16,8 +16,7 @@
         android:layout_height="?actionBarSize"
         app:title="Add Manual Entry"
         app:titleTextColor="@android:color/white"
-        android:background="@color/colorPrimary"
-        android:transitionName="fab_editor_transition"/>
+        android:background="@color/colorPrimary" />
 
 
     <LinearLayout

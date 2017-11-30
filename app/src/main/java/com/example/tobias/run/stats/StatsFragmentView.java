@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tobias.run.R;
+import com.example.tobias.run.stats.mileage.StatsFragmentMileageView;
+import com.example.tobias.run.stats.personalrecords.StatsFragmentPrsView;
 
 
 /**
@@ -21,7 +23,7 @@ import com.example.tobias.run.R;
 public class StatsFragmentView extends Fragment {
 
     private View rootView;
-    private static final int TAB_COUNT = 3;
+    private static final int TAB_COUNT = 2;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -42,10 +44,9 @@ public class StatsFragmentView extends Fragment {
     }
 
     private void initViewPager(){
-        TabLayout tabLayout = rootView.findViewById(R.id.stats_tab_layout);
+        final TabLayout tabLayout = rootView.findViewById(R.id.stats_tab_layout);
         ViewPager viewPager = rootView.findViewById(R.id.stats_viewpager);
         viewPager.setAdapter(new StatsPagerAdapter(getChildFragmentManager()));
-        viewPager.setOffscreenPageLimit(TAB_COUNT);
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -62,8 +63,10 @@ public class StatsFragmentView extends Fragment {
             switch (position) {
                 case 0 :
                     return new StatsFragmentMileageView();
+                case 1 :
+                    return new StatsFragmentPrsView();
                 default :
-                    return new StatsFragmentMileageView();
+                    return null;
             }
 
         }

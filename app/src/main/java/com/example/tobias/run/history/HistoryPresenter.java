@@ -25,7 +25,6 @@ public class HistoryPresenter implements Observer<List<Run>>{
     public HistoryPresenter(HistoryView view, ObservableDatabase<Run> model){
         this.view = view;
         this.model = model;
-        this.model.startQuery();
         model.attachObserver(this);
     }
 

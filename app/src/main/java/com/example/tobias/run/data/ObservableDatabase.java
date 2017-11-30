@@ -13,6 +13,4 @@ public interface ObservableDatabase<T> extends Observable {
     void remove(T data);
 
     void update(T data);
-
-    void startQuery();
 }

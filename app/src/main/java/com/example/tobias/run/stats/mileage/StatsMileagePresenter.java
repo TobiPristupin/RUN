@@ -1,4 +1,4 @@
-package com.example.tobias.run.stats;
+package com.example.tobias.run.stats.mileage;
 
 import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.data.Run;
@@ -31,7 +31,6 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
         this.sharedPrefRepository = sharedPrefRepository;
 
         this.model.attachObserver(this);
-        this.model.startQuery();
     }
 
     @Override

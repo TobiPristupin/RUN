@@ -51,8 +51,8 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         SharedPreferenceRepository preferenceRepository = new SharedPreferenceManager(MainActivityView.this);
         presenter = new MainPresenter(this, preferenceRepository);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.main_navigation_view);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.main_navigation_view);
         this.savedInstanceState = savedInstanceState;
 
         presenter.authenticate();
@@ -165,12 +165,13 @@ public class MainActivityView extends AppCompatActivity implements MainView {
     /**
      * Set toolbar defined in xml layout as support action toolbar and add button to open DrawerLayout
      */
-    public void initToolbar(){
+    private void initToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_menu);
     }
+
 
 }
 

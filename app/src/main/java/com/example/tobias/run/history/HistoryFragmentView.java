@@ -72,8 +72,6 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_history, container, false);
 
-        presenter = new HistoryPresenter(this, FirebaseDatabaseManager.getInstance());
-
         emptyViewImage = rootView.findViewById(R.id.history_empty_view_image);
         emptyViewHeader = rootView.findViewById(R.id.history_empty_view_header);
         emptyViewText = rootView.findViewById(R.id.history_empty_view_text);
@@ -82,6 +80,8 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
         initRecyclerView();
         initDateSpinner();
         initFab();
+
+        presenter = new HistoryPresenter(this, FirebaseDatabaseManager.getInstance());
 
         return rootView;
     }
