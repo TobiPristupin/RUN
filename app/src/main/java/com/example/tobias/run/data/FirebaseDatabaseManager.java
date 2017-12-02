@@ -68,7 +68,9 @@ public class FirebaseDatabaseManager implements ObservableDatabase<Run> {
     public void attachObserver(Observer o) {
         if (!observerList.contains(o)){
             observerList.add(o);
-            o.updateData(cachedRuns);
+            if (!cachedRuns.isEmpty()){
+                o.updateData(cachedRuns);
+            }
         }
     }
 
