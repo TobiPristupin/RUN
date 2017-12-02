@@ -19,15 +19,18 @@ public class FirebaseDatabaseManager implements ObservableDatabase<Run> {
     private List<Observer<List<Run>>> observerList = new ArrayList<>();
     private List<Run> cachedRuns = new ArrayList<>();
     private static final String TAG = "FirebaseDatabaseManager";
-
     private static FirebaseDatabaseManager instance = new FirebaseDatabaseManager();
+    private final FirebaseDatabase firebaseDatabase;
+    private final FirebaseAuth firebaseAuth;
+    private final FirebaseUser user;
+    private final DatabaseReference databaseRef;
 
     private FirebaseDatabaseManager(){
         //Private Singleton constructor
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        DatabaseReference databaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/");
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        databaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/");
 
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -51,6 +54,15 @@ public class FirebaseDatabaseManager implements ObservableDatabase<Run> {
     public static FirebaseDatabaseManager getInstance() {
         return instance;
     }
+
+   public void reset(){
+        clearCache();
+        instance = new FirebaseDatabaseManager();
+   }
+
+   private void clearCache(){
+       cachedRuns.clear();
+   }
 
     @Override
     public void attachObserver(Observer o) {
@@ -77,11 +89,6 @@ public class FirebaseDatabaseManager implements ObservableDatabase<Run> {
 
     @Override
     public void add(Run data) {
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        DatabaseReference databaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/");
-
         DatabaseReference ref = databaseRef.push();
         data.setId(ref.getKey());
         ref.setValue(data);
@@ -89,21 +96,11 @@ public class FirebaseDatabaseManager implements ObservableDatabase<Run> {
 
     @Override
     public void remove(Run data) {
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        DatabaseReference databaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/");
-
         databaseRef.child(data.getId()).removeValue();
     }
 
     @Override
     public void update(Run data) {
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        DatabaseReference databaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/");
-
         databaseRef.child(data.getId()).setValue(data);
     }
 }

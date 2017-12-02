@@ -55,7 +55,7 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         navigationView = findViewById(R.id.main_navigation_view);
         this.savedInstanceState = savedInstanceState;
 
-        presenter.authenticate();
+        presenter.onCreateView();
     }
 
     @Override

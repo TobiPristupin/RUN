@@ -77,8 +77,8 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     private void initTabLayout(){
         tabLayout = rootView.findViewById(R.id.stats_mileage_tablayout);
         tabLayout.addTab(tabLayout.newTab().setText("Month"));
-        tabLayout.addTab(tabLayout.newTab().setText("3Months"));
-        tabLayout.addTab(tabLayout.newTab().setText("6Months"));
+        tabLayout.addTab(tabLayout.newTab().setText("3 Months"));
+        tabLayout.addTab(tabLayout.newTab().setText("6 Months"));
         tabLayout.addTab(tabLayout.newTab().setText("Year"));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

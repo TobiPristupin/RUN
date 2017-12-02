@@ -14,13 +14,37 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.CardView
-            android:id="@+id/stats_mileage_graph_cardview"
+            android:id="@+id/stats_mileage_graph_cardview2"
             android:layout_width="match_parent"
-            android:layout_height="325dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            app:cardCornerRadius="6dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mileage"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@color/DarkPink"
+                android:paddingLeft="16dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"/>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/stats_mileage_graph_cardview"
+            android:layout_width="match_parent"
+            android:layout_height="375dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="10dp"
             app:cardElevation="20dp">
 
             <RelativeLayout
@@ -31,12 +55,10 @@
                     android:id="@+id/stats_mileage_totaldistance_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     tools:text="121 KM"
+                    android:layout_alignParentTop="true"
                     android:textColor="@android:color/black"
                     android:textSize="30sp"
                     android:textStyle="bold" />
@@ -45,14 +67,15 @@
                     android:id="@+id/stats_mileage_viewanimator"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_above="@id/stats_mileage_tablayout"
-                    android:layout_below="@id/stats_mileage_totaldistance_text" />
-
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/stats_mileage_totaldistance_text"
+                    android:layout_above="@id/stats_mileage_tablayout"/>
 
                 <android.support.design.widget.TabLayout
                     android:id="@+id/stats_mileage_tablayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:tabMode="scrollable"
                     android:layout_alignParentBottom="true"
                     android:background="@color/DarkPink"
                     app:tabIndicatorColor="@android:color/white"
@@ -64,36 +87,45 @@
 
         </android.support.v7.widget.CardView>
 
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="30dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Overview"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@color/DarkPink"
+                android:paddingLeft="16dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"/>
+
+        </android.support.v7.widget.CardView>
+
+
         <android.support.v7.widget.CardView
             android:id="@+id/stats_mileage_more_cardview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            app:cardCornerRadius="6dp"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="10dp"
             app:cardElevation="20dp"
             android:layout_marginBottom="75dp">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/stats_mileage_overview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/DarkPink"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="20dp"
-                    android:text="Overview"
-                    android:textColor="@android:color/white"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
                 <include
                     android:id="@+id/stats_mileage_overview_item_month"
@@ -102,12 +134,14 @@
                     android:layout_height="65dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/stats_mileage_overview" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <View
                     android:id="@+id/divider1"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:background="@color/Grey"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -129,6 +163,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/Grey"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -149,6 +185,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/Grey"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"

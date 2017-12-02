@@ -3,6 +3,7 @@ package com.example.tobias.run.app;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,6 +26,10 @@ public class MainPresenter {
         user = firebaseAuth.getCurrentUser();
     }
 
+    public void onCreateView(){
+        authenticate();
+    }
+
 
     public void authenticate(){
         initAuthStateListener();
@@ -33,6 +38,7 @@ public class MainPresenter {
             view.loadLogIn();
         } else {
             view.initViews();
+            FirebaseDatabaseManager.getInstance().reset();
         }
     }
 
