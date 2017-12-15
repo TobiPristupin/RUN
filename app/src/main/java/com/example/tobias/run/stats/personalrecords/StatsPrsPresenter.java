@@ -1,5 +1,7 @@
 package com.example.tobias.run.stats.personalrecords;
 
+import android.support.annotation.Nullable;
+
 import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.data.Run;
 import com.example.tobias.run.interfaces.Observer;
@@ -7,7 +9,6 @@ import com.example.tobias.run.utils.RunUtils;
 import com.github.mikephil.charting.data.Entry;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class StatsPrsPresenter implements Observer<List<Run>> {
@@ -23,15 +24,15 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         this.model.attachObserver(this);
     }
 
+    public void onDetachView(){
+        model.detachObserver(this);
+    }
+
     @Override
     public void updateData(List<Run> data) {
         runList = data;
 
         updateChartData();
-    }
-
-    public void onDetachView(){
-        model.detachObserver(this);
     }
 
     private void updateChartData(){
@@ -46,66 +47,138 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
     private void update400mChartData(){
         List<Run> runs400m = RunUtils.filterList(runList, Run.Predicates.isRunFromDistanceKm(.4f));
 
-        List<Entry> scatterData = null;
-        List<Entry> bestRunData = null;
-        List<Entry> averageRunData = null;
-
-        if (runs400m.size() > 0) {
-            scatterData = new ArrayList<>();
-
-            Run fastestRun = RunUtils.getFastestRun(runs400m, false);
-            //Fastest run will always be added
-            scatterData.add(new Entry(1, fastestRun.getTime()));
-
-            //Start at 2 because index 0 goes outside the graph and index 1 is used by fastestRun
-            int counter = 2;
-            for (int i = 1; i < runs400m.size(); i++){
-                Run r = runs400m.get(i);
-
-                /*Run has to be less than 75% slower than best run to be added to graph. Runs not
-                added to graph will still count in average data.*/
-                if (fastestRun.getTime() * 1.5 > r.getTime()){
-                    scatterData.add(new Entry(counter, r.getTime()));
-                    counter++;
-                }
-            }
-
-            bestRunData = new ArrayList<>();
-            bestRunData.add(new Entry(0, fastestRun.getTime()));
-            bestRunData.add(new Entry(scatterData.size() + 1, fastestRun.getTime()));
-
-            averageRunData = new ArrayList<>();
-            float averageTime = RunUtils.getAverageTime(runs400m);
-            averageRunData.add(new Entry(0, averageTime));
-            averageRunData.add(new Entry(scatterData.size() + 1, averageTime));
-        }
+        List<Entry> scatterData = calculateScatterData(runs400m);
+        int scatterDataSize = scatterData == null ? 0  : scatterData.size();
+        List<Entry> bestRunData = calculateBestRunData(runs400m, scatterDataSize);
+        List<Entry> averageRunData = calculateAverageRunData(runs400m, scatterDataSize);
 
         view.set400mChartData(scatterData, bestRunData, averageRunData);
     }
 
     private void updateMileChartData(){
-        List<Entry> data = Arrays.asList(new Entry(0, 1));
-        view.setMileChartData(data, data, data);
+        List<Run> runsMile = RunUtils.filterList(runList, Run.Predicates.isRunFromDistanceMiles(1f));
+
+        List<Entry> scatterData = calculateScatterData(runsMile);
+        int scatterDataSize = scatterData == null ? 0  : scatterData.size();
+        List<Entry> bestRunData = calculateBestRunData(runsMile, scatterDataSize);
+        List<Entry> averageRunData = calculateAverageRunData(runsMile, scatterDataSize);
+
+        view.setMileChartData(scatterData, bestRunData, averageRunData);
     }
 
     private void update5kChartData(){
-        List<Entry> data = Arrays.asList(new Entry(0, 1));
-        view.set5kChartData(data, data, data);
+        List<Run> runs5k = RunUtils.filterList(runList, Run.Predicates.isRunFromDistanceKm(5f));
+
+        List<Entry> scatterData = calculateScatterData(runs5k);
+        int scatterDataSize = scatterData == null ? 0  : scatterData.size();
+        List<Entry> bestRunData = calculateBestRunData(runs5k, scatterDataSize);
+        List<Entry> averageRunData = calculateAverageRunData(runs5k, scatterDataSize);
+
+        view.set5kChartData(scatterData, bestRunData, averageRunData);
     }
 
     private void update10kChartData(){
-        List<Entry> data = Arrays.asList(new Entry(0, 1));
-        view.set10kChartData(data, data, data);
+        List<Run> runs10k = RunUtils.filterList(runList, Run.Predicates.isRunFromDistanceKm(10f));
+
+        List<Entry> scatterData = calculateScatterData(runs10k);
+        int scatterDataSize = scatterData == null ? 0  : scatterData.size();
+        List<Entry> bestRunData = calculateBestRunData(runs10k, scatterDataSize);
+        List<Entry> averageRunData = calculateAverageRunData(runs10k, scatterDataSize);
+
+        view.set10kChartData(scatterData, bestRunData, averageRunData);
     }
 
     private void update21kChartData(){
-        List<Entry> data = Arrays.asList(new Entry(0, 1));
-        view.set21kChartData(data, data, data);
+        List<Run> runs21k = RunUtils.filterList(runList, Run.Predicates.isRunFromDistanceKm(21f));
+
+        List<Entry> scatterData = calculateScatterData(runs21k);
+        int scatterDataSize = scatterData == null ? 0  : scatterData.size();
+        List<Entry> bestRunData = calculateBestRunData(runs21k, scatterDataSize);
+        List<Entry> averageRunData = calculateAverageRunData(runs21k, scatterDataSize);
+
+        view.set21kChartData(scatterData, bestRunData, averageRunData);
     }
 
     private void update42kChartData(){
-        List<Entry> data = Arrays.asList(new Entry(0, 1));
-        view.set42kChartData(data, data, data);
+        List<Run> runs42k = RunUtils.filterList(runList, Run.Predicates.isRunFromDistanceKm(42));
+
+        List<Entry> scatterData = calculateScatterData(runs42k);
+        int scatterDataSize = scatterData == null ? 0  : scatterData.size();
+        List<Entry> bestRunData = calculateBestRunData(runs42k, scatterDataSize);
+        List<Entry> averageRunData = calculateAverageRunData(runs42k, scatterDataSize);
+
+        view.set42kChartData(scatterData, bestRunData, averageRunData);
+    }
+
+    private @Nullable List<Entry> calculateScatterData(List<Run> runs){
+        if (runs.size() < 1){
+            return null;
+        }
+
+        List<Entry> scatterData = new ArrayList<>();
+        Run fastestRun = RunUtils.getFastestRun(runs, false);
+
+        //Fastest run will always be added no matter what
+        scatterData.add(new Entry(1, fastestRun.getTime()));
+
+        //Start at 2 because index 0 is outside of the graph and index 1 is already occupied by fastestRun
+        int counter = 2;
+        for (int i = 1; i < runs.size(); i++){
+            Run r = runs.get(i);
+
+            /*Run has to be less than 50% slower than best run to be added to graph. Runs not
+            added to graph will still count in average data.*/
+            if (fastestRun.getTime() * 1.5 > r.getTime()){
+                scatterData.add(new Entry(counter, r.getTime()));
+                counter++;
+            }
+        }
+
+        return scatterData;
+    }
+
+    /**
+     *
+     * @param runs
+     * @param scatterDataSize bestRunData is represented as a line in the graph , and the x-value of
+     *                       the endpoint of the line has to be scatterDataSize + 1, to add the necessary
+     *                       padding to the graph and avoid the scatter data dots going outside of the graph.
+     * @return
+     */
+    private @Nullable List<Entry> calculateBestRunData(List<Run> runs, int scatterDataSize){
+        if (runs.size() < 1){
+            return null;
+        }
+
+        Run fastestRun = RunUtils.getFastestRun(runs, false);
+        List<Entry> bestRunData = new ArrayList<>();
+
+        bestRunData.add(new Entry(0, fastestRun.getTime()));
+        bestRunData.add(new Entry(scatterDataSize + 1, fastestRun.getTime()));
+
+        return bestRunData;
+    }
+
+    /**
+     *
+     * @param runs
+     * @param scatterDataSize averageRunData is represented as a line in the graph , and the x-value of
+     *                       the endpoint of the line has to be scatterDataSize + 1, to add the necessary
+     *                       padding to the graph and avoid the scatter data dots going outside of the graph.
+     * @return
+     */
+    private @Nullable List<Entry> calculateAverageRunData(List<Run> runs, int scatterDataSize){
+        if (runs.size() < 1){
+            return null;
+        }
+
+        List<Entry> averageRunData = new ArrayList<>();
+
+        float averageTime = RunUtils.getAverageTime(runs);
+        averageRunData.add(new Entry(0, averageTime));
+        averageRunData.add(new Entry(scatterDataSize + 1, averageTime));
+
+        return averageRunData;
     }
 
 }

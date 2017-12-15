@@ -35,4 +35,12 @@ public class RunTest {
         Assert.assertEquals(similarRun.hashCode(), similarRun2.hashCode());
         Assert.assertNotEquals(similarRun.hashCode(), differentRun.hashCode());
     }
+
+    @Test public void testIsRunFromDistanceKm(){
+
+    }
+
+    @Test public void testIsRunFromDistanceMiles(){
+
+    }
 }
