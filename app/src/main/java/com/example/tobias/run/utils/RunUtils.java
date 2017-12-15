@@ -3,7 +3,6 @@ package com.example.tobias.run.utils;
 import android.support.annotation.Nullable;
 
 import com.example.tobias.run.data.Run;
-import com.example.tobias.run.data.RunPredicates;
 
 import org.apache.commons.collections.Predicate;
 import org.joda.time.DateTime;
@@ -43,6 +42,46 @@ public class RunUtils {
         return filteredList;
     }
 
+
+    /**
+     * Returns fastest run (run with less time). If two runs have same time, will return first one in list.
+     * Precondition: Assumes all runs are of the same distance, will not check if runs are the same distances.
+     * @param runs list of runs to evaluate
+     * @param includeZeroTimeRuns should include runs with time = 0 or skip them.
+     * @return fastest run
+     */
+    public static @Nullable Run getFastestRun(List<Run> runs, boolean includeZeroTimeRuns){
+        if (runs.isEmpty()){
+            return null;
+        }
+
+        Run fastest = runs.get(0);
+
+        for (Run r : runs){
+            if (includeZeroTimeRuns && r.getTime() == 0){
+                //No need to check further because runs can't have negative time.
+                return r;
+            }
+
+            if (r.getTime() < fastest.getTime()){
+                fastest = r;
+            }
+
+        }
+
+        return fastest;
+    }
+
+    public static float getAverageTime(List<Run> runs){
+        long sum = 0;
+
+        for (Run r : runs){
+            sum += r.getTime();
+        }
+
+        return sum / runs.size();
+    }
+
     /**
      * Gets mileage between a period of time.
      * @param start time in unix timestamp
@@ -51,7 +90,7 @@ public class RunUtils {
      */
     public static float getMileageBetween(long start, long end, List<Run> data, String unit){
         List<Run> filteredList = new ArrayList<>();
-        filteredList.addAll(filterList(data, RunPredicates.isRunBetween(start, end)));
+        filteredList.addAll(filterList(data, Run.Predicates.isRunBetween(start, end)));
 
         float mileage = 0;
 
@@ -66,10 +105,23 @@ public class RunUtils {
         return mileage;
     }
 
-    public static float addMileage(float[] mileage){
+    public static float addMileage(float[] mileage) {
         float sum = 0;
-        for (float f : mileage){
+        for (float f : mileage) {
             sum += f;
+        }
+
+        return sum;
+    }
+
+    public static float addMileage(List<Run> runs, String unit) {
+        float sum = 0;
+        for (Run r : runs) {
+            if (unit.equals("km")){
+                sum += r.getDistanceKilometres();
+            } else {
+                sum += r.getDistanceKilometres();
+            }
         }
 
         return sum;
@@ -97,16 +149,6 @@ public class RunUtils {
         }
 
         return text;
-    }
-
-    /**
-     * Returns the fastest run (less time) given a distance.
-     * @param distanceKilometers
-     * @return Fastest run (less time)
-     */
-    public static @Nullable
-    Run getFastestRun(float distanceKilometers, List<Run> list){
-        return null;
     }
 
     /**
@@ -159,6 +201,28 @@ public class RunUtils {
                 .append(String.format(Locale.getDefault(), "%02d", period.getMinutes()))
                 .append(":")
                 .append(String.format(Locale.getDefault(), "%02d", period.getSeconds())).toString();
+
+        return timeText;
+    }
+
+    /**
+     *
+     * @param time in unix timestamp format
+     * @param includeZeroHours should include hour part if hours are 0
+     * @return time in format hh:mm:ss or mm:ss if includeZeroHours is false;
+     */
+    public static String timeToString(long time, boolean includeZeroHours){
+        //Create period to transform time in millis to formatted time.
+        Period period = new Period(time);
+
+        String timeText = new StringBuilder()
+                .append(String.format(Locale.getDefault(), "%02d", period.getMinutes()))
+                .append(":")
+                .append(String.format(Locale.getDefault(), "%02d", period.getSeconds())).toString();
+
+        if (period.getHours() > 0 || includeZeroHours){
+            timeText = String.format(Locale.getDefault(), "%02d", period.getHours()) + ":" + timeText;
+        }
 
         return timeText;
     }
@@ -254,8 +318,4 @@ public class RunUtils {
         return Integer.valueOf(rating);
     }
 
-    public static float round (float value, int precision) {
-        int scale = (int) Math.pow(10, precision);
-        return (float) Math.round(value * scale) / scale;
-    }
 }

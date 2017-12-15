@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -30,11 +29,9 @@ public class DistanceDialog {
     private NumberPicker numberPickerWhole;
     private NumberPicker numberPickerDecimal;
     private onPositiveButtonListener listener;
-    private Activity activity;
     private SharedPreferenceRepository preferenceManager;
 
     public DistanceDialog(Activity activity, onPositiveButtonListener listener){
-        this.activity = activity;
         this.listener = listener;
         this.preferenceManager = new SharedPreferenceManager((Context) activity);
     }

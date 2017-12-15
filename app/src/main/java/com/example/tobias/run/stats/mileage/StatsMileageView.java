@@ -41,4 +41,5 @@ public interface StatsMileageView {
     void set6MonthsIncreaseText(String text, boolean isIncrease);
 
     void setYearIncreaseText(String text, boolean isIncrease);
+
 }

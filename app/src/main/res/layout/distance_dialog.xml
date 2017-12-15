@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:textSize="35sp"
         android:textStyle="bold"
-        android:text=","
+        android:text="."
         android:layout_toRightOf="@id/distance_picker_whole"
         android:layout_centerVertical="true"
         android:layout_marginLeft="15dp"/>

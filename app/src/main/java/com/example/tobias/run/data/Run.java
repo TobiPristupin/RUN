@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import com.example.tobias.run.utils.RunUtils;
 import com.google.firebase.database.Exclude;
 
+import org.apache.commons.collections.Predicate;
+
 /**
  * Object to represent a run.
  */
@@ -135,10 +137,14 @@ public class Run implements Parcelable, Comparable<Run> {
         } else {
             setDistanceMiles(distance);
         }
+
+        updatePace();
+
     }
 
     public void setDistanceKilometres(float distanceKilometres){
         this.distanceKilometres = distanceKilometres;
+        updatePace();
     }
 
     @Exclude
@@ -149,10 +155,13 @@ public class Run implements Parcelable, Comparable<Run> {
 
         distanceKilometres = RunUtils.distanceToFloat(distanceText);
         distanceMiles = RunUtils.kilometresToMiles(distanceKilometres);
+
+        updatePace();
     }
 
     public void setDistanceMiles(float distanceMiles){
         this.distanceMiles = distanceMiles;
+        updatePace();
     }
 
     @Exclude
@@ -163,6 +172,8 @@ public class Run implements Parcelable, Comparable<Run> {
 
         distanceMiles = RunUtils.distanceToFloat(distanceText);
         distanceKilometres = RunUtils.milesToKilometers(distanceMiles);
+
+        updatePace();
     }
 
     public void setTime(long time){
@@ -196,7 +207,6 @@ public class Run implements Parcelable, Comparable<Run> {
         id = pushKey;
     }
 
-
     @Deprecated
     /**
      * Setter required for Firebase, should not be used by user as pace should never be set manually,
@@ -205,7 +215,6 @@ public class Run implements Parcelable, Comparable<Run> {
     public void setKilometrePace(long kmPace){
         this.kilometrePace = kmPace;
     }
-
 
     @Deprecated
     /**
@@ -216,10 +225,12 @@ public class Run implements Parcelable, Comparable<Run> {
         this.milePace = milePace;
     }
 
-    //Compares by date
-    @Override
-    public int compareTo(@NonNull Run o) {
-        return (int) (date - o.date);
+    /**
+     * Updates pace values. Called when distance fields are modified and pace requires updating.
+     */
+    private void updatePace(){
+        milePace = RunUtils.calculatePace(distanceMiles, time);
+        kilometrePace = RunUtils.calculatePace(distanceKilometres, time);
     }
 
     @Override
@@ -259,6 +270,19 @@ public class Run implements Parcelable, Comparable<Run> {
     }
 
     @Override
+    public int compareTo(@NonNull Run o) {
+        if (date == o.date){
+            return 0;
+        }
+
+        if (date > o.date){
+            return 1;
+        }
+
+        return -1;
+    }
+
+    @Override
     public String toString() {
         return distanceMiles + "mi - " + distanceKilometres + "km - date:" + date + " - time:"
                 + time + " - rating:" + rating + " - id:" + id;
@@ -279,6 +303,7 @@ public class Run implements Parcelable, Comparable<Run> {
         parcel.writeFloat(distanceMiles);
         parcel.writeLong(milePace);
         parcel.writeLong(kilometrePace);
+        
     }
 
     @Exclude
@@ -296,4 +321,36 @@ public class Run implements Parcelable, Comparable<Run> {
 
     };
 
+    public static class Predicates {
+
+        public static Predicate isRunBetween(final long start, final long end) {
+            return new Predicate() {
+                @Override
+                public boolean evaluate(Object object) {
+                    Run tr = (Run) object;
+                    return tr.getDate() >= start && tr.getDate() <= end;
+                }
+            };
+        }
+
+        public static Predicate isRunFromDistanceKm(final float distanceKm) {
+            return new Predicate() {
+                @Override
+                public boolean evaluate(Object object) {
+                    Run tr = (Run) object;
+                    return Math.abs(tr.getDistanceKilometres() - distanceKm) < 0.01;
+                }
+            };
+        }
+
+        public static Predicate isRunFromDistanceMiles(final float distanceMiles) {
+            return new Predicate() {
+                @Override
+                public boolean evaluate(Object object) {
+                    Run tr = (Run) object;
+                    return Math.abs(tr.getDistanceMiles() - distanceMiles) < 0.01;
+                }
+            };
+        }
+    }
 }

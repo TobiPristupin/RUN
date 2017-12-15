@@ -2,7 +2,6 @@ package com.example.tobias.run.editor;
 
 import android.support.annotation.Nullable;
 
-import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.data.Run;
 import com.example.tobias.run.data.SharedPreferenceRepository;
@@ -18,10 +17,12 @@ public class EditorPresenter {
     private Run runToEdit;
     private boolean editMode;
     private SharedPreferenceRepository preferenceRepository;
+    private ObservableDatabase<Run> model;
 
-    public EditorPresenter(EditorView view, SharedPreferenceRepository preferenceRepository) {
+    public EditorPresenter(EditorView view, SharedPreferenceRepository preferenceRepository, ObservableDatabase<Run> model) {
         this.view = view;
         this.preferenceRepository = preferenceRepository;
+        this.model = model;
     }
 
     /**
@@ -110,11 +111,10 @@ public class EditorPresenter {
 
 
     private void addRunToDatabase(Run run){
-        ObservableDatabase<Run> database = FirebaseDatabaseManager.getInstance();
         if (editMode){
-            database.update(run);
+            model.update(run);
         } else {
-            database.add(run);
+            model.add(run);
         }
     }
 

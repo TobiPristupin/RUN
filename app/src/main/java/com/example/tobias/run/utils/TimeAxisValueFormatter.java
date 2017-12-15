@@ -4,21 +4,13 @@ import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 /**
- * Axis value formatter for graphs
+ * Created by Tobi on 12/10/2017.
  */
 
-public class AxisValueFormatter implements IAxisValueFormatter {
-
-    private String[] values;
-
-    public AxisValueFormatter(String[] values){
-        this.values = values;
-    }
+public class TimeAxisValueFormatter implements IAxisValueFormatter {
 
     @Override
     public String getFormattedValue(float value, AxisBase axis) {
-        return values[(int) value - 1];
+        return RunUtils.timeToString((long) value, false);
     }
-
-
 }

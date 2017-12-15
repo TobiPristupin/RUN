@@ -15,7 +15,7 @@ import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.SharedPreferenceManager;
 import com.example.tobias.run.data.SharedPreferenceRepository;
-import com.example.tobias.run.utils.AxisValueFormatter;
+import com.example.tobias.run.utils.GenericAxisValueFormatter;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -77,8 +77,8 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     private void initTabLayout(){
         tabLayout = rootView.findViewById(R.id.stats_mileage_tablayout);
         tabLayout.addTab(tabLayout.newTab().setText("Month"));
-        tabLayout.addTab(tabLayout.newTab().setText("3 Months"));
-        tabLayout.addTab(tabLayout.newTab().setText("6 Months"));
+        tabLayout.addTab(tabLayout.newTab().setText("3Months"));
+        tabLayout.addTab(tabLayout.newTab().setText("6Months"));
         tabLayout.addTab(tabLayout.newTab().setText("Year"));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -238,26 +238,27 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
         barChartYear.setData(new BarData(barDataSet));
         barChartYear.invalidate();
+
     }
 
     @Override
     public void setGraphMonthXLabel(String[] values) {
-        barChartMonth.getXAxis().setValueFormatter(new AxisValueFormatter(values));
+        barChartMonth.getXAxis().setValueFormatter(new GenericAxisValueFormatter<>(values));
     }
 
     @Override
     public void setGraph3MonthXLabel(String[] values) {
-        barChart3Month.getXAxis().setValueFormatter(new AxisValueFormatter(values));
+        barChart3Month.getXAxis().setValueFormatter(new GenericAxisValueFormatter<>(values));
     }
 
     @Override
     public void setGraph6MonthXLabel(String[] values) {
-        barChart6Month.getXAxis().setValueFormatter(new AxisValueFormatter(values));
+        barChart6Month.getXAxis().setValueFormatter(new GenericAxisValueFormatter<>(values));
     }
 
     @Override
     public void setGraphYearXLabel(String[] values) {
-        barChartYear.getXAxis().setValueFormatter(new AxisValueFormatter(values));
+        barChartYear.getXAxis().setValueFormatter(new GenericAxisValueFormatter<>(values));
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.example.tobias.run.history;
 
 
-import android.app.ActivityOptions;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -152,16 +151,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), EditorActivity.class);
-                //Shared transition animations not implemented below api 21
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                    String transitionName = fab.getTransitionName();
-                    ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
-                            (View) fab, transitionName);
-                    startActivity(intent, activityOptions.toBundle());
-                } else {
-                    startActivity(intent);
-                }
-
+                startActivity(intent);
             }
         });
 

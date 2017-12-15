@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tobias.run.R;
+import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.Run;
 import com.example.tobias.run.data.SharedPreferenceManager;
 import com.example.tobias.run.data.SharedPreferenceRepository;
@@ -54,7 +55,7 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
         initToolbar();
 
         SharedPreferenceRepository preferenceRepository = new SharedPreferenceManager(EditorActivity.this);
-        presenter = new EditorPresenter(this, preferenceRepository);
+        presenter = new EditorPresenter(this, preferenceRepository, FirebaseDatabaseManager.getInstance());
         preferenceManager = new SharedPreferenceManager(EditorActivity.this);
 
         Intent intent = getIntent();

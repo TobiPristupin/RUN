@@ -70,7 +70,7 @@
         android:elevation="5dp"
         android:indeterminate="true"
         android:src="@drawable/ic_keyboard_arrow_right"
-        app:fbb_progressColor="@color/Grey"
+        app:fbb_progressColor="@color/Orange"
         app:fbb_progressWidthRatio="0.2"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintLeft_toLeftOf="parent"

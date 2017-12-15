@@ -72,7 +72,7 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
         } else {
             view.setMonthIncreaseText(String.format("%.1f", monthIncrease), false);
         }
-        
+
         float months3Increase = RunUtils.addMileage(get3MonthsMileage()) - getPast3MonthsMileageTotal();
         System.out.println(months3Increase);
         if (months3Increase >= 0){
@@ -185,67 +185,97 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
     }
 
     private float getMonthMileage(){
-        float mileageSum = RunUtils.getMileageBetween(DateUtils.getStartOfMonth(),
-                DateUtils.getEndOfMonth(), runList, getDistanceUnit());
+        List<Run> monthRuns = RunUtils.filterList(runList,
+                Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(), DateUtils.getEndOfMonth()));
+
+        float mileageSum = RunUtils.addMileage(monthRuns, getDistanceUnit());
 
         return mileageSum;
     }
 
     private float getPastMonthMileageTotal(){
-        float mileageSum = RunUtils.getMileageBetween(DateUtils.getStartOfMonth(-1),
-                DateUtils.getEndOfMonth(-1), runList, getDistanceUnit());
+        List<Run> lastMonthRuns = RunUtils.filterList(runList,
+                Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(-1), DateUtils.getEndOfMonth(-1)));
+
+        float mileageSum = RunUtils.addMileage(lastMonthRuns, getDistanceUnit());
 
         return mileageSum;
     }
 
     private float[] get3MonthsMileage(){
-        float mileage2MonthsPrevious = RunUtils.getMileageBetween(DateUtils.getStartOfMonth(-2),
-                DateUtils.getEndOfMonth(-2), runList, getDistanceUnit());
+        List<Run> runs2MonthsBack = RunUtils.filterList(runList, Run.Predicates.
+                isRunBetween(DateUtils.getStartOfMonth(-2), DateUtils.getEndOfMonth(-2)));
 
-        float mileagePreviousMonth = RunUtils.getMileageBetween(DateUtils.getStartOfMonth(-1),
-                DateUtils.getEndOfMonth(-1), runList, getDistanceUnit());
+        List<Run> runsLastMonth = RunUtils.filterList(runList,
+                Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(-1), DateUtils.getEndOfMonth(-1)));
 
-        float mileageMonth = RunUtils.getMileageBetween(DateUtils.getStartOfMonth(),
-                DateUtils.getEndOfMonth(), runList, getDistanceUnit());
+        List<Run> monthRuns = RunUtils.filterList(runList,
+                Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(), DateUtils.getEndOfMonth()));
+
+
+        float mileage2MonthsPrevious = RunUtils.addMileage(runs2MonthsBack, getDistanceUnit());
+        float mileagePreviousMonth = RunUtils.addMileage(runsLastMonth, getDistanceUnit());
+        float mileageMonth = RunUtils.addMileage(monthRuns, getDistanceUnit());
 
         return new float[] {mileage2MonthsPrevious, mileagePreviousMonth, mileageMonth};
     }
 
     private float getPast3MonthsMileageTotal(){
-        float mileageSum = RunUtils.getMileageBetween(DateUtils.getStartOfMonth(-5),
-                DateUtils.getEndOfMonth(-3), runList, getDistanceUnit());
+        List<Run> last3MonthsRuns = RunUtils.filterList(runList,
+                Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(-5), DateUtils.getEndOfMonth(-3)));
+
+        float mileageSum = RunUtils.addMileage(last3MonthsRuns, getDistanceUnit());
 
         return mileageSum;
     }
 
     private float[] get6MonthsMileage(){
-        float mileageMonths1To2 = RunUtils.getMileageBetween(DateUtils.getStartOfMonth(-5),
-                DateUtils.getEndOfMonth(-4), runList, getDistanceUnit());
+        List<Run> runs5To6MonthsBack = RunUtils.filterList(runList,
+                Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(-5), DateUtils.getEndOfMonth(-4)));
 
-        float mileageMonths3To4 = RunUtils.getMileageBetween(DateUtils.getStartOfMonth(-3),
-                DateUtils.getEndOfMonth(-2), runList, getDistanceUnit());
+        List<Run> runs4To3MonthsBack = RunUtils.filterList(runList,
+                Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(-3), DateUtils.getEndOfMonth(-2)));
 
-        float mileageMonths5To6 = RunUtils.getMileageBetween(DateUtils.getStartOfMonth(-1),
-                DateUtils.getEndOfMonth(), runList, getDistanceUnit());
+        List<Run> runs2To1MonthsBack = RunUtils.filterList(runList,
+                Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(-1), DateUtils.getEndOfMonth()));
+
+        float mileageMonths1To2 = RunUtils.addMileage(runs5To6MonthsBack, getDistanceUnit());
+
+        float mileageMonths3To4 = RunUtils.addMileage(runs4To3MonthsBack, getDistanceUnit());
+
+        float mileageMonths5To6 = RunUtils.addMileage(runs2To1MonthsBack, getDistanceUnit());
 
         return new float[] {mileageMonths1To2, mileageMonths3To4, mileageMonths5To6};
     }
 
     private float getPast6MonthsMileageTotal(){
-        float mileageSum = RunUtils.getMileageBetween(DateUtils.getStartOfMonth(-11),
-                DateUtils.getEndOfMonth(-6), runList, getDistanceUnit());
+        List<Run> runsLast6Months = RunUtils.filterList(runList,
+                Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(-11), DateUtils.getEndOfMonth(-6)));
+
+        float mileageSum = RunUtils.addMileage(runsLast6Months, getDistanceUnit());
 
         return mileageSum;
     }
 
     private float getPastYearMileage(){
-        float mileageSum = RunUtils.getMileageBetween(DateUtils.getStartOfLastYear(),
-                DateUtils.getEndOfLastYear(), runList, getDistanceUnit());
+        List<Run> runsLastYear = RunUtils.filterList(runList,
+                Run.Predicates.isRunBetween(DateUtils.getStartOfLastYear(),  DateUtils.getEndOfLastYear()));
+
+        float mileageSum = RunUtils.addMileage(runsLastYear, getDistanceUnit());
 
         return mileageSum;
     }
 
     private float[] getYearMileage(){
+        List<Run> runsMonths1To4 = RunUtils.filterList(runList,
+                Run.Predicates.isRunBetween(DateUtils.getStartOfYear(), DateUtils.getStartOfYearEndOfMonth(4)));
+
+        List<Run> runsMonth4To8 = RunUtils.filterList(runList,
+                Run.Predicates.isRunBetween(DateUtils.getStartOfYearStartOfMonth(5), DateUtils.getStartOfYearEndOfMonth(8)));
+
+        List<Run> runsMonth8To12 = RunUtils.filterList(runList,
+                Run.Predicates.isRunBetween(DateUtils.getStartOfYearStartOfMonth(9), DateUtils.getEndOfYear()));
+
         float mileageMonths1To4 = RunUtils.getMileageBetween(DateUtils.getStartOfYear(),
                 DateUtils.getStartOfYearEndOfMonth(4), runList, getDistanceUnit());
 
