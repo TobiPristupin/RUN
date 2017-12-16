@@ -210,6 +210,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
      */
     @Override
     public void setData(List<Run> data) {
+        ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(0, 0);
         adapter.updateItems(data);
     }
 
