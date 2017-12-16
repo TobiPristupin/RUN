@@ -118,6 +118,8 @@ public class HistoryPresenter implements Observer<List<Run>>{
         view.actionModeInvalidate();
     }
 
+
+
     public void deleteRun(Run run){
         model.remove(run);
     }

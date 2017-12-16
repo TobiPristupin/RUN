@@ -3,12 +3,12 @@ package com.example.tobias.run.history;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
@@ -20,8 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.example.tobias.run.R;
@@ -79,6 +77,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
         initRecyclerView();
         initDateSpinner();
         initFab();
+        initNavigationDrawer();
 
         presenter = new HistoryPresenter(this, FirebaseDatabaseManager.getInstance());
 
@@ -89,6 +88,25 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     public void onDetach() {
         super.onDetach();
         presenter.onDetachView();
+    }
+
+    private void initNavigationDrawer(){
+        DrawerLayout drawer = getActivity().findViewById(R.id.main_activity_drawer_layout);
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                finishActionMode();
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {}
+
+            @Override
+            public void onDrawerClosed(View drawerView) {}
+
+            @Override
+            public void onDrawerStateChanged(int newState) {}
+        });
     }
 
     private void initDateSpinner(){
@@ -128,8 +146,8 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
             @Override
             public boolean onLongClick(int position) {
                 if (actionMode == null){
+//                    setActiveActionModeBackground(true);
                     actionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(modeCallback);
-                    setActiveActionModeBackground(true);
                 }
 
                 adapter.toggleSelection(position);
@@ -203,6 +221,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     public void actionModeInvalidate() {
         actionMode.invalidate();
     }
+
 
     /**
      * Updates Recycler View's adapter data set with new data
@@ -300,22 +319,14 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     private void setActiveActionModeBackground(boolean activated){
         RelativeLayout spinnerLayout = rootView.findViewById(R.id.history_spinner_layout);
 
-        Window window = getActivity().getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
         if (activated){
             spinnerLayout.setBackgroundColor(getResources().getColor(R.color.actionMode));
             dateSpinner.setBackgroundColor(getResources().getColor(R.color.actionMode));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                window.setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-            }
+            getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
         } else {
             spinnerLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             dateSpinner.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                window.setStatusBarColor(getResources().getColor(android.R.color.transparent));
-            }
+            getActivity().getWindow().setStatusBarColor(getResources().getColor(android.R.color.transparent));
         }
 
     }
@@ -330,7 +341,8 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
+            setActiveActionModeBackground(true);
+            return true;
         }
 
         @Override

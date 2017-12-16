@@ -51,7 +51,7 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         SharedPreferenceRepository preferenceRepository = new SharedPreferenceManager(MainActivityView.this);
         presenter = new MainPresenter(this, preferenceRepository);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
+        drawerLayout = findViewById(R.id.main_activity_drawer_layout);
         navigationView = findViewById(R.id.main_navigation_view);
         this.savedInstanceState = savedInstanceState;
 
