@@ -86,7 +86,7 @@ public class DistanceDialog {
      */
     private void initUnitText(){
         TextView unitText = (TextView) rootView.findViewById(R.id.distance_unit);
-        unitText.setText(preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY));
+        unitText.setText(preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY).toString());
     }
 
     /**

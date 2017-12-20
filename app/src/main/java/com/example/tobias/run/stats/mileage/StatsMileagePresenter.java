@@ -1,5 +1,6 @@
 package com.example.tobias.run.stats.mileage;
 
+import com.example.tobias.run.data.Distance;
 import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.data.Run;
 import com.example.tobias.run.data.SharedPreferenceRepository;
@@ -289,7 +290,7 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
     }
 
 
-    private String getDistanceUnit(){
+    private Distance.Unit getDistanceUnit(){
         return sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
     }
 

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.DiffCallback;
+import com.example.tobias.run.data.Distance;
 import com.example.tobias.run.data.Run;
 import com.example.tobias.run.data.SharedPreferenceManager;
 import com.example.tobias.run.data.SharedPreferenceRepository;
@@ -77,7 +78,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         diffResult.dispatchUpdatesTo(this);
     }
 
-    private String getDistanceUnit(){
+    private Distance.Unit getDistanceUnit(){
         return preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
     }
 

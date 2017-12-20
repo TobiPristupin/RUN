@@ -1,6 +1,5 @@
 package com.example.tobias.run.data;
 
-import android.content.ComponentCallbacks;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
@@ -21,9 +20,18 @@ public class SharedPreferenceManager implements SharedPreferenceRepository {
 
     @Override
     @Nullable
-    public String get(String key) {
+    public Distance.Unit get(String key) {
         String value = sharedPrefs.getString(key, null);
-        return value;
+
+        if (value == null){
+            return null;
+        }
+
+        if (value.equals("km")){
+            return Distance.Unit.KM;
+        }
+
+        return Distance.Unit.MILE;
     }
 
     @Override

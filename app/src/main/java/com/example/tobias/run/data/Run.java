@@ -8,14 +8,15 @@ import com.example.tobias.run.utils.RunUtils;
 import com.google.firebase.database.Exclude;
 
 import org.apache.commons.collections.Predicate;
+import org.joda.time.Period;
+
 
 /**
  * Object to represent a run.
  */
 public class Run implements Parcelable, Comparable<Run> {
 
-    private float distanceKilometres;
-    private float distanceMiles;
+    private Distance distance;
     private long time;
     private long date;
     private int rating;
@@ -23,48 +24,40 @@ public class Run implements Parcelable, Comparable<Run> {
     private long kilometrePace;
     private String id = null;
 
-    private Run(long date, float distanceKilometres, float distanceMiles, long time, int rating, long milePace, long kilometrePace){
-        this.distanceKilometres = distanceKilometres;
-        this.distanceMiles = distanceMiles;
+    public Run(Distance distance, long time, long date, int rating) {
+        this.distance = distance;
         this.time = time;
         this.date = date;
         this.rating = rating;
-        this.milePace = milePace;
-        this.kilometrePace = kilometrePace;
+        this.kilometrePace = calculatePace(this.distance.getDistanceKm(), time);
+        this.milePace = calculatePace(this.distance.getDistanceMi(), time);
     }
 
-    public static Run withKilometers(long date, float distanceKilometres, long time, int rating){
-        float distanceMiles = RunUtils.kilometresToMiles(distanceKilometres);
-        long kmPace = RunUtils.calculatePace(distanceKilometres, time);
-        long milePace = RunUtils.calculatePace(distanceMiles, time);
-
-        return new Run(date, distanceKilometres, distanceMiles, time, rating, milePace, kmPace);
+    public static Run withKilometers(float distanceKm, long time, long date, int rating){
+        Distance distance = new Distance(distanceKm, Distance.Unit.KM);
+        return new Run(distance, time, date, rating);
     }
 
-    public static Run withKilometers(String date, String distanceKilometres, String time, String rating){
+    public static Run withKilometers(String distanceKm, String time, String date, String rating){
         long d = RunUtils.dateToUnix(date);
-        float distance = RunUtils.distanceToFloat(distanceKilometres);
+        float distance = RunUtils.distanceToFloat(distanceKm);
+        long t = RunUtils.timeToUnix(time);
+        int r = RunUtils.ratingToInt(rating);
+        return withKilometers(distance, t, d, r);
+    }
+
+    public static Run withMiles(float distanceMi, long time, long date, int rating){
+        Distance distance = new Distance(distanceMi, Distance.Unit.MILE);
+        return new Run(distance, time, date, rating);
+    }
+
+    public static Run withMiles(String distanceMi, String time, String date, String rating){
+        long d = RunUtils.dateToUnix(date);
+        float distance = RunUtils.distanceToFloat(distanceMi);
         long t = RunUtils.timeToUnix(time);
         int r = RunUtils.ratingToInt(rating);
 
-        return withKilometers(d, distance, t, r);
-    }
-
-    public static Run withMiles(long date, float distanceMiles, long time, int rating){
-        float distanceKilometres = RunUtils.milesToKilometers(distanceMiles);
-        long kmPace = RunUtils.calculatePace(distanceKilometres, time);
-        long milePace = RunUtils.calculatePace(distanceMiles, time);
-
-        return new Run(date, distanceKilometres, distanceMiles, time, rating, milePace, kmPace);
-    }
-
-    public static Run withMiles(String date, String distanceMiles, String time, String rating){
-        long d = RunUtils.dateToUnix(date);
-        float distance = RunUtils.distanceToFloat(distanceMiles);
-        long t = RunUtils.timeToUnix(time);
-        int r = RunUtils.ratingToInt(rating);
-
-        return withMiles(d, distance, t, r);
+        return withMiles(distance, t, d, r);
     }
 
     @Deprecated
@@ -72,32 +65,47 @@ public class Run implements Parcelable, Comparable<Run> {
      * This no-arg constructor is required and should only be used by firebase, never by a user,
      * because it will lead to the object being in an invalid state where no fields are initialized.
      */
-    public Run(){
+    public Run(){}
 
-    }
-
-    public Run(Parcel in) {
+    private Run(Parcel in) {
+        this.distance = in.readParcelable(Distance.class.getClassLoader());
         this.id = in.readString();
         this.date = in.readLong();
-        this.distanceKilometres = in.readFloat();
         this.time = in.readLong();
         this.rating = in.readInt();
-        this.distanceMiles = in.readFloat();
         this.milePace = in.readLong();
         this.kilometrePace = in.readLong();
     }
 
-    @Exclude
-    public float getDistance(String unit){
-        return unit.equals("km") ? distanceKilometres : distanceMiles;
+    /**
+     * Updates pace values. Called when distance fields are modified and pace requires updating.
+     */
+    private void updatePace(){
+        milePace = calculatePace(distance.getDistanceMi(), time);
+        kilometrePace = calculatePace(distance.getDistanceKm(), time);
+    }
+
+    private long calculatePace(float distance, long time){
+        //Period is inputted time in millis and converts it to hh:mm:ss
+        Period period = new Period(time);
+        float timeInSeconds = period.getHours() * 3600f + period.getMinutes() * 60f + period.getSeconds();
+        float pace = timeInSeconds / distance;
+        //Multiply pace by 1000 to convert it to millis from seconds.
+        return (long) pace * 1000;
+    }
+
+
+
+    @Exclude public float getDistance(Distance.Unit unit){
+        return distance.getDistance(unit);
     }
 
     public float getDistanceKilometres(){
-        return distanceKilometres;
+        return distance.getDistanceKm();
     }
 
     public float getDistanceMiles(){
-        return distanceMiles;
+        return distance.getDistanceMi();
     }
 
     public long getTime(){
@@ -122,12 +130,15 @@ public class Run implements Parcelable, Comparable<Run> {
         return kilometrePace;
     }
 
-    @Exclude
-    /**
-     * Automatically handles if distance is in miles or km and calls appropriate methods.
-     * @param distance
-     */
-    public void setDistance(String distance){
+    public Distance getDistance(){
+        return distance;
+    }
+
+
+
+
+
+    @Exclude public void setDistance(String distance){
         if (!(distance.contains("mi") || distance.contains("km"))){
             throw new IllegalArgumentException("Distance does not contain unit");
         }
@@ -139,49 +150,45 @@ public class Run implements Parcelable, Comparable<Run> {
         }
 
         updatePace();
-
     }
 
-    public void setDistanceKilometres(float distanceKilometres){
-        this.distanceKilometres = distanceKilometres;
+    @Exclude public void setDistanceKilometres(float distanceKilometres){
+        distance.setDistanceKm(distanceKilometres);
         updatePace();
     }
 
-    @Exclude
-    public void setDistanceKilometres(String distanceText){
+    @Exclude public void setDistanceKilometres(String distanceText){
         if (!distanceText.contains("km")){
             throw new IllegalArgumentException("Argument is not in kilometres");
         }
 
-        distanceKilometres = RunUtils.distanceToFloat(distanceText);
-        distanceMiles = RunUtils.kilometresToMiles(distanceKilometres);
-
+        distance.setDistanceKm(RunUtils.distanceToFloat(distanceText));
         updatePace();
     }
 
-    public void setDistanceMiles(float distanceMiles){
-        this.distanceMiles = distanceMiles;
+    @Exclude  public void setDistanceMiles(float distanceMiles){
+        distance.setDistanceMi(distanceMiles);
         updatePace();
     }
 
-    @Exclude
-    public void setDistanceMiles(String distanceText){
+    @Exclude public void setDistanceMiles(String distanceText){
         if (!distanceText.contains("mi")){
             throw new IllegalArgumentException("Argument is not in miles");
         }
 
-        distanceMiles = RunUtils.distanceToFloat(distanceText);
-        distanceKilometres = RunUtils.milesToKilometers(distanceMiles);
-
+        distance.setDistanceMi(RunUtils.distanceToFloat(distanceText));
         updatePace();
+    }
+
+    public void setDistance(Distance distance){
+        this.distance = distance;
     }
 
     public void setTime(long time){
         this.time = time;
     }
 
-    @Exclude
-    public void setTime(String timeText){
+    @Exclude public void setTime(String timeText){
         time = RunUtils.timeToUnix(timeText);
     }
 
@@ -189,8 +196,7 @@ public class Run implements Parcelable, Comparable<Run> {
         this.date = date;
     }
 
-    @Exclude
-    public void setDate(String dateText){
+    @Exclude public void setDate(String dateText){
         date = RunUtils.dateToUnix(dateText);
     }
 
@@ -198,8 +204,7 @@ public class Run implements Parcelable, Comparable<Run> {
         this.rating = rating;
     }
 
-    @Exclude
-    public void setRating(String ratingText){
+    @Exclude public void setRating(String ratingText){
         rating = RunUtils.ratingToInt(ratingText);
     }
 
@@ -225,14 +230,6 @@ public class Run implements Parcelable, Comparable<Run> {
         this.milePace = milePace;
     }
 
-    /**
-     * Updates pace values. Called when distance fields are modified and pace requires updating.
-     */
-    private void updatePace(){
-        milePace = RunUtils.calculatePace(distanceMiles, time);
-        kilometrePace = RunUtils.calculatePace(distanceKilometres, time);
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -243,7 +240,7 @@ public class Run implements Parcelable, Comparable<Run> {
 
         Run run = (Run) obj;
 
-        if (!this.getId().equals(run.getId())) return false;
+        if (this.getId() != null && run.getId() != null && !this.getId().equals(run.getId())) return false;
         if (this.getDate() != run.getDate()) return false;
         if (this.getDistanceKilometres() != run.getDistanceKilometres()) return false;
         if (this.getRating() != run.getRating()) return false;
@@ -256,8 +253,7 @@ public class Run implements Parcelable, Comparable<Run> {
     @Override
     public int hashCode() {
         int result = 15;
-        result = 31 * result + Float.floatToIntBits(distanceKilometres);
-        result = 31 * result + Float.floatToIntBits(distanceMiles);
+        result = 31 * result + distance.hashCode();
         result = 31 * result + (int) (date ^ (date >>> 32));
         result = 31 * result + (int) (time ^ (time >>> 32));
         result = 31 * result + rating;
@@ -284,7 +280,7 @@ public class Run implements Parcelable, Comparable<Run> {
 
     @Override
     public String toString() {
-        return distanceMiles + "mi - " + distanceKilometres + "km - date:" + date + " - time:"
+        return distance.toString() + " - date:" + date + " - time:"
                 + time + " - rating:" + rating + " - id:" + id;
     }
 
@@ -295,15 +291,13 @@ public class Run implements Parcelable, Comparable<Run> {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeParcelable(distance, i);
         parcel.writeString(id);
         parcel.writeLong(date);
-        parcel.writeFloat(distanceKilometres);
         parcel.writeLong(time);
         parcel.writeInt(rating);
-        parcel.writeFloat(distanceMiles);
         parcel.writeLong(milePace);
         parcel.writeLong(kilometrePace);
-        
     }
 
     @Exclude
@@ -321,6 +315,8 @@ public class Run implements Parcelable, Comparable<Run> {
 
     };
 
+
+
     public static class Predicates {
 
         public static Predicate isRunBetween(final long start, final long end) {
@@ -333,22 +329,12 @@ public class Run implements Parcelable, Comparable<Run> {
             };
         }
 
-        public static Predicate isRunFromDistanceKm(final float distanceKm) {
+        public static Predicate isRunFromDistance(final float distance, final Distance.Unit unit) {
             return new Predicate() {
                 @Override
                 public boolean evaluate(Object object) {
                     Run tr = (Run) object;
-                    return Math.abs(tr.getDistanceKilometres() - distanceKm) < 0.01;
-                }
-            };
-        }
-
-        public static Predicate isRunFromDistanceMiles(final float distanceMiles) {
-            return new Predicate() {
-                @Override
-                public boolean evaluate(Object object) {
-                    Run tr = (Run) object;
-                    return Math.abs(tr.getDistanceMiles() - distanceMiles) < 0.01;
+                    return tr.distance.equalsDistance(distance, unit);
                 }
             };
         }

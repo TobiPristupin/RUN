@@ -2,6 +2,7 @@ package com.example.tobias.run.editor;
 
 import android.support.annotation.Nullable;
 
+import com.example.tobias.run.data.Distance;
 import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.data.Run;
 import com.example.tobias.run.data.SharedPreferenceRepository;
@@ -40,7 +41,7 @@ public class EditorPresenter {
     }
 
     private void setViewEditMode(){
-        String unit = preferenceRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        Distance.Unit unit = preferenceRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
 
         String distanceText = RunUtils.distanceToString(runToEdit.getDistance(unit), unit);
         view.setDistanceText(distanceText);
@@ -92,10 +93,10 @@ public class EditorPresenter {
 
     private Run createRunFromData(String distanceText, String ratingText, String timeText, String dateText){
         Run run;
-        if (distanceText.contains("km")){
-            run = Run.withKilometers(dateText, distanceText, timeText, ratingText);
+        if (distanceText.contains(Distance.Unit.KM.toString())){
+            run = Run.withKilometers(distanceText, timeText, dateText, ratingText);
         } else {
-            run = Run.withMiles(dateText, distanceText, timeText, ratingText);
+            run = Run.withMiles(distanceText, timeText, dateText, ratingText);
         }
 
         return run;

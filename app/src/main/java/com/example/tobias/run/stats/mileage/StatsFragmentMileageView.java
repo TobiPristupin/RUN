@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.example.tobias.run.R;
+import com.example.tobias.run.data.Distance;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.SharedPreferenceManager;
 import com.example.tobias.run.data.SharedPreferenceRepository;
@@ -116,33 +117,33 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     }
 
     private void initOverviewItems(){
-        String unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        Distance.Unit unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
 
         View overviewItemMonth = rootView.findViewById(R.id.stats_mileage_overview_item_month);
         ((TextView) overviewItemMonth.findViewById(R.id.overview_item_value_text)).setText("This month");
         ((TextView) overviewItemMonth.findViewById(R.id.overview_item_increase_text)).setText("Over last month");
-        ((TextView) overviewItemMonth.findViewById(R.id.overview_item_value)).setText(0 + unit);
+        ((TextView) overviewItemMonth.findViewById(R.id.overview_item_value)).setText(0 + unit.toString());
         ((TextView) overviewItemMonth.findViewById(R.id.overview_item_increase_value)).setText(0 + "+");
         ((TextView) overviewItemMonth.findViewById(R.id.overview_item_increase_value)).setTextColor(getResources().getColor(R.color.Green));
 
         View overviewItem3Months = rootView.findViewById(R.id.stats_mileage_overview_item_3months);
         ((TextView) overviewItem3Months.findViewById(R.id.overview_item_value_text)).setText("This 3 months");
         ((TextView) overviewItem3Months.findViewById(R.id.overview_item_increase_text)).setText("Over last 3 months");
-        ((TextView) overviewItem3Months.findViewById(R.id.overview_item_value)).setText(0 + unit);
+        ((TextView) overviewItem3Months.findViewById(R.id.overview_item_value)).setText(0 + unit.toString());
         ((TextView) overviewItem3Months.findViewById(R.id.overview_item_increase_value)).setText(0 + "+");
         ((TextView) overviewItem3Months.findViewById(R.id.overview_item_increase_value)).setTextColor(getResources().getColor(R.color.Green));
 
         View overviewItem6Months = rootView.findViewById(R.id.stats_mileage_overview_item_6months);
         ((TextView) overviewItem6Months.findViewById(R.id.overview_item_value_text)).setText("This 6 months");
         ((TextView) overviewItem6Months.findViewById(R.id.overview_item_increase_text)).setText("Over last 6 months");
-        ((TextView) overviewItem6Months.findViewById(R.id.overview_item_value)).setText(0 + unit);
+        ((TextView) overviewItem6Months.findViewById(R.id.overview_item_value)).setText(0 + unit.toString());
         ((TextView) overviewItem6Months.findViewById(R.id.overview_item_increase_value)).setText(0 + "+");
         ((TextView) overviewItem6Months.findViewById(R.id.overview_item_increase_value)).setTextColor(getResources().getColor(R.color.Green));
 
         View overviewItemYear = rootView.findViewById(R.id.stats_mileage_overview_item_year);
         ((TextView) overviewItemYear.findViewById(R.id.overview_item_value_text)).setText("This year");
         ((TextView) overviewItemYear.findViewById(R.id.overview_item_increase_text)).setText("Over last year");
-        ((TextView) overviewItemYear.findViewById(R.id.overview_item_value)).setText(0 + unit);
+        ((TextView) overviewItemYear.findViewById(R.id.overview_item_value)).setText(0 + unit.toString());
         ((TextView) overviewItemYear.findViewById(R.id.overview_item_increase_value)).setText(0 + "+");
         ((TextView) overviewItemYear.findViewById(R.id.overview_item_increase_value)).setTextColor(getResources().getColor(R.color.Green));
     }
@@ -198,7 +199,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
     @Override
     public void setGraphMonthData(List<BarEntry> barEntries) {
-        String unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        Distance.Unit unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
         BarDataSet barDataSet = new BarDataSet(barEntries, "Distance (" + unit + ")");
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkPink));
@@ -209,7 +210,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
     @Override
     public void setGraph3MonthData(List<BarEntry> barEntries) {
-        String unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        Distance.Unit unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
         BarDataSet barDataSet = new BarDataSet(barEntries, "Distance (" + unit + ")");
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkPink));
@@ -220,7 +221,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
     @Override
     public void setGraph6MonthData(List<BarEntry> barEntries) {
-        String unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        Distance.Unit unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
         BarDataSet barDataSet = new BarDataSet(barEntries, "Distance (" + unit + ")");
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkPink));
@@ -231,7 +232,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
     @Override
     public void setGraphYearData(List<BarEntry> barEntries) {
-        String unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        Distance.Unit unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
         BarDataSet barDataSet = new BarDataSet(barEntries, "Distance (" + unit + ")");
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkPink));

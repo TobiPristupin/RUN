@@ -2,6 +2,7 @@ package com.example.tobias.run.stats.personalrecords;
 
 import android.support.annotation.Nullable;
 
+import com.example.tobias.run.data.Distance;
 import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.data.Run;
 import com.example.tobias.run.interfaces.Observer;
@@ -45,7 +46,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
     }
 
     private void update400mChartData(){
-        List<Run> runs400m = RunUtils.filterList(runList, Run.Predicates.isRunFromDistanceKm(.4f));
+        List<Run> runs400m = RunUtils.filterList(runList, Run.Predicates.isRunFromDistance(.4f, Distance.Unit.KM));
 
         List<Entry> scatterData = calculateScatterData(runs400m);
         int scatterDataSize = scatterData == null ? 0  : scatterData.size();
@@ -56,7 +57,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
     }
 
     private void updateMileChartData(){
-        List<Run> runsMile = RunUtils.filterList(runList, Run.Predicates.isRunFromDistanceMiles(1f));
+        List<Run> runsMile = RunUtils.filterList(runList, Run.Predicates.isRunFromDistance(1f, Distance.Unit.MILE));
 
         List<Entry> scatterData = calculateScatterData(runsMile);
         int scatterDataSize = scatterData == null ? 0  : scatterData.size();
@@ -67,7 +68,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
     }
 
     private void update5kChartData(){
-        List<Run> runs5k = RunUtils.filterList(runList, Run.Predicates.isRunFromDistanceKm(5f));
+        List<Run> runs5k = RunUtils.filterList(runList, Run.Predicates.isRunFromDistance(5f, Distance.Unit.KM));
 
         List<Entry> scatterData = calculateScatterData(runs5k);
         int scatterDataSize = scatterData == null ? 0  : scatterData.size();
@@ -78,7 +79,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
     }
 
     private void update10kChartData(){
-        List<Run> runs10k = RunUtils.filterList(runList, Run.Predicates.isRunFromDistanceKm(10f));
+        List<Run> runs10k = RunUtils.filterList(runList, Run.Predicates.isRunFromDistance(10f, Distance.Unit.KM));
 
         List<Entry> scatterData = calculateScatterData(runs10k);
         int scatterDataSize = scatterData == null ? 0  : scatterData.size();
@@ -89,7 +90,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
     }
 
     private void update21kChartData(){
-        List<Run> runs21k = RunUtils.filterList(runList, Run.Predicates.isRunFromDistanceKm(21f));
+        List<Run> runs21k = RunUtils.filterList(runList, Run.Predicates.isRunFromDistance(21f, Distance.Unit.KM));
 
         List<Entry> scatterData = calculateScatterData(runs21k);
         int scatterDataSize = scatterData == null ? 0  : scatterData.size();
@@ -99,8 +100,8 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         view.set21kChartData(scatterData, bestRunData, averageRunData);
     }
 
-    private void update42kChartData(){
-        List<Run> runs42k = RunUtils.filterList(runList, Run.Predicates.isRunFromDistanceKm(42));
+    private void update42kChartData() {
+        List<Run> runs42k = RunUtils.filterList(runList, Run.Predicates.isRunFromDistance(42, Distance.Unit.KM));
 
         List<Entry> scatterData = calculateScatterData(runs42k);
         int scatterDataSize = scatterData == null ? 0  : scatterData.size();
@@ -116,9 +117,9 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         }
 
         List<Entry> scatterData = new ArrayList<>();
-        Run fastestRun = RunUtils.getFastestRun(runs, false);
+        Run fastestRun = RunUtils.getFastestRun(runs);
 
-        //Fastest run will always be added no matter what
+        //Fastest run will always be added
         scatterData.add(new Entry(1, fastestRun.getTime()));
 
         //Start at 2 because index 0 is outside of the graph and index 1 is already occupied by fastestRun
@@ -150,7 +151,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
             return null;
         }
 
-        Run fastestRun = RunUtils.getFastestRun(runs, false);
+        Run fastestRun = RunUtils.getFastestRun(runs);
         List<Entry> bestRunData = new ArrayList<>();
 
         bestRunData.add(new Entry(0, fastestRun.getTime()));

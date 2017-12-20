@@ -2,6 +2,7 @@ package com.example.tobias.run.utils;
 
 import android.support.annotation.Nullable;
 
+import com.example.tobias.run.data.Distance;
 import com.example.tobias.run.data.Run;
 
 import org.apache.commons.collections.Predicate;
@@ -45,12 +46,12 @@ public class RunUtils {
 
     /**
      * Returns fastest run (run with less time). If two runs have same time, will return first one in list.
+     * Ignores runs that have time = 0.
      * Precondition: Assumes all runs are of the same distance, will not check if runs are the same distances.
      * @param runs list of runs to evaluate
-     * @param includeZeroTimeRuns should include runs with time = 0 or skip them.
      * @return fastest run
      */
-    public static @Nullable Run getFastestRun(List<Run> runs, boolean includeZeroTimeRuns){
+    public static @Nullable Run getFastestRun(List<Run> runs){
         if (runs.isEmpty()){
             return null;
         }
@@ -58,12 +59,7 @@ public class RunUtils {
         Run fastest = runs.get(0);
 
         for (Run r : runs){
-            if (includeZeroTimeRuns && r.getTime() == 0){
-                //No need to check further because runs can't have negative time.
-                return r;
-            }
-
-            if (r.getTime() < fastest.getTime()){
+            if (r.getTime() != 0 && r.getTime() < fastest.getTime()){
                 fastest = r;
             }
 
@@ -88,14 +84,14 @@ public class RunUtils {
      * @param end
      * @return mileage in unit
      */
-    public static float getMileageBetween(long start, long end, List<Run> data, String unit){
+    public static float getMileageBetween(long start, long end, List<Run> data, Distance.Unit unit){
         List<Run> filteredList = new ArrayList<>();
         filteredList.addAll(filterList(data, Run.Predicates.isRunBetween(start, end)));
 
         float mileage = 0;
 
         for (Run tr : filteredList){
-            if (unit.equals("km")){
+            if (unit == Distance.Unit.KM){
                 mileage += tr.getDistanceKilometres();
             } else {
                 mileage += tr.getDistanceMiles();
@@ -114,10 +110,10 @@ public class RunUtils {
         return sum;
     }
 
-    public static float addMileage(List<Run> runs, String unit) {
+    public static float addMileage(List<Run> runs, Distance.Unit unit) {
         float sum = 0;
         for (Run r : runs) {
-            if (unit.equals("km")){
+            if (unit == Distance.Unit.KM){
                 sum += r.getDistanceKilometres();
             } else {
                 sum += r.getDistanceKilometres();
@@ -127,10 +123,10 @@ public class RunUtils {
         return sum;
     }
 
-    public static String getDistanceText(Run currentItem, String unit){
+    public static String getDistanceText(Run currentItem, Distance.Unit unit){
         String text;
 
-        if (unit.equals("km")){
+        if (unit == Distance.Unit.KM){
             text = distanceToString(currentItem.getDistanceKilometres(), unit);
         } else {
             text = distanceToString(currentItem.getDistanceMiles(), unit);
@@ -139,39 +135,16 @@ public class RunUtils {
         return text;
     }
 
-    public static String getPaceText(Run currentItem, String unit){
+    public static String getPaceText(Run currentItem, Distance.Unit unit){
         String text;
 
-        if (unit.equals("km")){
-            text = paceToString(currentItem.getKilometrePace(), "km");
+        if (unit == Distance.Unit.KM){
+            text = paceToString(currentItem.getKilometrePace(), unit.toString());
         } else {
-            text = paceToString(currentItem.getMilePace(), "mi");
+            text = paceToString(currentItem.getMilePace(), unit.toString());
         }
 
         return text;
-    }
-
-    /**
-     *
-     * @param distance distance in any format.
-     * @param unixTime time of run in unix timestamp format
-     * @return pace per unit of distance in unix timestamp format
-     */
-    public static long calculatePace(float distance, long unixTime){
-        //Period is inputted time in millis and converts it to hh:mm:ss
-        Period period = new Period(unixTime);
-        float timeInSeconds = period.getHours() * 3600f + period.getMinutes() * 60f + period.getSeconds();
-        float pace = timeInSeconds / distance;
-        //Multiply pace by 1000 to convert it to millis from seconds.
-        return (long) pace * 1000;
-    }
-
-    public static float kilometresToMiles(float km){
-        return km * 0.621371f;
-    }
-
-    public static float milesToKilometers(float mi){
-        return mi * 1.60934f;
     }
 
     /**
@@ -180,9 +153,9 @@ public class RunUtils {
      * @param unit
      * @return distance in the format of "1 km/mi"
      */
-    public static String distanceToString(double distance, String unit){
+    public static String distanceToString(double distance, Distance.Unit unit){
         DecimalFormat df = new DecimalFormat("0.00");
-        String distanceText = df.format(distance) + " " + unit;
+        String distanceText = df.format(distance) + " " + unit.toString();
         return distanceText;
     }
 

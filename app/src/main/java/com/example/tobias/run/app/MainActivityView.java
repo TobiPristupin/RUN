@@ -55,6 +55,8 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         navigationView = findViewById(R.id.main_navigation_view);
         this.savedInstanceState = savedInstanceState;
 
+        presenter.initSharedPreferences();
+
         presenter.onCreateView();
     }
 
@@ -63,7 +65,6 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         initDrawerLayout();
         initToolbar();
         initNavHeader();
-        presenter.initSharedPreferences();
 
         if (savedInstanceState == null) {
             //If app hasn't loaded the views previously
