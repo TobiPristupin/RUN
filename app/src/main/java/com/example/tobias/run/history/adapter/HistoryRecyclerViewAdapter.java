@@ -52,11 +52,14 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
     @Override
     public void onBindViewHolder(final HistoryViewHolder holder, int position) {
         final Run run = runs.get(holder.getAdapterPosition());
+
+        Distance.Unit unit = getDistanceUnit();
+
         holder.ratingBar.setRating(run.getRating());
         holder.date.setText(RunUtils.dateToString(run.getDate()));
         holder.time.setText(RunUtils.timeToString(run.getTime()));
-        holder.distance.setText(RunUtils.getDistanceText(run, getDistanceUnit()));
-        holder.pace.setText(RunUtils.getPaceText(run, getDistanceUnit()));
+        holder.distance.setText(RunUtils.distanceToString(run.getDistance(unit), unit));
+        holder.pace.setText(RunUtils.paceToString(run.getPace(unit), unit));
 
         if (isSelected(holder.getAdapterPosition())){
             holder.layout.setBackgroundColor(context.getResources().getColor(R.color.selectedColor));

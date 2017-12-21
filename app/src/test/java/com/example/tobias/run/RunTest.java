@@ -1,5 +1,6 @@
 package com.example.tobias.run;
 
+import com.example.tobias.run.data.Distance;
 import com.example.tobias.run.data.Run;
 
 import org.junit.Assert;
@@ -57,5 +58,20 @@ public class RunTest {
 
     @Test public void testIsRunFromDistanceMiles(){
 
+    }
+
+    @Test public void testPaceUpdate(){
+        Run run = Run.withKilometers(1, 1000, 0, 0);
+        long kmPace1 = run.getPace(Distance.Unit.KM);
+
+        run.setTime(2000);
+        long kmPace2 = run.getPace(Distance.Unit.KM);
+
+        Assert.assertEquals(false, kmPace1 == kmPace2);
+
+        run.setDistanceKilometres(5);
+        long kmPace3 = run.getPace(Distance.Unit.KM);
+
+        Assert.assertEquals(false, kmPace2 == kmPace3);
     }
 }

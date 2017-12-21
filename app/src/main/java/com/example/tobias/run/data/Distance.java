@@ -61,6 +61,7 @@ public class Distance implements Comparable<Distance>, Parcelable {
     public Distance(){}
 
     private void initDistanceEquivalences(){
+        distanceEquivalences.add(new Pair<>(.4f, .25f));
         distanceEquivalences.add(new Pair<>(1.6f, 1f));
         distanceEquivalences.add(new Pair<>(5f, 3.1f));
         distanceEquivalences.add(new Pair<>(10f, 6.2f));

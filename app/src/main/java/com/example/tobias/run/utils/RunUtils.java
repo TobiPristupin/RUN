@@ -91,11 +91,7 @@ public class RunUtils {
         float mileage = 0;
 
         for (Run tr : filteredList){
-            if (unit == Distance.Unit.KM){
-                mileage += tr.getDistanceKilometres();
-            } else {
-                mileage += tr.getDistanceMiles();
-            }
+            mileage += tr.getDistance(unit);
         }
 
         return mileage;
@@ -113,43 +109,15 @@ public class RunUtils {
     public static float addMileage(List<Run> runs, Distance.Unit unit) {
         float sum = 0;
         for (Run r : runs) {
-            if (unit == Distance.Unit.KM){
-                sum += r.getDistanceKilometres();
-            } else {
-                sum += r.getDistanceKilometres();
-            }
+            sum += r.getDistance(unit);
         }
 
         return sum;
     }
 
-    public static String getDistanceText(Run currentItem, Distance.Unit unit){
-        String text;
-
-        if (unit == Distance.Unit.KM){
-            text = distanceToString(currentItem.getDistanceKilometres(), unit);
-        } else {
-            text = distanceToString(currentItem.getDistanceMiles(), unit);
-        }
-
-        return text;
-    }
-
-    public static String getPaceText(Run currentItem, Distance.Unit unit){
-        String text;
-
-        if (unit == Distance.Unit.KM){
-            text = paceToString(currentItem.getKilometrePace(), unit.toString());
-        } else {
-            text = paceToString(currentItem.getMilePace(), unit.toString());
-        }
-
-        return text;
-    }
-
     /**
      *
-     * @param distance in "5.5(f)"
+     * @param distance in "5.5"
      * @param unit
      * @return distance in the format of "1 km/mi"
      */
@@ -267,7 +235,7 @@ public class RunUtils {
      * @param unit
      * @return pace in format mm:ss/unit or hh:mm:ss/unit if the pace contains hours.
      */
-    public static String paceToString(long paceTimeUnix, String unit){
+    public static String paceToString(long paceTimeUnix, Distance.Unit unit){
         Period period = new Period(paceTimeUnix);
         String paceText = new StringBuilder()
                 .append(String.format(Locale.getDefault(), "%02d", period.getMinutes()))

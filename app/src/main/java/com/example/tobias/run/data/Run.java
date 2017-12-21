@@ -81,8 +81,10 @@ public class Run implements Parcelable, Comparable<Run> {
      * Updates pace values. Called when distance fields are modified and pace requires updating.
      */
     private void updatePace(){
-        milePace = calculatePace(distance.getDistanceMi(), time);
-        kilometrePace = calculatePace(distance.getDistanceKm(), time);
+        if (distance != null){
+            milePace = calculatePace(distance.getDistanceMi(), time);
+            kilometrePace = calculatePace(distance.getDistanceKm(), time);
+        }
     }
 
     private long calculatePace(float distance, long time){
@@ -95,17 +97,8 @@ public class Run implements Parcelable, Comparable<Run> {
     }
 
 
-
     @Exclude public float getDistance(Distance.Unit unit){
         return distance.getDistance(unit);
-    }
-
-    public float getDistanceKilometres(){
-        return distance.getDistanceKm();
-    }
-
-    public float getDistanceMiles(){
-        return distance.getDistanceMi();
     }
 
     public long getTime(){
@@ -122,6 +115,14 @@ public class Run implements Parcelable, Comparable<Run> {
 
     public String getId(){ return id; }
 
+    @Exclude public long getPace(Distance.Unit unit){
+        if (unit == Distance.Unit.KM){
+            return kilometrePace;
+        }
+
+        return milePace;
+    }
+
     public long getMilePace(){
         return milePace;
     }
@@ -136,17 +137,20 @@ public class Run implements Parcelable, Comparable<Run> {
 
 
 
+    @Exclude public void setDistance(String distanceString){
+        String km = Distance.Unit.KM.toString();
+        String mi = Distance.Unit.MILE.toString();
 
-
-    @Exclude public void setDistance(String distance){
-        if (!(distance.contains("mi") || distance.contains("km"))){
+        if (!(distanceString.contains(km) || distanceString.contains(mi))){
             throw new IllegalArgumentException("Distance does not contain unit");
         }
 
-        if (distance.contains("km")){
-            setDistanceKilometres(distance);
+        float d = RunUtils.distanceToFloat(distanceString);
+
+        if (distanceString.contains(km)){
+            setDistanceKilometres(d);
         } else {
-            setDistanceMiles(distance);
+            setDistanceMiles(d);
         }
 
         updatePace();
@@ -157,39 +161,24 @@ public class Run implements Parcelable, Comparable<Run> {
         updatePace();
     }
 
-    @Exclude public void setDistanceKilometres(String distanceText){
-        if (!distanceText.contains("km")){
-            throw new IllegalArgumentException("Argument is not in kilometres");
-        }
-
-        distance.setDistanceKm(RunUtils.distanceToFloat(distanceText));
-        updatePace();
-    }
-
     @Exclude  public void setDistanceMiles(float distanceMiles){
         distance.setDistanceMi(distanceMiles);
         updatePace();
     }
 
-    @Exclude public void setDistanceMiles(String distanceText){
-        if (!distanceText.contains("mi")){
-            throw new IllegalArgumentException("Argument is not in miles");
-        }
-
-        distance.setDistanceMi(RunUtils.distanceToFloat(distanceText));
-        updatePace();
-    }
-
     public void setDistance(Distance distance){
         this.distance = distance;
+        updatePace();
     }
 
     public void setTime(long time){
         this.time = time;
+        updatePace();
     }
 
     @Exclude public void setTime(String timeText){
         time = RunUtils.timeToUnix(timeText);
+        updatePace();
     }
 
     public void setDate(long date){
@@ -230,6 +219,9 @@ public class Run implements Parcelable, Comparable<Run> {
         this.milePace = milePace;
     }
 
+
+
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -242,7 +234,7 @@ public class Run implements Parcelable, Comparable<Run> {
 
         if (this.getId() != null && run.getId() != null && !this.getId().equals(run.getId())) return false;
         if (this.getDate() != run.getDate()) return false;
-        if (this.getDistanceKilometres() != run.getDistanceKilometres()) return false;
+        if (this.getDistance(Distance.Unit.KM) != run.getDistance(Distance.Unit.KM)) return false;
         if (this.getRating() != run.getRating()) return false;
         if (this.getTime() != run.getTime()) return false;
         //No need to check for mile or km pace because pace is computed off time and distance.
