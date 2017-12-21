@@ -19,32 +19,24 @@ public class DistanceTest {
     @Test public void testSetters(){
         Distance distance = new Distance(1, Distance.Unit.KM);
         distance.setDistanceKm(10);
-        System.out.println(distance.getDistanceMi());
-        Assert.assertEquals(true, distance.getDistanceMi() == 6.2f);
+        Assert.assertEquals(true, distance.getDistanceMi() == 6.2);
     }
 
     @Test public void testDistanceEquivalences() {
-        Distance distanceMile = new Distance(1.6f, Distance.Unit.KM);
+        Distance distanceMile = new Distance(1.6, Distance.Unit.KM);
         Assert.assertEquals(true, distanceMile.getDistanceMi() == 1);
 
-        Distance distanceHM = new Distance(13.1f, Distance.Unit.MILE);
+        Distance distanceHM = new Distance(13.1, Distance.Unit.MILE);
         Assert.assertEquals(true, distanceHM.getDistanceKm() == 21);
     }
 
-    @Test public void testCompareTo(){
-        Assert.assertEquals(true, distanceKm.compareTo(distance2Km) < 0);
-
-        Assert.assertEquals(true, distanceMile.compareTo(distanceKm) > 0);
-
-        Assert.assertEquals(true, distanceKm.compareTo(distanceKm) == 0);
-    }
 
     @Test public void testEqualsDistance(){
         Assert.assertEquals(true, distanceKm.equalsDistance(1, Distance.Unit.KM));
 
         Assert.assertEquals(false, distanceKm.equalsDistance(1, Distance.Unit.MILE));
 
-        Assert.assertEquals(true, distanceMile.equalsDistance(1.6f, Distance.Unit.KM));
+        Assert.assertEquals(true, distanceMile.equalsDistance(1.6, Distance.Unit.KM));
     }
 
     @Test public void testHashCode(){

@@ -175,9 +175,9 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
 
         List<Entry> averageRunData = new ArrayList<>();
 
-        float averageTime = RunUtils.getAverageTime(runs);
-        averageRunData.add(new Entry(0, averageTime));
-        averageRunData.add(new Entry(scatterDataSize + 1, averageTime));
+        double averageTime = RunUtils.getAverageTime(runs);
+        averageRunData.add(new Entry(0, (float) averageTime));
+        averageRunData.add(new Entry(scatterDataSize + 1, (float) averageTime));
 
         return averageRunData;
     }

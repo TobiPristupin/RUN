@@ -68,7 +68,7 @@ public class RunUtils {
         return fastest;
     }
 
-    public static float getAverageTime(List<Run> runs){
+    public static double getAverageTime(List<Run> runs){
         long sum = 0;
 
         for (Run r : runs){
@@ -84,11 +84,11 @@ public class RunUtils {
      * @param end
      * @return mileage in unit
      */
-    public static float getMileageBetween(long start, long end, List<Run> data, Distance.Unit unit){
+    public static double getMileageBetween(long start, long end, List<Run> data, Distance.Unit unit){
         List<Run> filteredList = new ArrayList<>();
         filteredList.addAll(filterList(data, Run.Predicates.isRunBetween(start, end)));
 
-        float mileage = 0;
+        double mileage = 0;
 
         for (Run tr : filteredList){
             mileage += tr.getDistance(unit);
@@ -97,17 +97,17 @@ public class RunUtils {
         return mileage;
     }
 
-    public static float addMileage(float[] mileage) {
-        float sum = 0;
-        for (float f : mileage) {
+    public static double addMileage(double[] mileage) {
+        double sum = 0;
+        for (double f : mileage) {
             sum += f;
         }
 
         return sum;
     }
 
-    public static float addMileage(List<Run> runs, Distance.Unit unit) {
-        float sum = 0;
+    public static double addMileage(List<Run> runs, Distance.Unit unit) {
+        double sum = 0;
         for (Run r : runs) {
             sum += r.getDistance(unit);
         }
@@ -185,12 +185,12 @@ public class RunUtils {
      * @param distance in format "5.5 km/mi"
      * @return distance in format "5.5(f)"
      */
-    public static float distanceToFloat(String distance){
+    public static double distanceToDouble(String distance){
         //Double.ValueOf wont parse comma, but will parse dot.
         distance = distance.replace(",", ".");
         //Remove km or mi
         distance = distance.replace("km", "").replace("mi", "").trim();
-        return Float.parseFloat(distance);
+        return Double.parseDouble(distance);
     }
 
     /**

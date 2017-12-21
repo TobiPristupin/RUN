@@ -33,27 +33,27 @@ public class Run implements Parcelable, Comparable<Run> {
         this.milePace = calculatePace(this.distance.getDistanceMi(), time);
     }
 
-    public static Run withKilometers(float distanceKm, long time, long date, int rating){
+    public static Run withKilometers(double distanceKm, long time, long date, int rating){
         Distance distance = new Distance(distanceKm, Distance.Unit.KM);
         return new Run(distance, time, date, rating);
     }
 
     public static Run withKilometers(String distanceKm, String time, String date, String rating){
         long d = RunUtils.dateToUnix(date);
-        float distance = RunUtils.distanceToFloat(distanceKm);
+        double distance = RunUtils.distanceToDouble(distanceKm);
         long t = RunUtils.timeToUnix(time);
         int r = RunUtils.ratingToInt(rating);
         return withKilometers(distance, t, d, r);
     }
 
-    public static Run withMiles(float distanceMi, long time, long date, int rating){
+    public static Run withMiles(double distanceMi, long time, long date, int rating){
         Distance distance = new Distance(distanceMi, Distance.Unit.MILE);
         return new Run(distance, time, date, rating);
     }
 
     public static Run withMiles(String distanceMi, String time, String date, String rating){
         long d = RunUtils.dateToUnix(date);
-        float distance = RunUtils.distanceToFloat(distanceMi);
+        double distance = RunUtils.distanceToDouble(distanceMi);
         long t = RunUtils.timeToUnix(time);
         int r = RunUtils.ratingToInt(rating);
 
@@ -87,17 +87,17 @@ public class Run implements Parcelable, Comparable<Run> {
         }
     }
 
-    private long calculatePace(float distance, long time){
+    private long calculatePace(double distance, long time){
         //Period is inputted time in millis and converts it to hh:mm:ss
         Period period = new Period(time);
-        float timeInSeconds = period.getHours() * 3600f + period.getMinutes() * 60f + period.getSeconds();
-        float pace = timeInSeconds / distance;
+        double timeInSeconds = period.getHours() * 3600f + period.getMinutes() * 60f + period.getSeconds();
+        double pace = timeInSeconds / distance;
         //Multiply pace by 1000 to convert it to millis from seconds.
         return (long) pace * 1000;
     }
 
 
-    @Exclude public float getDistance(Distance.Unit unit){
+    @Exclude public double getDistance(Distance.Unit unit){
         return distance.getDistance(unit);
     }
 
@@ -145,7 +145,7 @@ public class Run implements Parcelable, Comparable<Run> {
             throw new IllegalArgumentException("Distance does not contain unit");
         }
 
-        float d = RunUtils.distanceToFloat(distanceString);
+        double d = RunUtils.distanceToDouble(distanceString);
 
         if (distanceString.contains(km)){
             setDistanceKilometres(d);
@@ -156,12 +156,12 @@ public class Run implements Parcelable, Comparable<Run> {
         updatePace();
     }
 
-    @Exclude public void setDistanceKilometres(float distanceKilometres){
+    @Exclude public void setDistanceKilometres(double distanceKilometres){
         distance.setDistanceKm(distanceKilometres);
         updatePace();
     }
 
-    @Exclude  public void setDistanceMiles(float distanceMiles){
+    @Exclude  public void setDistanceMiles(double distanceMiles){
         distance.setDistanceMi(distanceMiles);
         updatePace();
     }
@@ -321,7 +321,7 @@ public class Run implements Parcelable, Comparable<Run> {
             };
         }
 
-        public static Predicate isRunFromDistance(final float distance, final Distance.Unit unit) {
+        public static Predicate isRunFromDistance(final double distance, final Distance.Unit unit) {
             return new Predicate() {
                 @Override
                 public boolean evaluate(Object object) {

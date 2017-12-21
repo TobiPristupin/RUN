@@ -2,7 +2,6 @@ package com.example.tobias.run.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 
 import com.example.tobias.run.utils.Pair;
 
@@ -13,16 +12,16 @@ import java.util.List;
  * Created by Tobi on 12/18/2017.
  */
 
-public class Distance implements Comparable<Distance>, Parcelable {
+public class Distance implements Parcelable {
 
-    private float distanceKm;
-    private float distanceMi;
+    private double distanceKm;
+    private double distanceMi;
 
     /*Contains the most common distance equivalences known by runners,
-    * such as 5k = 3.1mi. This is done because of the inaccuracy when comparing float distance values due to
+    * such as 5k = 3.1mi. This is done because of the inaccuracy when comparing double distance values due to
     * round-off errors and loss of precision when converting km values to mi and vice versa. Storing these
     * Common comparisons ensures that at least the most used ones will be correct.*/
-    private List<Pair<Float, Float>> distanceEquivalences = new ArrayList<>();
+    private List<Pair<Double, Double>> distanceEquivalences = new ArrayList<>();
 
     public enum Unit {
         KM("km"), MILE("mi");
@@ -40,7 +39,7 @@ public class Distance implements Comparable<Distance>, Parcelable {
         }
     }
 
-    public Distance(float distance, Unit unit){
+    public Distance(double distance, Unit unit){
         initDistanceEquivalences();
         roundNearestTenth(distance);
 
@@ -61,20 +60,20 @@ public class Distance implements Comparable<Distance>, Parcelable {
     public Distance(){}
 
     private void initDistanceEquivalences(){
-        distanceEquivalences.add(new Pair<>(.4f, .25f));
-        distanceEquivalences.add(new Pair<>(1.6f, 1f));
-        distanceEquivalences.add(new Pair<>(5f, 3.1f));
-        distanceEquivalences.add(new Pair<>(10f, 6.2f));
-        distanceEquivalences.add(new Pair<>(21f, 13.1f));
-        distanceEquivalences.add(new Pair<>(42f, 26.2f));
+        distanceEquivalences.add(new Pair<>(.4, .25));
+        distanceEquivalences.add(new Pair<>(1.6, 1d));
+        distanceEquivalences.add(new Pair<>(5d, 3.1));
+        distanceEquivalences.add(new Pair<>(10d, 6.2));
+        distanceEquivalences.add(new Pair<>(21d, 13.1));
+        distanceEquivalences.add(new Pair<>(42d, 26.2));
     }
 
-    private float roundNearestTenth(float a){
-         return (float) Math.round(a * 10) / 10;
+    private double roundNearestTenth(double a){
+         return (double) Math.round(a * 10) / 10;
     }
 
-    private float kmToMile(float km){
-        for (Pair<Float, Float> pair : distanceEquivalences){
+    private double kmToMile(double km){
+        for (Pair<Double, Double> pair : distanceEquivalences){
             if (pair.first == km){
                 return pair.second;
             }
@@ -83,8 +82,8 @@ public class Distance implements Comparable<Distance>, Parcelable {
            return roundNearestTenth(km * 0.621371f);
     }
 
-    private float mileToKm(float miles){
-        for (Pair<Float, Float> pair : distanceEquivalences){
+    private double mileToKm(double miles){
+        for (Pair<Double, Double> pair : distanceEquivalences){
             if (pair.second == miles){
                 return pair.first;
             }
@@ -93,12 +92,8 @@ public class Distance implements Comparable<Distance>, Parcelable {
         return roundNearestTenth(miles * 1.60934f);
     }
 
-    @Override
-    public int compareTo(@NonNull Distance o) {
-        return Math.round(distanceKm - o.distanceKm);
-    }
 
-    public boolean equalsDistance(float distance, Unit unit){
+    public boolean equalsDistance(double distance, Unit unit){
         if (unit == Unit.MILE){
             return Math.abs(distanceMi - distance) < 0.099;
         }
@@ -107,15 +102,15 @@ public class Distance implements Comparable<Distance>, Parcelable {
     }
 
 
-    public float getDistanceKm() {
+    public double getDistanceKm() {
         return distanceKm;
     }
 
-    public float getDistanceMi() {
+    public double getDistanceMi() {
         return distanceMi;
     }
 
-    public float getDistance(Unit unit){
+    public double getDistance(Unit unit){
         if (unit == Unit.MILE){
             return getDistanceMi();
         }
@@ -123,13 +118,13 @@ public class Distance implements Comparable<Distance>, Parcelable {
         return getDistanceKm();
     }
 
-    public void setDistanceKm(float distanceKm) {
+    public void setDistanceKm(double distanceKm) {
         distanceKm = roundNearestTenth(distanceKm);
         this.distanceKm = distanceKm;
         this.distanceMi = kmToMile(distanceKm);
     }
 
-    public void setDistanceMi(float distanceMi) {
+    public void setDistanceMi(double distanceMi) {
         distanceMi = roundNearestTenth(distanceMi);
         this.distanceMi = distanceMi;
         this.distanceKm = mileToKm(distanceMi);
@@ -138,8 +133,10 @@ public class Distance implements Comparable<Distance>, Parcelable {
     @Override
     public int hashCode() {
         int result = 15;
-        result = 31 * result + Float.floatToIntBits(distanceKm);
-        result = 31 * result + Float.floatToIntBits(distanceMi);
+        long hashKm = Double.doubleToLongBits(distanceKm);
+        result = 31 * result + (int) (hashKm ^(hashKm >>> 32));
+        long hashMi = Double.doubleToLongBits(distanceMi);
+        result = 31 * result + (int) (hashMi ^(hashMi >>> 32));
 
         return result;
     }
@@ -156,13 +153,13 @@ public class Distance implements Comparable<Distance>, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeFloat(distanceKm);
-        dest.writeFloat(distanceMi);
+        dest.writeDouble(distanceKm);
+        dest.writeDouble(distanceMi);
     }
 
     private Distance(Parcel in){
-        distanceKm = in.readFloat();
-        distanceMi = in.readFloat();
+        distanceKm = in.readDouble();
+        distanceMi = in.readDouble();
     }
 
     public static final Parcelable.Creator<Distance> CREATOR = new Parcelable.Creator<Distance>() {

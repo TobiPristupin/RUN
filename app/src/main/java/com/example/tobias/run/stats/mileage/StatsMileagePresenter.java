@@ -67,29 +67,28 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
     }
 
     private void updateIncreaseText(){
-        float monthIncrease = getMonthMileage() - getPastMonthMileageTotal();
+        double monthIncrease = getMonthMileage() - getPastMonthMileageTotal();
         if (monthIncrease >= 0){
             view.setMonthIncreaseText("+" + String.format("%.1f", monthIncrease), true);
         } else {
             view.setMonthIncreaseText(String.format("%.1f", monthIncrease), false);
         }
 
-        float months3Increase = RunUtils.addMileage(get3MonthsMileage()) - getPast3MonthsMileageTotal();
-        System.out.println(months3Increase);
+        double months3Increase = RunUtils.addMileage(get3MonthsMileage()) - getPast3MonthsMileageTotal();
         if (months3Increase >= 0){
             view.set3MonthsIncreaseText("+" + String.format("%.1f", months3Increase), true);
         } else {
             view.set3MonthsIncreaseText(String.format("%.1f", months3Increase), false);
         }
 
-        float months6Increase = RunUtils.addMileage(get6MonthsMileage()) - getPast6MonthsMileageTotal();
+        double months6Increase = RunUtils.addMileage(get6MonthsMileage()) - getPast6MonthsMileageTotal();
         if (months6Increase >= 0){
             view.set6MonthsIncreaseText("+" + String.format("%.1f", months6Increase), true);
         } else {
             view.set6MonthsIncreaseText(String.format("%.1f", months6Increase), false);
         }
 
-        float yearIncrease = RunUtils.addMileage(getYearMileage()) - getPastYearMileage();
+        double yearIncrease = RunUtils.addMileage(getYearMileage()) - getPastYearMileage();
         if (yearIncrease >= 0){
             view.setYearIncreaseText("+" + String.format("%.1f", yearIncrease), true);
         } else {
@@ -99,11 +98,11 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
 
     private void updateBarChartMonth(){
 
-        float mileageSum = getMonthMileage();
+        double mileageSum = getMonthMileage();
 
         if (mileageSum != 0){
             List<BarEntry> barEntries = new ArrayList<>();
-            barEntries.add(new BarEntry(1, mileageSum));
+            barEntries.add(new BarEntry(1, (float) mileageSum));
             view.setGraphMonthData(barEntries);
         }
 
@@ -113,17 +112,17 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
     }
 
     private void updateBarChart3Month(){
-        float mileage2MonthsPrevious = get3MonthsMileage()[0];
+        double mileage2MonthsPrevious = get3MonthsMileage()[0];
 
-        float mileagePreviousMonth = get3MonthsMileage()[1];
+        double mileagePreviousMonth = get3MonthsMileage()[1];
 
-        float mileageMonth = get3MonthsMileage()[2];
+        double mileageMonth = get3MonthsMileage()[2];
 
         if (mileage2MonthsPrevious + mileagePreviousMonth + mileageMonth != 0){
             List<BarEntry> barEntries = new ArrayList<>();
-            barEntries.add(new BarEntry(1, mileage2MonthsPrevious));
-            barEntries.add(new BarEntry(2, mileagePreviousMonth));
-            barEntries.add(new BarEntry(3, mileageMonth));
+            barEntries.add(new BarEntry(1, (float) mileage2MonthsPrevious));
+            barEntries.add(new BarEntry(2, (float) mileagePreviousMonth));
+            barEntries.add(new BarEntry(3, (float) mileageMonth));
             view.setGraph3MonthData(barEntries);
         }
 
@@ -137,16 +136,16 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
     }
 
     private void updateBarChart6Months(){
-        float mileageMonths1To2 = get6MonthsMileage()[0];
+        double mileageMonths1To2 = get6MonthsMileage()[0];
 
-        float mileageMonths3To4 = get6MonthsMileage()[1];
+        double mileageMonths3To4 = get6MonthsMileage()[1];
 
-        float mileageMonths5To6 = get6MonthsMileage()[2];
+        double mileageMonths5To6 = get6MonthsMileage()[2];
         if (mileageMonths1To2 + mileageMonths3To4 + mileageMonths5To6 != 0){
             List<BarEntry> barEntries = new ArrayList<>();
-            barEntries.add(new BarEntry(1, mileageMonths1To2));
-            barEntries.add(new BarEntry(2, mileageMonths3To4));
-            barEntries.add(new BarEntry(3, mileageMonths5To6));
+            barEntries.add(new BarEntry(1, (float) mileageMonths1To2));
+            barEntries.add(new BarEntry(2, (float) mileageMonths3To4));
+            barEntries.add(new BarEntry(3, (float) mileageMonths5To6));
             view.setGraph6MonthData(barEntries);
         }
 
@@ -161,17 +160,17 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
     }
 
     private void updateBarChartYear(){
-        float mileageMonths1To4 = getYearMileage()[0];
+        double mileageMonths1To4 = getYearMileage()[0];
 
-        float mileageMonths4To8 = getYearMileage()[1];
+        double mileageMonths4To8 = getYearMileage()[1];
 
-        float mileageMonths8To12 = getYearMileage()[2];
+        double mileageMonths8To12 = getYearMileage()[2];
 
         if (mileageMonths1To4 + mileageMonths4To8 + mileageMonths8To12 != 0){
             List<BarEntry> barEntries = new ArrayList<>();
-            barEntries.add(new BarEntry(1, mileageMonths1To4));
-            barEntries.add(new BarEntry(2, mileageMonths4To8));
-            barEntries.add(new BarEntry(3, mileageMonths8To12));
+            barEntries.add(new BarEntry(1, (float) mileageMonths1To4));
+            barEntries.add(new BarEntry(2, (float) mileageMonths4To8));
+            barEntries.add(new BarEntry(3, (float) mileageMonths8To12));
             view.setGraphYearData(barEntries);
         }
 
@@ -185,25 +184,25 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
         view.setGraphYearXLabel(xAxisLabelValues);
     }
 
-    private float getMonthMileage(){
+    private double getMonthMileage(){
         List<Run> monthRuns = RunUtils.filterList(runList,
                 Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(), DateUtils.getEndOfMonth()));
 
-        float mileageSum = RunUtils.addMileage(monthRuns, getDistanceUnit());
+        double mileageSum = RunUtils.addMileage(monthRuns, getDistanceUnit());
 
         return mileageSum;
     }
 
-    private float getPastMonthMileageTotal(){
+    private double getPastMonthMileageTotal(){
         List<Run> lastMonthRuns = RunUtils.filterList(runList,
                 Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(-1), DateUtils.getEndOfMonth(-1)));
 
-        float mileageSum = RunUtils.addMileage(lastMonthRuns, getDistanceUnit());
+        double mileageSum = RunUtils.addMileage(lastMonthRuns, getDistanceUnit());
 
         return mileageSum;
     }
 
-    private float[] get3MonthsMileage(){
+    private double[] get3MonthsMileage(){
         List<Run> runs2MonthsBack = RunUtils.filterList(runList, Run.Predicates.
                 isRunBetween(DateUtils.getStartOfMonth(-2), DateUtils.getEndOfMonth(-2)));
 
@@ -214,23 +213,23 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
                 Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(), DateUtils.getEndOfMonth()));
 
 
-        float mileage2MonthsPrevious = RunUtils.addMileage(runs2MonthsBack, getDistanceUnit());
-        float mileagePreviousMonth = RunUtils.addMileage(runsLastMonth, getDistanceUnit());
-        float mileageMonth = RunUtils.addMileage(monthRuns, getDistanceUnit());
+        double mileage2MonthsPrevious = RunUtils.addMileage(runs2MonthsBack, getDistanceUnit());
+        double mileagePreviousMonth = RunUtils.addMileage(runsLastMonth, getDistanceUnit());
+        double mileageMonth = RunUtils.addMileage(monthRuns, getDistanceUnit());
 
-        return new float[] {mileage2MonthsPrevious, mileagePreviousMonth, mileageMonth};
+        return new double[] {mileage2MonthsPrevious, mileagePreviousMonth, mileageMonth};
     }
 
-    private float getPast3MonthsMileageTotal(){
+    private double getPast3MonthsMileageTotal(){
         List<Run> last3MonthsRuns = RunUtils.filterList(runList,
                 Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(-5), DateUtils.getEndOfMonth(-3)));
 
-        float mileageSum = RunUtils.addMileage(last3MonthsRuns, getDistanceUnit());
+        double mileageSum = RunUtils.addMileage(last3MonthsRuns, getDistanceUnit());
 
         return mileageSum;
     }
 
-    private float[] get6MonthsMileage(){
+    private double[] get6MonthsMileage(){
         List<Run> runs5To6MonthsBack = RunUtils.filterList(runList,
                 Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(-5), DateUtils.getEndOfMonth(-4)));
 
@@ -240,34 +239,34 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
         List<Run> runs2To1MonthsBack = RunUtils.filterList(runList,
                 Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(-1), DateUtils.getEndOfMonth()));
 
-        float mileageMonths1To2 = RunUtils.addMileage(runs5To6MonthsBack, getDistanceUnit());
+        double mileageMonths1To2 = RunUtils.addMileage(runs5To6MonthsBack, getDistanceUnit());
 
-        float mileageMonths3To4 = RunUtils.addMileage(runs4To3MonthsBack, getDistanceUnit());
+        double mileageMonths3To4 = RunUtils.addMileage(runs4To3MonthsBack, getDistanceUnit());
 
-        float mileageMonths5To6 = RunUtils.addMileage(runs2To1MonthsBack, getDistanceUnit());
+        double mileageMonths5To6 = RunUtils.addMileage(runs2To1MonthsBack, getDistanceUnit());
 
-        return new float[] {mileageMonths1To2, mileageMonths3To4, mileageMonths5To6};
+        return new double[] {mileageMonths1To2, mileageMonths3To4, mileageMonths5To6};
     }
 
-    private float getPast6MonthsMileageTotal(){
+    private double getPast6MonthsMileageTotal(){
         List<Run> runsLast6Months = RunUtils.filterList(runList,
                 Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(-11), DateUtils.getEndOfMonth(-6)));
 
-        float mileageSum = RunUtils.addMileage(runsLast6Months, getDistanceUnit());
+        double mileageSum = RunUtils.addMileage(runsLast6Months, getDistanceUnit());
 
         return mileageSum;
     }
 
-    private float getPastYearMileage(){
+    private double getPastYearMileage(){
         List<Run> runsLastYear = RunUtils.filterList(runList,
                 Run.Predicates.isRunBetween(DateUtils.getStartOfLastYear(),  DateUtils.getEndOfLastYear()));
 
-        float mileageSum = RunUtils.addMileage(runsLastYear, getDistanceUnit());
+        double mileageSum = RunUtils.addMileage(runsLastYear, getDistanceUnit());
 
         return mileageSum;
     }
 
-    private float[] getYearMileage(){
+    private double[] getYearMileage(){
         List<Run> runsMonths1To4 = RunUtils.filterList(runList,
                 Run.Predicates.isRunBetween(DateUtils.getStartOfYear(), DateUtils.getStartOfYearEndOfMonth(4)));
 
@@ -277,16 +276,16 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
         List<Run> runsMonth8To12 = RunUtils.filterList(runList,
                 Run.Predicates.isRunBetween(DateUtils.getStartOfYearStartOfMonth(9), DateUtils.getEndOfYear()));
 
-        float mileageMonths1To4 = RunUtils.getMileageBetween(DateUtils.getStartOfYear(),
-                DateUtils.getStartOfYearEndOfMonth(4), runList, getDistanceUnit());
+        double mileageMonths1To4 = RunUtils.getMileageBetween(DateUtils.getStartOfYear(),
+                DateUtils.getStartOfYearEndOfMonth(4), runsMonths1To4, getDistanceUnit());
 
-        float mileageMonths4To8 = RunUtils.getMileageBetween(DateUtils.getStartOfYearStartOfMonth(5),
-                DateUtils.getStartOfYearEndOfMonth(8), runList, getDistanceUnit());
+        double mileageMonths4To8 = RunUtils.getMileageBetween(DateUtils.getStartOfYearStartOfMonth(5),
+                DateUtils.getStartOfYearEndOfMonth(8), runsMonth4To8, getDistanceUnit());
 
-        float mileageMonths8To12 = RunUtils.getMileageBetween(DateUtils.getStartOfYearStartOfMonth(9),
-                DateUtils.getEndOfYear(), runList, getDistanceUnit());
+        double mileageMonths8To12 = RunUtils.getMileageBetween(DateUtils.getStartOfYearStartOfMonth(9),
+                DateUtils.getEndOfYear(), runsMonth8To12, getDistanceUnit());
 
-        return new float[] {mileageMonths1To4, mileageMonths4To8, mileageMonths8To12};
+        return new double[] {mileageMonths1To4, mileageMonths4To8, mileageMonths8To12};
     }
 
 
