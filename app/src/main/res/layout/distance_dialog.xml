@@ -1,51 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent">
+    tools:layout_editor_absoluteY="25dp">
 
     <NumberPicker
         android:id="@+id/distance_picker_whole"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="50dp">
-    </NumberPicker>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/dialog_coma"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/dialog_coma"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="."
         android:textSize="35sp"
         android:textStyle="bold"
-        android:text="."
-        android:layout_toRightOf="@id/distance_picker_whole"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="15dp"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/distance_picker_decimal"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/distance_picker_whole"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <NumberPicker
         android:id="@+id/distance_picker_decimal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:layout_toRightOf="@id/dialog_coma"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="15dp"
-        >
-    </NumberPicker>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/distance_unit"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/dialog_coma"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/distance_unit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/distance_picker_decimal"
-        android:layout_centerVertical="true"
         android:textSize="16sp"
-        tools:text="km"
-        android:layout_marginLeft="15dp"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/distance_picker_decimal"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="km" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
 
