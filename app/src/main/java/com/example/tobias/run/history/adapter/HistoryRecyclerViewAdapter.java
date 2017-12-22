@@ -20,6 +20,7 @@ import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.utils.RunUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -77,6 +78,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diff);
 
         this.runs.clear();
+        Collections.sort(newList);
         this.runs.addAll(newList);
         diffResult.dispatchUpdatesTo(this);
     }

@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import com.example.tobias.run.utils.RunUtils;
 import com.google.firebase.database.Exclude;
 
-import org.apache.commons.collections.Predicate;
 import org.joda.time.Period;
 
 
@@ -137,6 +136,7 @@ public class Run implements Parcelable, Comparable<Run> {
 
 
 
+
     @Exclude public void setDistance(String distanceString){
         String km = Distance.Unit.KM.toString();
         String mi = Distance.Unit.MILE.toString();
@@ -157,12 +157,12 @@ public class Run implements Parcelable, Comparable<Run> {
     }
 
     @Exclude public void setDistanceKilometres(double distanceKilometres){
-        distance.setDistanceKm(distanceKilometres);
+        distance.setDistance(Distance.Unit.KM, distanceKilometres);
         updatePace();
     }
 
     @Exclude  public void setDistanceMiles(double distanceMiles){
-        distance.setDistanceMi(distanceMiles);
+        distance.setDistance(Distance.Unit.MILE, distanceMiles);
         updatePace();
     }
 
@@ -307,28 +307,4 @@ public class Run implements Parcelable, Comparable<Run> {
 
     };
 
-
-
-    public static class Predicates {
-
-        public static Predicate isRunBetween(final long start, final long end) {
-            return new Predicate() {
-                @Override
-                public boolean evaluate(Object object) {
-                    Run tr = (Run) object;
-                    return tr.getDate() >= start && tr.getDate() <= end;
-                }
-            };
-        }
-
-        public static Predicate isRunFromDistance(final double distance, final Distance.Unit unit) {
-            return new Predicate() {
-                @Override
-                public boolean evaluate(Object object) {
-                    Run tr = (Run) object;
-                    return tr.distance.equalsDistance(distance, unit);
-                }
-            };
-        }
-    }
 }

@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.tobias.run.utils.Pair;
+import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class Distance implements Parcelable {
 
     private double distanceKm;
     private double distanceMi;
+    private double epsilon = 0.099;
 
     /*Contains the most common distance equivalences known by runners,
     * such as 5k = 3.1mi. This is done because of the inaccuracy when comparing double distance values due to
@@ -41,7 +43,6 @@ public class Distance implements Parcelable {
 
     public Distance(double distance, Unit unit){
         initDistanceEquivalences();
-        roundNearestTenth(distance);
 
         if (unit == Unit.MILE){
             distanceMi = distance;
@@ -68,37 +69,33 @@ public class Distance implements Parcelable {
         distanceEquivalences.add(new Pair<>(42d, 26.2));
     }
 
-    private double roundNearestTenth(double a){
-         return (double) Math.round(a * 10) / 10;
-    }
-
     private double kmToMile(double km){
         for (Pair<Double, Double> pair : distanceEquivalences){
-            if (pair.first == km){
+            if (Math.abs(pair.first - km) <= epsilon){
                 return pair.second;
             }
         }
 
-           return roundNearestTenth(km * 0.621371f);
+        return km * 0.621371f;
     }
 
     private double mileToKm(double miles){
         for (Pair<Double, Double> pair : distanceEquivalences){
-            if (pair.second == miles){
+            if (Math.abs(pair.second - miles) <= epsilon){
                 return pair.first;
             }
         }
 
-        return roundNearestTenth(miles * 1.60934f);
+        return miles * 1.60934f;
     }
 
 
     public boolean equalsDistance(double distance, Unit unit){
         if (unit == Unit.MILE){
-            return Math.abs(distanceMi - distance) < 0.099;
+            return Math.abs(distanceMi - distance) <= epsilon;
         }
 
-        return Math.abs(distanceKm - distance) < 0.099;
+        return Math.abs(distanceKm - distance) <= epsilon;
     }
 
 
@@ -118,16 +115,33 @@ public class Distance implements Parcelable {
         return getDistanceKm();
     }
 
+    @Deprecated
+    /**
+     * Method should only be used by firebase, as it might leave the object in an invalid state.
+     * use setDistance(Distance.Unit) instead.
+     */
     public void setDistanceKm(double distanceKm) {
-        distanceKm = roundNearestTenth(distanceKm);
         this.distanceKm = distanceKm;
-        this.distanceMi = kmToMile(distanceKm);
     }
 
+    @Deprecated
+    /**
+     * Method should only be used by firebase, as it might leave the object in an invalid state.
+     * use setDistance(Distance.Unit) instead.
+     */
     public void setDistanceMi(double distanceMi) {
-        distanceMi = roundNearestTenth(distanceMi);
         this.distanceMi = distanceMi;
-        this.distanceKm = mileToKm(distanceMi);
+    }
+
+    @Exclude
+    public void setDistance(Unit unit, double distance){
+        if (unit == Unit.MILE){
+            distanceMi = distance;
+            distanceKm = mileToKm(distance);
+        } else  {
+            distanceKm = distance;
+            distanceMi = kmToMile(distance);
+        }
     }
 
     @Override

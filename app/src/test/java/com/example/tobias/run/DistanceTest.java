@@ -18,7 +18,7 @@ public class DistanceTest {
 
     @Test public void testSetters(){
         Distance distance = new Distance(1, Distance.Unit.KM);
-        distance.setDistanceKm(10);
+        distance.setDistance(Distance.Unit.KM, 10);
         Assert.assertEquals(true, distance.getDistanceMi() == 6.2);
     }
 
@@ -37,6 +37,16 @@ public class DistanceTest {
         Assert.assertEquals(false, distanceKm.equalsDistance(1, Distance.Unit.MILE));
 
         Assert.assertEquals(true, distanceMile.equalsDistance(1.6, Distance.Unit.KM));
+
+        Distance distance = new Distance(.39996, Distance.Unit.KM);
+        Assert.assertEquals(true, distance.equalsDistance(.4, Distance.Unit.KM));
+        Assert.assertEquals(true, distance.equalsDistance(.25, Distance.Unit.MILE));
+
+        Distance distance1 = new Distance(42, Distance.Unit.KM);
+        Assert.assertEquals(true, distance1.equalsDistance(26.2, Distance.Unit.MILE));
+
+        distance1.setDistance(Distance.Unit.KM, 42.5);
+        Assert.assertEquals(false, distance1.equalsDistance(26.2, Distance.Unit.MILE));
     }
 
     @Test public void testHashCode(){

@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.example.tobias.run.data.Distance;
 import com.example.tobias.run.data.Run;
+import com.example.tobias.run.data.RunPredicates;
 
 import org.apache.commons.collections.Predicate;
 import org.joda.time.DateTime;
@@ -23,7 +24,7 @@ import java.util.Locale;
 public class RunUtils {
 
     private RunUtils(){
-        //Private constructor to ensure noninstantiability
+        //Private constructor to ensure non-instantiability
     }
 
     /**
@@ -86,7 +87,7 @@ public class RunUtils {
      */
     public static double getMileageBetween(long start, long end, List<Run> data, Distance.Unit unit){
         List<Run> filteredList = new ArrayList<>();
-        filteredList.addAll(filterList(data, Run.Predicates.isRunBetween(start, end)));
+        filteredList.addAll(filterList(data, RunPredicates.isRunBetween(start, end)));
 
         double mileage = 0;
 
@@ -97,7 +98,7 @@ public class RunUtils {
         return mileage;
     }
 
-    public static double addMileage(double[] mileage) {
+    public static double addArray(double[] mileage) {
         double sum = 0;
         for (double f : mileage) {
             sum += f;
@@ -122,6 +123,7 @@ public class RunUtils {
      * @return distance in the format of "1 km/mi"
      */
     public static String distanceToString(double distance, Distance.Unit unit){
+        distance = roundNearestTenth(distance);
         DecimalFormat df = new DecimalFormat("0.00");
         String distanceText = df.format(distance) + " " + unit.toString();
         return distanceText;
@@ -257,6 +259,10 @@ public class RunUtils {
 
     public static int ratingToInt(String rating){
         return Integer.valueOf(rating);
+    }
+
+    public static double roundNearestTenth(double a){
+        return (double) Math.round(a * 10) / 10;
     }
 
 }

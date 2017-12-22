@@ -6,6 +6,10 @@ import com.example.tobias.run.data.Run;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Created by Tobi on 10/20/2017.
  */
@@ -35,14 +39,6 @@ public class RunTest {
         Assert.assertNotEquals(similarRun.hashCode(), differentRun.hashCode());
     }
 
-    @Test public void testIsRunFromDistanceKm(){
-
-    }
-
-    @Test public void testIsRunFromDistanceMiles(){
-
-    }
-
     @Test public void testPaceUpdate(){
         Run run = Run.withKilometers(1, 1000, 0, 0);
         long kmPace1 = run.getPace(Distance.Unit.KM);
@@ -56,5 +52,16 @@ public class RunTest {
         long kmPace3 = run.getPace(Distance.Unit.KM);
 
         Assert.assertEquals(false, kmPace2 == kmPace3);
+    }
+
+    @Test public void testCompareTo(){
+        List<Run> list = new ArrayList<>();
+        list.add(Run.withKilometers(0, 0, 3, 0));
+        list.add(Run.withKilometers(0, 0, 1, 0));
+        list.add(Run.withKilometers(0, 0, 2, 0));
+        Collections.sort(list);
+
+        Assert.assertEquals(true, list.get(0).getDate() == 1);
+        Assert.assertEquals(true, list.get(1).getDate() == 2);
     }
 }

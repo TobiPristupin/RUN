@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import com.example.tobias.run.data.Distance;
 import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.data.Run;
+import com.example.tobias.run.data.RunPredicates;
 import com.example.tobias.run.interfaces.Observer;
 import com.example.tobias.run.utils.RunUtils;
 import com.github.mikephil.charting.data.Entry;
@@ -46,7 +47,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
     }
 
     private void update400mChartData(){
-        List<Run> runs400m = RunUtils.filterList(runList, Run.Predicates.isRunFromDistance(.4f, Distance.Unit.KM));
+        List<Run> runs400m = RunUtils.filterList(runList, RunPredicates.isRunFromDistance(.4, Distance.Unit.KM));
 
         List<Entry> scatterData = calculateScatterData(runs400m);
         int scatterDataSize = scatterData == null ? 0  : scatterData.size();
@@ -57,7 +58,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
     }
 
     private void updateMileChartData(){
-        List<Run> runsMile = RunUtils.filterList(runList, Run.Predicates.isRunFromDistance(1f, Distance.Unit.MILE));
+        List<Run> runsMile = RunUtils.filterList(runList, RunPredicates.isRunFromDistance(1, Distance.Unit.MILE));
 
         List<Entry> scatterData = calculateScatterData(runsMile);
         int scatterDataSize = scatterData == null ? 0  : scatterData.size();
@@ -68,7 +69,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
     }
 
     private void update5kChartData(){
-        List<Run> runs5k = RunUtils.filterList(runList, Run.Predicates.isRunFromDistance(5f, Distance.Unit.KM));
+        List<Run> runs5k = RunUtils.filterList(runList, RunPredicates.isRunFromDistance(5, Distance.Unit.KM));
 
         List<Entry> scatterData = calculateScatterData(runs5k);
         int scatterDataSize = scatterData == null ? 0  : scatterData.size();
@@ -79,7 +80,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
     }
 
     private void update10kChartData(){
-        List<Run> runs10k = RunUtils.filterList(runList, Run.Predicates.isRunFromDistance(10f, Distance.Unit.KM));
+        List<Run> runs10k = RunUtils.filterList(runList, RunPredicates.isRunFromDistance(10, Distance.Unit.KM));
 
         List<Entry> scatterData = calculateScatterData(runs10k);
         int scatterDataSize = scatterData == null ? 0  : scatterData.size();
@@ -90,7 +91,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
     }
 
     private void update21kChartData(){
-        List<Run> runs21k = RunUtils.filterList(runList, Run.Predicates.isRunFromDistance(21f, Distance.Unit.KM));
+        List<Run> runs21k = RunUtils.filterList(runList, RunPredicates.isRunFromDistance(21, Distance.Unit.KM));
 
         List<Entry> scatterData = calculateScatterData(runs21k);
         int scatterDataSize = scatterData == null ? 0  : scatterData.size();
@@ -101,7 +102,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
     }
 
     private void update42kChartData() {
-        List<Run> runs42k = RunUtils.filterList(runList, Run.Predicates.isRunFromDistance(42, Distance.Unit.KM));
+        List<Run> runs42k = RunUtils.filterList(runList, RunPredicates.isRunFromDistance(42, Distance.Unit.KM));
 
         List<Entry> scatterData = calculateScatterData(runs42k);
         int scatterDataSize = scatterData == null ? 0  : scatterData.size();

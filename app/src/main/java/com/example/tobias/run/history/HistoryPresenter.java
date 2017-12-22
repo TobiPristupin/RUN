@@ -2,6 +2,7 @@ package com.example.tobias.run.history;
 
 import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.data.Run;
+import com.example.tobias.run.data.RunPredicates;
 import com.example.tobias.run.interfaces.Observer;
 import com.example.tobias.run.utils.DateUtils;
 import com.example.tobias.run.utils.RunUtils;
@@ -59,17 +60,17 @@ public class HistoryPresenter implements Observer<List<Run>>{
         switch (filter){
             case "Week" :
                 List<Run> weekRuns = RunUtils.filterList(allRunsList,
-                        Run.Predicates.isRunBetween(DateUtils.getStartOfWeek(), DateUtils.getEndOfWeek()));
+                        RunPredicates.isRunBetween(DateUtils.getStartOfWeek(), DateUtils.getEndOfWeek()));
                 displayedRunsList.addAll(weekRuns);
                 break;
             case "Month" :
                 List<Run> monthRuns = RunUtils.filterList(allRunsList,
-                        Run.Predicates.isRunBetween(DateUtils.getStartOfMonth(), DateUtils.getEndOfMonth()));
+                        RunPredicates.isRunBetween(DateUtils.getStartOfMonth(), DateUtils.getEndOfMonth()));
                 displayedRunsList.addAll(monthRuns);
                 break;
             case "Year" :
                 List<Run> yearRuns = RunUtils.filterList(allRunsList,
-                        Run.Predicates.isRunBetween(DateUtils.getStartOfYear(), DateUtils.getEndOfYear()));
+                        RunPredicates.isRunBetween(DateUtils.getStartOfYear(), DateUtils.getEndOfYear()));
                 displayedRunsList.addAll(yearRuns);
                 break;
             case "All" :
