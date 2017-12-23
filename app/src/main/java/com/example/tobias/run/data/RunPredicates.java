@@ -23,7 +23,7 @@ public class RunPredicates {
             @Override
             public boolean evaluate(Object object) {
                 Run tr = (Run) object;
-                return tr.getDistance().equalsDistance(distance, unit);
+                return tr.getDistance().equalsDistance(distance, unit) && tr.getTime() != 0;
             }
         };
     }

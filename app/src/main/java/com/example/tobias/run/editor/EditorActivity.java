@@ -282,9 +282,4 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
 
         }
     }
-
-
-
-
-
 }

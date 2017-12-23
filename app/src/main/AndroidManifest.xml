@@ -23,7 +23,8 @@
         </activity>
         <activity
             android:name=".editor.EditorActivity"
-            android:parentActivityName=".app.MainActivityView" />
+            android:parentActivityName=".app.MainActivityView"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".settings.SettingsActivity"
             android:parentActivityName=".app.MainActivityView" />

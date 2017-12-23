@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.example.tobias.run.editor.EditorActivity"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/LightGrey"
     android:orientation="vertical"
-    android:background="@color/LightGrey">
+    tools:context="com.example.tobias.run.editor.EditorActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/editor_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
+        android:background="@color/colorPrimary"
         app:title="Add Manual Entry"
-        app:titleTextColor="@android:color/white"
-        android:background="@color/colorPrimary" />
+        app:titleTextColor="@android:color/white" />
 
 
     <LinearLayout
+        android:id="@+id/editor_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/editor_container"
         android:layout_margin="15dp"
+        android:alpha="0"
         android:background="@drawable/mild_rounded_button"
         android:elevation="5dp"
-        android:orientation="vertical"
-        android:alpha="0">
+        android:orientation="vertical">
 
         <RelativeLayout
             android:id="@+id/editor_distance_view"
@@ -148,7 +147,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:src="@drawable/ic_stars"
-                android:transitionName="fab_editor_transition"/>
+                android:transitionName="fab_editor_transition" />
 
             <TextView
                 android:layout_width="wrap_content"

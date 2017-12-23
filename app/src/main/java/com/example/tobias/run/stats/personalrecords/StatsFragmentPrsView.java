@@ -192,18 +192,22 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
 
         LineData lineData = new LineData();
         LineDataSet bestLineDataSet = new LineDataSet(lineDataBest, "Best Time");
+        bestLineDataSet.enableDashedLine(25, 15, 0);
         bestLineDataSet.setColor(getResources().getColor(R.color.colorPrimary));
         bestLineDataSet.setDrawCircles(false);
         bestLineDataSet.setLineWidth(2);
         bestLineDataSet.setDrawValues(false);
-        lineData.addDataSet(bestLineDataSet);
+
 
         LineDataSet averageLineDataSet = new LineDataSet(lineDataAverage, "Average Time");
+        averageLineDataSet.enableDashedLine(15, 5, 0);
         averageLineDataSet.setColor(getResources().getColor(R.color.Blue));
         averageLineDataSet.setDrawCircles(false);
         averageLineDataSet.setLineWidth(2);
         averageLineDataSet.setDrawValues(false);
+
         lineData.addDataSet(averageLineDataSet);
+        lineData.addDataSet(bestLineDataSet);
 
         combinedData.setData(lineData);
         combinedData.setData(scData);

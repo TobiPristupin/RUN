@@ -22,7 +22,7 @@ public class DistanceDialog {
 
 
     public interface onPositiveButtonListener {
-        public void onClick(String distanceValue);
+        void onClick(String distanceValue);
     }
 
     private View rootView;

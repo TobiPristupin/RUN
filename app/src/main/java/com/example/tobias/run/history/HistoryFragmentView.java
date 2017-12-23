@@ -146,7 +146,6 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
             @Override
             public boolean onLongClick(int position) {
                 if (actionMode == null){
-//                    setActiveActionModeBackground(true);
                     actionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(modeCallback);
                 }
 
