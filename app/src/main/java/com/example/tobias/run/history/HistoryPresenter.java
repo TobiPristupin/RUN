@@ -34,6 +34,10 @@ public class HistoryPresenter implements Observer<List<Run>>{
         model.detachObserver(this);
     }
 
+    public void onStartView(){
+        showEmptyViewIfNecessary();
+    }
+
     /**
      * Called from model to to update data
      * @param data
@@ -82,13 +86,7 @@ public class HistoryPresenter implements Observer<List<Run>>{
         //Exit selection state, user isn't allowed to change filter with selected items.
         view.finishActionMode();
 
-        if (shouldShowEmptyView()){
-            //If presenters's data set is empty, meaning that database has no items, message shown changes
-            boolean longMessage = allRunsList.isEmpty();
-            view.showEmptyView(longMessage);
-        } else {
-            view.removeEmptyView();
-        }
+        showEmptyViewIfNecessary();
     }
 
     private boolean shouldShowEmptyView(){
@@ -120,11 +118,6 @@ public class HistoryPresenter implements Observer<List<Run>>{
     }
 
 
-
-    public void deleteRun(Run run){
-        model.remove(run);
-    }
-
     public void deleteRun(List<Integer> indexList){
         for (Integer index : indexList){
             model.remove(displayedRunsList.get(index));
@@ -150,6 +143,14 @@ public class HistoryPresenter implements Observer<List<Run>>{
         view.sendIntentEditorActivity(run);
     }
 
-
+    private void showEmptyViewIfNecessary(){
+        if (shouldShowEmptyView()){
+            //If presenters's data set is empty, meaning that database has no items, message shown changes
+            boolean longMessage = allRunsList.isEmpty();
+            view.showEmptyView(longMessage);
+        } else {
+            view.removeEmptyView();
+        }
+    }
 
 }

@@ -58,12 +58,6 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
         //Required empty constructor.
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("History");
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -82,6 +76,18 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
         presenter = new HistoryPresenter(this, FirebaseDatabaseManager.getInstance());
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("History");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        presenter.onStartView();
     }
 
     @Override
@@ -233,6 +239,28 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     }
 
     /**
+     * @return current state of filter spinner
+     */
+    @Override
+    public String getDataFilter() {
+        return dateSpinner.getItems().get(dateSpinner.getSelectedIndex()).toString();
+    }
+
+    @Override
+    public void showEmptyView(boolean longMessage) {
+        if (longMessage){
+            animateViews(true, emptyViewHeader, emptyViewImage, emptyViewText);
+        } else {
+            animateViews(true, emptyViewHeader, emptyViewImage);
+        }
+    }
+
+    @Override
+    public void removeEmptyView() {
+        animateViews(false, emptyViewHeader, emptyViewImage, emptyViewText);
+    }
+
+    /**
      * Dialog that asks the user for confirmation before deleting items.
      * @param selectedItems selected items in adapter to be deleted
      */
@@ -262,28 +290,6 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
         });
 
         builder.create().show();
-    }
-
-    /**
-     * @return current state of filter spinner
-     */
-    @Override
-    public String getDataFilter() {
-        return dateSpinner.getItems().get(dateSpinner.getSelectedIndex()).toString();
-    }
-
-    @Override
-    public void showEmptyView(boolean longMessage) {
-        if (longMessage){
-            animateViews(true, emptyViewHeader, emptyViewImage, emptyViewText);
-        } else {
-            animateViews(true, emptyViewHeader, emptyViewImage);
-        }
-    }
-
-    @Override
-    public void removeEmptyView() {
-        animateViews(false, emptyViewHeader, emptyViewImage, emptyViewText);
     }
 
     @Override
