@@ -15,6 +15,20 @@ import org.joda.time.Period;
  */
 public class Run implements Parcelable, Comparable<Run> {
 
+    @Exclude
+    public static final Parcelable.Creator<Run> CREATOR = new Parcelable.Creator<Run>(){
+
+        @Override
+        public Run createFromParcel(Parcel parcel) {
+            return new Run(parcel);
+        }
+
+        @Override
+        public Run[] newArray(int i) {
+            return new Run[i];
+        }
+
+    };
     private Distance distance;
     private long time;
     private long date;
@@ -30,6 +44,23 @@ public class Run implements Parcelable, Comparable<Run> {
         this.rating = rating;
         this.kilometrePace = calculatePace(this.distance.getDistanceKm(), time);
         this.milePace = calculatePace(this.distance.getDistanceMi(), time);
+    }
+
+    @Deprecated
+    /**
+     * This no-arg constructor is required and should only be used by firebase, never by a user,
+     * because it will lead to the object being in an invalid state where no fields are initialized.
+     */
+    public Run(){}
+
+    private Run(Parcel in) {
+        this.distance = in.readParcelable(Distance.class.getClassLoader());
+        this.id = in.readString();
+        this.date = in.readLong();
+        this.time = in.readLong();
+        this.rating = in.readInt();
+        this.milePace = in.readLong();
+        this.kilometrePace = in.readLong();
     }
 
     public static Run withKilometers(double distanceKm, long time, long date, int rating){
@@ -59,23 +90,6 @@ public class Run implements Parcelable, Comparable<Run> {
         return withMiles(distance, t, d, r);
     }
 
-    @Deprecated
-    /**
-     * This no-arg constructor is required and should only be used by firebase, never by a user,
-     * because it will lead to the object being in an invalid state where no fields are initialized.
-     */
-    public Run(){}
-
-    private Run(Parcel in) {
-        this.distance = in.readParcelable(Distance.class.getClassLoader());
-        this.id = in.readString();
-        this.date = in.readLong();
-        this.time = in.readLong();
-        this.rating = in.readInt();
-        this.milePace = in.readLong();
-        this.kilometrePace = in.readLong();
-    }
-
     /**
      * Updates pace values. Called when distance fields are modified and pace requires updating.
      */
@@ -95,7 +109,6 @@ public class Run implements Parcelable, Comparable<Run> {
         return (long) pace * 1000;
     }
 
-
     @Exclude public double getDistance(Distance.Unit unit){
         return distance.getDistance(unit);
     }
@@ -104,15 +117,32 @@ public class Run implements Parcelable, Comparable<Run> {
         return time;
     }
 
+    @Exclude public void setTime(String timeText){
+        time = RunUtils.timeToUnix(timeText);
+        updatePace();
+    }
+
     public long getDate(){
         return date;
+    }
+
+    @Exclude public void setDate(String dateText){
+        date = RunUtils.dateToUnix(dateText);
     }
 
     public int getRating(){
         return rating;
     }
 
+    @Exclude public void setRating(String ratingText){
+        rating = RunUtils.ratingToInt(ratingText);
+    }
+
     public String getId(){ return id; }
+
+    public void setId(String pushKey){
+        id = pushKey;
+    }
 
     @Exclude public long getPace(Distance.Unit unit){
         if (unit == Distance.Unit.KM){
@@ -122,20 +152,14 @@ public class Run implements Parcelable, Comparable<Run> {
         return milePace;
     }
 
-    public long getMilePace(){
-        return milePace;
-    }
-
-    public long getKilometrePace() {
-        return kilometrePace;
-    }
-
     public Distance getDistance(){
         return distance;
     }
 
-
-
+    public void setDistance(Distance distance){
+        this.distance = distance;
+        updatePace();
+    }
 
     @Exclude public void setDistance(String distanceString){
         String km = Distance.Unit.KM.toString();
@@ -166,18 +190,8 @@ public class Run implements Parcelable, Comparable<Run> {
         updatePace();
     }
 
-    public void setDistance(Distance distance){
-        this.distance = distance;
-        updatePace();
-    }
-
     public void setTime(long time){
         this.time = time;
-        updatePace();
-    }
-
-    @Exclude public void setTime(String timeText){
-        time = RunUtils.timeToUnix(timeText);
         updatePace();
     }
 
@@ -185,20 +199,8 @@ public class Run implements Parcelable, Comparable<Run> {
         this.date = date;
     }
 
-    @Exclude public void setDate(String dateText){
-        date = RunUtils.dateToUnix(dateText);
-    }
-
     public void setRating(int rating){
         this.rating = rating;
-    }
-
-    @Exclude public void setRating(String ratingText){
-        rating = RunUtils.ratingToInt(ratingText);
-    }
-
-    public void setId(String pushKey){
-        id = pushKey;
     }
 
     @Deprecated
@@ -219,8 +221,20 @@ public class Run implements Parcelable, Comparable<Run> {
         this.milePace = milePace;
     }
 
+    @Override
+    public int hashCode() {
+        int result = 15;
+        result = 31 * result + distance.hashCode();
+        result = 31 * result + (int) (date ^ (date >>> 32));
+        result = 31 * result + (int) (time ^ (time >>> 32));
+        result = 31 * result + rating;
 
+        if (id != null){
+            result = 31 * id.hashCode();
+        }
 
+        return result;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -243,18 +257,9 @@ public class Run implements Parcelable, Comparable<Run> {
     }
 
     @Override
-    public int hashCode() {
-        int result = 15;
-        result = 31 * result + distance.hashCode();
-        result = 31 * result + (int) (date ^ (date >>> 32));
-        result = 31 * result + (int) (time ^ (time >>> 32));
-        result = 31 * result + rating;
-
-        if (id != null){
-            result = 31 * id.hashCode();
-        }
-
-        return result;
+    public String toString() {
+        return distance.toString() + " - date:" + date + " - time:"
+                + time + " - rating:" + rating + " - id:" + id;
     }
 
     @Override
@@ -268,12 +273,6 @@ public class Run implements Parcelable, Comparable<Run> {
         }
 
         return -1;
-    }
-
-    @Override
-    public String toString() {
-        return distance.toString() + " - date:" + date + " - time:"
-                + time + " - rating:" + rating + " - id:" + id;
     }
 
     @Override
@@ -291,20 +290,5 @@ public class Run implements Parcelable, Comparable<Run> {
         parcel.writeLong(milePace);
         parcel.writeLong(kilometrePace);
     }
-
-    @Exclude
-    public static final Parcelable.Creator<Run> CREATOR = new Parcelable.Creator<Run>(){
-
-        @Override
-        public Run createFromParcel(Parcel parcel) {
-            return new Run(parcel);
-        }
-
-        @Override
-        public Run[] newArray(int i) {
-            return new Run[i];
-        }
-
-    };
 
 }

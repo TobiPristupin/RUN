@@ -1,10 +1,8 @@
 package com.example.tobias.run.settings;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.tobias.run.R;
+import com.example.tobias.run.data.Distance;
 import com.example.tobias.run.data.SharedPreferenceManager;
 import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.login.LoginActivity;
@@ -32,8 +31,6 @@ public class SettingsActivity extends AppCompatActivity {
         initUnitText();
         initButtons();
     }
-
-
 
     private void initToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
@@ -80,6 +77,19 @@ public class SettingsActivity extends AppCompatActivity {
                 });
                 builder.setNegativeButton("No", null);
                 builder.create().show();
+            }
+        });
+
+        RelativeLayout changeMetricButton = findViewById(R.id.settings_distance_unit_button);
+        changeMetricButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferenceRepository sharedPref = new SharedPreferenceManager(SettingsActivity.this);
+                if (sharedPref.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY).equals(Distance.Unit.KM)){
+                    sharedPref.set(SharedPreferenceRepository.DISTANCE_UNIT_KEY, Distance.Unit.MILE.toString());
+                } else {
+                    sharedPref.set(SharedPreferenceRepository.DISTANCE_UNIT_KEY, Distance.Unit.KM.toString());
+                }
             }
         });
     }

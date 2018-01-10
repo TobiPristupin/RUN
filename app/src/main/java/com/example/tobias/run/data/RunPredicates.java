@@ -18,12 +18,12 @@ public class RunPredicates {
         };
     }
 
-    public static Predicate isRunFromDistance(final double distance, final Distance.Unit unit) {
+    public static Predicate isRunFromDistance(final double distanceKm, final double distanceMi) {
         return new Predicate() {
             @Override
             public boolean evaluate(Object object) {
                 Run tr = (Run) object;
-                return tr.getDistance().equalsDistance(distance, unit) && tr.getTime() != 0;
+                return tr.getDistance().equalsDistance(distanceKm, distanceMi) && tr.getTime() != 0;
             }
         };
     }

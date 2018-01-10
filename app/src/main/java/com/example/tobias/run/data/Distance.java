@@ -15,34 +15,28 @@ import java.util.List;
 
 public class Distance implements Parcelable {
 
+    public static final Parcelable.Creator<Distance> CREATOR = new Parcelable.Creator<Distance>() {
+
+        @Override
+        public Distance createFromParcel(Parcel source) {
+            return new Distance(source);
+        }
+
+        @Override
+        public Distance[] newArray(int size) {
+            return new Distance[size];
+        }
+    };
     private double distanceKm;
     private double distanceMi;
     private double epsilon = 0.099;
-
     /*Contains the most common distance equivalences known by runners,
     * such as 5k = 3.1mi. This is done because of the inaccuracy when comparing double distance values due to
     * round-off errors and loss of precision when converting km values to mi and vice versa. Storing these
     * Common comparisons ensures that at least the most used ones will be correct.*/
     private List<Pair<Double, Double>> distanceEquivalences = new ArrayList<>();
 
-    public enum Unit {
-        KM("km"), MILE("mi");
-
-        private String value;
-
-        Unit(String value){
-            this.value = value;
-        }
-
-
-        @Override
-        public String toString() {
-            return value;
-        }
-    }
-
     public Distance(double distance, Unit unit){
-        initDistanceEquivalences();
 
         if (unit == Unit.MILE){
             distanceMi = distance;
@@ -60,59 +54,32 @@ public class Distance implements Parcelable {
      */
     public Distance(){}
 
-    private void initDistanceEquivalences(){
-        distanceEquivalences.add(new Pair<>(.4, .25));
-        distanceEquivalences.add(new Pair<>(1.6, 1d));
-        distanceEquivalences.add(new Pair<>(5d, 3.1));
-        distanceEquivalences.add(new Pair<>(10d, 6.2));
-        distanceEquivalences.add(new Pair<>(21d, 13.1));
-        distanceEquivalences.add(new Pair<>(42d, 26.2));
+    private Distance(Parcel in){
+        distanceKm = in.readDouble();
+        distanceMi = in.readDouble();
     }
 
     private double kmToMile(double km){
-        for (Pair<Double, Double> pair : distanceEquivalences){
-            if (Math.abs(pair.first - km) <= epsilon){
-                return pair.second;
-            }
-        }
-
         return km * 0.621371f;
     }
 
     private double mileToKm(double miles){
-        for (Pair<Double, Double> pair : distanceEquivalences){
-            if (Math.abs(pair.second - miles) <= epsilon){
-                return pair.first;
-            }
-        }
-
         return miles * 1.60934f;
     }
 
-
-    public boolean equalsDistance(double distance, Unit unit){
-        if (unit == Unit.MILE){
-            return Math.abs(distanceMi - distance) <= epsilon;
-        }
-
-        return Math.abs(distanceKm - distance) <= epsilon;
+    /**
+     * Requires distance in both units because one unit (the original one) will always be precise, while the
+     * other unit will be computed off the first and thus not precise.
+     * @param distanceKm
+     * @param distanceMi
+     * @return
+     */
+    public boolean equalsDistance(double distanceKm, double distanceMi){
+        return Math.abs(this.distanceKm - distanceKm) <= epsilon || Math.abs(this.distanceMi - distanceMi) <= epsilon;
     }
-
 
     public double getDistanceKm() {
         return distanceKm;
-    }
-
-    public double getDistanceMi() {
-        return distanceMi;
-    }
-
-    public double getDistance(Unit unit){
-        if (unit == Unit.MILE){
-            return getDistanceMi();
-        }
-
-        return getDistanceKm();
     }
 
     @Deprecated
@@ -124,6 +91,10 @@ public class Distance implements Parcelable {
         this.distanceKm = distanceKm;
     }
 
+    public double getDistanceMi() {
+        return distanceMi;
+    }
+
     @Deprecated
     /**
      * Method should only be used by firebase, as it might leave the object in an invalid state.
@@ -131,6 +102,14 @@ public class Distance implements Parcelable {
      */
     public void setDistanceMi(double distanceMi) {
         this.distanceMi = distanceMi;
+    }
+
+    public double getDistance(Unit unit){
+        if (unit == Unit.MILE){
+            return getDistanceMi();
+        }
+
+        return getDistanceKm();
     }
 
     @Exclude
@@ -171,21 +150,19 @@ public class Distance implements Parcelable {
         dest.writeDouble(distanceMi);
     }
 
-    private Distance(Parcel in){
-        distanceKm = in.readDouble();
-        distanceMi = in.readDouble();
+    public enum Unit {
+        KM("km"), MILE("mi");
+
+        private String value;
+
+        Unit(String value){
+            this.value = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return value;
+        }
     }
-
-    public static final Parcelable.Creator<Distance> CREATOR = new Parcelable.Creator<Distance>() {
-
-        @Override
-        public Distance createFromParcel(Parcel source) {
-            return new Distance(source);
-        }
-
-        @Override
-        public Distance[] newArray(int size) {
-            return new Distance[size];
-        }
-    };
 }
