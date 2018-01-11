@@ -28,7 +28,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="5dp"
-                android:text="Personal Bests"
+                android:text="Best Performances"
                 android:textColor="@android:color/white"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -96,7 +96,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="5dp"
-                android:text="All Time Bests"
+                android:text="Personal Bests"
                 android:textColor="@android:color/white"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -105,16 +105,54 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="75dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="75dp"
             android:background="@android:color/white"
             app:cardCornerRadius="10dp"
             app:cardElevation="20dp">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
+                <include
+                    android:id="@+id/stats_prs_farthest_run"
+                    layout="@layout/personal_best_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/Orange"/>
+
+                <include
+                    android:id="@+id/stats_prs_fastest_pace"
+                    layout="@layout/personal_best_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/Orange"/>
+
+                <include
+                    android:id="@+id/stats_prs_longest_duration"
+                    layout="@layout/personal_best_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+            </LinearLayout>
 
         </android.support.v7.widget.CardView>
 

@@ -8,11 +8,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.utils.TimeAxisValueFormatter;
+import com.example.tobias.run.utils.TimeValueFormatter;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -57,6 +59,7 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
 
         initViewAnimator();
         initTabLayout();
+        initPersonalBests();
 
         presenter = new StatsPrsPresenter(this, FirebaseDatabaseManager.getInstance());
         return rootView;
@@ -107,6 +110,23 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
         viewAnimator.addView(chart42k);
         viewAnimator.setInAnimation(getContext(), R.anim.fade_in);
         viewAnimator.setOutAnimation(getContext(), R.anim.fade_out);
+    }
+    
+    private void initPersonalBests(){
+        View farthestDistance = rootView.findViewById(R.id.stats_prs_farthest_run);
+        ((TextView) farthestDistance.findViewById(R.id.personal_best_item_title)).setText("Farthest Distance");
+        ((TextView) farthestDistance.findViewById(R.id.personal_best_item_date)).setText("?");
+        ((TextView) farthestDistance.findViewById(R.id.personal_best_item_value)).setText("0");
+
+        View fastestPace = rootView.findViewById(R.id.stats_prs_fastest_pace);
+        ((TextView) fastestPace.findViewById(R.id.personal_best_item_title)).setText("Fastest Pace");
+        ((TextView) fastestPace.findViewById(R.id.personal_best_item_date)).setText("?");
+        ((TextView) fastestPace.findViewById(R.id.personal_best_item_value)).setText("0");
+
+        View longestDuration = rootView.findViewById(R.id.stats_prs_longest_duration);
+        ((TextView) longestDuration.findViewById(R.id.personal_best_item_title)).setText("Longest Duration");
+        ((TextView) longestDuration.findViewById(R.id.personal_best_item_date)).setText("?");
+        ((TextView) longestDuration.findViewById(R.id.personal_best_item_value)).setText("0");
     }
 
     /**
@@ -186,7 +206,8 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
         ScatterDataSet scatterDataSet = new ScatterDataSet(scatterData, "Time");
         scatterDataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
         scatterDataSet.setScatterShapeSize(25);
-        scatterDataSet.setDrawValues(false);
+        scatterDataSet.setValueFormatter(new TimeValueFormatter());
+        scatterDataSet.setDrawValues(true);
         scatterDataSet.setColor(getResources().getColor(R.color.Orange));
         scData.addDataSet(scatterDataSet);
 
