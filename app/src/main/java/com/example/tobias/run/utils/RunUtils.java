@@ -202,10 +202,17 @@ public class RunUtils {
     /**
      *
      * @param date in unix timestamp
-     * @return date in format "E, d/M/y"
+     * @return date in format "E, M/d/y" if Locale is US or format "E, d/M/y if it isn't""
      */
     public static String dateToString(long date){
-        DateTimeFormatter formatter = DateTimeFormat.forPattern("E, d/M/y");
+        Locale locale = Locale.getDefault();
+        DateTimeFormatter formatter;
+        if (locale.equals(Locale.US)){
+            formatter = DateTimeFormat.forPattern("E, M/d/y");
+        } else {
+            formatter = DateTimeFormat.forPattern("E, d/M/y");
+        }
+
         //Unix time is in milli, DateTime is in sec, so multiply by 1000 to convert
         String dateText = formatter.print(new DateTime(date * 1000L));
         return dateText;

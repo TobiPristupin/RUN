@@ -74,7 +74,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         if (longest == null){
             view.setLongestDurationText("0", "?");
         } else {
-            String time = RunUtils.timeToString(longest.getTime(), false);
+            String time = RunUtils.timeToString(longest.getTime(), true);
             String date = RunUtils.dateToString(longest.getDate());
             view.setLongestDurationText(time, date);
         }
