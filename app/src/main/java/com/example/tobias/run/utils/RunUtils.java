@@ -69,6 +69,54 @@ public class RunUtils {
         return fastest;
     }
 
+    public static @Nullable Run getLongestRun(List<Run> runs){
+        if (runs.isEmpty()){
+            return null;
+        }
+
+        Run farthest = runs.get(0);
+
+        for (Run r : runs){
+            if (r.getDistance(Distance.Unit.KM) > farthest.getDistance(Distance.Unit.KM)){
+                farthest = r;
+            }
+        }
+
+        return farthest;
+    }
+
+    public static @Nullable Run getFastestPace(List<Run> runs){
+        if (runs.isEmpty()){
+            return null;
+        }
+
+        Run fastest = runs.get(0);
+
+        for (Run r : runs){
+            if (r.getPace(Distance.Unit.KM) < fastest.getPace(Distance.Unit.KM)){
+                fastest = r;
+            }
+        }
+
+        return fastest;
+    }
+
+    public static @Nullable Run getLongestDuration(List<Run> runs){
+        if (runs.isEmpty()){
+            return null;
+        }
+
+        Run longest = runs.get(0);
+
+        for (Run r : runs){
+            if (r.getTime() > longest.getTime()){
+                longest = r;
+            }
+        }
+
+        return longest;
+    }
+
     public static double getAverageTime(List<Run> runs){
         long sum = 0;
 
@@ -127,25 +175,6 @@ public class RunUtils {
         DecimalFormat df = new DecimalFormat("0.00");
         String distanceText = df.format(distance) + " " + unit.toString();
         return distanceText;
-    }
-
-    /**
-     *
-     * @param time in unix timestamp format
-     * @return time in format hh:mm:ss
-     */
-    public static String timeToString(long time){
-        //Create period to transform time in millis to formatted time.
-        Period period = new Period(time);
-
-        String timeText = new StringBuilder()
-                .append(String.format(Locale.getDefault(), "%02d", period.getHours()))
-                .append(":")
-                .append(String.format(Locale.getDefault(), "%02d", period.getMinutes()))
-                .append(":")
-                .append(String.format(Locale.getDefault(), "%02d", period.getSeconds())).toString();
-
-        return timeText;
     }
 
     /**

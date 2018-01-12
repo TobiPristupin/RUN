@@ -2,9 +2,11 @@ package com.example.tobias.run.stats.personalrecords;
 
 import android.support.annotation.Nullable;
 
+import com.example.tobias.run.data.Distance;
 import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.data.Run;
 import com.example.tobias.run.data.RunPredicates;
+import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.interfaces.Observer;
 import com.example.tobias.run.utils.RunUtils;
 import com.github.mikephil.charting.data.Entry;
@@ -16,11 +18,13 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
 
     private StatsPrsView view;
     private ObservableDatabase<Run> model;
+    private SharedPreferenceRepository sharedPref;
     private List<Run> runList;
 
-    public StatsPrsPresenter(StatsPrsView view, ObservableDatabase<Run> model) {
+    public StatsPrsPresenter(StatsPrsView view, ObservableDatabase<Run> model, SharedPreferenceRepository sharedPref) {
         this.view = view;
         this.model = model;
+        this.sharedPref = sharedPref;
 
         this.model.attachObserver(this);
     }
@@ -43,6 +47,37 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         update10kChartData();
         update21kChartData();
         update42kChartData();
+        updatePersonalBests();
+    }
+
+    private void updatePersonalBests(){
+        Run farthest = RunUtils.getLongestRun(runList);
+        if (farthest == null){
+            view.setFarthestDistanceText("0", "?");
+        } else {
+            String distance = RunUtils.distanceToString(farthest.getDistance(getDistanceUnit()), getDistanceUnit());
+            String date = RunUtils.dateToString(farthest.getDate());
+            view.setFarthestDistanceText(distance, date);
+        }
+
+
+        Run fastestPace = RunUtils.getFastestPace(runList);
+        if (fastestPace == null){
+            view.setFastestPaceText("0", "?");
+        } else {
+            String pace = RunUtils.paceToString(fastestPace.getPace(getDistanceUnit()), getDistanceUnit());
+            String date = RunUtils.dateToString(fastestPace.getDate());
+            view.setFastestPaceText(pace, date);
+        }
+
+        Run longest = RunUtils.getLongestDuration(runList);
+        if (longest == null){
+            view.setLongestDurationText("0", "?");
+        } else {
+            String time = RunUtils.timeToString(longest.getTime(), false);
+            String date = RunUtils.dateToString(longest.getDate());
+            view.setLongestDurationText(time, date);
+        }
     }
 
     private void update400mChartData(){
@@ -180,6 +215,10 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         averageRunData.add(new Entry(scatterDataSize + 1, (float) averageTime));
 
         return averageRunData;
+    }
+
+    private Distance.Unit getDistanceUnit(){
+        return sharedPref.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
     }
 
 }

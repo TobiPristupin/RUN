@@ -21,4 +21,10 @@ public interface StatsPrsView {
     void set21kChartData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage);
 
     void set42kChartData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage);
+
+    void setFarthestDistanceText(String distance, String date);
+
+    void setLongestDurationText(String duration, String date);
+
+    void setFastestPaceText(String pace, String date);
 }

@@ -28,16 +28,10 @@ import java.util.List;
  */
 public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecyclerViewAdapter.HistoryViewHolder> {
 
-    public interface OnItemClicked {
-        void onClick(int position);
-        boolean onLongClick(int position);
-    }
-
     private ArrayList<Run> runs = new ArrayList<>();
     private Context context;
     private OnItemClicked clickListener;
     private SharedPreferenceRepository preferenceManager;
-
     public HistoryRecyclerViewAdapter(Context context, OnItemClicked clickListener){
         this.context = context;
         this.clickListener = clickListener;
@@ -58,7 +52,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
 
         holder.ratingBar.setRating(run.getRating());
         holder.date.setText(RunUtils.dateToString(run.getDate()));
-        holder.time.setText(RunUtils.timeToString(run.getTime()));
+        holder.time.setText(RunUtils.timeToString(run.getTime(), true));
         holder.distance.setText(RunUtils.distanceToString(run.getDistance(unit), unit));
         holder.pace.setText(RunUtils.paceToString(run.getPace(unit), unit));
 
@@ -67,6 +61,11 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         } else {
             holder.layout.setBackgroundColor(context.getResources().getColor(android.R.color.white));
         }
+    }
+
+    @Override
+    public int getItemCount() {
+        return this.runs.size();
     }
 
     /**
@@ -87,9 +86,9 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         return preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
     }
 
-    @Override
-    public int getItemCount() {
-        return this.runs.size();
+    public interface OnItemClicked {
+        void onClick(int position);
+        boolean onLongClick(int position);
     }
 
     public class HistoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {

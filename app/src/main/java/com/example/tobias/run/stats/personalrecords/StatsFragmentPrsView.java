@@ -13,6 +13,7 @@ import android.widget.ViewAnimator;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
+import com.example.tobias.run.data.SharedPreferenceManager;
 import com.example.tobias.run.utils.TimeAxisValueFormatter;
 import com.example.tobias.run.utils.TimeValueFormatter;
 import com.github.mikephil.charting.charts.CombinedChart;
@@ -61,7 +62,8 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
         initTabLayout();
         initPersonalBests();
 
-        presenter = new StatsPrsPresenter(this, FirebaseDatabaseManager.getInstance());
+        presenter = new StatsPrsPresenter(this, FirebaseDatabaseManager.getInstance(),
+                new SharedPreferenceManager(getContext()));
         return rootView;
     }
 
@@ -119,7 +121,7 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
         ((TextView) farthestDistance.findViewById(R.id.personal_best_item_value)).setText("0");
 
         View fastestPace = rootView.findViewById(R.id.stats_prs_fastest_pace);
-        ((TextView) fastestPace.findViewById(R.id.personal_best_item_title)).setText("Fastest Pace");
+        ((TextView) fastestPace.findViewById(R.id.personal_best_item_title)).setText("Fastest Avg Pace");
         ((TextView) fastestPace.findViewById(R.id.personal_best_item_date)).setText("?");
         ((TextView) fastestPace.findViewById(R.id.personal_best_item_value)).setText("0");
 
@@ -192,6 +194,33 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
     @Override
     public void set42kChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
         setChartData(scatterData, lineDataBest, lineDataAverage, chart42k);
+    }
+
+    @Override
+    public void setFarthestDistanceText(String distance, String date) {
+        ((TextView) rootView.findViewById(R.id.stats_prs_farthest_run).findViewById(R.id.personal_best_item_value))
+                .setText(distance);
+
+        ((TextView) rootView.findViewById(R.id.stats_prs_farthest_run).findViewById(R.id.personal_best_item_date))
+                .setText(date);
+    }
+
+    @Override
+    public void setLongestDurationText(String duration, String date) {
+        ((TextView) rootView.findViewById(R.id.stats_prs_longest_duration).findViewById(R.id.personal_best_item_value))
+                .setText(duration);
+
+        ((TextView) rootView.findViewById(R.id.stats_prs_longest_duration).findViewById(R.id.personal_best_item_date))
+                .setText(date);
+    }
+
+    @Override
+    public void setFastestPaceText(String pace, String date) {
+        ((TextView) rootView.findViewById(R.id.stats_prs_fastest_pace).findViewById(R.id.personal_best_item_value))
+                .setText(pace);
+
+        ((TextView) rootView.findViewById(R.id.stats_prs_fastest_pace).findViewById(R.id.personal_best_item_date))
+                .setText(date);
     }
 
     private void setChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage, CombinedChart combinedChart){

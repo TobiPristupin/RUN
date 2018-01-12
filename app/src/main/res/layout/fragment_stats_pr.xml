@@ -125,25 +125,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@color/Orange"/>
-
                 <include
                     android:id="@+id/stats_prs_fastest_pace"
                     layout="@layout/personal_best_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@color/Orange"/>
 
                 <include
                     android:id="@+id/stats_prs_longest_duration"

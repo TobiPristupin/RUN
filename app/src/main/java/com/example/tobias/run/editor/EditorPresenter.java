@@ -49,7 +49,7 @@ public class EditorPresenter {
         String dateText = RunUtils.dateToString(runToEdit.getDate());
         view.setDateText(dateText);
 
-        String timeText = RunUtils.timeToString(runToEdit.getTime());
+        String timeText = RunUtils.timeToString(runToEdit.getTime(), true);
         view.setTimeText(timeText);
 
         view.setRatingText(String.valueOf(runToEdit.getRating()));
