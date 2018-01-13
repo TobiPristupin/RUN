@@ -50,6 +50,7 @@ public class HistoryPresenter implements Observer<List<Run>>{
     }
 
     public void onSpinnerItemSelected(){
+        view.finishActionMode();
         updateViewData();
     }
 
