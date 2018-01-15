@@ -109,56 +109,14 @@ public class Run implements Parcelable, Comparable<Run> {
         return (long) pace * 1000;
     }
 
+
+
     @Exclude public double getDistance(Distance.Unit unit){
         return distance.getDistance(unit);
     }
 
-    public long getTime(){
-        return time;
-    }
-
-    @Exclude public void setTime(String timeText){
-        time = RunUtils.timeToUnix(timeText);
-        updatePace();
-    }
-
-    public long getDate(){
-        return date;
-    }
-
-    @Exclude public void setDate(String dateText){
-        date = RunUtils.dateToUnix(dateText);
-    }
-
-    public int getRating(){
-        return rating;
-    }
-
-    @Exclude public void setRating(String ratingText){
-        rating = RunUtils.ratingToInt(ratingText);
-    }
-
-    public String getId(){ return id; }
-
-    public void setId(String pushKey){
-        id = pushKey;
-    }
-
-    @Exclude public long getPace(Distance.Unit unit){
-        if (unit == Distance.Unit.KM){
-            return kilometrePace;
-        }
-
-        return milePace;
-    }
-
     public Distance getDistance(){
         return distance;
-    }
-
-    public void setDistance(Distance distance){
-        this.distance = distance;
-        updatePace();
     }
 
     @Exclude public void setDistance(String distanceString){
@@ -180,6 +138,63 @@ public class Run implements Parcelable, Comparable<Run> {
         updatePace();
     }
 
+    public long getTime(){
+        return time;
+    }
+
+    public void setTime(long time){
+        this.time = time;
+        updatePace();
+    }
+
+    public long getDate(){
+        return date;
+    }
+
+    public void setDate(long date){
+        this.date = date;
+    }
+
+    public int getRating(){
+        return rating;
+    }
+
+    public void setRating(int rating){
+        this.rating = rating;
+    }
+
+    public String getId(){ return id; }
+
+    public void setId(String pushKey){
+        id = pushKey;
+    }
+
+    @Exclude public long getPace(Distance.Unit unit){
+        if (unit == Distance.Unit.KM){
+            return kilometrePace;
+        }
+
+        return milePace;
+    }
+
+    @Exclude public void setTime(String timeText){
+        time = RunUtils.timeToUnix(timeText);
+        updatePace();
+    }
+
+    @Exclude public void setDate(String dateText){
+        date = RunUtils.dateToUnix(dateText);
+    }
+
+    @Exclude public void setRating(String ratingText){
+        rating = RunUtils.ratingToInt(ratingText);
+    }
+
+    public void setDistance(Distance distance){
+        this.distance = distance;
+        updatePace();
+    }
+
     @Exclude public void setDistanceKilometres(double distanceKilometres){
         distance.setDistance(Distance.Unit.KM, distanceKilometres);
         updatePace();
@@ -188,19 +203,6 @@ public class Run implements Parcelable, Comparable<Run> {
     @Exclude  public void setDistanceMiles(double distanceMiles){
         distance.setDistance(Distance.Unit.MILE, distanceMiles);
         updatePace();
-    }
-
-    public void setTime(long time){
-        this.time = time;
-        updatePace();
-    }
-
-    public void setDate(long date){
-        this.date = date;
-    }
-
-    public void setRating(int rating){
-        this.rating = rating;
     }
 
     @Deprecated
@@ -220,6 +222,9 @@ public class Run implements Parcelable, Comparable<Run> {
     public void setMilePace(long milePace){
         this.milePace = milePace;
     }
+
+
+
 
     @Override
     public int hashCode() {

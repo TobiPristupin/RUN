@@ -202,7 +202,7 @@ public class RunUtils {
     /**
      *
      * @param date in unix timestamp
-     * @return date in format "E, M/d/y" if Locale is US or format "E, d/M/y if it isn't""
+     * @return date in format "E, M/d/y" if Locale is US or format "E, d/M/y" if it isn't
      */
     public static String dateToString(long date){
         Locale locale = Locale.getDefault();
@@ -240,6 +240,7 @@ public class RunUtils {
         String[] timeUnits = new String[3];
         //Split time into hours seconds minutes
         timeUnits = time.split(":");
+
         Period timePeriod = new Period()
                 .withHours(Integer.valueOf(timeUnits[0]))
                 .withMinutes(Integer.valueOf(timeUnits[1]))
@@ -259,10 +260,21 @@ public class RunUtils {
         String[] dateUnits = new String[3];
         //Split into year month day
         dateUnits = date.split("/");
-        DateTime dateTime = new DateTime()
-                .withYear(Integer.valueOf(dateUnits[2]))
-                .withMonthOfYear(Integer.valueOf(dateUnits[1]))
-                .withDayOfMonth(Integer.valueOf(dateUnits[0]));
+
+        DateTime dateTime;
+
+        if (Locale.getDefault().equals(Locale.US)){
+            dateTime = new DateTime()
+                    .withYear(Integer.valueOf(dateUnits[2]))
+                    .withMonthOfYear(Integer.valueOf(dateUnits[0]))
+                    .withDayOfMonth(Integer.valueOf(dateUnits[1]));
+        } else {
+            dateTime = new DateTime()
+                    .withYear(Integer.valueOf(dateUnits[2]))
+                    .withMonthOfYear(Integer.valueOf(dateUnits[1]))
+                    .withDayOfMonth(Integer.valueOf(dateUnits[0]));
+        }
+
 
         return dateTime.getMillis() / 1000;
     }

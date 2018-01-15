@@ -16,6 +16,7 @@
     <color name="Green">#4CAF50</color>
     <color name="Red">#FF5722</color>
     <color name="Blue">#2196F3</color>
+    <color name="DarkOrange">#FF5722</color>
 
 
     <!--Dirty workaround fix to avoid status bar going black when setting its color to transparent

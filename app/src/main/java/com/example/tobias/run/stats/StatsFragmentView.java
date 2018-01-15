@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tobias.run.R;
+import com.example.tobias.run.stats.activities.StatsFragmentActivitiesView;
 import com.example.tobias.run.stats.mileage.StatsFragmentMileageView;
 import com.example.tobias.run.stats.personalrecords.StatsFragmentPrsView;
 
@@ -22,14 +23,8 @@ import com.example.tobias.run.stats.personalrecords.StatsFragmentPrsView;
  */
 public class StatsFragmentView extends Fragment {
 
+    private static final int TAB_COUNT = 3;
     private View rootView;
-    private static final int TAB_COUNT = 2;
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Analyze");
-    }
 
     public StatsFragmentView(){
         //Required empty constructor.
@@ -43,6 +38,12 @@ public class StatsFragmentView extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Analyze");
+    }
+
     private void initViewPager(){
         final TabLayout tabLayout = rootView.findViewById(R.id.stats_tab_layout);
         ViewPager viewPager = rootView.findViewById(R.id.stats_viewpager);
@@ -52,7 +53,7 @@ public class StatsFragmentView extends Fragment {
 
     private class StatsPagerAdapter extends FragmentPagerAdapter {
 
-        private String[] TAB_TITLES = {"Mileage", "PR's", "Distribution"};
+        private String[] TAB_TITLES = {"Mileage", "PR's", "Activities"};
 
         public StatsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -65,8 +66,10 @@ public class StatsFragmentView extends Fragment {
                     return new StatsFragmentMileageView();
                 case 1 :
                     return new StatsFragmentPrsView();
+                case 2 :
+                    return new StatsFragmentActivitiesView();
                 default :
-                    return null;
+                    throw new RuntimeException("Invalid tab position");
             }
 
         }
