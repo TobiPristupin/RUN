@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 
 import com.example.tobias.run.data.Distance;
 import com.example.tobias.run.data.Run;
-import com.example.tobias.run.data.RunPredicates;
 
 import org.apache.commons.collections.Predicate;
 import org.joda.time.DateTime;
@@ -127,25 +126,6 @@ public class RunUtils {
         return sum / runs.size();
     }
 
-    /**
-     * Gets mileage between a period of time.
-     * @param start time in unix timestamp
-     * @param end
-     * @return mileage in unit
-     */
-    public static double getMileageBetween(long start, long end, List<Run> data, Distance.Unit unit){
-        List<Run> filteredList = new ArrayList<>();
-        filteredList.addAll(filterList(data, RunPredicates.isRunBetween(start, end)));
-
-        double mileage = 0;
-
-        for (Run tr : filteredList){
-            mileage += tr.getDistance(unit);
-        }
-
-        return mileage;
-    }
-
     public static double addArray(double[] mileage) {
         double sum = 0;
         for (double f : mileage) {
@@ -207,6 +187,7 @@ public class RunUtils {
     public static String dateToString(long date){
         Locale locale = Locale.getDefault();
         DateTimeFormatter formatter;
+
         if (locale.equals(Locale.US)){
             formatter = DateTimeFormat.forPattern("E, M/d/y");
         } else {

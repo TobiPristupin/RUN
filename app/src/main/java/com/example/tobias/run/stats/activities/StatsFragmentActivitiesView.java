@@ -12,17 +12,15 @@ import android.widget.ViewAnimator;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
-import com.example.tobias.run.utils.TimeAxisValueFormatter;
-import com.example.tobias.run.utils.TimeValueFormatter;
-import com.github.mikephil.charting.charts.CombinedChart;
-import com.github.mikephil.charting.charts.ScatterChart;
+import com.example.tobias.run.utils.GenericAxisValueFormatter;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.CombinedData;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.data.ScatterData;
-import com.github.mikephil.charting.data.ScatterDataSet;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.List;
 
@@ -35,10 +33,11 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
     private View rootView;
     private StatsActivitiesPresenter presenter;
 
-    private CombinedChart chartMonth;
-    private CombinedChart chart3Months;
-    private CombinedChart chart6Months;
-    private CombinedChart chartYear;
+    private BarChart chartWeek;
+    private BarChart chartMonth;
+    private BarChart chart3Months;
+    private BarChart chart6Months;
+    private BarChart chartYear;
     private ViewAnimator viewAnimator;
 
 
@@ -47,10 +46,11 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_stats_activities, container, false);
 
-        chartMonth = styleChart(new CombinedChart(getContext()));
-        chart3Months = styleChart(new CombinedChart(getContext()));
-        chart6Months = styleChart(new CombinedChart(getContext()));
-        chartYear = styleChart(new CombinedChart(getContext()));
+        chartWeek = styleChart(new BarChart(getContext()));
+        chartMonth = styleChart(new BarChart(getContext()));
+        chart3Months = styleChart(new BarChart(getContext()));
+        chart6Months = styleChart(new BarChart(getContext()));
+        chartYear = styleChart(new BarChart(getContext()));
 
         initViewAnimator();
         initTabLayout();
@@ -69,6 +69,7 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
     private void initTabLayout(){
         TabLayout tabLayout = rootView.findViewById(R.id.stats_activities_tablayout);
 
+        tabLayout.addTab(tabLayout.newTab().setText("Week"));
         tabLayout.addTab(tabLayout.newTab().setText("Month"));
         tabLayout.addTab(tabLayout.newTab().setText("3Months"));
         tabLayout.addTab(tabLayout.newTab().setText("6Months"));
@@ -78,7 +79,7 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewAnimator.setDisplayedChild(tab.getPosition());
-                ((CombinedChart) viewAnimator.getCurrentView()).animateXY(1000, 1000);
+                ((BarChart) viewAnimator.getCurrentView()).animateXY(1000, 1000);
             }
 
             @Override
@@ -96,6 +97,7 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
     private void initViewAnimator(){
         viewAnimator = rootView.findViewById(R.id.stats_activities_viewanimator);
 
+        viewAnimator.addView(chartWeek);
         viewAnimator.addView(chartMonth);
         viewAnimator.addView(chart3Months);
         viewAnimator.addView(chart6Months);
@@ -104,26 +106,22 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
         viewAnimator.setOutAnimation(getContext(), R.anim.fade_out);
     }
 
-    private CombinedChart styleChart(CombinedChart chart){
+    private BarChart styleChart(BarChart chart){
         chart.getAxisLeft().setAxisMinimum(0);
         chart.getAxisLeft().setGranularity(1);
-        chart.getAxisLeft().setSpaceTop(60);
-        chart.getAxisLeft().setValueFormatter(new TimeAxisValueFormatter());
-
-        chart.getAxisLeft().setDrawAxisLine(true);
+        chart.getAxisLeft().setSpaceTop(30);
         chart.getAxisRight().setEnabled(false);
         chart.getAxisRight().setDrawGridLines(false);
         chart.getAxisLeft().setDrawGridLines(false);
+
+        chart.getXAxis().setGranularity(1);
         chart.getXAxis().setDrawGridLines(false);
         chart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        chart.getXAxis().setDrawLabels(false);
 
         chart.animateXY(1500, 1500);
         chart.setTouchEnabled(false);
 
         chart.setDrawGridBackground(false);
-
-        chart.setDrawOrder(new CombinedChart.DrawOrder[]{CombinedChart.DrawOrder.SCATTER, CombinedChart.DrawOrder.LINE});
 
         chart.setNoDataText("Oh Dear! It's empty! Start by adding some runs.");
         chart.setNoDataTextColor(getResources().getColor(android.R.color.black));
@@ -135,53 +133,67 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
     }
 
     @Override
-    public void setMonthChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineData) {
-        setChartData(scatterData, lineData, chartMonth);
+    public void setGraphWeekData(List<BarEntry> barData) {
+        setChartData(barData, chartWeek);
     }
 
     @Override
-    public void set3MonthsChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineData) {
-        setChartData(scatterData, lineData, chart3Months);
+    public void setGraphMonthData(List<BarEntry> barData) {
+        setChartData(barData, chartMonth);
     }
 
     @Override
-    public void set6MonthsChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineData) {
-        setChartData(scatterData, lineData, chart6Months);
+    public void setGraph3MonthsData(List<BarEntry> barData) {
+        setChartData(barData, chart3Months);
     }
 
     @Override
-    public void setYearChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineData) {
-        setChartData(scatterData, lineData, chartYear);
+    public void setGraph6MonthsData(List<BarEntry> barData) {
+        setChartData(barData, chart6Months);
     }
 
-    private void setChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineData, CombinedChart chart){
-        if (scatterData == null){
-            //No need to check other lists, because if scatterData is null remaining lists will be null.
-            return;
-        }
+    @Override
+    public void setGraphYearData(List<BarEntry> barData) {
+        setChartData(barData, chartYear);
+    }
 
-        CombinedData combinedData = new CombinedData();
+    @Override
+    public void setGraphWeekXLabels(String[] labels) {
+        chartWeek.getXAxis().setValueFormatter(new GenericAxisValueFormatter<String>(labels));
+    }
 
-        ScatterData scData = new ScatterData();
-        ScatterDataSet scatterDataSet = new ScatterDataSet(scatterData, "Runs");
-        scatterDataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
-        scatterDataSet.setScatterShapeSize(25);
-        scatterDataSet.setValueFormatter(new TimeValueFormatter());
-        scatterDataSet.setDrawValues(true);
-        scatterDataSet.setColor(getResources().getColor(R.color.DarkOrange));
-        scData.addDataSet(scatterDataSet);
+    @Override
+    public void setGraphMonthXLabels(String[] labels) {
+        chartMonth.getXAxis().setValueFormatter(new GenericAxisValueFormatter<String>(labels));
+    }
 
-        LineData lnData = new LineData();
-        LineDataSet lineDataSet = new LineDataSet(lineData, "");
-        lineDataSet.setColor(getResources().getColor(R.color.colorPrimary));
-        lineDataSet.setDrawCircles(false);
-        lineDataSet.setLineWidth(2);
-        lineDataSet.setDrawValues(false);
+    @Override
+    public void setGraph3MonthsXLabels(String[] labels) {
+        chart3Months.getXAxis().setValueFormatter(new GenericAxisValueFormatter<String>(labels));
+    }
 
-        lnData.addDataSet(lineDataSet);
+    @Override
+    public void setGraph6MonthsXLabels(String[] labels) {
+        chart6Months.getXAxis().setValueFormatter(new GenericAxisValueFormatter<String>(labels));
+    }
 
-        combinedData.setData(lnData);
-        combinedData.setData(scData);
-        chart.setData(combinedData);
+    @Override
+    public void setGraphYearXLabels(String[] labels) {
+        chartYear.getXAxis().setValueFormatter(new GenericAxisValueFormatter<String>(labels));
+    }
+
+    private void setChartData(List<BarEntry> barData, BarChart chart){
+        BarDataSet barDataSet = new BarDataSet(barData, "Activities");
+        barDataSet.setValueTextSize(10);
+        barDataSet.setColor(getResources().getColor(R.color.DarkOrange));
+        barDataSet.setValueFormatter(new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                return String.valueOf((int) value);
+            }
+        });
+
+        chart.setData(new BarData(barDataSet));
+        chart.invalidate();
     }
 }

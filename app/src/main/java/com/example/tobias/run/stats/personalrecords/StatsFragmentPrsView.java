@@ -14,7 +14,6 @@ import android.widget.ViewAnimator;
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.SharedPreferenceManager;
-import com.example.tobias.run.utils.TimeAxisValueFormatter;
 import com.example.tobias.run.utils.TimeValueFormatter;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.ScatterChart;
@@ -140,7 +139,7 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
         chart.getAxisLeft().setAxisMinimum(0);
         chart.getAxisLeft().setGranularity(1);
         chart.getAxisLeft().setSpaceTop(60);
-        chart.getAxisLeft().setValueFormatter(new TimeAxisValueFormatter());
+        chart.getAxisLeft().setValueFormatter(new TimeValueFormatter());
 
         chart.getAxisLeft().setDrawAxisLine(true);
         chart.getAxisRight().setEnabled(false);
@@ -167,32 +166,32 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
     }
 
     @Override
-    public void set400mChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
+    public void setGraph400mData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
         setChartData(scatterData, lineDataBest, lineDataAverage, chart400m);
     }
 
     @Override
-    public void setMileChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
+    public void setGraphMileData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
         setChartData(scatterData, lineDataBest, lineDataAverage, chartMile);
     }
 
     @Override
-    public void set5kChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
+    public void setGraph5kData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
         setChartData(scatterData, lineDataBest, lineDataAverage, chart5k);
     }
 
     @Override
-    public void set10kChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
+    public void setGraph10kData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
         setChartData(scatterData, lineDataBest, lineDataAverage, chart10k);
     }
 
     @Override
-    public void set21kChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
+    public void setGraph21kData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
         setChartData(scatterData, lineDataBest, lineDataAverage, chart21k);
     }
 
     @Override
-    public void set42kChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
+    public void setGraph42kData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
         setChartData(scatterData, lineDataBest, lineDataAverage, chart42k);
     }
 

@@ -15,6 +15,7 @@ import org.joda.time.DateTime;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Tobi on 10/30/2017.
@@ -33,6 +34,8 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
         this.sharedPrefRepository = sharedPrefRepository;
 
         this.model.attachObserver(this);
+
+        updateChartXLabels();
     }
 
     @Override
@@ -48,6 +51,37 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
 
     public void onDetachView(){
         model.detachObserver(this);
+    }
+
+    private void updateChartXLabels(){
+        DateTime dateTime = new DateTime();
+        Locale locale = Locale.getDefault();
+
+        String xLabelsMonth = dateTime.monthOfYear().getAsText(locale);
+        view.setGraphMonthXLabel(new String[]{xLabelsMonth});
+
+        String[] xLabels3Months = {
+                dateTime.minusMonths(2).monthOfYear().getAsText(locale),
+                dateTime.minusMonths(1).monthOfYear().getAsText(locale),
+                dateTime.monthOfYear().getAsText(locale),
+        };
+        view.setGraph3MonthXLabel(xLabels3Months);
+
+        String[] xLabels6Months = {
+                dateTime.minusMonths(5).monthOfYear().getAsShortText(locale) + "-" + dateTime.minusMonths(4).monthOfYear().getAsShortText(locale),
+                dateTime.minusMonths(3).monthOfYear().getAsShortText(locale) + "-" + dateTime.minusMonths(2).monthOfYear().getAsShortText(locale),
+                dateTime.minusMonths(1).monthOfYear().getAsShortText(locale) + "-" + dateTime.monthOfYear().getAsShortText(locale)
+        };
+
+        view.setGraph6MonthXLabel(xLabels6Months);
+
+        String[] xLabelsYear = {
+                dateTime.withMonthOfYear(1).monthOfYear().getAsShortText(locale) + "-" + dateTime.withMonthOfYear(4).monthOfYear().getAsShortText(locale),
+                dateTime.withMonthOfYear(5).monthOfYear().getAsShortText(locale) + "-" + dateTime.withMonthOfYear(8).monthOfYear().getAsShortText(locale),
+                dateTime.withMonthOfYear(9).monthOfYear().getAsShortText(locale) + "-" + dateTime.withMonthOfYear(12).monthOfYear().getAsShortText(locale),
+        };
+
+        view.setGraphYearXLabel(xLabelsYear);
     }
 
     private void updateTotalDistanceText(){
@@ -106,10 +140,6 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
             barEntries.add(new BarEntry(1, (float) mileageSum));
             view.setGraphMonthData(barEntries);
         }
-
-        DateTime dateTime = new DateTime();
-        String monthStr = dateTime.monthOfYear().getAsText();
-        view.setGraphMonthXLabel(new String[]{monthStr});
     }
 
     private void updateBarChart3Month(){
@@ -126,14 +156,6 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
             barEntries.add(new BarEntry(3, (float) mileageMonth));
             view.setGraph3MonthData(barEntries);
         }
-
-        DateTime dateTime = new DateTime();
-        String[] xAxisLabelValues = {
-                dateTime.minusMonths(2).monthOfYear().getAsText(),
-                dateTime.minusMonths(1).monthOfYear().getAsText(),
-                dateTime.monthOfYear().getAsText(),
-        };
-        view.setGraph3MonthXLabel(xAxisLabelValues);
     }
 
     private void updateBarChart6Months(){
@@ -149,15 +171,6 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
             barEntries.add(new BarEntry(3, (float) mileageMonths5To6));
             view.setGraph6MonthData(barEntries);
         }
-
-        DateTime dateTime = new DateTime();
-        String[] xAxisLabelValues = {
-                dateTime.minusMonths(5).monthOfYear().getAsShortText() + "-" + dateTime.minusMonths(4).monthOfYear().getAsShortText(),
-                dateTime.minusMonths(3).monthOfYear().getAsShortText() + "-" + dateTime.minusMonths(2).monthOfYear().getAsShortText(),
-                dateTime.minusMonths(1).monthOfYear().getAsShortText() + "-" + dateTime.monthOfYear().getAsShortText()
-        };
-
-        view.setGraph6MonthXLabel(xAxisLabelValues);
     }
 
     private void updateBarChartYear(){
@@ -174,15 +187,6 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
             barEntries.add(new BarEntry(3, (float) mileageMonths8To12));
             view.setGraphYearData(barEntries);
         }
-
-        DateTime dateTime = new DateTime();
-        String[] xAxisLabelValues = {
-                dateTime.withMonthOfYear(1).monthOfYear().getAsShortText() + "-" + dateTime.withMonthOfYear(4).monthOfYear().getAsShortText(),
-                dateTime.withMonthOfYear(5).monthOfYear().getAsShortText() + "-" + dateTime.withMonthOfYear(8).monthOfYear().getAsShortText(),
-                dateTime.withMonthOfYear(9).monthOfYear().getAsShortText() + "-" + dateTime.withMonthOfYear(12).monthOfYear().getAsShortText(),
-        };
-
-        view.setGraphYearXLabel(xAxisLabelValues);
     }
 
     private double getMonthMileage(){
@@ -277,14 +281,11 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
         List<Run> runsMonth8To12 = RunUtils.filterList(runList,
                 RunPredicates.isRunBetween(DateUtils.getStartOfYearStartOfMonth(9), DateUtils.getEndOfYear()));
 
-        double mileageMonths1To4 = RunUtils.getMileageBetween(DateUtils.getStartOfYear(),
-                DateUtils.getStartOfYearEndOfMonth(4), runsMonths1To4, getDistanceUnit());
+        double mileageMonths1To4 = RunUtils.addMileage(runsMonths1To4, getDistanceUnit());
 
-        double mileageMonths4To8 = RunUtils.getMileageBetween(DateUtils.getStartOfYearStartOfMonth(5),
-                DateUtils.getStartOfYearEndOfMonth(8), runsMonth4To8, getDistanceUnit());
+        double mileageMonths4To8 = RunUtils.addMileage(runsMonth4To8, getDistanceUnit());
 
-        double mileageMonths8To12 = RunUtils.getMileageBetween(DateUtils.getStartOfYearStartOfMonth(9),
-                DateUtils.getEndOfYear(), runsMonth8To12, getDistanceUnit());
+        double mileageMonths8To12 = RunUtils.addMileage(runsMonth8To12, getDistanceUnit());
 
         return new double[] {mileageMonths1To4, mileageMonths4To8, mileageMonths8To12};
     }

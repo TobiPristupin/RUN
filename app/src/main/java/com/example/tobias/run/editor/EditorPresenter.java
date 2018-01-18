@@ -8,6 +8,12 @@ import com.example.tobias.run.data.Run;
 import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.utils.RunUtils;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.util.Locale;
+
 /**
  * Created by Tobi on 10/23/2017.
  */
@@ -80,6 +86,32 @@ public class EditorPresenter {
         addRunToDatabase(run);
         view.showAddedRunSuccessfullyToast();
         view.finishView();
+    }
+
+    public void onDistanceDialogPositiveButton(String text){
+        view.setDistanceText(text);
+    }
+
+    public void onTimeDialogPositiveButton(String text){
+        view.setTimeText(text);
+    }
+
+    public void onRatingDialogPositiveButton(String text){
+        view.setRatingText(text);
+    }
+
+    public void onDateDialogPositiveButton(int year, int month, int dayOfMonth){
+        DateTimeFormatter formatter;
+
+        if (Locale.getDefault().equals(Locale.US)) {
+            formatter = DateTimeFormat.forPattern("E, M/d/y");
+        } else {
+            formatter = DateTimeFormat.forPattern("E, d/M/y");
+        }
+
+        DateTime dateText = new DateTime(year, month + 1, dayOfMonth, 0, 0);
+
+        view.setDateText(formatter.print(dateText));
     }
 
     private boolean isValid(String... values){

@@ -1,8 +1,6 @@
 package com.example.tobias.run.stats.activities;
 
-import android.support.annotation.Nullable;
-
-import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.BarEntry;
 
 import java.util.List;
 
@@ -12,12 +10,23 @@ import java.util.List;
 
 public interface StatsActivitiesView {
 
+    void setGraphWeekData(List<BarEntry> barData);
 
-    void setMonthChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineData);
+    void setGraphMonthData(List<BarEntry> barData);
 
-    void set3MonthsChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineData);
+    void setGraph3MonthsData(List<BarEntry> barData);
 
-    void set6MonthsChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineData);
+    void setGraph6MonthsData(List<BarEntry> barData);
 
-    void setYearChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineData);
+    void setGraphYearData(List<BarEntry> barData);
+    
+    void setGraphWeekXLabels(String[] labels);
+
+    void setGraphMonthXLabels(String[] labels);
+
+    void setGraph3MonthsXLabels(String[] labels);
+
+    void setGraph6MonthsXLabels(String[] labels);
+
+    void setGraphYearXLabels(String[] labels);
 }

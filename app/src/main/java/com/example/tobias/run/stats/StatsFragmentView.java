@@ -47,6 +47,7 @@ public class StatsFragmentView extends Fragment {
     private void initViewPager(){
         final TabLayout tabLayout = rootView.findViewById(R.id.stats_tab_layout);
         ViewPager viewPager = rootView.findViewById(R.id.stats_viewpager);
+        viewPager.setOffscreenPageLimit(TAB_COUNT);
         viewPager.setAdapter(new StatsPagerAdapter(getChildFragmentManager()));
         tabLayout.setupWithViewPager(viewPager);
     }

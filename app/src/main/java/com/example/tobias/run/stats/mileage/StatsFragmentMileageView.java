@@ -75,6 +75,12 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
         return rootView;
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        presenter.onDetachView();
+    }
+
     private void initTabLayout(){
         tabLayout = rootView.findViewById(R.id.stats_mileage_tablayout);
         tabLayout.addTab(tabLayout.newTab().setText("Month"));
@@ -190,12 +196,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
         return chart;
     }
 
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        presenter.onDetachView();
-    }
+    //TODO: extract setGraphData like rest of fragments
 
     @Override
     public void setGraphMonthData(List<BarEntry> barEntries) {

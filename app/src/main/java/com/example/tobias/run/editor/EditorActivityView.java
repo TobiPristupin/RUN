@@ -28,10 +28,6 @@ import com.example.tobias.run.editor.dialog.DistanceDialog;
 import com.example.tobias.run.editor.dialog.RatingDialog;
 import com.example.tobias.run.editor.dialog.TimeDialog;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
 import java.util.Calendar;
 
 import es.dmoral.toasty.Toasty;
@@ -41,7 +37,7 @@ import es.dmoral.toasty.Toasty;
  * editing a run. This class shows different dialogs to input the data, and implements the onClickListener
  * for the positive button to retrieve the data
  */
-public class EditorActivity extends AppCompatActivity implements EditorView {
+public class EditorActivityView extends AppCompatActivity implements EditorView {
 
     private final int DATE_DIALOG_ID = 999;
     private SharedPreferenceRepository preferenceManager;
@@ -54,9 +50,9 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
 
         initToolbar();
 
-        SharedPreferenceRepository preferenceRepository = new SharedPreferenceManager(EditorActivity.this);
+        SharedPreferenceRepository preferenceRepository = new SharedPreferenceManager(EditorActivityView.this);
         presenter = new EditorPresenter(this, preferenceRepository, FirebaseDatabaseManager.getInstance());
-        preferenceManager = new SharedPreferenceManager(EditorActivity.this);
+        preferenceManager = new SharedPreferenceManager(EditorActivityView.this);
 
         Intent intent = getIntent();
         Run run = intent.getParcelableExtra(getString(R.string.run_intent_key));
@@ -68,6 +64,33 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
         initDateField();
         initRatingField();
         animateViewsEntrance();
+    }
+
+    @Override
+    public void showAddedRunSuccessfullyToast() {
+        Toasty.success(EditorActivityView.this, "Successfully Added", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showInvalidFieldsToast() {
+        Toasty.warning(EditorActivityView.this, "Fill in all the fields", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void finishView() {
+        supportFinishAfterTransition();
+    }
+
+    @Override
+    public void vibrate() {
+        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        vibrator.vibrate(100);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.editor_toolbar_menu, menu);
+        return true;
     }
 
     @Override
@@ -83,112 +106,9 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
 
         return true;
 
-    }
-
-    @Override
-    public void finishView() {
-        supportFinishAfterTransition();
-    }
-
-    @Override
-    public void showAddedRunSuccessfullyToast() {
-        Toasty.success(EditorActivity.this, "Successfully Added", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showInvalidFieldsToast() {
-        Toasty.warning(EditorActivity.this, "Fill in all the fields", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.editor_toolbar_menu, menu);
-        return true;
-    }
-
-    @Override
+    }    @Override
     public void setDistanceText(String text) {
         ((TextView) findViewById(R.id.editor_distance_text)).setText(text);
-    }
-
-    @Override
-    public void setDateText(String text) {
-        ((TextView) findViewById(R.id.editor_date_text)).setText(text);
-    }
-
-    @Override
-    public void setTimeText(String text) {
-        ((TextView) findViewById(R.id.editor_time_text)).setText(text);
-    }
-
-    @Override
-    public void setRatingText(String text) {
-        ((TextView) findViewById(R.id.editor_rating_text)).setText(text);
-    }
-
-    @Override
-    public void setSupportActionBarTitle(String text) {
-        getSupportActionBar().setTitle(text);
-    }
-
-    @Override
-    public String getDistanceText() {
-        return ((TextView) findViewById(R.id.editor_distance_text)).getText().toString();
-    }
-
-    @Override
-    public String getDateText() {
-        return ((TextView) findViewById(R.id.editor_date_text)).getText().toString();
-    }
-
-    @Override
-    public String getTimeText() {
-        return ((TextView) findViewById(R.id.editor_time_text)).getText().toString();
-    }
-
-    @Override
-    public String getRatingText() {
-        return ((TextView) findViewById(R.id.editor_rating_text)).getText().toString();
-    }
-
-    @Override
-    public void vibrate() {
-        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-        vibrator.vibrate(100);
-    }
-
-    public void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.editor_toolbar);
-        setSupportActionBar(toolbar);
-        changeStatusBarColor();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
-    }
-
-    /**
-     * AppTheme status bar color attr is set to transparent for the drawerLayout in main activity.
-     * this activity uses the primary dark color as status bar color. This method sets it during runtime.
-     */
-    private void changeStatusBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-        }
-    }
-
-
-    private void initDateField() {
-        RelativeLayout field = (RelativeLayout) findViewById(R.id.editor_date_view);
-        field.setOnClickListener(new View.OnClickListener() {
-            @Override
-            @SuppressWarnings("deprecation")
-            public void onClick(View v) {
-                showDialog(DATE_DIALOG_ID);
-            }
-        });
     }
 
     @Override
@@ -208,15 +128,56 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
             return new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    DateTimeFormatter formatter = DateTimeFormat.forPattern("E, d/M/y");
-                    DateTime dateText = new DateTime(year, month + 1, dayOfMonth, 0, 0);
-
-                    TextView dateTextView = (TextView) findViewById(R.id.editor_date_text);
-                    dateTextView.setText(formatter.print(dateText));
+                    presenter.onDateDialogPositiveButton(year, month, dayOfMonth);
                 }
             }, year, month, day);
         }
         return null;
+    }    @Override
+    public void setDateText(String text) {
+        ((TextView) findViewById(R.id.editor_date_text)).setText(text);
+    }
+
+    public void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.editor_toolbar);
+        setSupportActionBar(toolbar);
+        changeStatusBarColor();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
+    }    @Override
+    public void setTimeText(String text) {
+        ((TextView) findViewById(R.id.editor_time_text)).setText(text);
+    }
+
+    /**
+     * AppTheme status bar color attr is set to transparent for the drawerLayout in main activity.
+     * this activity uses the primary dark color as status bar color. This method sets it during runtime.
+     */
+    private void changeStatusBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
+    }    @Override
+    public void setRatingText(String text) {
+        ((TextView) findViewById(R.id.editor_rating_text)).setText(text);
+    }
+
+    private void initDateField() {
+        RelativeLayout field = (RelativeLayout) findViewById(R.id.editor_date_view);
+        field.setOnClickListener(new View.OnClickListener() {
+            @Override
+            @SuppressWarnings("deprecation")
+            public void onClick(View v) {
+                showDialog(DATE_DIALOG_ID);
+            }
+        });
+    }    @Override
+    public void setSupportActionBarTitle(String text) {
+        getSupportActionBar().setTitle(text);
     }
 
     private void initDistanceField() {
@@ -224,34 +185,38 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
         field.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DistanceDialog dialog = new DistanceDialog(EditorActivity.this, new DistanceDialog.onPositiveButtonListener() {
+                DistanceDialog dialog = new DistanceDialog(EditorActivityView.this, new DistanceDialog.onPositiveButtonListener() {
                     @Override
                     public void onClick(String distanceValue) {
-                        TextView distanceTextView = (TextView) findViewById(R.id.editor_distance_text);
-                        distanceTextView.setText(distanceValue);
+                        presenter.onDistanceDialogPositiveButton(distanceValue);
                     }
                 });
-                dialog.makeDialog(EditorActivity.this).show();
+                dialog.makeDialog(EditorActivityView.this).show();
             }
         });
-        }
+        }    @Override
+    public String getDistanceText() {
+        return ((TextView) findViewById(R.id.editor_distance_text)).getText().toString();
+    }
 
     private void initTimeField() {
         RelativeLayout field = (RelativeLayout) findViewById(R.id.editor_time_view);
         field.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimeDialog timeDialog = new TimeDialog(EditorActivity.this, new TimeDialog.onPositiveButtonListener() {
+                TimeDialog timeDialog = new TimeDialog(EditorActivityView.this, new TimeDialog.onPositiveButtonListener() {
                     @Override
                     public void onClick(String timeValue) {
-                        TextView timeTextView = (TextView) findViewById(R.id.editor_time_text);
-                        timeTextView.setText(timeValue);
+                        presenter.onTimeDialogPositiveButton(timeValue);
                     }
                 });
                 timeDialog.makeDialog().show();
             }
 
         });
+    }    @Override
+    public String getDateText() {
+        return ((TextView) findViewById(R.id.editor_date_text)).getText().toString();
     }
 
     private void initRatingField() {
@@ -259,18 +224,19 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
         field.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RatingDialog ratingDialog = new RatingDialog(EditorActivity.this, new RatingDialog.onPositiveButtonListener() {
+                RatingDialog ratingDialog = new RatingDialog(EditorActivityView.this, new RatingDialog.onPositiveButtonListener() {
                     @Override
                     public void onClick(String ratingValue) {
-                        TextView ratingTextView = (TextView) findViewById(R.id.editor_rating_text);
-                        ratingTextView.setText(ratingValue);
+                        presenter.onRatingDialogPositiveButton(ratingValue);
                     }
                 });
                 ratingDialog.makeDialog().show();
             }
         });
+    }    @Override
+    public String getTimeText() {
+        return ((TextView) findViewById(R.id.editor_time_text)).getText().toString();
     }
-
 
     private void animateViewsEntrance() {
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.content_main);
@@ -281,5 +247,28 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
                     .alpha(1.0f);
 
         }
+    }    @Override
+    public String getRatingText() {
+        return ((TextView) findViewById(R.id.editor_rating_text)).getText().toString();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -25,7 +25,7 @@ import android.widget.RelativeLayout;
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.Run;
-import com.example.tobias.run.editor.EditorActivity;
+import com.example.tobias.run.editor.EditorActivityView;
 import com.example.tobias.run.history.adapter.HistoryRecyclerViewAdapter;
 import com.example.tobias.run.utils.VerticalDividerItemDecoration;
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -173,7 +173,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), EditorActivity.class);
+                Intent intent = new Intent(getContext(), EditorActivityView.class);
                 startActivity(intent);
             }
         });
@@ -294,7 +294,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
 
     @Override
     public void sendIntentEditorActivity(@Nullable Run runToEdit) {
-        Intent intent = new Intent(getContext(), EditorActivity.class);
+        Intent intent = new Intent(getContext(), EditorActivityView.class);
 
         if (runToEdit != null){
             intent.putExtra(getString(R.string.run_intent_key), runToEdit);

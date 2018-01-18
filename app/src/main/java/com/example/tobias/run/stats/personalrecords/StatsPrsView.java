@@ -10,17 +10,17 @@ import java.util.List;
 
 public interface StatsPrsView {
 
-    void set400mChartData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage);
+    void setGraph400mData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage);
 
-    void setMileChartData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage);
+    void setGraphMileData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage);
 
-    void set5kChartData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage);
+    void setGraph5kData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage);
 
-    void set10kChartData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage);
+    void setGraph10kData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage);
 
-    void set21kChartData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage);
+    void setGraph21kData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage);
 
-    void set42kChartData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage);
+    void setGraph42kData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage);
 
     void setFarthestDistanceText(String distance, String date);
 

@@ -88,7 +88,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         List<Entry> bestRunData = calculateBestRunData(runs400m, scatterDataSize);
         List<Entry> averageRunData = calculateAverageRunData(runs400m, scatterDataSize);
 
-        view.set400mChartData(scatterData, bestRunData, averageRunData);
+        view.setGraph400mData(scatterData, bestRunData, averageRunData);
     }
 
     private void updateMileChartData(){
@@ -99,7 +99,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         List<Entry> bestRunData = calculateBestRunData(runsMile, scatterDataSize);
         List<Entry> averageRunData = calculateAverageRunData(runsMile, scatterDataSize);
 
-        view.setMileChartData(scatterData, bestRunData, averageRunData);
+        view.setGraphMileData(scatterData, bestRunData, averageRunData);
     }
 
     private void update5kChartData(){
@@ -110,7 +110,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         List<Entry> bestRunData = calculateBestRunData(runs5k, scatterDataSize);
         List<Entry> averageRunData = calculateAverageRunData(runs5k, scatterDataSize);
 
-        view.set5kChartData(scatterData, bestRunData, averageRunData);
+        view.setGraph5kData(scatterData, bestRunData, averageRunData);
     }
 
     private void update10kChartData(){
@@ -121,7 +121,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         List<Entry> bestRunData = calculateBestRunData(runs10k, scatterDataSize);
         List<Entry> averageRunData = calculateAverageRunData(runs10k, scatterDataSize);
 
-        view.set10kChartData(scatterData, bestRunData, averageRunData);
+        view.setGraph10kData(scatterData, bestRunData, averageRunData);
     }
 
     private void update21kChartData(){
@@ -132,7 +132,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         List<Entry> bestRunData = calculateBestRunData(runs21k, scatterDataSize);
         List<Entry> averageRunData = calculateAverageRunData(runs21k, scatterDataSize);
 
-        view.set21kChartData(scatterData, bestRunData, averageRunData);
+        view.setGraph21kData(scatterData, bestRunData, averageRunData);
     }
 
     private void update42kChartData() {
@@ -143,7 +143,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         List<Entry> bestRunData = calculateBestRunData(runs42k, scatterDataSize);
         List<Entry> averageRunData = calculateAverageRunData(runs42k, scatterDataSize);
 
-        view.set42kChartData(scatterData, bestRunData, averageRunData);
+        view.setGraph42kData(scatterData, bestRunData, averageRunData);
     }
 
     private @Nullable List<Entry> calculateScatterData(List<Run> runs){

@@ -12,18 +12,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FirebaseDatabaseManager implements ObservableDatabase<Run> {
 
-    private List<Observer<List<Run>>> observerList = new ArrayList<>();
-    private List<Run> cachedRuns = new ArrayList<>();
     private static final String TAG = "FirebaseDatabaseManager";
     private static FirebaseDatabaseManager instance = new FirebaseDatabaseManager();
     private final FirebaseDatabase firebaseDatabase;
     private final FirebaseAuth firebaseAuth;
     private final FirebaseUser user;
     private final DatabaseReference databaseRef;
+    private List<Observer<List<Run>>> observerList = new ArrayList<>();
+    private List<Run> cachedRuns = new ArrayList<>();
 
     private FirebaseDatabaseManager(){
         //Private Singleton constructor
@@ -85,7 +86,8 @@ public class FirebaseDatabaseManager implements ObservableDatabase<Run> {
     @Override
     public void notifyUpdateObservers() {
         for (Observer<List<Run>> observer : observerList){
-            observer.updateData(cachedRuns);
+            //Return an immutable defensive copy of cached runs, to avoid client modifying list
+            observer.updateData(Collections.unmodifiableList(cachedRuns));
         }
     }
 
