@@ -17,6 +17,7 @@ import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.SharedPreferenceManager;
 import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.utils.GenericAxisValueFormatter;
+import com.example.tobias.run.utils.StateChange;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -304,34 +305,34 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     }
 
     @Override
-    public void setMonthIncreaseText(String text, boolean isIncrease) {
+    public void setMonthIncreaseText(String text, StateChange change) {
         TextView textView = rootView.findViewById(R.id.stats_mileage_overview_item_month).findViewById(R.id.overview_item_increase_value);
-        setIncreaseText(text, isIncrease, textView);
+        setIncreaseText(text, change, textView);
     }
 
     @Override
-    public void set3MonthsIncreaseText(String text, boolean isIncrease) {
+    public void set3MonthsIncreaseText(String text, StateChange change) {
         TextView textView = rootView.findViewById(R.id.stats_mileage_overview_item_3months).findViewById(R.id.overview_item_increase_value);
-        setIncreaseText(text, isIncrease, textView);
+        setIncreaseText(text, change, textView);
     }
 
     @Override
-    public void set6MonthsIncreaseText(String text, boolean isIncrease) {
+    public void set6MonthsIncreaseText(String text, StateChange change) {
         TextView textView = rootView.findViewById(R.id.stats_mileage_overview_item_6months).findViewById(R.id.overview_item_increase_value);
-        setIncreaseText(text, isIncrease, textView);
+        setIncreaseText(text, change, textView);
     }
 
     @Override
-    public void setYearIncreaseText(String text, boolean isIncrease) {
+    public void setYearIncreaseText(String text, StateChange change) {
         TextView textView = rootView.findViewById(R.id.stats_mileage_overview_item_year).findViewById(R.id.overview_item_increase_value);
-        setIncreaseText(text, isIncrease, textView);
+        setIncreaseText(text, change, textView);
     }
 
-    private void setIncreaseText(String text, boolean isIncrease, TextView textView){
+    private void setIncreaseText(String text, StateChange change, TextView textView){
         textView.setText(text);
-        if (isIncrease){
+        if (change == StateChange.INCREASE){
             textView.setTextColor(getResources().getColor(R.color.Green));
-        } else {
+        } else if (change == StateChange.DECREASE) {
             textView.setTextColor(getResources().getColor(R.color.Red));
         }
     }

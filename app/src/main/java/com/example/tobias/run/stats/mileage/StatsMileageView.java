@@ -1,5 +1,6 @@
 package com.example.tobias.run.stats.mileage;
 
+import com.example.tobias.run.utils.StateChange;
 import com.github.mikephil.charting.data.BarEntry;
 
 import java.util.List;
@@ -34,12 +35,12 @@ public interface StatsMileageView {
 
     void setTotalDistanceYear(String text);
 
-    void setMonthIncreaseText(String text, boolean isIncrease);
+    void setMonthIncreaseText(String text, StateChange change);
 
-    void set3MonthsIncreaseText(String text, boolean isIncrease);
+    void set3MonthsIncreaseText(String text, StateChange change);
 
-    void set6MonthsIncreaseText(String text, boolean isIncrease);
+    void set6MonthsIncreaseText(String text, StateChange change);
 
-    void setYearIncreaseText(String text, boolean isIncrease);
+    void setYearIncreaseText(String text, StateChange change);
 
 }

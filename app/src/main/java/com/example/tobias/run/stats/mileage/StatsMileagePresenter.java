@@ -8,6 +8,7 @@ import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.interfaces.Observer;
 import com.example.tobias.run.utils.DateUtils;
 import com.example.tobias.run.utils.RunUtils;
+import com.example.tobias.run.utils.StateChange;
 import com.github.mikephil.charting.data.BarEntry;
 
 import org.joda.time.DateTime;
@@ -104,30 +105,30 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
     private void updateIncreaseText(){
         double monthIncrease = getMonthMileage() - getPastMonthMileageTotal();
         if (monthIncrease >= 0){
-            view.setMonthIncreaseText("+" + String.format("%.1f", monthIncrease), true);
+            view.setMonthIncreaseText("+" + String.format("%.1f", monthIncrease), StateChange.INCREASE);
         } else {
-            view.setMonthIncreaseText(String.format("%.1f", monthIncrease), false);
+            view.setMonthIncreaseText(String.format("%.1f", monthIncrease), StateChange.DECREASE);
         }
 
         double months3Increase = RunUtils.addArray(get3MonthsMileage()) - getPast3MonthsMileageTotal();
         if (months3Increase >= 0){
-            view.set3MonthsIncreaseText("+" + String.format("%.1f", months3Increase), true);
+            view.set3MonthsIncreaseText("+" + String.format("%.1f", months3Increase), StateChange.INCREASE);
         } else {
-            view.set3MonthsIncreaseText(String.format("%.1f", months3Increase), false);
+            view.set3MonthsIncreaseText(String.format("%.1f", months3Increase), StateChange.DECREASE);
         }
 
         double months6Increase = RunUtils.addArray(get6MonthsMileage()) - getPast6MonthsMileageTotal();
         if (months6Increase >= 0){
-            view.set6MonthsIncreaseText("+" + String.format("%.1f", months6Increase), true);
+            view.set6MonthsIncreaseText("+" + String.format("%.1f", months6Increase), StateChange.INCREASE);
         } else {
-            view.set6MonthsIncreaseText(String.format("%.1f", months6Increase), false);
+            view.set6MonthsIncreaseText(String.format("%.1f", months6Increase), StateChange.DECREASE);
         }
 
         double yearIncrease = RunUtils.addArray(getYearMileage()) - getPastYearMileage();
         if (yearIncrease >= 0){
-            view.setYearIncreaseText("+" + String.format("%.1f", yearIncrease), true);
+            view.setYearIncreaseText("+" + String.format("%.1f", yearIncrease), StateChange.INCREASE);
         } else {
-            view.setYearIncreaseText(String.format("%.1f", yearIncrease), false);
+            view.setYearIncreaseText(String.format("%.1f", yearIncrease), StateChange.DECREASE);
         }
     }
 
