@@ -45,6 +45,12 @@ public class StatsActivitiesPresenter implements Observer<List<Run>> {
         update3MonthsChartData();
         update6MonthsChartData();
         updateYearChartData();
+        updatePieChartData();
+    }
+
+    private void updatePieChartData(){
+        int allActivities = runList.size();
+        
     }
 
     private void updateWeekChartData(){

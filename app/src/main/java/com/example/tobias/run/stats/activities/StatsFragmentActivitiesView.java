@@ -14,11 +14,15 @@ import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.utils.GenericAxisValueFormatter;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
@@ -39,6 +43,7 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
     private BarChart chart6Months;
     private BarChart chartYear;
     private ViewAnimator viewAnimator;
+    private PieChart pieChart;
 
 
     @Nullable
@@ -46,14 +51,18 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_stats_activities, container, false);
 
-        chartWeek = styleChart(new BarChart(getContext()));
-        chartMonth = styleChart(new BarChart(getContext()));
-        chart3Months = styleChart(new BarChart(getContext()));
-        chart6Months = styleChart(new BarChart(getContext()));
-        chartYear = styleChart(new BarChart(getContext()));
+        pieChart = rootView.findViewById(R.id.stats_activities_distribution_chart);
+        chartWeek = styleBarChart(new BarChart(getContext()));
+        chartMonth = styleBarChart(new BarChart(getContext()));
+        chart3Months = styleBarChart(new BarChart(getContext()));
+        chart6Months = styleBarChart(new BarChart(getContext()));
+        chartYear = styleBarChart(new BarChart(getContext()));
+
+
 
         initViewAnimator();
-        initTabLayout();
+        initFrequencyTabLayout();
+        initPieChart();
 
         presenter = new StatsActivitiesPresenter(this, FirebaseDatabaseManager.getInstance());
 
@@ -66,8 +75,8 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
         presenter.onDetachView();
     }
 
-    private void initTabLayout(){
-        TabLayout tabLayout = rootView.findViewById(R.id.stats_activities_tablayout);
+    private void initFrequencyTabLayout(){
+        TabLayout tabLayout = rootView.findViewById(R.id.stats_activities_frequency_tablayout);
 
         tabLayout.addTab(tabLayout.newTab().setText("Week"));
         tabLayout.addTab(tabLayout.newTab().setText("Month"));
@@ -94,8 +103,9 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
         });
     }
 
+
     private void initViewAnimator(){
-        viewAnimator = rootView.findViewById(R.id.stats_activities_viewanimator);
+        viewAnimator = rootView.findViewById(R.id.stats_activities_frequency_viewanimator);
 
         viewAnimator.addView(chartWeek);
         viewAnimator.addView(chartMonth);
@@ -106,7 +116,7 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
         viewAnimator.setOutAnimation(getContext(), R.anim.fade_out);
     }
 
-    private BarChart styleChart(BarChart chart){
+    private BarChart styleBarChart(BarChart chart){
         chart.getAxisLeft().setAxisMinimum(0);
         chart.getAxisLeft().setGranularity(1);
         chart.getAxisLeft().setSpaceTop(30);
@@ -130,6 +140,10 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
         chart.setDescription(null);
 
         return chart;
+    }
+
+    private void initPieChart(){
+
     }
 
     @Override
@@ -180,6 +194,14 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
     @Override
     public void setGraphYearXLabels(String[] labels) {
         chartYear.getXAxis().setValueFormatter(new GenericAxisValueFormatter<String>(labels));
+    }
+
+    @Override
+    public void setPieChartData(List<PieEntry> data) {
+        PieDataSet set = new PieDataSet(data, "Distribution");
+        PieData pieData = new PieData(set);
+        pieChart.setData(pieData);
+        pieChart.invalidate();
     }
 
     private void setChartData(List<BarEntry> barData, BarChart chart){

@@ -1,6 +1,7 @@
 package com.example.tobias.run.stats.activities;
 
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.PieEntry;
 
 import java.util.List;
 
@@ -29,4 +30,6 @@ public interface StatsActivitiesView {
     void setGraph6MonthsXLabels(String[] labels);
 
     void setGraphYearXLabels(String[] labels);
+
+    void setPieChartData(List<PieEntry> data);
 }

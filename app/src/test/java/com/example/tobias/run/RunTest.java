@@ -16,9 +16,9 @@ import java.util.List;
 
 public class RunTest {
 
-    Run similarRun = Run.withKilometers(1, 2, 3, 4);
-    Run similarRun2 = Run.withKilometers(1, 2, 3, 4);
-    Run differentRun = Run.withMiles(45, 2, 567, 7);
+    Run similarRun = Run.withKilometers(1, 2, 3, 3);
+    Run similarRun2 = Run.withKilometers(1, 2, 3, 3);
+    Run differentRun = Run.withMiles(45, 2, 567, 3);
 
     @Test public void testEquals(){
         Assert.assertEquals(true, similarRun.equals(similarRun2));

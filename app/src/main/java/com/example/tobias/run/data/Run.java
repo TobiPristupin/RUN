@@ -38,6 +38,10 @@ public class Run implements Parcelable, Comparable<Run> {
     private String id = null;
 
     public Run(Distance distance, long time, long date, int rating) {
+        if (time < 0 || date < 0 || rating > 3 || rating < 0){
+            throw new IllegalArgumentException();
+        }
+
         this.distance = distance;
         this.time = time;
         this.date = date;
@@ -64,6 +68,10 @@ public class Run implements Parcelable, Comparable<Run> {
     }
 
     public static Run withKilometers(double distanceKm, long time, long date, int rating){
+        if (distanceKm < 0){
+            throw new IllegalArgumentException();
+        }
+
         Distance distance = new Distance(distanceKm, Distance.Unit.KM);
         return new Run(distance, time, date, rating);
     }
@@ -77,6 +85,10 @@ public class Run implements Parcelable, Comparable<Run> {
     }
 
     public static Run withMiles(double distanceMi, long time, long date, int rating){
+        if (distanceMi < 0){
+            throw new IllegalArgumentException();
+        }
+
         Distance distance = new Distance(distanceMi, Distance.Unit.MILE);
         return new Run(distance, time, date, rating);
     }
@@ -119,6 +131,11 @@ public class Run implements Parcelable, Comparable<Run> {
         return distance;
     }
 
+    public void setDistance(Distance distance){
+        this.distance = distance;
+        updatePace();
+    }
+
     @Exclude public void setDistance(String distanceString){
         String km = Distance.Unit.KM.toString();
         String mi = Distance.Unit.MILE.toString();
@@ -142,6 +159,11 @@ public class Run implements Parcelable, Comparable<Run> {
         return time;
     }
 
+    @Exclude public void setTime(String timeText){
+        time = RunUtils.timeToUnix(timeText);
+        updatePace();
+    }
+
     public void setTime(long time){
         this.time = time;
         updatePace();
@@ -151,12 +173,20 @@ public class Run implements Parcelable, Comparable<Run> {
         return date;
     }
 
+    @Exclude public void setDate(String dateText){
+        date = RunUtils.dateToUnix(dateText);
+    }
+
     public void setDate(long date){
         this.date = date;
     }
 
     public int getRating(){
         return rating;
+    }
+
+    @Exclude public void setRating(String ratingText){
+        rating = RunUtils.ratingToInt(ratingText);
     }
 
     public void setRating(int rating){
@@ -175,24 +205,6 @@ public class Run implements Parcelable, Comparable<Run> {
         }
 
         return milePace;
-    }
-
-    @Exclude public void setTime(String timeText){
-        time = RunUtils.timeToUnix(timeText);
-        updatePace();
-    }
-
-    @Exclude public void setDate(String dateText){
-        date = RunUtils.dateToUnix(dateText);
-    }
-
-    @Exclude public void setRating(String ratingText){
-        rating = RunUtils.ratingToInt(ratingText);
-    }
-
-    public void setDistance(Distance distance){
-        this.distance = distance;
-        updatePace();
     }
 
     @Exclude public void setDistanceKilometres(double distanceKilometres){
