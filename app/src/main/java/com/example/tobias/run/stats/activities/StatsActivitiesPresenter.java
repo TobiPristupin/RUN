@@ -7,6 +7,7 @@ import com.example.tobias.run.interfaces.Observer;
 import com.example.tobias.run.utils.DateUtils;
 import com.example.tobias.run.utils.RunUtils;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.PieEntry;
 
 import org.joda.time.DateTime;
 
@@ -50,7 +51,24 @@ public class StatsActivitiesPresenter implements Observer<List<Run>> {
 
     private void updatePieChartData(){
         int allActivities = runList.size();
-        
+
+        List<PieEntry> pieEntries = new ArrayList<>();
+
+        pieEntries.add(new PieEntry(getRunsFromWeekday(1) * 100 / allActivities, "Monday"));
+        pieEntries.add(new PieEntry(getRunsFromWeekday(2) * 100 / allActivities, "Tuesday"));
+        pieEntries.add(new PieEntry(getRunsFromWeekday(3) * 100 / allActivities, "Wednesday"));
+        pieEntries.add(new PieEntry(getRunsFromWeekday(4) * 100 / allActivities, "Thursday"));
+        pieEntries.add(new PieEntry(getRunsFromWeekday(5) * 100 / allActivities, "Friday"));
+        pieEntries.add(new PieEntry(getRunsFromWeekday(6) * 100 / allActivities, "Saturday"));
+        pieEntries.add(new PieEntry(getRunsFromWeekday(7) * 100 / allActivities, "Sunday"));
+
+        for(int i = pieEntries.size() - 1; i >= 0; i--){
+            if (pieEntries.get(i).getValue() == 0){
+                pieEntries.remove(i);
+            }
+        }
+
+        view.setPieChartData(pieEntries);
     }
 
     private void updateWeekChartData(){
@@ -159,5 +177,17 @@ public class StatsActivitiesPresenter implements Observer<List<Run>> {
                 dateTime.withMonthOfYear(9).monthOfYear().getAsShortText(locale) + "-" + dateTime.withMonthOfYear(12).monthOfYear().getAsShortText(locale),
         };
         view.setGraphYearXLabels(xLabelsYear);
+    }
+
+    /**
+     * @param weekDay day of week in range [1, 7]. 1 = Monday, 7 = Sunday
+     * @return amount of runs that happened on weekday
+     */
+    private int getRunsFromWeekday(int weekDay){
+        if(weekDay < 1 || weekDay > 7){
+            throw new IllegalArgumentException("week day must be in range [1, 7]");
+        }
+
+        return RunUtils.filterList(runList, RunPredicates.isRunFromWeekDay(weekDay)).size();
     }
 }

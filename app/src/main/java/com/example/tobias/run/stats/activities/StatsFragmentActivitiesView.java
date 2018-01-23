@@ -13,7 +13,9 @@ import android.widget.ViewAnimator;
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.utils.GenericAxisValueFormatter;
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -24,8 +26,11 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,7 +66,7 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
 
 
         initViewAnimator();
-        initFrequencyTabLayout();
+        initTabLayout();
         initPieChart();
 
         presenter = new StatsActivitiesPresenter(this, FirebaseDatabaseManager.getInstance());
@@ -75,7 +80,7 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
         presenter.onDetachView();
     }
 
-    private void initFrequencyTabLayout(){
+    private void initTabLayout(){
         TabLayout tabLayout = rootView.findViewById(R.id.stats_activities_frequency_tablayout);
 
         tabLayout.addTab(tabLayout.newTab().setText("Week"));
@@ -88,7 +93,7 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewAnimator.setDisplayedChild(tab.getPosition());
-                ((BarChart) viewAnimator.getCurrentView()).animateXY(1000, 1000);
+                ((Chart) viewAnimator.getCurrentView()).animateXY(1000, 1000);
             }
 
             @Override
@@ -102,7 +107,6 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
             }
         });
     }
-
 
     private void initViewAnimator(){
         viewAnimator = rootView.findViewById(R.id.stats_activities_frequency_viewanimator);
@@ -143,7 +147,13 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
     }
 
     private void initPieChart(){
-
+        pieChart.setRotationEnabled(true);
+        pieChart.setUsePercentValues(true);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
+        pieChart.setEntryLabelTextSize(13);
+        pieChart.setEntryLabelTypeface(Typeface.DEFAULT_BOLD);
+        pieChart.getLegend().setEnabled(false);
     }
 
     @Override
@@ -199,7 +209,19 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
     @Override
     public void setPieChartData(List<PieEntry> data) {
         PieDataSet set = new PieDataSet(data, "Distribution");
+        set.setValueFormatter(new PercentFormatter());
+
+        List<Integer> colors = new ArrayList<>();
+        for (int c : ColorTemplate.COLORFUL_COLORS){
+            colors.add(c);
+        }
+
+        set.setColors(colors);
+
         PieData pieData = new PieData(set);
+        pieData.setValueTextSize(11);
+        pieData.setValueTypeface(Typeface.DEFAULT_BOLD);
+        pieData.setValueTextColor(getResources().getColor(android.R.color.white));
         pieChart.setData(pieData);
         pieChart.invalidate();
     }
