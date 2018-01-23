@@ -166,32 +166,32 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
     }
 
     @Override
-    public void setGraph400mData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
+    public void setGraph400mData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage) {
         setChartData(scatterData, lineDataBest, lineDataAverage, chart400m);
     }
 
     @Override
-    public void setGraphMileData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
+    public void setGraphMileData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage) {
         setChartData(scatterData, lineDataBest, lineDataAverage, chartMile);
     }
 
     @Override
-    public void setGraph5kData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
+    public void setGraph5kData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage) {
         setChartData(scatterData, lineDataBest, lineDataAverage, chart5k);
     }
 
     @Override
-    public void setGraph10kData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
+    public void setGraph10kData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage) {
         setChartData(scatterData, lineDataBest, lineDataAverage, chart10k);
     }
 
     @Override
-    public void setGraph21kData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
+    public void setGraph21kData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage) {
         setChartData(scatterData, lineDataBest, lineDataAverage, chart21k);
     }
 
     @Override
-    public void setGraph42kData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage) {
+    public void setGraph42kData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage) {
         setChartData(scatterData, lineDataBest, lineDataAverage, chart42k);
     }
 
@@ -222,9 +222,9 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
                 .setText(date);
     }
 
-    private void setChartData(@Nullable List<Entry> scatterData, @Nullable List<Entry> lineDataBest, @Nullable List<Entry> lineDataAverage, CombinedChart combinedChart){
-        if (scatterData == null){
-            //No need to check other lists, because if scatterData is null remaining lists will be null.
+    private void setChartData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage, CombinedChart combinedChart){
+        if (scatterData.isEmpty()){
+            //No need to check other lists, because if scatterData is empty remaining lists will be empty.
             return;
         }
 

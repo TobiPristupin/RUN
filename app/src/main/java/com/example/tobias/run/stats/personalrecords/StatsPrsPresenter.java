@@ -1,7 +1,5 @@
 package com.example.tobias.run.stats.personalrecords;
 
-import android.support.annotation.Nullable;
-
 import com.example.tobias.run.data.Distance;
 import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.data.Run;
@@ -12,6 +10,7 @@ import com.example.tobias.run.utils.RunUtils;
 import com.github.mikephil.charting.data.Entry;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class StatsPrsPresenter implements Observer<List<Run>> {
@@ -84,9 +83,8 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         List<Run> runs400m = RunUtils.filterList(runList, RunPredicates.isRunFromDistance(.4, .25));
 
         List<Entry> scatterData = calculateScatterData(runs400m);
-        int scatterDataSize = scatterData == null ? 0  : scatterData.size();
-        List<Entry> bestRunData = calculateBestRunData(runs400m, scatterDataSize);
-        List<Entry> averageRunData = calculateAverageRunData(runs400m, scatterDataSize);
+        List<Entry> bestRunData = calculateBestRunData(runs400m, scatterData.size());
+        List<Entry> averageRunData = calculateAverageRunData(runs400m, scatterData.size());
 
         view.setGraph400mData(scatterData, bestRunData, averageRunData);
     }
@@ -106,9 +104,8 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         List<Run> runs5k = RunUtils.filterList(runList, RunPredicates.isRunFromDistance(5, 3.1));
 
         List<Entry> scatterData = calculateScatterData(runs5k);
-        int scatterDataSize = scatterData == null ? 0  : scatterData.size();
-        List<Entry> bestRunData = calculateBestRunData(runs5k, scatterDataSize);
-        List<Entry> averageRunData = calculateAverageRunData(runs5k, scatterDataSize);
+        List<Entry> bestRunData = calculateBestRunData(runs5k, scatterData.size());
+        List<Entry> averageRunData = calculateAverageRunData(runs5k, scatterData.size());
 
         view.setGraph5kData(scatterData, bestRunData, averageRunData);
     }
@@ -117,9 +114,8 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         List<Run> runs10k = RunUtils.filterList(runList, RunPredicates.isRunFromDistance(10, 6.2));
 
         List<Entry> scatterData = calculateScatterData(runs10k);
-        int scatterDataSize = scatterData == null ? 0  : scatterData.size();
-        List<Entry> bestRunData = calculateBestRunData(runs10k, scatterDataSize);
-        List<Entry> averageRunData = calculateAverageRunData(runs10k, scatterDataSize);
+        List<Entry> bestRunData = calculateBestRunData(runs10k, scatterData.size());
+        List<Entry> averageRunData = calculateAverageRunData(runs10k, scatterData.size());
 
         view.setGraph10kData(scatterData, bestRunData, averageRunData);
     }
@@ -128,9 +124,8 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         List<Run> runs21k = RunUtils.filterList(runList, RunPredicates.isRunFromDistance(21, 13.1));
 
         List<Entry> scatterData = calculateScatterData(runs21k);
-        int scatterDataSize = scatterData == null ? 0  : scatterData.size();
-        List<Entry> bestRunData = calculateBestRunData(runs21k, scatterDataSize);
-        List<Entry> averageRunData = calculateAverageRunData(runs21k, scatterDataSize);
+        List<Entry> bestRunData = calculateBestRunData(runs21k, scatterData.size());
+        List<Entry> averageRunData = calculateAverageRunData(runs21k, scatterData.size());
 
         view.setGraph21kData(scatterData, bestRunData, averageRunData);
     }
@@ -139,16 +134,15 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         List<Run> runs42k = RunUtils.filterList(runList, RunPredicates.isRunFromDistance(42, 26.2));
 
         List<Entry> scatterData = calculateScatterData(runs42k);
-        int scatterDataSize = scatterData == null ? 0  : scatterData.size();
-        List<Entry> bestRunData = calculateBestRunData(runs42k, scatterDataSize);
-        List<Entry> averageRunData = calculateAverageRunData(runs42k, scatterDataSize);
+        List<Entry> bestRunData = calculateBestRunData(runs42k, scatterData.size());
+        List<Entry> averageRunData = calculateAverageRunData(runs42k, scatterData.size());
 
         view.setGraph42kData(scatterData, bestRunData, averageRunData);
     }
 
-    private @Nullable List<Entry> calculateScatterData(List<Run> runs){
+    private List<Entry> calculateScatterData(List<Run> runs){
         if (runs.size() < 1){
-            return null;
+            return Collections.emptyList();
         }
 
         List<Entry> scatterData = new ArrayList<>();
@@ -181,9 +175,9 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
      *                       padding to the graph and avoid the scatter data dots going outside of the graph.
      * @return
      */
-    private @Nullable List<Entry> calculateBestRunData(List<Run> runs, int scatterDataSize){
+    private List<Entry> calculateBestRunData(List<Run> runs, int scatterDataSize){
         if (runs.size() < 1){
-            return null;
+            return Collections.emptyList();
         }
 
         Run fastestRun = RunUtils.getFastestRun(runs);
@@ -203,9 +197,9 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
      *                       padding to the graph and avoid the scatter data dots going outside of the graph.
      * @return
      */
-    private @Nullable List<Entry> calculateAverageRunData(List<Run> runs, int scatterDataSize){
+    private List<Entry> calculateAverageRunData(List<Run> runs, int scatterDataSize){
         if (runs.size() < 1){
-            return null;
+            return Collections.emptyList();
         }
 
         List<Entry> averageRunData = new ArrayList<>();
