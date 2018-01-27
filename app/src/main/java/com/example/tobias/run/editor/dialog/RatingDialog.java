@@ -15,21 +15,15 @@ import com.example.tobias.run.R;
 
 public class RatingDialog {
 
-    public interface onPositiveButtonListener {
-        public void onClick(String ratingValue);
-    }
-
     private View rootView;
     private onPositiveButtonListener listener;
-    private Activity activity;
     private RatingBar ratingBar;
 
-    public RatingDialog(Activity activity, onPositiveButtonListener listener){
-        this.activity = activity;
+    public RatingDialog(onPositiveButtonListener listener) {
         this.listener = listener;
     }
 
-    public AlertDialog makeDialog(){
+    public AlertDialog makeDialog(Activity activity) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         LayoutInflater inflater = activity.getLayoutInflater();
         rootView = inflater.inflate(R.layout.rating_dialog, null);
@@ -57,7 +51,7 @@ public class RatingDialog {
     }
 
     private void initRatingBar(){
-        ratingBar = (RatingBar) rootView.findViewById(R.id.rating_rating_bar);
+        ratingBar = rootView.findViewById(R.id.rating_rating_bar);
 
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
@@ -76,6 +70,10 @@ public class RatingDialog {
     private String formatValues(){
         String value = "" + (int) ratingBar.getRating();
         return value;
+    }
+
+    public interface onPositiveButtonListener {
+        void onClick(String ratingValue);
     }
 
 

@@ -106,11 +106,7 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
 
         return true;
 
-    }    @Override
-    public void setDistanceText(String text) {
-        ((TextView) findViewById(R.id.editor_distance_text)).setText(text);
     }
-
     @Override
     @SuppressWarnings("deprecation")
     /**
@@ -133,21 +129,19 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
             }, year, month, day);
         }
         return null;
-    }    @Override
-    public void setDateText(String text) {
-        ((TextView) findViewById(R.id.editor_date_text)).setText(text);
     }
-
     public void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.editor_toolbar);
+        Toolbar toolbar = findViewById(R.id.editor_toolbar);
         setSupportActionBar(toolbar);
         changeStatusBarColor();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
-    }    @Override
-    public void setTimeText(String text) {
-        ((TextView) findViewById(R.id.editor_time_text)).setText(text);
+    }
+
+    @Override
+    public void setDistanceText(String text) {
+        ((TextView) findViewById(R.id.editor_distance_text)).setText(text);
     }
 
     /**
@@ -161,13 +155,10 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
         }
-    }    @Override
-    public void setRatingText(String text) {
-        ((TextView) findViewById(R.id.editor_rating_text)).setText(text);
     }
 
     private void initDateField() {
-        RelativeLayout field = (RelativeLayout) findViewById(R.id.editor_date_view);
+        RelativeLayout field = findViewById(R.id.editor_date_view);
         field.setOnClickListener(new View.OnClickListener() {
             @Override
             @SuppressWarnings("deprecation")
@@ -175,71 +166,68 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
                 showDialog(DATE_DIALOG_ID);
             }
         });
-    }    @Override
-    public void setSupportActionBarTitle(String text) {
-        getSupportActionBar().setTitle(text);
     }
 
     private void initDistanceField() {
-        RelativeLayout field = (RelativeLayout) findViewById(R.id.editor_distance_view);
-        field.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DistanceDialog dialog = new DistanceDialog(EditorActivityView.this, new DistanceDialog.onPositiveButtonListener() {
+        RelativeLayout field = findViewById(R.id.editor_distance_view);
+
+        final DistanceDialog dialog = new DistanceDialog(preferenceManager,
+                new DistanceDialog.onPositiveButtonListener() {
                     @Override
                     public void onClick(String distanceValue) {
                         presenter.onDistanceDialogPositiveButton(distanceValue);
                     }
                 });
+
+        field.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 dialog.makeDialog(EditorActivityView.this).show();
             }
         });
-        }    @Override
-    public String getDistanceText() {
-        return ((TextView) findViewById(R.id.editor_distance_text)).getText().toString();
+    }
+
+    @Override
+    public void setDateText(String text) {
+        ((TextView) findViewById(R.id.editor_date_text)).setText(text);
     }
 
     private void initTimeField() {
-        RelativeLayout field = (RelativeLayout) findViewById(R.id.editor_time_view);
+        RelativeLayout field = findViewById(R.id.editor_time_view);
+        final TimeDialog dialog = new TimeDialog(new TimeDialog.onPositiveButtonListener() {
+            @Override
+            public void onClick(String timeValue) {
+                presenter.onTimeDialogPositiveButton(timeValue);
+            }
+        });
+
         field.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimeDialog timeDialog = new TimeDialog(EditorActivityView.this, new TimeDialog.onPositiveButtonListener() {
-                    @Override
-                    public void onClick(String timeValue) {
-                        presenter.onTimeDialogPositiveButton(timeValue);
-                    }
-                });
-                timeDialog.makeDialog().show();
+                dialog.makeDialog(EditorActivityView.this).show();
             }
 
         });
-    }    @Override
-    public String getDateText() {
-        return ((TextView) findViewById(R.id.editor_date_text)).getText().toString();
     }
 
     private void initRatingField() {
-        RelativeLayout field = (RelativeLayout) findViewById(R.id.editor_rating_view);
+        RelativeLayout field = findViewById(R.id.editor_rating_view);
+        final RatingDialog ratingDialog = new RatingDialog(new RatingDialog.onPositiveButtonListener() {
+            @Override
+            public void onClick(String ratingValue) {
+                presenter.onRatingDialogPositiveButton(ratingValue);
+            }
+        });
+
         field.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RatingDialog ratingDialog = new RatingDialog(EditorActivityView.this, new RatingDialog.onPositiveButtonListener() {
-                    @Override
-                    public void onClick(String ratingValue) {
-                        presenter.onRatingDialogPositiveButton(ratingValue);
-                    }
-                });
-                ratingDialog.makeDialog().show();
+                ratingDialog.makeDialog(EditorActivityView.this).show();
             }
         });
-    }    @Override
-    public String getTimeText() {
-        return ((TextView) findViewById(R.id.editor_time_text)).getText().toString();
     }
-
     private void animateViewsEntrance() {
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.content_main);
+        LinearLayout linearLayout = findViewById(R.id.content_main);
         for (int i = 0; i < linearLayout.getChildCount(); i++) {
             View child = linearLayout.getChildAt(i);
             child.animate()
@@ -247,7 +235,45 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
                     .alpha(1.0f);
 
         }
-    }    @Override
+    }
+
+    @Override
+    public void setTimeText(String text) {
+        ((TextView) findViewById(R.id.editor_time_text)).setText(text);
+    }
+
+
+    @Override
+    public void setRatingText(String text) {
+        ((TextView) findViewById(R.id.editor_rating_text)).setText(text);
+    }
+
+
+    @Override
+    public void setSupportActionBarTitle(String text) {
+        getSupportActionBar().setTitle(text);
+    }
+
+
+    @Override
+    public String getDistanceText() {
+        return ((TextView) findViewById(R.id.editor_distance_text)).getText().toString();
+    }
+
+
+    @Override
+    public String getDateText() {
+        return ((TextView) findViewById(R.id.editor_date_text)).getText().toString();
+    }
+
+
+    @Override
+    public String getTimeText() {
+        return ((TextView) findViewById(R.id.editor_time_text)).getText().toString();
+    }
+
+
+    @Override
     public String getRatingText() {
         return ((TextView) findViewById(R.id.editor_rating_text)).getText().toString();
     }

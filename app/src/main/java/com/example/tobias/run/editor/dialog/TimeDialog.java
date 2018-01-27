@@ -1,5 +1,6 @@
 package com.example.tobias.run.editor.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -17,23 +18,18 @@ import java.text.DecimalFormat;
 
 public class TimeDialog  {
 
-    public interface onPositiveButtonListener {
-        public void onClick(String timeValue);
-    }
-
-    private Activity activity;
     private View rootView;
     private NumberPicker numberPickerHour;
     private NumberPicker numberPickerMinute;
     private NumberPicker numberPickerSecond;
     private onPositiveButtonListener listener;
 
-    public TimeDialog(Activity activity, onPositiveButtonListener listener){
-        this.activity = activity;
+    public TimeDialog(onPositiveButtonListener listener) {
         this.listener = listener;
     }
 
-    public  AlertDialog makeDialog(){
+    @SuppressLint("InflateParams")
+    public AlertDialog makeDialog(Activity activity) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         LayoutInflater inflater = activity.getLayoutInflater();
         rootView = inflater.inflate(R.layout.time_dialog, null);
@@ -61,19 +57,18 @@ public class TimeDialog  {
 
     }
 
-
     private void initNumberPickers(){
-        numberPickerHour = (NumberPicker) rootView.findViewById(R.id.time_picker_hour);
+        numberPickerHour = rootView.findViewById(R.id.time_picker_hour);
         numberPickerHour.setMaxValue(24);
         numberPickerHour.setMinValue(0);
         numberPickerHour.setValue(0);
 
-        numberPickerMinute = (NumberPicker) rootView.findViewById(R.id.time_picker_minute);
+        numberPickerMinute = rootView.findViewById(R.id.time_picker_minute);
         numberPickerMinute.setMaxValue(59);
         numberPickerMinute.setMinValue(0);
         numberPickerMinute.setValue(0);
 
-        numberPickerSecond = (NumberPicker) rootView.findViewById(R.id.time_picker_second);
+        numberPickerSecond = rootView.findViewById(R.id.time_picker_second);
         numberPickerSecond.setMaxValue(59);
         numberPickerSecond.setMinValue(0);
         numberPickerSecond.setValue(0);
@@ -89,5 +84,9 @@ public class TimeDialog  {
                 + df.format(numberPickerMinute.getValue()) + ":"
                 + df.format(numberPickerSecond.getValue());
         return time;
+    }
+
+    public interface onPositiveButtonListener {
+        void onClick(String timeValue);
     }
 }

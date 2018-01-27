@@ -27,6 +27,7 @@ public class Distance implements Parcelable {
             return new Distance[size];
         }
     };
+
     private double distanceKm;
     private double distanceMi;
     private double epsilon = 0.099;
