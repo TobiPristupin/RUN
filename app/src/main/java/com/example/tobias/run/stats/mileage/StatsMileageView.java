@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface StatsMileageView {
 
+    void setGraphWeekData(List<BarEntry> barEntries);
+
     void setGraphMonthData(List<BarEntry> barEntries);
 
     void setGraph3MonthData(List<BarEntry> barEntries);
@@ -18,6 +20,9 @@ public interface StatsMileageView {
     void setGraph6MonthData(List<BarEntry> barEntries);
 
     void setGraphYearData(List<BarEntry> barEntries);
+
+
+    void setGraphWeekXLabel(String[] values);
 
     void setGraphMonthXLabel(String[] values);
 
@@ -27,6 +32,9 @@ public interface StatsMileageView {
 
     void setGraphYearXLabel(String[] values);
 
+
+    void setTotalDistanceWeek(String text);
+
     void setTotalDistanceMonth(String text);
 
     void setTotalDistance3Months(String text);
@@ -34,6 +42,7 @@ public interface StatsMileageView {
     void setTotalDistance6Months(String text);
 
     void setTotalDistanceYear(String text);
+
 
     void setMonthIncreaseText(String text, StateChange change);
 

@@ -35,11 +35,13 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
     private View rootView;
 
+    private BarChart barChartWeek;
     private BarChart barChartMonth;
     private BarChart barChart3Month;
     private BarChart barChart6Month;
     private BarChart barChartYear;
 
+    private String weekTotalDistance;
     private String monthTotalDistance;
     private String month3TotalDistance;
     private String month6TotalDistance;
@@ -59,6 +61,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
         sharedPrefRepository = new SharedPreferenceManager(getContext());
 
+        barChartWeek = styleBarChart(new BarChart(getContext()));
         barChartMonth = styleBarChart(new BarChart(getContext()));
         barChart3Month = styleBarChart(new BarChart(getContext()));
         barChart6Month = styleBarChart(new BarChart(getContext()));
@@ -84,6 +87,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
     private void initTabLayout(){
         tabLayout = rootView.findViewById(R.id.stats_mileage_tablayout);
+        tabLayout.addTab(tabLayout.newTab().setText("Week"));
         tabLayout.addTab(tabLayout.newTab().setText("Month"));
         tabLayout.addTab(tabLayout.newTab().setText("3Months"));
         tabLayout.addTab(tabLayout.newTab().setText("6Months"));
@@ -97,15 +101,18 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
                 switch (tab.getPosition()){
                     case 0 :
-                        totalDistanceTextView.setText(monthTotalDistance);
+                        totalDistanceTextView.setText(weekTotalDistance);
                         break;
                     case 1 :
-                        totalDistanceTextView.setText(month3TotalDistance);
+                        totalDistanceTextView.setText(monthTotalDistance);
                         break;
                     case 2 :
-                        totalDistanceTextView.setText(month6TotalDistance);
+                        totalDistanceTextView.setText(month3TotalDistance);
                         break;
                     case 3 :
+                        totalDistanceTextView.setText(month6TotalDistance);
+                        break;
+                    case 4 :
                         totalDistanceTextView.setText(yearTotalDistance);
                         break;
                 }
@@ -157,6 +164,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
     private void initViewAnimator(){
         viewAnimator = rootView.findViewById(R.id.stats_mileage_viewanimator);
+        viewAnimator.addView(barChartWeek);
         viewAnimator.addView(barChartMonth);
         viewAnimator.addView(barChart3Month);
         viewAnimator.addView(barChart6Month);
@@ -197,51 +205,35 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
         return chart;
     }
 
-    //TODO: extract setGraphData like rest of fragments
+
+    @Override
+    public void setGraphWeekData(List<BarEntry> barEntries) {
+        setGraphData(barEntries, barChartWeek);
+    }
 
     @Override
     public void setGraphMonthData(List<BarEntry> barEntries) {
-        Distance.Unit unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
-        BarDataSet barDataSet = new BarDataSet(barEntries, "Distance (" + unit + ")");
-        barDataSet.setValueTextSize(10);
-        barDataSet.setColor(getResources().getColor(R.color.DarkPink));
-
-        barChartMonth.setData(new BarData(barDataSet));
-        barChartMonth.invalidate();
+        setGraphData(barEntries, barChartMonth);
     }
 
     @Override
     public void setGraph3MonthData(List<BarEntry> barEntries) {
-        Distance.Unit unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
-        BarDataSet barDataSet = new BarDataSet(barEntries, "Distance (" + unit + ")");
-        barDataSet.setValueTextSize(10);
-        barDataSet.setColor(getResources().getColor(R.color.DarkPink));
-
-        barChart3Month.setData(new BarData(barDataSet));
-        barChart3Month.invalidate();
+        setGraphData(barEntries, barChart3Month);
     }
 
     @Override
     public void setGraph6MonthData(List<BarEntry> barEntries) {
-        Distance.Unit unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
-        BarDataSet barDataSet = new BarDataSet(barEntries, "Distance (" + unit + ")");
-        barDataSet.setValueTextSize(10);
-        barDataSet.setColor(getResources().getColor(R.color.DarkPink));
-
-        barChart6Month.setData(new BarData(barDataSet));
-        barChart6Month.invalidate();
+        setGraphData(barEntries, barChart6Month);
     }
 
     @Override
     public void setGraphYearData(List<BarEntry> barEntries) {
-        Distance.Unit unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
-        BarDataSet barDataSet = new BarDataSet(barEntries, "Distance (" + unit + ")");
-        barDataSet.setValueTextSize(10);
-        barDataSet.setColor(getResources().getColor(R.color.DarkPink));
-
-        barChartYear.setData(new BarData(barDataSet));
-        barChartYear.invalidate();
-
+        setGraphData(barEntries, barChartYear);
+    }
+    
+    @Override
+    public void setGraphWeekXLabel(String[] values) {
+        barChartWeek.getXAxis().setValueFormatter(new GenericAxisValueFormatter<>(values));
     }
 
     @Override
@@ -265,11 +257,8 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     }
 
     @Override
-    public void setTotalDistanceMonth(String text) {
-        ((TextView) rootView.findViewById(R.id.stats_mileage_overview_item_month).findViewById(R.id.overview_item_value))
-                .setText(text);
-
-        monthTotalDistance = text;
+    public void setTotalDistanceWeek(String text){
+        weekTotalDistance = text;
         /**
          * totalDistanceTextView text is updated when any tab is selected. Because presenter has a delay
          * when retrieving data from the network, when tab 0 is selected the totalDistanceMonth text has not
@@ -279,8 +268,16 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
          * all the totalDistance strings.
          */
         if (tabLayout.getSelectedTabPosition() == 0){
-            totalDistanceTextView.setText(monthTotalDistance);
+            totalDistanceTextView.setText(weekTotalDistance);
         }
+    }
+
+    @Override
+    public void setTotalDistanceMonth(String text) {
+        ((TextView) rootView.findViewById(R.id.stats_mileage_overview_item_month).findViewById(R.id.overview_item_value))
+                .setText(text);
+
+        monthTotalDistance = text;
     }
 
     @Override
@@ -326,6 +323,16 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     public void setYearIncreaseText(String text, StateChange change) {
         TextView textView = rootView.findViewById(R.id.stats_mileage_overview_item_year).findViewById(R.id.overview_item_increase_value);
         setIncreaseText(text, change, textView);
+    }
+
+    private void setGraphData(List<BarEntry> barEntries, BarChart chart){
+        Distance.Unit unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        BarDataSet barDataSet = new BarDataSet(barEntries, "Distance (" + unit + ")");
+        barDataSet.setValueTextSize(10);
+        barDataSet.setColor(getResources().getColor(R.color.DarkPink));
+
+        chart.setData(new BarData(barDataSet));
+        chart.invalidate();
     }
 
     private void setIncreaseText(String text, StateChange change, TextView textView){

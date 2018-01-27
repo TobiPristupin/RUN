@@ -42,6 +42,7 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
     @Override
     public void updateData(List<Run> data) {
         runList = data;
+        updateBarChartWeek();
         updateBarChartMonth();
         updateBarChart3Month();
         updateBarChart6Months();
@@ -57,6 +58,11 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
     private void updateChartXLabels(){
         DateTime dateTime = new DateTime();
         Locale locale = Locale.getDefault();
+
+        String[] xLabelWeek = { dateTime.withDayOfWeek(1).dayOfMonth().getAsString()
+                + "-" + dateTime.withDayOfWeek(7).dayOfMonth().getAsString()
+                + " " + dateTime.monthOfYear().getAsShortText(Locale.getDefault()) };
+        view.setGraphWeekXLabel(xLabelWeek);
 
         String xLabelsMonth = dateTime.monthOfYear().getAsText(locale);
         view.setGraphMonthXLabel(new String[]{xLabelsMonth});
@@ -88,6 +94,9 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
     private void updateTotalDistanceText(){
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
+
+        String mileageWeek = df.format(getWeekMileage()) + " " + getDistanceUnit();
+        view.setTotalDistanceWeek(mileageWeek);
 
         String mileageMonth =  df.format(getMonthMileage()) + " " + getDistanceUnit();
         view.setTotalDistanceMonth(mileageMonth);
@@ -129,6 +138,16 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
             view.setYearIncreaseText("+" + String.format("%.1f", yearIncrease), StateChange.INCREASE);
         } else {
             view.setYearIncreaseText(String.format("%.1f", yearIncrease), StateChange.DECREASE);
+        }
+    }
+
+    private void updateBarChartWeek(){
+        double mileageSum = getWeekMileage();
+
+        if (mileageSum != 0){
+            List<BarEntry> barEntries = new ArrayList<>();
+            barEntries.add(new BarEntry(1, (float) mileageSum));
+            view.setGraphWeekData(barEntries);
         }
     }
 
@@ -188,6 +207,15 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
             barEntries.add(new BarEntry(3, (float) mileageMonths8To12));
             view.setGraphYearData(barEntries);
         }
+    }
+
+    private double getWeekMileage(){
+        List<Run> weekRuns = RunUtils.filterList(runList,
+                RunPredicates.isRunBetween(DateUtils.getStartOfWeek(), DateUtils.getEndOfWeek()));
+
+        double mileageSum = RunUtils.addMileage(weekRuns, getDistanceUnit());
+
+        return mileageSum;
     }
 
     private double getMonthMileage(){

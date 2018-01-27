@@ -4,106 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.tobias.run.settings.SettingsActivity"
     android:background="@color/LightGrey"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.example.tobias.run.settings.SettingsActivity">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/settings_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:title="Settings"
-                app:titleTextColor="@android:color/white"
-                android:background="@color/colorPrimary"/>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/settings_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:title="Settings"
+            app:titleTextColor="@android:color/white"/>
 
         <TextView
+            android:id="@+id/settings_general"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:text="General"
-            android:textSize="16sp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:textStyle="bold"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:paddingBottom="10dp"
-            android:paddingTop="2dp"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:id="@+id/settings_distance_unit_button">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/settings_distance_unit_text"
-                android:text="Distance Units"
-                android:layout_marginLeft="15dp"
-                android:textSize="18sp"
-                android:textColor="@android:color/black"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/settings_distance_unit_value"
-                tools:text="Metric (km)"
-                android:layout_below="@id/settings_distance_unit_text"
-                android:layout_marginTop="7dp"
-                android:layout_marginLeft="15dp"/>
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/iron"
-            android:layout_marginTop="2dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Account"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="25dp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/settings_toolbar" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/settings_distance_units_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:paddingBottom="10dp"
-            android:paddingTop="2dp"
-            android:id="@+id/settings_signout_button">
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Distance Units"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/settings_general" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/settings_signout_text"
-                android:text="Sign Out"
-                android:layout_marginLeft="15dp"
-                android:textSize="18sp"
-                android:textColor="@android:color/black"/>
+        <TextView
+            android:id="@+id/settting_distance_current_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/settings_distance_units_text"
+            app:layout_constraintTop_toBottomOf="@+id/settings_distance_units_text"
+            tools:text="Imperial (mi)" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/settings_signout_text"
-                android:layout_marginTop="7dp"
-                android:layout_marginLeft="15dp"
-                android:text="Sign out from your account"/>
+        <View
+            android:id="@+id/setting_divider1"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/Grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/settting_distance_current_unit" />
 
-        </RelativeLayout>
-
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </ScrollView>

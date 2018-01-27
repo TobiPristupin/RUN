@@ -62,6 +62,7 @@ public class StatsActivitiesPresenter implements Observer<List<Run>> {
         pieEntries.add(new PieEntry(getRunsFromWeekday(6) * 100 / allActivities, "Saturday"));
         pieEntries.add(new PieEntry(getRunsFromWeekday(7) * 100 / allActivities, "Sunday"));
 
+
         for(int i = pieEntries.size() - 1; i >= 0; i--){
             if (pieEntries.get(i).getValue() == 0){
                 pieEntries.remove(i);
@@ -150,9 +151,10 @@ public class StatsActivitiesPresenter implements Observer<List<Run>> {
         DateTime dateTime = new DateTime();
         Locale locale = Locale.getDefault();
 
-        String[] xLabelsWeek = { dateTime.withDayOfWeek(1).dayOfMonth().getAsString()
-                + "-" + dateTime.withDayOfWeek(7).dayOfMonth().getAsString() };
-        view.setGraphWeekXLabels(xLabelsWeek);
+        String[] xLabelWeek = { dateTime.withDayOfWeek(1).dayOfMonth().getAsString()
+                + "-" + dateTime.withDayOfWeek(7).dayOfMonth().getAsString()
+                + " " + dateTime.monthOfYear().getAsShortText(Locale.getDefault()) };
+        view.setGraphWeekXLabels(xLabelWeek);
 
         String[] xLabelsMonth = {dateTime.monthOfYear().getAsText(locale)};
         view.setGraphMonthXLabels(xLabelsMonth);
