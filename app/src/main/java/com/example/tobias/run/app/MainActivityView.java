@@ -29,7 +29,7 @@ import com.example.tobias.run.data.SharedPreferenceManager;
 import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.history.HistoryFragmentView;
 import com.example.tobias.run.login.LoginActivity;
-import com.example.tobias.run.settings.SettingsActivity;
+import com.example.tobias.run.settings.SettingsActivityView;
 import com.example.tobias.run.stats.StatsFragmentView;
 import com.squareup.picasso.Picasso;
 
@@ -60,20 +60,6 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         presenter.onCreateView();
     }
 
-    @Override
-    public void initViews() {
-        initDrawerLayout();
-        initToolbar();
-        initNavHeader();
-
-        if (savedInstanceState == null) {
-            //If app hasn't loaded the views previously
-            MenuItem menuItem = navigationView.getMenu().findItem(R.id.menu_history);
-            //Open History fragment setting it as default for startup.
-            openFragment(menuItem);
-        }
-    }
-
     private void initDrawerLayout(){
         //On item selected in navigation view
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -91,14 +77,13 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         ((TextView) headerLayout.findViewById(R.id.navheader_username_text)).setText(presenter.getUserDisplayName());
         ((TextView) headerLayout.findViewById(R.id.navheader_email_text)).setText(presenter.getUserEmail());
 
-        CircleImageView profileImage = (CircleImageView) headerLayout.findViewById(R.id.navheader_profile_image);
+        CircleImageView profileImage = headerLayout.findViewById(R.id.navheader_profile_image);
 
         Picasso.with(MainActivityView.this)
                 .load(presenter.getUserPhotoUrl())
                 .placeholder(android.R.color.darker_gray)
                 .into(profileImage);
     }
-
 
     @Override
     protected void onPause() {
@@ -121,6 +106,20 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         startActivity(intent);
     }
 
+    @Override
+    public void initViews() {
+        initDrawerLayout();
+        initToolbar();
+        initNavHeader();
+
+        if (savedInstanceState == null) {
+            //If app hasn't loaded the views previously
+            MenuItem menuItem = navigationView.getMenu().findItem(R.id.menu_history);
+            //Open History fragment setting it as default for startup.
+            openFragment(menuItem);
+        }
+    }
+
     public void openFragment(MenuItem menuItem){
         Fragment newFragment = null;
 
@@ -135,7 +134,7 @@ public class MainActivityView extends AppCompatActivity implements MainView {
                 break;
             //...
             case R.id.menu_settings :
-                startActivity(new Intent(MainActivityView.this, SettingsActivity.class));
+                startActivity(new Intent(MainActivityView.this, SettingsActivityView.class));
                 break;
         }
 
@@ -167,7 +166,7 @@ public class MainActivityView extends AppCompatActivity implements MainView {
      * Set toolbar defined in xml layout as support action toolbar and add button to open DrawerLayout
      */
     private void initToolbar(){
-        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_menu);

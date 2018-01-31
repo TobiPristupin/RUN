@@ -3,7 +3,7 @@
     package="com.example.tobias.run">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".app.RunApplication"
@@ -24,14 +24,17 @@
         <activity
             android:name=".editor.EditorActivityView"
             android:parentActivityName=".app.MainActivityView"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name=".settings.SettingsActivityView"
             android:parentActivityName=".app.MainActivityView" />
         <activity
             android:name=".login.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/LoginTheme" />
+        <activity
+            android:name=".settings.libraries.LibraryActivityView"
+            android:parentActivityName=".settings.SettingsActivityView" />
     </application>
 
 </manifest>

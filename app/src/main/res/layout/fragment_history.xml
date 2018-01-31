@@ -132,10 +132,6 @@
          app:layout_constraintHorizontal_bias="1.0"
          app:layout_constraintLeft_toLeftOf="parent"
          app:layout_constraintRight_toRightOf="parent"
-         app:layout_constraintTop_toBottomOf="@+id/history_spinner_layout"
-         tools:layout_conversion_absoluteHeight="553dp"
-         tools:layout_conversion_absoluteWidth="411dp"
-         tools:layout_conversion_absoluteX="0dp"
-         tools:layout_conversion_absoluteY="104dp" />
+         app:layout_constraintTop_toBottomOf="@+id/history_spinner_layout" />
 
  </android.support.constraint.ConstraintLayout>

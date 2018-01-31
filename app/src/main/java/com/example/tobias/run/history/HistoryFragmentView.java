@@ -116,7 +116,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     }
 
     private void initDateSpinner(){
-        dateSpinner = (MaterialSpinner) rootView.findViewById(R.id.history_date_spinner);
+        dateSpinner = rootView.findViewById(R.id.history_date_spinner);
         dateSpinner.setItems("Month", "Week", "Year", "All");
         dateSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
@@ -127,7 +127,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     }
 
     private void initRecyclerView(){
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.history_recyclerview);
+        recyclerView = rootView.findViewById(R.id.history_recyclerview);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -169,7 +169,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     }
 
     private void initFab(){
-        final FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.history_fab_button);
+        final FloatingActionButton fab = rootView.findViewById(R.id.history_fab_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
