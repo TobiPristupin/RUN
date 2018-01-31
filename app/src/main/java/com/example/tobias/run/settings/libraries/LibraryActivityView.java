@@ -135,7 +135,14 @@ public class LibraryActivityView extends AppCompatActivity {
     }
 
     private void populateLibrariesList() {
-        libraries.add(new Library("MPAndroid Chart", "https://developer.android.com/guide/components/intents-common.html"));
+        libraries.add(new Library("Joda Time", "http://www.joda.org/joda-time/"));
+        libraries.add(new Library("MPAndroid Chart", "https://github.com/PhilJay/MPAndroidChart"));
+        libraries.add(new Library("Toasty", "https://github.com/GrenderG/Toasty"));
+        libraries.add(new Library("FabButton", "https://github.com/ckurtm/FabButton"));
+        libraries.add(new Library("AVLoadingIndicatorView", "https://github.com/81813780/AVLoadingIndicatorView"));
+        libraries.add(new Library("Recycler View Animator", "https://github.com/wasabeef/recyclerview-animators"));
+        libraries.add(new Library("Material Spinner", "https://github.com/jaredrummler/MaterialSpinner"));
+        libraries.add(new Library("Circle Image View", "https://github.com/hdodenhof/CircleImageView"));
     }
 
 
