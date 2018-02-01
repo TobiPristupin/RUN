@@ -23,4 +23,6 @@ public interface SettingsView {
     void showNoEmailAppError();
 
     void sendLibrariesViewIntent();
+
+    void showAboutDialog();
 }

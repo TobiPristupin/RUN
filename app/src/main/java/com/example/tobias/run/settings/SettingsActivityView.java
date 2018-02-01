@@ -43,6 +43,7 @@ public class SettingsActivityView extends AppCompatActivity implements SettingsV
         initSignOut();
         initLibraries();
         initHelpAndFeedback();
+        initAbout();
 
         presenter.onCreateView();
     }
@@ -101,6 +102,16 @@ public class SettingsActivityView extends AppCompatActivity implements SettingsV
             @Override
             public void onClick(View v) {
                 presenter.onLibrariesClick();
+            }
+        });
+    }
+
+    private void initAbout() {
+        RelativeLayout view = findViewById(R.id.settings_about_container);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.onAboutClick();
             }
         });
     }
@@ -170,5 +181,13 @@ public class SettingsActivityView extends AppCompatActivity implements SettingsV
         Intent intent = new Intent(SettingsActivityView.this, LibraryActivityView.class);
         intent.putExtra(LibraryActivityView.callingActivityKey, SettingsActivityView.class.toString());
         startActivity(intent);
+    }
+
+    @Override
+    public void showAboutDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivityView.this);
+        builder.setTitle("About");
+        builder.setMessage(String.format(getResources().getString(R.string.about_dialog), BuildConfig.VERSION_NAME));
+        builder.show();
     }
 }

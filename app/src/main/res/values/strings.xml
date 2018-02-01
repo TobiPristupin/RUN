@@ -8,4 +8,6 @@
     <string name="run_intent_key">run</string>
     <string name="graph_entries_key">entries</string>
     <string name="graph_xlabel_key">label</string>
+    <string name="about_dialog">Running Partner Version %1$s \n\nYour own running tracker. Easily manage your activities
+        and observe trends over time \n\n Developed by Tobias Pristupin</string>
 </resources>

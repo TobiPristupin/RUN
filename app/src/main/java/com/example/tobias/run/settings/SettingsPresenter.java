@@ -56,6 +56,10 @@ public class SettingsPresenter {
                 "a bug report, please add device model and Android version.");
     }
 
+    public void onAboutClick() {
+        view.showAboutDialog();
+    }
+
     public void onActivityNotFoundError() {
         view.showNoEmailAppError();
     }
