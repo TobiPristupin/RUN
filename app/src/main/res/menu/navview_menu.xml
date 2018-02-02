@@ -3,12 +3,12 @@
     <group
         android:checkableBehavior="single">
         <item
-            android:id="@+id/menu_history"
+            android:id="@+id/navview_menu_history"
             android:icon="@drawable/ic_editor_format_list_bulleted"
             android:title="History"/>
         <item
-            android:id="@+id/menu_stats"
-            android:icon="@drawable/ic_editor_insert_chart"
+            android:id="@+id/navview_menu_stats"
+            android:icon="@drawable/ic_line_chart"
             android:title="Analyze"/>
 
     </group>
@@ -16,12 +16,20 @@
         android:title="Other">
         <menu>
             <item
-                android:id="@+id/menu_settings"
+                android:id="@+id/navview_menu_settings"
+                android:icon="@drawable/ic_action_settings"
                 android:title="Settings"/>
 
             <item
-                android:id="@+id/menu_about"
+                android:id="@+id/navview_menu_about"
+                android:icon="@drawable/ic_info_outline_medium"
                 android:title="About"/>
+
+            <item
+                android:id="@+id/navview_menu_libs"
+                android:icon="@drawable/ic_code_medium"
+                android:title="Open Source Libraries" />
+
         </menu>
     </item>
 </menu>

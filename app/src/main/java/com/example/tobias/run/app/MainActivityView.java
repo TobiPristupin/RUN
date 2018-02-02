@@ -18,18 +18,21 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.tobias.run.BuildConfig;
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.SharedPreferenceManager;
 import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.example.tobias.run.history.HistoryFragmentView;
 import com.example.tobias.run.login.LoginActivity;
 import com.example.tobias.run.settings.SettingsActivityView;
+import com.example.tobias.run.settings.libraries.LibraryActivityView;
 import com.example.tobias.run.stats.StatsFragmentView;
 import com.squareup.picasso.Picasso;
 
@@ -61,7 +64,6 @@ public class MainActivityView extends AppCompatActivity implements MainView {
     }
 
     private void initDrawerLayout(){
-        //On item selected in navigation view
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -114,7 +116,7 @@ public class MainActivityView extends AppCompatActivity implements MainView {
 
         if (savedInstanceState == null) {
             //If app hasn't loaded the views previously
-            MenuItem menuItem = navigationView.getMenu().findItem(R.id.menu_history);
+            MenuItem menuItem = navigationView.getMenu().findItem(R.id.navview_menu_history);
             //Open History fragment setting it as default for startup.
             openFragment(menuItem);
         }
@@ -124,17 +126,22 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         Fragment newFragment = null;
 
         switch (menuItem.getItemId()){
-            //If item selected id is menu_history, create new HistoryFragmentView in newFragment variable
-            case R.id.menu_history :
+            case R.id.navview_menu_history:
                 newFragment = new HistoryFragmentView();
                 break;
-            //...
-            case R.id.menu_stats :
+            case R.id.navview_menu_stats:
                 newFragment = new StatsFragmentView();
                 break;
-            //...
-            case R.id.menu_settings :
+            case R.id.navview_menu_settings:
                 startActivity(new Intent(MainActivityView.this, SettingsActivityView.class));
+                break;
+            case R.id.navview_menu_about:
+                showAboutDialog();
+                break;
+            case R.id.navview_menu_libs:
+                Intent intent = new Intent(MainActivityView.this, LibraryActivityView.class);
+                intent.putExtra(LibraryActivityView.callingActivityKey, MainActivityView.class.toString());
+                startActivity(intent);
                 break;
         }
 
@@ -170,6 +177,13 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_menu);
+    }
+
+    private void showAboutDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivityView.this);
+        builder.setTitle("About");
+        builder.setMessage(String.format(getResources().getString(R.string.about_dialog), BuildConfig.VERSION_NAME));
+        builder.show();
     }
 
 
