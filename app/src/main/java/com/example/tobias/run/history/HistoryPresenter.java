@@ -134,7 +134,7 @@ public class HistoryPresenter implements Observer<List<Run>>{
     }
 
     public void onEditMenuClicked(List<Integer> selectedItems){
-        /**
+        /*
          * Edit functionality will only be enabled when only one item is selected. Therefore,
          * that item will always be in position 0 of selectedItems.
          */
@@ -146,9 +146,7 @@ public class HistoryPresenter implements Observer<List<Run>>{
 
     private void showEmptyViewIfNecessary(){
         if (shouldShowEmptyView()){
-            //If presenters's data set is empty, meaning that database has no items, message shown changes
-            boolean longMessage = allRunsList.isEmpty();
-            view.showEmptyView(longMessage);
+            view.showEmptyView();
         } else {
             view.removeEmptyView();
         }

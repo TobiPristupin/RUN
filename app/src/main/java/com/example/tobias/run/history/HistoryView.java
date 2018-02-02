@@ -18,7 +18,8 @@ public interface HistoryView {
     void actionModeInvalidate();
     void setData(List<Run> data);
     String getDataFilter();
-    void showEmptyView(boolean longMessage);
+
+    void showEmptyView();
     void removeEmptyView();
     void showDeleteDialog(List<Integer> selectedItems);
     void sendIntentEditorActivity(@Nullable Run runToEdit);

@@ -28,7 +28,7 @@
             android:layout_marginTop="16dp"
             android:text="General"
             android:textColor="@color/colorPrimary"
-            android:textSize="13sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <RelativeLayout
@@ -38,8 +38,8 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:paddingBottom="12dp"
-            android:paddingTop="12dp">
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp">
 
             <TextView
                 android:id="@+id/settings_distanceunit_text"
@@ -49,7 +49,7 @@
                 android:layout_marginLeft="16dp"
                 android:text="Distance Unit"
                 android:textColor="@android:color/black"
-                android:textSize="15sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/settings_distanceunit_selection"
@@ -58,7 +58,7 @@
                 android:layout_below="@id/settings_distanceunit_text"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 tools:text="Imperial (mi)" />
 
         </RelativeLayout>
@@ -70,7 +70,7 @@
             android:layout_marginTop="8dp"
             android:text="Account"
             android:textColor="@color/colorPrimary"
-            android:textSize="13sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <RelativeLayout
@@ -80,8 +80,8 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:paddingBottom="12dp"
-            android:paddingTop="12dp">
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp">
 
             <TextView
                 android:id="@+id/settings_signout_text"
@@ -91,7 +91,7 @@
                 android:layout_marginLeft="16dp"
                 android:text="Sign Out"
                 android:textColor="@android:color/black"
-                android:textSize="15sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -100,7 +100,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
                 android:text="Log out from your account"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
         </RelativeLayout>
 
@@ -111,7 +111,7 @@
             android:layout_marginTop="8dp"
             android:text="Other"
             android:textColor="@color/colorPrimary"
-            android:textSize="13sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <RelativeLayout
@@ -121,8 +121,8 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:paddingBottom="12dp"
-            android:paddingTop="12dp">
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp">
 
             <TextView
                 android:id="@+id/settings_help_text"
@@ -132,7 +132,7 @@
                 android:layout_marginLeft="16dp"
                 android:text="Help and Feedback"
                 android:textColor="@android:color/black"
-                android:textSize="15sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -141,7 +141,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
                 android:text="Help, feature requests and bug reports"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
         </RelativeLayout>
 
@@ -157,8 +157,8 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:paddingBottom="12dp"
-            android:paddingTop="12dp">
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp">
 
             <TextView
                 android:id="@+id/settings_libs_text"
@@ -168,7 +168,7 @@
                 android:layout_marginLeft="16dp"
                 android:text="Open Source Libraries"
                 android:textColor="@android:color/black"
-                android:textSize="15sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -177,7 +177,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
                 android:text="FOSS Libraries used"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
         </RelativeLayout>
 
@@ -193,8 +193,8 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:paddingBottom="12dp"
-            android:paddingTop="12dp">
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp">
 
             <TextView
                 android:id="@+id/settings_about_text"
@@ -204,7 +204,7 @@
                 android:layout_marginLeft="16dp"
                 android:text="About"
                 android:textColor="@android:color/black"
-                android:textSize="15sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -213,7 +213,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
                 android:text="About the developer"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
         </RelativeLayout>
 

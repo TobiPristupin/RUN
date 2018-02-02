@@ -51,7 +51,6 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     private MaterialSpinner dateSpinner;
     private View emptyViewImage;
     private View emptyViewHeader;
-    private View emptyViewText;
 
 
     public HistoryFragmentView(){
@@ -65,8 +64,6 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
 
         emptyViewImage = rootView.findViewById(R.id.history_empty_view_image);
         emptyViewHeader = rootView.findViewById(R.id.history_empty_view_header);
-        emptyViewText = rootView.findViewById(R.id.history_empty_view_text);
-
 
         initRecyclerView();
         initDateSpinner();
@@ -247,17 +244,13 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     }
 
     @Override
-    public void showEmptyView(boolean longMessage) {
-        if (longMessage){
-            animateViews(true, emptyViewHeader, emptyViewImage, emptyViewText);
-        } else {
-            animateViews(true, emptyViewHeader, emptyViewImage);
-        }
+    public void showEmptyView() {
+        animateViews(true, emptyViewHeader, emptyViewImage);
     }
 
     @Override
     public void removeEmptyView() {
-        animateViews(false, emptyViewHeader, emptyViewImage, emptyViewText);
+        animateViews(false, emptyViewHeader, emptyViewImage);
     }
 
     /**
