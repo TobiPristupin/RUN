@@ -3,6 +3,7 @@ package com.example.tobias.run.history;
 import android.support.annotation.Nullable;
 
 import com.example.tobias.run.data.Run;
+import com.example.tobias.run.data.RunFilter;
 
 import java.util.List;
 
@@ -13,14 +14,22 @@ import java.util.List;
 public interface HistoryView {
 
     void finishActionMode();
+
     void actionModeSetEditVisible(boolean visible);
+
     void actionModeSetTitle(String title);
+
     void actionModeInvalidate();
+
     void setData(List<Run> data);
-    String getDataFilter();
+
+    RunFilter getDataFilter();
 
     void showEmptyView();
+
     void removeEmptyView();
+
     void showDeleteDialog(List<Integer> selectedItems);
+
     void sendIntentEditorActivity(@Nullable Run runToEdit);
 }

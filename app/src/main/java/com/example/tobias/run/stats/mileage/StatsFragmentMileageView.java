@@ -131,7 +131,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     }
 
     private void initOverviewItems(){
-        Distance.Unit unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        Distance.Unit unit = sharedPrefRepository.getDistanceUnit();
 
         View overviewItemMonth = rootView.findViewById(R.id.stats_mileage_overview_item_month);
         ((TextView) overviewItemMonth.findViewById(R.id.overview_item_value_text)).setText("This month");
@@ -326,7 +326,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     }
 
     private void setGraphData(List<BarEntry> barEntries, BarChart chart){
-        Distance.Unit unit = sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        Distance.Unit unit = sharedPrefRepository.getDistanceUnit();
         BarDataSet barDataSet = new BarDataSet(barEntries, "Distance (" + unit + ")");
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkPink));

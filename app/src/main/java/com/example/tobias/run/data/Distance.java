@@ -161,6 +161,17 @@ public class Distance implements Parcelable {
         }
 
 
+        public static Unit get(String value) {
+            switch (value.toLowerCase()) {
+                case "km":
+                    return KM;
+                case "mi":
+                    return MILE;
+                default:
+                    throw new RuntimeException();
+            }
+        }
+
         @Override
         public String toString() {
             return value;

@@ -83,7 +83,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
     }
 
     private Distance.Unit getDistanceUnit(){
-        return preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        return preferenceManager.getDistanceUnit();
     }
 
     public interface OnItemClicked {
@@ -102,11 +102,11 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
 
         public HistoryViewHolder(View view){
             super(view);
-            ratingBar = (RatingBar) view.findViewById(R.id.history_list_item_rating_bar);
-            distance = (TextView) view.findViewById(R.id.history_list_item_distance_text);
-            time = (TextView) view.findViewById(R.id.history_list_item_time_text);
-            date = (TextView) view.findViewById(R.id.history_list_item_date_text);
-            pace = (TextView) view.findViewById(R.id.history_list_item_pace_text);
+            ratingBar = view.findViewById(R.id.history_list_item_rating_bar);
+            distance = view.findViewById(R.id.history_list_item_distance_text);
+            time = view.findViewById(R.id.history_list_item_time_text);
+            date = view.findViewById(R.id.history_list_item_date_text);
+            pace = view.findViewById(R.id.history_list_item_pace_text);
             layout = view.findViewById(R.id.history_list_item_layout);
 
             view.setOnClickListener(this);

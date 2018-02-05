@@ -47,7 +47,7 @@ public class EditorPresenter {
     }
 
     private void setViewEditMode(){
-        Distance.Unit unit = preferenceRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        Distance.Unit unit = preferenceRepository.getDistanceUnit();
 
         String distanceText = RunUtils.distanceToString(runToEdit.getDistance(unit), unit);
         view.setDistanceText(distanceText);

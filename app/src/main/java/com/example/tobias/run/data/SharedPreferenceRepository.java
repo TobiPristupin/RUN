@@ -7,7 +7,13 @@ package com.example.tobias.run.data;
 public interface SharedPreferenceRepository {
 
     String DISTANCE_UNIT_KEY = "distance_unit";
+    String FILTER_KEY = "filter";
 
-    Distance.Unit get(String key);
-    void set(String key, String value);
+    Distance.Unit getDistanceUnit();
+
+    void setDistanceUnit(Distance.Unit unit);
+
+    RunFilter getRunFilter();
+
+    void setRunFilter(RunFilter filter);
 }

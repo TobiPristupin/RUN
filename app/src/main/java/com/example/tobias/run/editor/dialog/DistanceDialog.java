@@ -80,7 +80,7 @@ public class DistanceDialog {
      */
     private void initUnitText(){
         TextView unitText = rootView.findViewById(R.id.distance_unit);
-        unitText.setText(preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY).toString());
+        unitText.setText(preferenceManager.getDistanceUnit().toString());
     }
 
     /**
@@ -90,7 +90,7 @@ public class DistanceDialog {
     private String formatValues(){
         String distance = null;
         distance = "" + numberPickerWhole.getValue() + "." + numberPickerDecimal.getValue() + " " +
-                preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+                preferenceManager.getDistanceUnit();
         return distance;
     }
 

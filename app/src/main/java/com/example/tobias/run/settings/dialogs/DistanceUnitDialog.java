@@ -26,7 +26,7 @@ public class DistanceUnitDialog {
 
         builder.setTitle("Distance Unit");
 
-        int checkedItem = preferenceManager.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY).equals(Distance.Unit.KM) ? 0 : 1;
+        int checkedItem = preferenceManager.getDistanceUnit().equals(Distance.Unit.KM) ? 0 : 1;
         CharSequence[] items = new String[]{"Metric (" + Distance.Unit.KM + ")", "Imperial (" + Distance.Unit.MILE + ")"};
         builder.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
             @Override

@@ -321,7 +321,7 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
 
 
     private Distance.Unit getDistanceUnit(){
-        return sharedPrefRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        return sharedPrefRepository.getDistanceUnit();
     }
 
 

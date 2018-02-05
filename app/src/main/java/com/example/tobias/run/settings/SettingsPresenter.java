@@ -31,7 +31,7 @@ public class SettingsPresenter {
             @Override
             public void onOptionSelected(Distance.Unit unit) {
                 view.setDistanceUnitText(formatDistanceUnitText(unit));
-                sharedPref.set(SharedPreferenceRepository.DISTANCE_UNIT_KEY, unit.toString());
+                sharedPref.setDistanceUnit(unit);
             }
         };
 
@@ -80,6 +80,6 @@ public class SettingsPresenter {
     }
 
     private Distance.Unit getDistanceUnit() {
-        return sharedPref.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        return sharedPref.getDistanceUnit();
     }
 }

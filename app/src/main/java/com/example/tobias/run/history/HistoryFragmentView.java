@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
 import com.example.tobias.run.data.Run;
+import com.example.tobias.run.data.RunFilter;
 import com.example.tobias.run.editor.EditorActivityView;
 import com.example.tobias.run.history.adapter.HistoryRecyclerViewAdapter;
 import com.example.tobias.run.utils.VerticalDividerItemDecoration;
@@ -239,8 +240,9 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
      * @return current state of filter spinner
      */
     @Override
-    public String getDataFilter() {
-        return dateSpinner.getItems().get(dateSpinner.getSelectedIndex()).toString();
+    public RunFilter getDataFilter() {
+        String value = dateSpinner.getItems().get(dateSpinner.getSelectedIndex()).toString();
+        return RunFilter.get(value);
     }
 
     @Override

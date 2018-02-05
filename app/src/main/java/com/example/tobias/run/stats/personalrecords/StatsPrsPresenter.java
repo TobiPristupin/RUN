@@ -212,7 +212,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
     }
 
     private Distance.Unit getDistanceUnit(){
-        return sharedPref.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY);
+        return sharedPref.getDistanceUnit();
     }
 
 }

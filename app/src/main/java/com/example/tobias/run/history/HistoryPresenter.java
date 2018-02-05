@@ -2,6 +2,7 @@ package com.example.tobias.run.history;
 
 import com.example.tobias.run.data.ObservableDatabase;
 import com.example.tobias.run.data.Run;
+import com.example.tobias.run.data.RunFilter;
 import com.example.tobias.run.data.RunPredicates;
 import com.example.tobias.run.interfaces.Observer;
 import com.example.tobias.run.utils.DateUtils;
@@ -59,26 +60,26 @@ public class HistoryPresenter implements Observer<List<Run>>{
      * Then finishes action mode in view and shows the view's empty view if needed.
      */
     public void updateViewData(){
-        String filter = view.getDataFilter();
+        RunFilter filter = view.getDataFilter();
         displayedRunsList.clear();
 
         switch (filter){
-            case "Week" :
+            case WEEK:
                 List<Run> weekRuns = RunUtils.filterList(allRunsList,
                         RunPredicates.isRunBetween(DateUtils.getStartOfWeek(), DateUtils.getEndOfWeek()));
                 displayedRunsList.addAll(weekRuns);
                 break;
-            case "Month" :
+            case MONTH:
                 List<Run> monthRuns = RunUtils.filterList(allRunsList,
                         RunPredicates.isRunBetween(DateUtils.getStartOfMonth(), DateUtils.getEndOfMonth()));
                 displayedRunsList.addAll(monthRuns);
                 break;
-            case "Year" :
+            case YEAR:
                 List<Run> yearRuns = RunUtils.filterList(allRunsList,
                         RunPredicates.isRunBetween(DateUtils.getStartOfYear(), DateUtils.getEndOfYear()));
                 displayedRunsList.addAll(yearRuns);
                 break;
-            case "All" :
+            case ALL:
                 displayedRunsList.addAll(allRunsList);
         }
 

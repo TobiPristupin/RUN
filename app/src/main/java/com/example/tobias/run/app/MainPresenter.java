@@ -3,14 +3,13 @@ package com.example.tobias.run.app;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.example.tobias.run.data.Distance;
 import com.example.tobias.run.data.FirebaseDatabaseManager;
+import com.example.tobias.run.data.RunFilter;
 import com.example.tobias.run.data.SharedPreferenceRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-/**
- * Created by Tobi on 10/21/2017.
- */
 
 public class MainPresenter {
 
@@ -70,9 +69,13 @@ public class MainPresenter {
      * sets it to default value (mi)
      */
     public void initSharedPreferences(){
-        //Distance unit hasn't been initialized, user reset app or first time using
-        if (preferenceRepository.get(SharedPreferenceRepository.DISTANCE_UNIT_KEY) == null){
-            preferenceRepository.set(SharedPreferenceRepository.DISTANCE_UNIT_KEY, "km");
+        //If values haven't been set, add default values
+        if (preferenceRepository.getDistanceUnit() == null) {
+            preferenceRepository.setDistanceUnit(Distance.Unit.KM);
+        }
+
+        if (preferenceRepository.getRunFilter() == null) {
+            preferenceRepository.setRunFilter(RunFilter.MONTH);
         }
     }
 
