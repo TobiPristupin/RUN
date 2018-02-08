@@ -1,7 +1,7 @@
 package com.example.tobias.run;
 
-import com.example.tobias.run.data.Run;
 import com.example.tobias.run.data.RunPredicates;
+import com.example.tobias.run.data.model.Run;
 
 import org.junit.Assert;
 import org.junit.Test;

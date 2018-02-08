@@ -2,8 +2,13 @@ package com.example.tobias.run.data;
 
 
 public enum RunFilter {
-    WEEK, MONTH, YEAR, ALL;
+    WEEK("Week"), MONTH("Month"), YEAR("Year"), ALL("All");
 
+    private String value;
+
+    RunFilter(String value) {
+        this.value = value;
+    }
 
     public static RunFilter get(String value) {
         switch (value.toLowerCase()) {
@@ -18,5 +23,11 @@ public enum RunFilter {
             default:
                 throw new RuntimeException();
         }
+    }
+
+
+    @Override
+    public String toString() {
+        return value;
     }
 }

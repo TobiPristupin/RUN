@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/LightGrey"
     android:orientation="vertical"
-    tools:context="com.example.tobias.run.editor.EditorActivityView">
+    tools:context=".ui.editor.EditorActivityView">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/editor_toolbar"

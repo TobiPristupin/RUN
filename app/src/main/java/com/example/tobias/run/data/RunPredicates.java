@@ -1,5 +1,7 @@
 package com.example.tobias.run.data;
 
+import com.example.tobias.run.data.model.Run;
+
 import org.apache.commons.collections.Predicate;
 import org.joda.time.DateTime;
 

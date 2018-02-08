@@ -1,10 +1,10 @@
 package com.example.tobias.run.auth;
 
-import android.nfc.Tag;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.example.tobias.run.interfaces.AuthCallbacks;
+import com.example.tobias.run.auth.interfaces.AuthCallbacks;
+import com.example.tobias.run.auth.interfaces.AuthManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -15,11 +15,10 @@ import com.google.firebase.auth.FirebaseAuth;
  * Created by Tobi on 10/22/2017.
  */
 
-public class FirebaseAuthManager implements AuthManager  {
+public class FirebaseAuthManager implements AuthManager {
 
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     public static final String TAG = "FirebaseAuthManager";
-
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     @Override
     public void logInWithEmailAndPassword(String email, String password, final AuthCallbacks.LoginCallback callback) {

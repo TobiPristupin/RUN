@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_bg_middle"
-    tools:context="com.example.tobias.run.login.LoginActivity">
+    tools:context=".ui.login.LoginActivity">
 
     <TextView
         android:id="@+id/login_logo"
@@ -29,6 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="48dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:background="@android:color/transparent"
         android:text="Forgot password?"
@@ -36,8 +37,7 @@
         android:textColor="@android:color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="16dp" />
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
         android:id="@+id/login_newaccount"
@@ -45,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="48dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:background="@android:color/transparent"
         android:text="@string/new_account"
         android:textAllCaps="false"
@@ -53,8 +54,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintBottom_creator="1"
-        tools:layout_constraintRight_creator="1"
-        android:layout_marginRight="16dp" />
+        tools:layout_constraintRight_creator="1" />
 
     <view
         android:id="@+id/login_button"
@@ -87,12 +87,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:textColorHint="@color/iron"
+        android:theme="@style/EditTextTheme"
         app:errorTextAppearance="@style/TextInputLayoutError"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_logo"
-        android:theme="@style/EditTextTheme"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1">
@@ -100,10 +100,10 @@
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusedByDefault="true"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:textColor="@android:color/white"
-            android:focusedByDefault="true"/>
+            android:textColor="@android:color/white" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -117,12 +117,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:textColorHint="@color/iron"
+        android:theme="@style/EditTextTheme"
         app:errorTextAppearance="@style/TextInputLayoutError"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_email"
         app:passwordToggleTint="@android:color/white"
-        android:theme="@style/EditTextTheme"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1">
@@ -146,10 +146,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:elevation="5dp"
+        app:buttonSize="icon_only"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_button"
-        app:buttonSize="icon_only"/>
+        app:layout_constraintTop_toBottomOf="@+id/login_button" />
 
 
 </android.support.constraint.ConstraintLayout>

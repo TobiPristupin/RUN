@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".app.MainActivityView"
+            android:name=".ui.main.MainActivityView"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,19 +22,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".editor.EditorActivityView"
-            android:parentActivityName=".app.MainActivityView"
+            android:name=".ui.editor.EditorActivityView"
+            android:parentActivityName=".ui.main.MainActivityView"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".settings.SettingsActivityView"
-            android:parentActivityName=".app.MainActivityView" />
+            android:name=".ui.settings.SettingsActivityView"
+            android:parentActivityName=".ui.main.MainActivityView" />
         <activity
-            android:name=".login.LoginActivity"
+            android:name=".ui.login.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/LoginTheme" />
         <activity
-            android:name=".settings.libraries.LibraryActivityView"
-            android:parentActivityName=".settings.SettingsActivityView" />
+            android:name=".ui.settings.libraries.LibraryItemsActivityView"
+            android:parentActivityName=".ui.settings.SettingsActivityView" />
     </application>
 
 </manifest>
