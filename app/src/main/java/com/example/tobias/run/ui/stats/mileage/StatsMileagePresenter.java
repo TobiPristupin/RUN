@@ -1,10 +1,10 @@
 package com.example.tobias.run.ui.stats.mileage;
 
 import com.example.tobias.run.data.RunPredicates;
-import com.example.tobias.run.data.interfaces.ObservableDatabase;
 import com.example.tobias.run.data.interfaces.SharedPreferenceRepository;
 import com.example.tobias.run.data.model.Distance;
 import com.example.tobias.run.data.model.Run;
+import com.example.tobias.run.interfaces.Observable;
 import com.example.tobias.run.interfaces.Observer;
 import com.example.tobias.run.utils.DateUtils;
 import com.example.tobias.run.utils.RunUtils;
@@ -25,16 +25,16 @@ import java.util.Locale;
 public class StatsMileagePresenter implements Observer<List<Run>> {
 
     private StatsMileageView view;
-    private ObservableDatabase model;
+    private Observable observable;
     private SharedPreferenceRepository sharedPrefRepository;
     private List<Run> runList = new ArrayList<>();
 
-    public StatsMileagePresenter(StatsMileageView view, ObservableDatabase<Run> model, SharedPreferenceRepository sharedPrefRepository) {
+    public StatsMileagePresenter(StatsMileageView view, Observable observable, SharedPreferenceRepository sharedPrefRepository) {
         this.view = view;
-        this.model = model;
+        this.observable = observable;
         this.sharedPrefRepository = sharedPrefRepository;
 
-        this.model.attachObserver(this);
+        this.observable.attachObserver(this);
 
         updateChartXLabels();
     }
@@ -52,7 +52,7 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
     }
 
     public void onDetachView(){
-        model.detachObserver(this);
+        observable.detachObserver(this);
     }
 
     private void updateChartXLabels(){

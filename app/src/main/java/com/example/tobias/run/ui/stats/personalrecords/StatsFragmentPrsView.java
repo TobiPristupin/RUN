@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.data.manager.FirebaseDatabaseManager;
+import com.example.tobias.run.data.manager.FirebaseDataSingleton;
 import com.example.tobias.run.data.manager.SharedPreferenceManager;
 import com.example.tobias.run.utils.TimeValueFormatter;
 import com.github.mikephil.charting.charts.CombinedChart;
@@ -61,7 +61,7 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
         initTabLayout();
         initPersonalBests();
 
-        presenter = new StatsPrsPresenter(this, FirebaseDatabaseManager.getInstance(),
+        presenter = new StatsPrsPresenter(this, FirebaseDataSingleton.getInstance(),
                 new SharedPreferenceManager(getContext()));
         return rootView;
     }

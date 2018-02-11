@@ -2,8 +2,8 @@ package com.example.tobias.run.data.manager;
 
 import android.util.Log;
 
-import com.example.tobias.run.data.interfaces.ObservableDatabase;
 import com.example.tobias.run.data.model.Run;
+import com.example.tobias.run.interfaces.Observable;
 import com.example.tobias.run.interfaces.Observer;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,23 +17,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class FirebaseDatabaseManager implements ObservableDatabase<Run> {
+public class FirebaseDataSingleton implements Observable {
 
-    private static final String TAG = "FirebaseDatabaseManager";
-    private static FirebaseDatabaseManager instance = new FirebaseDatabaseManager();
-    private final FirebaseDatabase firebaseDatabase;
-    private final FirebaseAuth firebaseAuth;
-    private final FirebaseUser user;
-    private final DatabaseReference databaseRef;
+    private static final String TAG = "FirebaseDataSingleton";
+    private static FirebaseDataSingleton instance = new FirebaseDataSingleton();
     private List<Observer<List<Run>>> observerList = new ArrayList<>();
     private List<Run> cachedRuns = new ArrayList<>();
 
-    private FirebaseDatabaseManager(){
+    private FirebaseDataSingleton() {
         //Private Singleton constructor
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        user = firebaseAuth.getCurrentUser();
-        databaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/");
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        DatabaseReference databaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/");
 
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -54,13 +50,13 @@ public class FirebaseDatabaseManager implements ObservableDatabase<Run> {
         });
     }
 
-    public static FirebaseDatabaseManager getInstance() {
+    public static FirebaseDataSingleton getInstance() {
         return instance;
     }
 
    public void reset(){
         clearCache();
-        instance = new FirebaseDatabaseManager();
+       instance = new FirebaseDataSingleton();
    }
 
    private void clearCache(){
@@ -88,25 +84,8 @@ public class FirebaseDatabaseManager implements ObservableDatabase<Run> {
     @Override
     public void notifyUpdateObservers() {
         for (Observer<List<Run>> observer : observerList){
-            //Return an immutable defensive copy of cached runs, to avoid client modifying list
+            //Return an immutable defensive copy of cached runs, to avoid client modifying reference to list
             observer.updateData(Collections.unmodifiableList(cachedRuns));
         }
-    }
-
-    @Override
-    public void add(Run data) {
-        DatabaseReference ref = databaseRef.push();
-        data.setId(ref.getKey());
-        ref.setValue(data);
-    }
-
-    @Override
-    public void remove(Run data) {
-        databaseRef.child(data.getId()).removeValue();
-    }
-
-    @Override
-    public void update(Run data) {
-        databaseRef.child(data.getId()).setValue(data);
     }
 }

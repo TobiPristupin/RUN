@@ -24,8 +24,8 @@ import android.widget.RelativeLayout;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.RunFilter;
-import com.example.tobias.run.data.manager.FirebaseDatabaseManager;
-import com.example.tobias.run.data.manager.SharedPreferenceManager;
+import com.example.tobias.run.data.manager.FirebaseDataSingleton;
+import com.example.tobias.run.data.manager.FirebaseRepository;
 import com.example.tobias.run.data.model.Run;
 import com.example.tobias.run.ui.editor.EditorActivityView;
 import com.example.tobias.run.ui.history.adapter.HistoryRecyclerViewAdapter;
@@ -77,7 +77,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
         initFab();
         initNavigationDrawer();
 
-        presenter = new HistoryPresenter(this, FirebaseDatabaseManager.getInstance(), new SharedPreferenceManager(getContext()));
+        presenter = new HistoryPresenter(this, FirebaseDataSingleton.getInstance(), new FirebaseRepository());
 
         return rootView;
     }

@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.interfaces.SharedPreferenceRepository;
-import com.example.tobias.run.data.manager.FirebaseDatabaseManager;
+import com.example.tobias.run.data.manager.FirebaseRepository;
 import com.example.tobias.run.data.manager.SharedPreferenceManager;
 import com.example.tobias.run.data.model.Run;
 import com.example.tobias.run.ui.editor.dialog.DistanceDialog;
@@ -51,7 +51,7 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
         initToolbar();
 
         SharedPreferenceRepository preferenceRepository = new SharedPreferenceManager(EditorActivityView.this);
-        presenter = new EditorPresenter(this, preferenceRepository, FirebaseDatabaseManager.getInstance());
+        presenter = new EditorPresenter(this, preferenceRepository, new FirebaseRepository());
         preferenceManager = new SharedPreferenceManager(EditorActivityView.this);
 
         Intent intent = getIntent();
@@ -88,6 +88,51 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
     }
 
     @Override
+    public String getDistanceText() {
+        return ((TextView) findViewById(R.id.editor_distance_text)).getText().toString();
+    }
+
+    @Override
+    public void setDistanceText(String text) {
+        ((TextView) findViewById(R.id.editor_distance_text)).setText(text);
+    }
+
+    @Override
+    public String getDateText() {
+        return ((TextView) findViewById(R.id.editor_date_text)).getText().toString();
+    }
+
+    @Override
+    public void setDateText(String text) {
+        ((TextView) findViewById(R.id.editor_date_text)).setText(text);
+    }
+
+    @Override
+    public String getTimeText() {
+        return ((TextView) findViewById(R.id.editor_time_text)).getText().toString();
+    }
+
+    @Override
+    public void setTimeText(String text) {
+        ((TextView) findViewById(R.id.editor_time_text)).setText(text);
+    }
+
+    @Override
+    public String getRatingText() {
+        return ((TextView) findViewById(R.id.editor_rating_text)).getText().toString();
+    }
+
+    @Override
+    public void setRatingText(String text) {
+        ((TextView) findViewById(R.id.editor_rating_text)).setText(text);
+    }
+
+    @Override
+    public void setSupportActionBarTitle(String text) {
+        getSupportActionBar().setTitle(text);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.editor_toolbar_menu, menu);
         return true;
@@ -107,6 +152,7 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
         return true;
 
     }
+
     @Override
     @SuppressWarnings("deprecation")
     /**
@@ -130,6 +176,7 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
         }
         return null;
     }
+
     public void initToolbar() {
         Toolbar toolbar = findViewById(R.id.editor_toolbar);
         setSupportActionBar(toolbar);
@@ -150,11 +197,6 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
         }
-    }
-
-    @Override
-    public void setDistanceText(String text) {
-        ((TextView) findViewById(R.id.editor_distance_text)).setText(text);
     }
 
     private void initDateField() {
@@ -222,11 +264,6 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
         });
     }
 
-    @Override
-    public void setDateText(String text) {
-        ((TextView) findViewById(R.id.editor_date_text)).setText(text);
-    }
-
     private void animateViewsEntrance() {
         LinearLayout linearLayout = findViewById(R.id.content_main);
         for (int i = 0; i < linearLayout.getChildCount(); i++) {
@@ -236,48 +273,6 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
                     .alpha(1.0f);
 
         }
-    }
-
-
-    @Override
-    public void setTimeText(String text) {
-        ((TextView) findViewById(R.id.editor_time_text)).setText(text);
-    }
-
-
-    @Override
-    public void setRatingText(String text) {
-        ((TextView) findViewById(R.id.editor_rating_text)).setText(text);
-    }
-
-
-    @Override
-    public void setSupportActionBarTitle(String text) {
-        getSupportActionBar().setTitle(text);
-    }
-
-
-    @Override
-    public String getDistanceText() {
-        return ((TextView) findViewById(R.id.editor_distance_text)).getText().toString();
-    }
-
-
-    @Override
-    public String getDateText() {
-        return ((TextView) findViewById(R.id.editor_date_text)).getText().toString();
-    }
-
-
-    @Override
-    public String getTimeText() {
-        return ((TextView) findViewById(R.id.editor_time_text)).getText().toString();
-    }
-
-
-    @Override
-    public String getRatingText() {
-        return ((TextView) findViewById(R.id.editor_rating_text)).getText().toString();
     }
 
 

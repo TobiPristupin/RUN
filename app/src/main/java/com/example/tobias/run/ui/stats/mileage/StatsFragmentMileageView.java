@@ -13,7 +13,7 @@ import android.widget.ViewAnimator;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.interfaces.SharedPreferenceRepository;
-import com.example.tobias.run.data.manager.FirebaseDatabaseManager;
+import com.example.tobias.run.data.manager.FirebaseDataSingleton;
 import com.example.tobias.run.data.manager.SharedPreferenceManager;
 import com.example.tobias.run.data.model.Distance;
 import com.example.tobias.run.utils.GenericAxisValueFormatter;
@@ -73,7 +73,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
         initTabLayout();
 
 
-        presenter = new StatsMileagePresenter(this, FirebaseDatabaseManager.getInstance(), sharedPrefRepository);
+        presenter = new StatsMileagePresenter(this, FirebaseDataSingleton.getInstance(), sharedPrefRepository);
 
 
         return rootView;

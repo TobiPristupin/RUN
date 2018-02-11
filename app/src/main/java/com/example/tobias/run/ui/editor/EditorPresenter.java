@@ -2,7 +2,7 @@ package com.example.tobias.run.ui.editor;
 
 import android.support.annotation.Nullable;
 
-import com.example.tobias.run.data.interfaces.ObservableDatabase;
+import com.example.tobias.run.data.interfaces.Repository;
 import com.example.tobias.run.data.interfaces.SharedPreferenceRepository;
 import com.example.tobias.run.data.model.Distance;
 import com.example.tobias.run.data.model.Run;
@@ -24,12 +24,12 @@ public class EditorPresenter {
     private Run runToEdit;
     private boolean editMode;
     private SharedPreferenceRepository preferenceRepository;
-    private ObservableDatabase<Run> model;
+    private Repository repository;
 
-    public EditorPresenter(EditorView view, SharedPreferenceRepository preferenceRepository, ObservableDatabase<Run> model) {
+    public EditorPresenter(EditorView view, SharedPreferenceRepository preferenceRepository, Repository model) {
         this.view = view;
         this.preferenceRepository = preferenceRepository;
-        this.model = model;
+        this.repository = model;
     }
 
     /**
@@ -145,9 +145,9 @@ public class EditorPresenter {
 
     private void addRunToDatabase(Run run){
         if (editMode){
-            model.update(run);
+            repository.updateRun(run);
         } else {
-            model.add(run);
+            repository.addRun(run);
         }
     }
 

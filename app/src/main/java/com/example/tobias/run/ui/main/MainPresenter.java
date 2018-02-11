@@ -1,10 +1,9 @@
 package com.example.tobias.run.ui.main;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.example.tobias.run.data.interfaces.SharedPreferenceRepository;
-import com.example.tobias.run.data.manager.FirebaseDatabaseManager;
+import com.example.tobias.run.data.manager.FirebaseDataSingleton;
 import com.example.tobias.run.data.model.Distance;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,7 +38,7 @@ public class MainPresenter {
             view.loadLogIn();
         } else {
             view.initViews();
-            FirebaseDatabaseManager.getInstance().reset();
+            FirebaseDataSingleton.getInstance().reset();
         }
     }
 
@@ -92,10 +91,6 @@ public class MainPresenter {
 
     public String getUserEmail(){
         return user.getEmail();
-    }
-
-    public Uri getUserPhotoUrl(){
-        return user.getPhotoUrl();
     }
 
 }

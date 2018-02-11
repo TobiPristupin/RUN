@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ViewAnimator;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.data.manager.FirebaseDatabaseManager;
+import com.example.tobias.run.data.manager.FirebaseDataSingleton;
 import com.example.tobias.run.utils.GenericAxisValueFormatter;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
@@ -69,7 +69,7 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
         initTabLayout();
         initPieChart();
 
-        presenter = new StatsActivitiesPresenter(this, FirebaseDatabaseManager.getInstance());
+        presenter = new StatsActivitiesPresenter(this, FirebaseDataSingleton.getInstance());
 
         return rootView;
     }

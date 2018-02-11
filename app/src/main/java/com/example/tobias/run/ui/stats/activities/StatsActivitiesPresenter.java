@@ -1,8 +1,8 @@
 package com.example.tobias.run.ui.stats.activities;
 
 import com.example.tobias.run.data.RunPredicates;
-import com.example.tobias.run.data.interfaces.ObservableDatabase;
 import com.example.tobias.run.data.model.Run;
+import com.example.tobias.run.interfaces.Observable;
 import com.example.tobias.run.interfaces.Observer;
 import com.example.tobias.run.utils.DateUtils;
 import com.example.tobias.run.utils.RunUtils;
@@ -22,20 +22,20 @@ import java.util.Locale;
 public class StatsActivitiesPresenter implements Observer<List<Run>> {
 
     private StatsActivitiesView view;
-    private ObservableDatabase<Run> model;
+    private Observable observable;
     private List<Run> runList = new ArrayList<>();
 
-    public StatsActivitiesPresenter(StatsActivitiesView view, ObservableDatabase<Run> model) {
+    public StatsActivitiesPresenter(StatsActivitiesView view, Observable observable) {
         this.view = view;
-        this.model = model;
+        this.observable = observable;
 
-        this.model.attachObserver(this);
+        this.observable.attachObserver(this);
 
         updateChartXLabels();
     }
 
     public void onDetachView(){
-        this.model.detachObserver(this);
+        this.observable.detachObserver(this);
     }
 
     @Override

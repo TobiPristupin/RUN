@@ -1,10 +1,10 @@
 package com.example.tobias.run.ui.stats.personalrecords;
 
 import com.example.tobias.run.data.RunPredicates;
-import com.example.tobias.run.data.interfaces.ObservableDatabase;
 import com.example.tobias.run.data.interfaces.SharedPreferenceRepository;
 import com.example.tobias.run.data.model.Distance;
 import com.example.tobias.run.data.model.Run;
+import com.example.tobias.run.interfaces.Observable;
 import com.example.tobias.run.interfaces.Observer;
 import com.example.tobias.run.utils.RunUtils;
 import com.github.mikephil.charting.data.Entry;
@@ -16,20 +16,20 @@ import java.util.List;
 public class StatsPrsPresenter implements Observer<List<Run>> {
 
     private StatsPrsView view;
-    private ObservableDatabase<Run> model;
+    private Observable observable;
     private SharedPreferenceRepository sharedPref;
     private List<Run> runList;
 
-    public StatsPrsPresenter(StatsPrsView view, ObservableDatabase<Run> model, SharedPreferenceRepository sharedPref) {
+    public StatsPrsPresenter(StatsPrsView view, Observable observable, SharedPreferenceRepository sharedPref) {
         this.view = view;
-        this.model = model;
+        this.observable = observable;
         this.sharedPref = sharedPref;
 
-        this.model.attachObserver(this);
+        this.observable.attachObserver(this);
     }
 
     public void onDetachView(){
-        model.detachObserver(this);
+        observable.detachObserver(this);
     }
 
     @Override

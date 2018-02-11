@@ -2,9 +2,9 @@ package com.example.tobias.run.ui.history;
 
 import com.example.tobias.run.data.RunFilter;
 import com.example.tobias.run.data.RunPredicates;
-import com.example.tobias.run.data.interfaces.ObservableDatabase;
-import com.example.tobias.run.data.interfaces.SharedPreferenceRepository;
+import com.example.tobias.run.data.interfaces.Repository;
 import com.example.tobias.run.data.model.Run;
+import com.example.tobias.run.interfaces.Observable;
 import com.example.tobias.run.interfaces.Observer;
 import com.example.tobias.run.utils.DateUtils;
 import com.example.tobias.run.utils.RunUtils;
@@ -22,19 +22,19 @@ public class HistoryPresenter implements Observer<List<Run>>{
     private HistoryView view;
     private List<Run> allRunsList = new ArrayList<>(); //Holds all runs
     private List<Run> displayedRunsList = new ArrayList<>(); //Holds all runs currently displayed in view
-    private ObservableDatabase<Run> model;
-    private SharedPreferenceRepository sharedPref;
+    private Observable observable;
+    private Repository repository;
 
-    public HistoryPresenter(HistoryView view, ObservableDatabase<Run> model, SharedPreferenceRepository sharedPref) {
+    public HistoryPresenter(HistoryView view, Observable model, Repository repository) {
         this.view = view;
-        this.model = model;
-        this.sharedPref = sharedPref;
+        this.observable = model;
+        this.repository = repository;
         model.attachObserver(this);
     }
 
     public void onDetachView(){
-        //Unsubscribe from model observers list
-        model.detachObserver(this);
+        //Unsubscribe from observable observers list
+        observable.detachObserver(this);
     }
 
     public void onStartView(){
@@ -42,7 +42,7 @@ public class HistoryPresenter implements Observer<List<Run>>{
     }
 
     /**
-     * Called from model to to update data
+     * Called from observable to to update data
      * @param data
      */
     @Override
@@ -124,7 +124,7 @@ public class HistoryPresenter implements Observer<List<Run>>{
 
     public void deleteRun(List<Integer> indexList){
         for (Integer index : indexList){
-            model.remove(displayedRunsList.get(index));
+            repository.deleteRun(displayedRunsList.get(index));
         }
     }
 
