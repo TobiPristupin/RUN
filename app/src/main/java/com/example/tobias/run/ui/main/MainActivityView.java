@@ -9,7 +9,9 @@ package com.example.tobias.run.ui.main;
  */
 
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -120,6 +122,31 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         }
     }
 
+    @Override
+    public void showAboutDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivityView.this);
+        builder.setTitle("About");
+        builder.setMessage(String.format(getResources().getString(R.string.about_dialog), BuildConfig.VERSION_NAME));
+        builder.show();
+    }
+
+    @Override
+    public void sendPlayStoreRatingIntent() {
+        Uri uri = Uri.parse("market://details?id=" + getPackageName());
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        //Flags required to maintain backstack when leaving to play store
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+
+        try {
+            startActivity(goToMarket);
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+        }
+    }
+
     public void openFragment(MenuItem menuItem){
         Fragment newFragment = null;
 
@@ -134,13 +161,15 @@ public class MainActivityView extends AppCompatActivity implements MainView {
                 startActivity(new Intent(MainActivityView.this, SettingsActivityView.class));
                 break;
             case R.id.navview_menu_about:
-                showAboutDialog();
+                presenter.onAboutClicked();
                 break;
             case R.id.navview_menu_libs:
                 Intent intent = new Intent(MainActivityView.this, LibraryItemsActivityView.class);
                 intent.putExtra(LibraryItemsActivityView.callingActivityKey, MainActivityView.class.toString());
                 startActivity(intent);
                 break;
+            case R.id.navview_menu_rate_us:
+                presenter.onRateUsClicked();
         }
 
         if (newFragment != null){
@@ -176,14 +205,5 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_menu);
     }
-
-    private void showAboutDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivityView.this);
-        builder.setTitle("About");
-        builder.setMessage(String.format(getResources().getString(R.string.about_dialog), BuildConfig.VERSION_NAME));
-        builder.show();
-    }
-
-
 }
 

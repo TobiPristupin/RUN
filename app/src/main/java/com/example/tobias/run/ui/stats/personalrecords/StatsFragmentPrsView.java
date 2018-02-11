@@ -236,6 +236,7 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
         scatterDataSet.setScatterShapeSize(25);
         scatterDataSet.setValueFormatter(new TimeValueFormatter());
         scatterDataSet.setDrawValues(true);
+        scatterDataSet.setValueTextSize(11);
         scatterDataSet.setColor(getResources().getColor(R.color.Orange));
         scData.addDataSet(scatterDataSet);
 

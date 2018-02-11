@@ -156,12 +156,8 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         for (int i = 1; i < runs.size(); i++){
             Run r = runs.get(i);
 
-            /*Run has to be less than 50% slower than best run to be added to graph. Runs not
-            added to graph will still count in average data.*/
-            if (fastestRun.getTime() * 1.5 > r.getTime()){
-                scatterData.add(new Entry(counter, r.getTime()));
-                counter++;
-            }
+            scatterData.add(new Entry(counter, r.getTime()));
+            counter++;
         }
 
         return scatterData;

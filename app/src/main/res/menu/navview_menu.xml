@@ -30,6 +30,11 @@
                 android:icon="@drawable/ic_code_medium"
                 android:title="Open Source Libraries" />
 
+            <item
+                android:id="@+id/navview_menu_rate_us"
+                android:icon="@drawable/ic_heart"
+                android:title="Rate Us" />
+
         </menu>
     </item>
 </menu>

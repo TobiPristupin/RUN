@@ -6,5 +6,10 @@ package com.example.tobias.run.ui.main;
 
 public interface MainView {
     void loadLogIn();
+
     void initViews();
+
+    void showAboutDialog();
+
+    void sendPlayStoreRatingIntent();
 }

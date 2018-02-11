@@ -77,6 +77,15 @@ public class MainPresenter {
         }
     }
 
+    public void onAboutClicked() {
+        view.showAboutDialog();
+    }
+
+    public void onRateUsClicked() {
+        view.sendPlayStoreRatingIntent();
+    }
+
+
     public String getUserDisplayName(){
         return user.getDisplayName();
     }
