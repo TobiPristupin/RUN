@@ -12,9 +12,9 @@ import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.data.interfaces.SharedPreferenceRepository;
+import com.example.tobias.run.data.interfaces.Repository;
 import com.example.tobias.run.data.manager.FirebaseDataSingleton;
-import com.example.tobias.run.data.manager.SharedPreferenceManager;
+import com.example.tobias.run.data.manager.FirebaseRepository;
 import com.example.tobias.run.data.model.Distance;
 import com.example.tobias.run.utils.GenericAxisValueFormatter;
 import com.example.tobias.run.utils.StateChange;
@@ -52,14 +52,14 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     private TabLayout tabLayout;
 
     private StatsMileagePresenter presenter;
-    private SharedPreferenceRepository sharedPrefRepository;
+    private Repository repo;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_stats_mileage, container, false);
 
-        sharedPrefRepository = new SharedPreferenceManager(getContext());
+        repo = new FirebaseRepository();
 
         barChartWeek = styleBarChart(new BarChart(getContext()));
         barChartMonth = styleBarChart(new BarChart(getContext()));
@@ -73,7 +73,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
         initTabLayout();
 
 
-        presenter = new StatsMileagePresenter(this, FirebaseDataSingleton.getInstance(), sharedPrefRepository);
+        presenter = new StatsMileagePresenter(this, FirebaseDataSingleton.getInstance(), repo);
 
 
         return rootView;
@@ -131,7 +131,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     }
 
     private void initOverviewItems(){
-        Distance.Unit unit = sharedPrefRepository.getDistanceUnit();
+        Distance.Unit unit = repo.getDistanceUnit();
 
         View overviewItemMonth = rootView.findViewById(R.id.stats_mileage_overview_item_month);
         ((TextView) overviewItemMonth.findViewById(R.id.overview_item_value_text)).setText("This month");
@@ -326,7 +326,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     }
 
     private void setGraphData(List<BarEntry> barEntries, BarChart chart){
-        Distance.Unit unit = sharedPrefRepository.getDistanceUnit();
+        Distance.Unit unit = repo.getDistanceUnit();
         BarDataSet barDataSet = new BarDataSet(barEntries, "Distance (" + unit + ")");
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkPink));

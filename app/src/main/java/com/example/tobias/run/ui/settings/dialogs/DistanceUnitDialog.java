@@ -4,7 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import com.example.tobias.run.data.interfaces.SharedPreferenceRepository;
+import com.example.tobias.run.data.interfaces.Repository;
 import com.example.tobias.run.data.model.Distance;
 
 /**
@@ -13,11 +13,11 @@ import com.example.tobias.run.data.model.Distance;
 
 public class DistanceUnitDialog {
 
-    private SharedPreferenceRepository preferenceManager;
+    private Repository repo;
     private OnClickListener listener;
 
-    public DistanceUnitDialog(SharedPreferenceRepository preferenceManager, OnClickListener listener) {
-        this.preferenceManager = preferenceManager;
+    public DistanceUnitDialog(Repository repo, OnClickListener listener) {
+        this.repo = repo;
         this.listener = listener;
     }
 
@@ -26,7 +26,7 @@ public class DistanceUnitDialog {
 
         builder.setTitle("Distance Unit");
 
-        int checkedItem = preferenceManager.getDistanceUnit().equals(Distance.Unit.KM) ? 0 : 1;
+        int checkedItem = repo.getDistanceUnit().equals(Distance.Unit.KM) ? 0 : 1;
         CharSequence[] items = new String[]{"Metric (" + Distance.Unit.KM + ")", "Imperial (" + Distance.Unit.MILE + ")"};
         builder.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
             @Override

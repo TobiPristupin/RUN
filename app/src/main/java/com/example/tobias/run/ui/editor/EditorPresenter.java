@@ -3,7 +3,6 @@ package com.example.tobias.run.ui.editor;
 import android.support.annotation.Nullable;
 
 import com.example.tobias.run.data.interfaces.Repository;
-import com.example.tobias.run.data.interfaces.SharedPreferenceRepository;
 import com.example.tobias.run.data.model.Distance;
 import com.example.tobias.run.data.model.Run;
 import com.example.tobias.run.utils.RunUtils;
@@ -23,13 +22,11 @@ public class EditorPresenter {
     private EditorView view;
     private Run runToEdit;
     private boolean editMode;
-    private SharedPreferenceRepository preferenceRepository;
-    private Repository repository;
+    private Repository repo;
 
-    public EditorPresenter(EditorView view, SharedPreferenceRepository preferenceRepository, Repository model) {
+    public EditorPresenter(EditorView view, Repository repo) {
         this.view = view;
-        this.preferenceRepository = preferenceRepository;
-        this.repository = model;
+        this.repo = repo;
     }
 
     /**
@@ -47,7 +44,7 @@ public class EditorPresenter {
     }
 
     private void setViewEditMode(){
-        Distance.Unit unit = preferenceRepository.getDistanceUnit();
+        Distance.Unit unit = repo.getDistanceUnit();
 
         String distanceText = RunUtils.distanceToString(runToEdit.getDistance(unit), unit);
         view.setDistanceText(distanceText);
@@ -145,9 +142,9 @@ public class EditorPresenter {
 
     private void addRunToDatabase(Run run){
         if (editMode){
-            repository.updateRun(run);
+            repo.updateRun(run);
         } else {
-            repository.addRun(run);
+            repo.addRun(run);
         }
     }
 

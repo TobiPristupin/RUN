@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import com.example.tobias.run.BuildConfig;
 import com.example.tobias.run.R;
-import com.example.tobias.run.data.interfaces.SharedPreferenceRepository;
-import com.example.tobias.run.data.manager.SharedPreferenceManager;
+import com.example.tobias.run.data.interfaces.Repository;
+import com.example.tobias.run.data.manager.FirebaseRepository;
 import com.example.tobias.run.ui.login.LoginActivity;
 import com.example.tobias.run.ui.settings.dialogs.DistanceUnitDialog;
 import com.example.tobias.run.ui.settings.libraries.LibraryItemsActivityView;
@@ -27,16 +27,17 @@ import es.dmoral.toasty.Toasty;
 
 public class SettingsActivityView extends AppCompatActivity implements SettingsView {
 
-    private SharedPreferenceRepository sharedPref;
     private SettingsPresenter presenter;
+    private Repository repo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        sharedPref = new SharedPreferenceManager(SettingsActivityView.this);
-        presenter = new SettingsPresenter(this, sharedPref);
+        repo = new FirebaseRepository();
+
+        presenter = new SettingsPresenter(this, repo);
 
         initToolbar();
         initDistanceUnit();
@@ -124,7 +125,7 @@ public class SettingsActivityView extends AppCompatActivity implements SettingsV
 
     @Override
     public void showDistanceUnitDialog(DistanceUnitDialog.OnClickListener OnClickListener) {
-        new DistanceUnitDialog(sharedPref, OnClickListener).makeDialog(SettingsActivityView.this).show();
+        new DistanceUnitDialog(repo, OnClickListener).makeDialog(SettingsActivityView.this).show();
     }
 
     @Override

@@ -28,15 +28,12 @@ import android.widget.TextView;
 
 import com.example.tobias.run.BuildConfig;
 import com.example.tobias.run.R;
-import com.example.tobias.run.data.interfaces.SharedPreferenceRepository;
-import com.example.tobias.run.data.manager.SharedPreferenceManager;
+import com.example.tobias.run.data.manager.FirebaseRepository;
 import com.example.tobias.run.ui.history.HistoryFragmentView;
 import com.example.tobias.run.ui.login.LoginActivity;
 import com.example.tobias.run.ui.settings.SettingsActivityView;
 import com.example.tobias.run.ui.settings.libraries.LibraryItemsActivityView;
 import com.example.tobias.run.ui.stats.StatsFragmentView;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -54,14 +51,13 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferenceRepository preferenceRepository = new SharedPreferenceManager(MainActivityView.this);
-        presenter = new MainPresenter(this, preferenceRepository);
+        presenter = new MainPresenter(this, new FirebaseRepository());
 
         drawerLayout = findViewById(R.id.main_activity_drawer_layout);
         navigationView = findViewById(R.id.main_navigation_view);
         this.savedInstanceState = savedInstanceState;
 
-        presenter.initSharedPreferences();
+        presenter.initUserSettings();
 
         presenter.onCreateView();
     }
@@ -93,14 +89,8 @@ public class MainActivityView extends AppCompatActivity implements MainView {
 
     private @Nullable
     Uri getProfilePicture() {
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(MainActivityView.this);
-        Uri profilePicture = null;
-
-        if (account != null) {
-            profilePicture = account.getPhotoUrl();
-        }
-
-        return profilePicture;
+        //TODO
+        return null;
     }
 
     @Override

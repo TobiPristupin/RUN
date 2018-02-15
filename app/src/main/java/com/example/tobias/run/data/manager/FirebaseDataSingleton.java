@@ -2,6 +2,7 @@ package com.example.tobias.run.data.manager;
 
 import android.util.Log;
 
+import com.example.tobias.run.data.model.Distance;
 import com.example.tobias.run.data.model.Run;
 import com.example.tobias.run.interfaces.Observable;
 import com.example.tobias.run.interfaces.Observer;
@@ -20,18 +21,23 @@ import java.util.List;
 public class FirebaseDataSingleton implements Observable {
 
     private static final String TAG = "FirebaseDataSingleton";
+    private static final String DISTANCE_UNIT_KEY = "distance_unit";
+
     private static FirebaseDataSingleton instance = new FirebaseDataSingleton();
     private List<Observer<List<Run>>> observerList = new ArrayList<>();
+
     private List<Run> cachedRuns = new ArrayList<>();
+    private Distance.Unit distanceUnit;
 
     private FirebaseDataSingleton() {
-        //Private Singleton constructor
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        DatabaseReference databaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/");
 
-        databaseRef.addValueEventListener(new ValueEventListener() {
+        DatabaseReference runsDatabaseReferences = firebaseDatabase.getReference("users/" + user.getUid() + "/runs/");
+        DatabaseReference settingsDatabaseReferences = firebaseDatabase.getReference("users/" + user.getUid() + "/settings/");
+
+        runsDatabaseReferences.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 cachedRuns.clear();
@@ -48,13 +54,34 @@ public class FirebaseDataSingleton implements Observable {
             }
 
         });
+
+        settingsDatabaseReferences.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                switch (dataSnapshot.getKey()) {
+                    case DISTANCE_UNIT_KEY:
+                        distanceUnit = Distance.Unit.get((String) dataSnapshot.getValue());
+                        break;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "Query error " + databaseError.getMessage());
+            }
+        });
     }
 
     public static FirebaseDataSingleton getInstance() {
         return instance;
     }
 
-   public void reset(){
+    /**
+     * Resets cache and variables that contain references to database. This method has
+     * to be called every time the user is logged out. If it isn't called, variables with references to
+     * the previous user's data will remain active.
+     */
+    public void reset() {
         clearCache();
        instance = new FirebaseDataSingleton();
    }

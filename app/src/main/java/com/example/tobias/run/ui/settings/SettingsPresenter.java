@@ -2,7 +2,8 @@ package com.example.tobias.run.ui.settings;
 
 import android.content.DialogInterface;
 
-import com.example.tobias.run.data.interfaces.SharedPreferenceRepository;
+import com.example.tobias.run.data.interfaces.Repository;
+import com.example.tobias.run.data.manager.FirebaseDataSingleton;
 import com.example.tobias.run.data.model.Distance;
 import com.example.tobias.run.ui.settings.dialogs.DistanceUnitDialog;
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,11 +15,11 @@ import com.google.firebase.auth.FirebaseAuth;
 public class SettingsPresenter {
 
     private SettingsView view;
-    private SharedPreferenceRepository sharedPref;
+    private Repository repo;
 
-    public SettingsPresenter(SettingsView view, SharedPreferenceRepository sharedPref) {
+    public SettingsPresenter(SettingsView view, Repository repo) {
         this.view = view;
-        this.sharedPref = sharedPref;
+        this.repo = repo;
     }
 
     public void onCreateView() {
@@ -31,7 +32,7 @@ public class SettingsPresenter {
             @Override
             public void onOptionSelected(Distance.Unit unit) {
                 view.setDistanceUnitText(formatDistanceUnitText(unit));
-                sharedPref.setDistanceUnit(unit);
+                repo.setDistanceUnit(unit);
             }
         };
 
@@ -43,6 +44,7 @@ public class SettingsPresenter {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 FirebaseAuth.getInstance().signOut();
+                FirebaseDataSingleton.getInstance().reset();
                 view.loadLogIn();
                 dialog.dismiss();
             }
@@ -80,6 +82,6 @@ public class SettingsPresenter {
     }
 
     private Distance.Unit getDistanceUnit() {
-        return sharedPref.getDistanceUnit();
+        return repo.getDistanceUnit();
     }
 }

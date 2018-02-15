@@ -13,7 +13,7 @@ import android.widget.ViewAnimator;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.manager.FirebaseDataSingleton;
-import com.example.tobias.run.data.manager.SharedPreferenceManager;
+import com.example.tobias.run.data.manager.FirebaseRepository;
 import com.example.tobias.run.utils.TimeValueFormatter;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.ScatterChart;
@@ -62,7 +62,7 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
         initPersonalBests();
 
         presenter = new StatsPrsPresenter(this, FirebaseDataSingleton.getInstance(),
-                new SharedPreferenceManager(getContext()));
+                new FirebaseRepository());
         return rootView;
     }
 

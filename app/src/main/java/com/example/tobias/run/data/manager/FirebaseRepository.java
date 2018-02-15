@@ -13,32 +13,23 @@ public class FirebaseRepository implements Repository {
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseUser user = firebaseAuth.getCurrentUser();
-    private DatabaseReference databaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/");
+    private DatabaseReference runsDatabaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/runs/");
 
     @Override
     public void addRun(Run run) {
-        DatabaseReference ref = databaseRef.push();
+        DatabaseReference ref = runsDatabaseRef.push();
         run.setId(ref.getKey());
         ref.setValue(run);
     }
 
     @Override
     public void deleteRun(Run run) {
-        databaseRef.child(run.getId()).removeValue();
+        runsDatabaseRef.child(run.getId()).removeValue();
     }
 
     @Override
     public void updateRun(Run run) {
-        databaseRef.child(run.getId()).setValue(run);
+        runsDatabaseRef.child(run.getId()).setValue(run);
     }
 
-    @Override
-    public void setDistanceUnit(String value) {
-        databaseRef.child("distance_unit").setValue(value);
-    }
-
-    @Override
-    public String getDistanceUnit() {
-        return null;
-    }
 }

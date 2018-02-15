@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.DiffCallback;
-import com.example.tobias.run.data.interfaces.SharedPreferenceRepository;
-import com.example.tobias.run.data.manager.SharedPreferenceManager;
+import com.example.tobias.run.data.interfaces.Repository;
+import com.example.tobias.run.data.manager.FirebaseRepository;
 import com.example.tobias.run.data.model.Distance;
 import com.example.tobias.run.data.model.Run;
 import com.example.tobias.run.utils.RunUtils;
@@ -31,11 +31,12 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
     private ArrayList<Run> runs = new ArrayList<>();
     private Context context;
     private OnItemClicked clickListener;
-    private SharedPreferenceRepository preferenceManager;
+    private Repository repo;
+
     public HistoryRecyclerViewAdapter(Context context, OnItemClicked clickListener){
         this.context = context;
         this.clickListener = clickListener;
-        preferenceManager = new SharedPreferenceManager(context);
+        repo = new FirebaseRepository();
     }
 
     @Override
@@ -83,7 +84,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
     }
 
     private Distance.Unit getDistanceUnit(){
-        return preferenceManager.getDistanceUnit();
+        return repo.getDistanceUnit();
     }
 
     public interface OnItemClicked {

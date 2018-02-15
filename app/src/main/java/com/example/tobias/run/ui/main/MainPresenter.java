@@ -2,8 +2,7 @@ package com.example.tobias.run.ui.main;
 
 import android.support.annotation.NonNull;
 
-import com.example.tobias.run.data.interfaces.SharedPreferenceRepository;
-import com.example.tobias.run.data.manager.FirebaseDataSingleton;
+import com.example.tobias.run.data.interfaces.Repository;
 import com.example.tobias.run.data.model.Distance;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,12 +16,12 @@ public class MainPresenter {
     private MainView view;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener authListener;
+    private Repository repo;
     private FirebaseUser user;
-    private SharedPreferenceRepository preferenceRepository;
 
-    public MainPresenter(MainView view, SharedPreferenceRepository preferenceRepository){
+    public MainPresenter(MainView view, Repository repo) {
         this.view = view;
-        this.preferenceRepository = preferenceRepository;
+        this.repo = repo;
         user = firebaseAuth.getCurrentUser();
     }
 
@@ -38,7 +37,6 @@ public class MainPresenter {
             view.loadLogIn();
         } else {
             view.initViews();
-            FirebaseDataSingleton.getInstance().reset();
         }
     }
 
@@ -66,13 +64,13 @@ public class MainPresenter {
     }
 
     /**
-     * If shared preferences distance unit hasn't been initialized (user reset app or first time using it)
+     * If user settings distance unit hasn't been initialized (user reset app or first time using it)
      * sets it to default value (mi)
      */
-    public void initSharedPreferences(){
+    public void initUserSettings() {
         //If values haven't been set, add default values
-        if (preferenceRepository.getDistanceUnit() == null) {
-            preferenceRepository.setDistanceUnit(Distance.Unit.KM);
+        if (repo.getDistanceUnit() == null) {
+            repo.setDistanceUnit(Distance.Unit.MILE);
         }
     }
 

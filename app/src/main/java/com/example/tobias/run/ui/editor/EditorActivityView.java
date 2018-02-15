@@ -20,9 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.data.interfaces.SharedPreferenceRepository;
+import com.example.tobias.run.data.interfaces.Repository;
 import com.example.tobias.run.data.manager.FirebaseRepository;
-import com.example.tobias.run.data.manager.SharedPreferenceManager;
 import com.example.tobias.run.data.model.Run;
 import com.example.tobias.run.ui.editor.dialog.DistanceDialog;
 import com.example.tobias.run.ui.editor.dialog.RatingDialog;
@@ -40,7 +39,7 @@ import es.dmoral.toasty.Toasty;
 public class EditorActivityView extends AppCompatActivity implements EditorView {
 
     private final int DATE_DIALOG_ID = 999;
-    private SharedPreferenceRepository preferenceManager;
+    private Repository repo;
     private EditorPresenter presenter;
 
     @Override
@@ -50,9 +49,8 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
 
         initToolbar();
 
-        SharedPreferenceRepository preferenceRepository = new SharedPreferenceManager(EditorActivityView.this);
-        presenter = new EditorPresenter(this, preferenceRepository, new FirebaseRepository());
-        preferenceManager = new SharedPreferenceManager(EditorActivityView.this);
+        repo = new FirebaseRepository();
+        presenter = new EditorPresenter(this, repo);
 
         Intent intent = getIntent();
         Run run = intent.getParcelableExtra(getString(R.string.run_intent_key));
@@ -213,7 +211,7 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
     private void initDistanceField() {
         RelativeLayout field = findViewById(R.id.editor_distance_view);
 
-        final DistanceDialog dialog = new DistanceDialog(preferenceManager,
+        final DistanceDialog dialog = new DistanceDialog(repo,
                 new DistanceDialog.onPositiveButtonListener() {
                     @Override
                     public void onClick(String distanceValue) {
