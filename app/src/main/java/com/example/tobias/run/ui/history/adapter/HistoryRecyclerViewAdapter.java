@@ -15,6 +15,7 @@ import com.example.tobias.run.R;
 import com.example.tobias.run.data.DiffCallback;
 import com.example.tobias.run.data.interfaces.Repository;
 import com.example.tobias.run.data.manager.FirebaseRepository;
+import com.example.tobias.run.data.manager.FirebaseSettingsSingleton;
 import com.example.tobias.run.data.model.Distance;
 import com.example.tobias.run.data.model.Run;
 import com.example.tobias.run.utils.RunUtils;
@@ -31,12 +32,10 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
     private ArrayList<Run> runs = new ArrayList<>();
     private Context context;
     private OnItemClicked clickListener;
-    private Repository repo;
 
     public HistoryRecyclerViewAdapter(Context context, OnItemClicked clickListener){
         this.context = context;
         this.clickListener = clickListener;
-        repo = new FirebaseRepository();
     }
 
     @Override
@@ -84,7 +83,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
     }
 
     private Distance.Unit getDistanceUnit(){
-        return repo.getDistanceUnit();
+        return FirebaseSettingsSingleton.getInstance().getDistanceUnit();
     }
 
     public interface OnItemClicked {

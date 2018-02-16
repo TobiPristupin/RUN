@@ -211,7 +211,7 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
     private void initDistanceField() {
         RelativeLayout field = findViewById(R.id.editor_distance_view);
 
-        final DistanceDialog dialog = new DistanceDialog(repo,
+        final DistanceDialog dialog = new DistanceDialog(
                 new DistanceDialog.onPositiveButtonListener() {
                     @Override
                     public void onClick(String distanceValue) {

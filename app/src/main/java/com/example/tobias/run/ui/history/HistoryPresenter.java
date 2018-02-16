@@ -1,6 +1,6 @@
 package com.example.tobias.run.ui.history;
 
-import com.example.tobias.run.data.RunFilter;
+import com.example.tobias.run.data.model.RunFilter;
 import com.example.tobias.run.data.RunPredicates;
 import com.example.tobias.run.data.interfaces.Repository;
 import com.example.tobias.run.data.model.Run;

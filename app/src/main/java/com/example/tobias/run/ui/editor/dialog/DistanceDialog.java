@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.interfaces.Repository;
+import com.example.tobias.run.data.manager.FirebaseSettingsSingleton;
 
 /**
  * Dialog that allows user to set a distance value for a new tracked run. Sends data to parent Activity
@@ -24,11 +25,9 @@ public class DistanceDialog {
     private NumberPicker numberPickerWhole;
     private NumberPicker numberPickerDecimal;
     private onPositiveButtonListener listener;
-    private Repository repo;
 
-    public DistanceDialog(Repository repo, onPositiveButtonListener listener) {
+    public DistanceDialog(onPositiveButtonListener listener) {
         this.listener = listener;
-        this.repo = repo;
     }
 
     @SuppressLint("InflateParams")
@@ -80,7 +79,7 @@ public class DistanceDialog {
      */
     private void initUnitText(){
         TextView unitText = rootView.findViewById(R.id.distance_unit);
-        unitText.setText(repo.getDistanceUnit().toString());
+        unitText.setText(FirebaseSettingsSingleton.getInstance().getDistanceUnit().toString());
     }
 
     /**
@@ -90,7 +89,7 @@ public class DistanceDialog {
     private String formatValues(){
         String distance = null;
         distance = "" + numberPickerWhole.getValue() + "." + numberPickerDecimal.getValue() + " " +
-                repo.getDistanceUnit();
+                FirebaseSettingsSingleton.getInstance().getDistanceUnit();
         return distance;
     }
 

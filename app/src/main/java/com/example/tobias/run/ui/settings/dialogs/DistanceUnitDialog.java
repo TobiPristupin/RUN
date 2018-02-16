@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 
 import com.example.tobias.run.data.interfaces.Repository;
+import com.example.tobias.run.data.manager.FirebaseSettingsSingleton;
 import com.example.tobias.run.data.model.Distance;
 
 /**
@@ -13,11 +14,9 @@ import com.example.tobias.run.data.model.Distance;
 
 public class DistanceUnitDialog {
 
-    private Repository repo;
     private OnClickListener listener;
 
-    public DistanceUnitDialog(Repository repo, OnClickListener listener) {
-        this.repo = repo;
+    public DistanceUnitDialog(OnClickListener listener) {
         this.listener = listener;
     }
 
@@ -26,7 +25,9 @@ public class DistanceUnitDialog {
 
         builder.setTitle("Distance Unit");
 
-        int checkedItem = repo.getDistanceUnit().equals(Distance.Unit.KM) ? 0 : 1;
+        Distance.Unit distanceUnit = FirebaseSettingsSingleton.getInstance().getDistanceUnit();
+
+        int checkedItem = distanceUnit.equals(Distance.Unit.KM) ? 0 : 1;
         CharSequence[] items = new String[]{"Metric (" + Distance.Unit.KM + ")", "Imperial (" + Distance.Unit.MILE + ")"};
         builder.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
             @Override

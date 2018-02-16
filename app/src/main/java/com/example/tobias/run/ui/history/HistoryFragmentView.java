@@ -23,8 +23,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.example.tobias.run.R;
-import com.example.tobias.run.data.RunFilter;
-import com.example.tobias.run.data.manager.FirebaseDataSingleton;
+import com.example.tobias.run.data.model.RunFilter;
+import com.example.tobias.run.data.manager.FirebaseRunsSingleton;
 import com.example.tobias.run.data.manager.FirebaseRepository;
 import com.example.tobias.run.data.model.Run;
 import com.example.tobias.run.ui.editor.EditorActivityView;
@@ -77,7 +77,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
         initFab();
         initNavigationDrawer();
 
-        presenter = new HistoryPresenter(this, FirebaseDataSingleton.getInstance(), new FirebaseRepository());
+        presenter = new HistoryPresenter(this, FirebaseRunsSingleton.getInstance(), new FirebaseRepository());
 
         return rootView;
     }

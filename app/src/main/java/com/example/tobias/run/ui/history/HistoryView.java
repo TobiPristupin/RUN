@@ -2,7 +2,7 @@ package com.example.tobias.run.ui.history;
 
 import android.support.annotation.Nullable;
 
-import com.example.tobias.run.data.RunFilter;
+import com.example.tobias.run.data.model.RunFilter;
 import com.example.tobias.run.data.model.Run;
 
 import java.util.List;

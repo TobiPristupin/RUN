@@ -2,6 +2,7 @@ package com.example.tobias.run.data.manager;
 
 
 import com.example.tobias.run.data.interfaces.Repository;
+import com.example.tobias.run.data.model.Distance;
 import com.example.tobias.run.data.model.Run;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

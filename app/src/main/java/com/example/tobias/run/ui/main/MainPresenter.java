@@ -3,6 +3,8 @@ package com.example.tobias.run.ui.main;
 import android.support.annotation.NonNull;
 
 import com.example.tobias.run.data.interfaces.Repository;
+import com.example.tobias.run.data.manager.FirebaseRunsSingleton;
+import com.example.tobias.run.data.manager.FirebaseSettingsSingleton;
 import com.example.tobias.run.data.model.Distance;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,6 +39,9 @@ public class MainPresenter {
             view.loadLogIn();
         } else {
             view.initViews();
+            FirebaseRunsSingleton.getInstance().reset();
+            FirebaseSettingsSingleton.getInstance().reset();
+            FirebaseSettingsSingleton.getInstance().initializeSettings();
         }
     }
 
@@ -61,17 +66,6 @@ public class MainPresenter {
                 }
             }
         };
-    }
-
-    /**
-     * If user settings distance unit hasn't been initialized (user reset app or first time using it)
-     * sets it to default value (mi)
-     */
-    public void initUserSettings() {
-        //If values haven't been set, add default values
-        if (repo.getDistanceUnit() == null) {
-            repo.setDistanceUnit(Distance.Unit.MILE);
-        }
     }
 
     public void onAboutClicked() {

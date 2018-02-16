@@ -3,6 +3,7 @@ package com.example.tobias.run.ui.editor;
 import android.support.annotation.Nullable;
 
 import com.example.tobias.run.data.interfaces.Repository;
+import com.example.tobias.run.data.manager.FirebaseSettingsSingleton;
 import com.example.tobias.run.data.model.Distance;
 import com.example.tobias.run.data.model.Run;
 import com.example.tobias.run.utils.RunUtils;
@@ -44,7 +45,7 @@ public class EditorPresenter {
     }
 
     private void setViewEditMode(){
-        Distance.Unit unit = repo.getDistanceUnit();
+        Distance.Unit unit = FirebaseSettingsSingleton.getInstance().getDistanceUnit();
 
         String distanceText = RunUtils.distanceToString(runToEdit.getDistance(unit), unit);
         view.setDistanceText(distanceText);

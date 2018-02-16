@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 26
@@ -20,8 +21,8 @@ android {
         }
     }
 
-    dataBinding {
-        enabled = true
+    realm {
+        syncEnabled = true;
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

@@ -37,7 +37,7 @@ public class SettingsActivityView extends AppCompatActivity implements SettingsV
 
         repo = new FirebaseRepository();
 
-        presenter = new SettingsPresenter(this, repo);
+        presenter = new SettingsPresenter(this);
 
         initToolbar();
         initDistanceUnit();
@@ -125,7 +125,7 @@ public class SettingsActivityView extends AppCompatActivity implements SettingsV
 
     @Override
     public void showDistanceUnitDialog(DistanceUnitDialog.OnClickListener OnClickListener) {
-        new DistanceUnitDialog(repo, OnClickListener).makeDialog(SettingsActivityView.this).show();
+        new DistanceUnitDialog(OnClickListener).makeDialog(SettingsActivityView.this).show();
     }
 
     @Override

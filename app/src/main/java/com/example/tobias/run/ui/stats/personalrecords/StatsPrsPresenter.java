@@ -2,6 +2,7 @@ package com.example.tobias.run.ui.stats.personalrecords;
 
 import com.example.tobias.run.data.RunPredicates;
 import com.example.tobias.run.data.interfaces.Repository;
+import com.example.tobias.run.data.manager.FirebaseSettingsSingleton;
 import com.example.tobias.run.data.model.Distance;
 import com.example.tobias.run.data.model.Run;
 import com.example.tobias.run.interfaces.Observable;
@@ -17,13 +18,11 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
 
     private StatsPrsView view;
     private Observable observable;
-    private Repository repo;
     private List<Run> runList;
 
-    public StatsPrsPresenter(StatsPrsView view, Observable observable, Repository repo) {
+    public StatsPrsPresenter(StatsPrsView view, Observable observable) {
         this.view = view;
         this.observable = observable;
-        this.repo = repo;
 
         this.observable.attachObserver(this);
     }
@@ -208,7 +207,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
     }
 
     private Distance.Unit getDistanceUnit(){
-        return repo.getDistanceUnit();
+        return FirebaseSettingsSingleton.getInstance().getDistanceUnit();
     }
 
 }
