@@ -20,7 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 public class FirebaseSettingsSingleton implements SettingsManager {
 
     public static final String DISTANCE_UNIT_KEY = "distance_unit";
-    //Tag shortened because Log tag ha st be shorter than 24 chars.
+    //Tag shortened because Log tag has to be shorter than 24 chars.
     public static final String TAG = "FirebaseSettingsSnglton";
     private static FirebaseSettingsSingleton instance = new FirebaseSettingsSingleton();
     private Distance.Unit distanceUnit;

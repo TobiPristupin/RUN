@@ -72,6 +72,7 @@ public class LoginPresenter {
         if (result.isSuccess()){
             Log.d(TAG, "HandleGoogleSignInResult: Success");
             GoogleSignInAccount account = result.getSignInAccount();
+
             authenticateGoogleLogin(account);
         } else {
             Log.d(TAG, "HandleGoogleSignInResult: Failed. Status code " + result.getStatus().getStatusCode());

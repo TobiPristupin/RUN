@@ -34,6 +34,8 @@ import com.example.tobias.run.ui.login.LoginActivity;
 import com.example.tobias.run.ui.settings.SettingsActivityView;
 import com.example.tobias.run.ui.settings.libraries.LibraryItemsActivityView;
 import com.example.tobias.run.ui.stats.StatsFragmentView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserInfo;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -51,7 +53,7 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        presenter = new MainPresenter(this, new FirebaseRepository());
+        presenter = new MainPresenter(this);
 
         drawerLayout = findViewById(R.id.main_activity_drawer_layout);
         navigationView = findViewById(R.id.main_navigation_view);
@@ -80,15 +82,9 @@ public class MainActivityView extends AppCompatActivity implements MainView {
 
 
         Picasso.with(MainActivityView.this)
-                .load(getProfilePicture())
+                .load(presenter.getUserPhotoUrl())
                 .placeholder(android.R.color.darker_gray)
                 .into(profileImage);
-    }
-
-    private @Nullable
-    Uri getProfilePicture() {
-        //TODO
-        return null;
     }
 
     @Override
