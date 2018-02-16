@@ -155,7 +155,7 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
 
         chart.setDrawOrder(new CombinedChart.DrawOrder[]{CombinedChart.DrawOrder.SCATTER, CombinedChart.DrawOrder.LINE});
 
-        chart.setNoDataText("Oh Dear! It's empty! Start by adding some runs.");
+        chart.setNoDataText("Oh no! It's empty!");
         chart.setNoDataTextColor(getResources().getColor(android.R.color.black));
         chart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD);
 

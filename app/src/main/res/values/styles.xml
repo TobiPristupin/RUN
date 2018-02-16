@@ -35,6 +35,10 @@
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:fitsSystemWindows">true</item>
     </style>
+    
+    <style name="NavigationDrawerHighDensityStyle">
+        <item name="android:textSize">17sp</item>
+    </style>
 
 
 </resources>

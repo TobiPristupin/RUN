@@ -137,7 +137,7 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
 
         chart.setDrawGridBackground(false);
 
-        chart.setNoDataText("Oh Dear! It's empty! Start by adding some runs.");
+        chart.setNoDataText("Oh no! It's empty!");
         chart.setNoDataTextColor(getResources().getColor(android.R.color.black));
         chart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD);
 
@@ -154,6 +154,9 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
         pieChart.setEntryLabelTextSize(13);
         pieChart.setEntryLabelTypeface(Typeface.DEFAULT_BOLD);
         pieChart.getLegend().setEnabled(false);
+        pieChart.setNoDataText("Oh no! It's empty!");
+        pieChart.setNoDataTextColor(getResources().getColor(android.R.color.black));
+        pieChart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD);
     }
 
     @Override

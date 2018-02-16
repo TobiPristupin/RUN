@@ -18,7 +18,7 @@
             <item
                 android:id="@+id/navview_menu_settings"
                 android:icon="@drawable/ic_action_settings"
-                android:title="Settings"/>
+                android:title="Settings" />
 
             <item
                 android:id="@+id/navview_menu_about"
