@@ -3,11 +3,7 @@ package com.example.tobias.run.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.tobias.run.utils.Pair;
 import com.google.firebase.database.Exclude;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Tobi on 12/18/2017.
@@ -30,15 +26,9 @@ public class Distance implements Parcelable {
 
     private double distanceKm;
     private double distanceMi;
-    private double epsilon = 0.099;
-    /*Contains the most common distance equivalences known by runners,
-    * such as 5k = 3.1mi. This is done because of the inaccuracy when comparing double distance values due to
-    * round-off errors and loss of precision when converting km values to mi and vice versa. Storing these
-    * Common comparisons ensures that at least the most used ones will be correct.*/
-    private List<Pair<Double, Double>> distanceEquivalences = new ArrayList<>();
+    private double floatingPointEpsilon = 0.099;
 
     public Distance(double distance, Unit unit){
-
         if (unit == Unit.MILE){
             distanceMi = distance;
             distanceKm = mileToKm(distance);
@@ -76,11 +66,23 @@ public class Distance implements Parcelable {
      * @return
      */
     public boolean equalsDistance(double distanceKm, double distanceMi){
-        return Math.abs(this.distanceKm - distanceKm) <= epsilon || Math.abs(this.distanceMi - distanceMi) <= epsilon;
+        return Math.abs(this.distanceKm - distanceKm) <= floatingPointEpsilon || Math.abs(this.distanceMi - distanceMi) <= floatingPointEpsilon;
     }
 
     public double getDistanceKm() {
         return distanceKm;
+    }
+
+    public double getDistanceMi() {
+        return distanceMi;
+    }
+
+    public double getDistance(Unit unit){
+        if (unit == Unit.MILE){
+            return getDistanceMi();
+        }
+
+        return getDistanceKm();
     }
 
     @Deprecated
@@ -92,10 +94,6 @@ public class Distance implements Parcelable {
         this.distanceKm = distanceKm;
     }
 
-    public double getDistanceMi() {
-        return distanceMi;
-    }
-
     @Deprecated
     /**
      * Method should only be used by firebase, as it might leave the object in an invalid state.
@@ -103,14 +101,6 @@ public class Distance implements Parcelable {
      */
     public void setDistanceMi(double distanceMi) {
         this.distanceMi = distanceMi;
-    }
-
-    public double getDistance(Unit unit){
-        if (unit == Unit.MILE){
-            return getDistanceMi();
-        }
-
-        return getDistanceKm();
     }
 
     @Exclude

@@ -29,6 +29,7 @@ public class Run implements Parcelable, Comparable<Run> {
         }
 
     };
+
     private Distance distance;
     private long time;
     private long date;
@@ -67,7 +68,7 @@ public class Run implements Parcelable, Comparable<Run> {
         this.kilometrePace = in.readLong();
     }
 
-    public static Run withKilometers(double distanceKm, long time, long date, int rating){
+    public static Run fromKilometers(double distanceKm, long time, long date, int rating){
         if (distanceKm < 0){
             throw new IllegalArgumentException();
         }
@@ -76,15 +77,15 @@ public class Run implements Parcelable, Comparable<Run> {
         return new Run(distance, time, date, rating);
     }
 
-    public static Run withKilometers(String distanceKm, String time, String date, String rating){
+    public static Run fromKilometers(String distanceKm, String time, String date, String rating){
         long d = RunUtils.dateToUnix(date);
         double distance = RunUtils.distanceToDouble(distanceKm);
         long t = RunUtils.timeToUnix(time);
         int r = RunUtils.ratingToInt(rating);
-        return withKilometers(distance, t, d, r);
+        return fromKilometers(distance, t, d, r);
     }
 
-    public static Run withMiles(double distanceMi, long time, long date, int rating){
+    public static Run fromMiles(double distanceMi, long time, long date, int rating){
         if (distanceMi < 0){
             throw new IllegalArgumentException();
         }
@@ -93,13 +94,13 @@ public class Run implements Parcelable, Comparable<Run> {
         return new Run(distance, time, date, rating);
     }
 
-    public static Run withMiles(String distanceMi, String time, String date, String rating){
+    public static Run fromMiles(String distanceMi, String time, String date, String rating){
         long d = RunUtils.dateToUnix(date);
         double distance = RunUtils.distanceToDouble(distanceMi);
         long t = RunUtils.timeToUnix(time);
         int r = RunUtils.ratingToInt(rating);
 
-        return withMiles(distance, t, d, r);
+        return fromMiles(distance, t, d, r);
     }
 
     /**
@@ -114,16 +115,16 @@ public class Run implements Parcelable, Comparable<Run> {
 
     private long calculatePace(double distance, long time){
         //Period is inputted time in millis and converts it to hh:mm:ss
-        Period period = new Period(time);
-        double timeInSeconds = period.getHours() * 3600f + period.getMinutes() * 60f + period.getSeconds();
-        double pace = timeInSeconds / distance;
+        Period periodFromTime = new Period(time);
+        double timeInSeconds = periodFromTime.getHours() * 3600f + periodFromTime.getMinutes() * 60f + periodFromTime.getSeconds();
+        double paceInMilliseconds = timeInSeconds / distance;
         //Multiply pace by 1000 to convert it to millis from seconds.
-        return (long) pace * 1000;
+        return (long) paceInMilliseconds * 1000;
     }
 
 
-
-    @Exclude public double getDistance(Distance.Unit unit){
+    @Exclude
+    public double getDistance(Distance.Unit unit){
         return distance.getDistance(unit);
     }
 
@@ -131,7 +132,29 @@ public class Run implements Parcelable, Comparable<Run> {
         return distance;
     }
 
-    @Exclude public void setDistance(String distanceString){
+    public long getTime(){
+        return time;
+    }
+
+    public long getDate(){
+        return date;
+    }
+
+    public String getId(){
+        return id;
+    }
+
+    @Exclude
+    public long getPace(Distance.Unit unit){
+        if (unit == Distance.Unit.KM){
+            return kilometrePace;
+        }
+
+        return milePace;
+    }
+
+    @Exclude
+    public void setDistance(String distanceString){
         String km = Distance.Unit.KM.toString();
         String mi = Distance.Unit.MILE.toString();
 
@@ -155,10 +178,6 @@ public class Run implements Parcelable, Comparable<Run> {
         updatePace();
     }
 
-    public long getTime(){
-        return time;
-    }
-
     public void setTime(long time){
         this.time = time;
         updatePace();
@@ -168,10 +187,6 @@ public class Run implements Parcelable, Comparable<Run> {
     public void setTime(String timeText) {
         time = RunUtils.timeToUnix(timeText);
         updatePace();
-    }
-
-    public long getDate(){
-        return date;
     }
 
     public void setDate(long date){
@@ -196,26 +211,18 @@ public class Run implements Parcelable, Comparable<Run> {
         rating = RunUtils.ratingToInt(ratingText);
     }
 
-    public String getId(){ return id; }
-
-    public void setId(String pushKey){
-        id = pushKey;
+    public void setId(String id){
+        this.id = id;
     }
 
-    @Exclude public long getPace(Distance.Unit unit){
-        if (unit == Distance.Unit.KM){
-            return kilometrePace;
-        }
-
-        return milePace;
-    }
-
-    @Exclude public void setDistanceKilometres(double distanceKilometres){
+    @Exclude
+    public void setDistanceKilometres(double distanceKilometres){
         distance.setDistance(Distance.Unit.KM, distanceKilometres);
         updatePace();
     }
 
-    @Exclude  public void setDistanceMiles(double distanceMiles){
+    @Exclude
+    public void setDistanceMiles(double distanceMiles){
         distance.setDistance(Distance.Unit.MILE, distanceMiles);
         updatePace();
     }
@@ -237,9 +244,6 @@ public class Run implements Parcelable, Comparable<Run> {
     public void setMilePace(long milePace){
         this.milePace = milePace;
     }
-
-
-
 
     @Override
     public int hashCode() {

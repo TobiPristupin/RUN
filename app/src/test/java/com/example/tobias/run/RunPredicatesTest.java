@@ -13,7 +13,7 @@ import org.junit.Test;
 public class RunPredicatesTest {
 
     @Test public void testIsRunFromWeekday(){
-        Run run = Run.withKilometers(1, 1, 1516228192, 1);
+        Run run = Run.fromKilometers(1, 1, 1516228192, 1);
         Assert.assertEquals(true, RunPredicates.isRunFromWeekDay(3).evaluate(run));
         Assert.assertEquals(false, RunPredicates.isRunFromWeekDay(4).evaluate(run));
 
@@ -26,7 +26,7 @@ public class RunPredicatesTest {
         }
         Assert.assertEquals(true, exceptionThrown);
 
-        Run run1 = Run.withKilometers(1, 1, 1516048993, 1);
+        Run run1 = Run.fromKilometers(1, 1, 1516048993, 1);
         Assert.assertEquals(true, RunPredicates.isRunFromWeekDay(1).evaluate(run1));
     }
 }

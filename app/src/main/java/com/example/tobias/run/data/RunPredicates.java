@@ -32,9 +32,8 @@ public class RunPredicates {
     }
 
     /**
-     *
+     * Checks if run's date is in certain weekday
      * @param weekDay day of week in range [1, 7]. 1 = Monday, 7 = Sunday
-     * @return
      */
     public static Predicate isRunFromWeekDay(final int weekDay){
         if(weekDay < 1 || weekDay > 7){

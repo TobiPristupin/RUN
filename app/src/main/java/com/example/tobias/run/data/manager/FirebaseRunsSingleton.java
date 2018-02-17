@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Singleton class that talks to database and holds all runs. Implements the observable design pattern
- * for realtime updating.
+ * for real time updating.
  */
 public class FirebaseRunsSingleton implements Observable {
 
@@ -75,11 +75,11 @@ public class FirebaseRunsSingleton implements Observable {
    }
 
     @Override
-    public void attachObserver(Observer o) {
-        if (!observerList.contains(o)){
-            observerList.add(o);
+    public void attachObserver(Observer observer) {
+        if (!observerList.contains(observer)){
+            observerList.add(observer);
             if (!cachedRuns.isEmpty()){
-                o.updateData(cachedRuns);
+                observer.updateData(cachedRuns);
             }
         }
     }

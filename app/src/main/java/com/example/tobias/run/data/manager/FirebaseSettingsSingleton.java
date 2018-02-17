@@ -2,7 +2,7 @@ package com.example.tobias.run.data.manager;
 
 import android.util.Log;
 
-import com.example.tobias.run.data.interfaces.SettingsManager;
+import com.example.tobias.run.data.interfaces.SettingsRepository;
 import com.example.tobias.run.data.model.Distance;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,7 +17,7 @@ import com.google.firebase.database.ValueEventListener;
  * Singleton that stores all user settings from database
  */
 
-public class FirebaseSettingsSingleton implements SettingsManager {
+public class FirebaseSettingsSingleton implements SettingsRepository {
 
     public static final String DISTANCE_UNIT_KEY = "distance_unit";
     //Tag shortened because Log tag has to be shorter than 24 chars.
@@ -29,9 +29,9 @@ public class FirebaseSettingsSingleton implements SettingsManager {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        DatabaseReference reference = firebaseDatabase.getReference("users/" + user.getUid() + "/settings/");
+        DatabaseReference databaseReference = firebaseDatabase.getReference("users/" + user.getUid() + "/settings/");
 
-        reference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){

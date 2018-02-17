@@ -32,5 +32,4 @@ public class FirebaseRepository implements Repository {
     public void updateRun(Run run) {
         runsDatabaseRef.child(run.getId()).setValue(run);
     }
-
 }

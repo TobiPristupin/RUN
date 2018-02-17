@@ -124,9 +124,9 @@ public class EditorPresenter {
     private Run createRunFromData(String distanceText, String ratingText, String timeText, String dateText){
         Run run;
         if (distanceText.contains(Distance.Unit.KM.toString())){
-            run = Run.withKilometers(distanceText, timeText, dateText, ratingText);
+            run = Run.fromKilometers(distanceText, timeText, dateText, ratingText);
         } else {
-            run = Run.withMiles(distanceText, timeText, dateText, ratingText);
+            run = Run.fromMiles(distanceText, timeText, dateText, ratingText);
         }
 
         return run;

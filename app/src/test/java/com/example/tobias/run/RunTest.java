@@ -16,9 +16,9 @@ import java.util.List;
 
 public class RunTest {
 
-    Run similarRun = Run.withKilometers(1, 2, 3, 3);
-    Run similarRun2 = Run.withKilometers(1, 2, 3, 3);
-    Run differentRun = Run.withMiles(45, 2, 567, 3);
+    Run similarRun = Run.fromKilometers(1, 2, 3, 3);
+    Run similarRun2 = Run.fromKilometers(1, 2, 3, 3);
+    Run differentRun = Run.fromMiles(45, 2, 567, 3);
 
     @Test public void testEquals(){
         Assert.assertEquals(true, similarRun.equals(similarRun2));
@@ -40,7 +40,7 @@ public class RunTest {
     }
 
     @Test public void testPaceUpdate(){
-        Run run = Run.withKilometers(1, 1000, 0, 0);
+        Run run = Run.fromKilometers(1, 1000, 0, 0);
         long kmPace1 = run.getPace(Distance.Unit.KM);
 
         run.setTime(2000);
@@ -56,9 +56,9 @@ public class RunTest {
 
     @Test public void testCompareTo(){
         List<Run> list = new ArrayList<>();
-        list.add(Run.withKilometers(0, 0, 3, 0));
-        list.add(Run.withKilometers(0, 0, 1, 0));
-        list.add(Run.withKilometers(0, 0, 2, 0));
+        list.add(Run.fromKilometers(0, 0, 3, 0));
+        list.add(Run.fromKilometers(0, 0, 1, 0));
+        list.add(Run.fromKilometers(0, 0, 2, 0));
         Collections.sort(list);
 
         Assert.assertEquals(true, list.get(0).getDate() == 1);

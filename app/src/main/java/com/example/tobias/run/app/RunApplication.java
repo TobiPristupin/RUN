@@ -2,6 +2,7 @@ package com.example.tobias.run.app;
 
 import android.app.Application;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.database.FirebaseDatabase;
 
 /**
