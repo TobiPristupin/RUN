@@ -15,7 +15,7 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /**
- * Created by Tobi on 10/23/2017.
+ * Presenter used in EditorActivityView.
  */
 
 public class EditorPresenter {

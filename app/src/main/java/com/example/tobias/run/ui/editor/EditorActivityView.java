@@ -32,9 +32,7 @@ import java.util.Calendar;
 import es.dmoral.toasty.Toasty;
 
 /**
- * Activity that allows user to complete distance, time, rating and date fields when adding /
- * editing a run. This class shows different dialogs to input the data, and implements the OnClickListener
- * for the positive button to retrieve the data
+ * Activity to create and edit runs.
  */
 public class EditorActivityView extends AppCompatActivity implements EditorView {
 

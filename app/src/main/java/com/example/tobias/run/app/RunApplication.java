@@ -7,7 +7,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * This class overrides the onCreate method of Application
- * in order to run database.setPersistenceEnabled(), which has to be called when app starts.
+ * in order to call setPersistenceEnabled(), which has to be called when app starts.
  */
 
 public class RunApplication extends Application {

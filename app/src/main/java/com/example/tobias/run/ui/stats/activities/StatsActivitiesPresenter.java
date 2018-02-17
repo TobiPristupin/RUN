@@ -12,6 +12,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -51,8 +52,12 @@ public class StatsActivitiesPresenter implements Observer<List<Run>> {
 
     private void updatePieChartData(){
         int allActivities = runList.size();
-
         List<PieEntry> pieEntries = new ArrayList<>();
+
+        if (allActivities == 0){
+            view.setPieChartData(Collections.emptyList());
+            return;
+        }
 
         pieEntries.add(new PieEntry(getRunsFromWeekday(1) * 100 / allActivities, "Monday"));
         pieEntries.add(new PieEntry(getRunsFromWeekday(2) * 100 / allActivities, "Tuesday"));

@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="RUN."
+        android:text="RUN"
         android:textColor="@android:color/white"
         android:textSize="70sp"
         android:textStyle="italic|bold"

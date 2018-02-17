@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 
 /**
- * Created by Tobi on 12/18/2017.
+ * Model class to represent Distance in kilometres and miles. Used in Run class.
  */
 
 public class Distance implements Parcelable {

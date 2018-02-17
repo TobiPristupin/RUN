@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.tobias.run.BuildConfig;
 import com.example.tobias.run.R;
 import com.example.tobias.run.data.manager.FirebaseRepository;
@@ -142,6 +143,7 @@ public class MainActivityView extends AppCompatActivity implements MainView {
         try {
             startActivity(goToMarket);
         } catch (ActivityNotFoundException e) {
+            Crashlytics.logException(e);
             startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
         }

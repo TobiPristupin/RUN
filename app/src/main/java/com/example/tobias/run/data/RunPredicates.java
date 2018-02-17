@@ -6,7 +6,7 @@ import org.apache.commons.collections.Predicate;
 import org.joda.time.DateTime;
 
 /**
- * Created by Tobi on 12/21/2017.
+ * Apache commons predicates to test conditions for Runs
  */
 
 public class RunPredicates {

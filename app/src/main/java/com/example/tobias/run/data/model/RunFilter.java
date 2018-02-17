@@ -1,6 +1,10 @@
 package com.example.tobias.run.data.model;
 
 
+/**
+ * Enum to represent different date filters that can be applied to sort Runs
+ */
+
 public enum RunFilter {
     WEEK("Week"), MONTH("Month"), YEAR("Year"), ALL("All");
 

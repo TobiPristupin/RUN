@@ -1,5 +1,6 @@
 package com.example.tobias.run.ui.login;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.tobias.run.auth.FirebaseAuthManager;
 import com.example.tobias.run.auth.interfaces.AuthCallbacks;
 import com.example.tobias.run.auth.interfaces.AuthManager;
@@ -48,6 +49,7 @@ public class ForgotPasswordPresenter {
 
             @Override
             public void onLoginFailed(Exception e) {
+                Crashlytics.logException(e);
                 if (e instanceof FirebaseTooManyRequestsException){
                     view.showTooManyRequestsToast();
                 } else {

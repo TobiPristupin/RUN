@@ -3,6 +3,7 @@ package com.example.tobias.run.ui.login;
 
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.tobias.run.auth.FirebaseAuthManager;
 import com.example.tobias.run.auth.interfaces.AuthCallbacks;
 import com.example.tobias.run.auth.interfaces.AuthManager;
@@ -84,6 +85,7 @@ public class NewAccountPresenter {
 
             @Override
             public void onLoginFailed(Exception e) {
+                Crashlytics.logException(e);
                 view.stopLoadingAnimation();
                 if (e instanceof FirebaseAuthWeakPasswordException){
                     view.showWeakPasswordErrorToast();
