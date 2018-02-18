@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tobias.run">
+    package="com.tobipristupin.simplerun">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -34,7 +34,7 @@
             android:theme="@style/LoginTheme" />
         <activity
             android:name=".ui.settings.libraries.LibraryItemsActivityView"
-            android:parentActivityName=".ui.settings.SettingsActivityView" />
+            android:parentActivityName="ui.settings.SettingsActivityView" />
     </application>
 
 </manifest>
