@@ -1,4 +1,4 @@
-package com.tobipristupin.simplerun.ui.login.fragments;
+package com.tobipristupin.simplerun.ui.login.forgotpassword;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -16,8 +16,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.tobipristupin.simplerun.R;
-import com.tobipristupin.simplerun.ui.login.ForgotPasswordPresenter;
-import com.tobipristupin.simplerun.ui.login.ForgotPasswordView;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import es.dmoral.toasty.Toasty;
@@ -34,6 +32,10 @@ public class ForgotPasswordFragmentView extends Fragment implements ForgotPasswo
     private TextInputLayout emailLayout;
     private Button sendButton;
     private ForgotPasswordPresenter presenter;
+
+    private Toast recoveryEmailSent;
+    private Toast recoveryEmailFailed;
+    private Toast tooManyRequestsToast;
 
     @Nullable
     @Override
@@ -64,15 +66,15 @@ public class ForgotPasswordFragmentView extends Fragment implements ForgotPasswo
         });
     }
 
-
-    /**
-     * @param enabled Should be enabled to errors
-     * @param error Error message to be displayed
-     */
     @Override
-    public void setEmailTextInputError(boolean enabled, @Nullable String error) {
-        emailLayout.setErrorEnabled(enabled);
-        emailLayout.setError(error);
+    public void enableEmailError() {
+        emailLayout.setErrorEnabled(true);
+        emailLayout.setError(getString(R.string.all_invalid_email));
+    }
+
+    @Override
+    public void disableEmailError() {
+        emailLayout.setErrorEnabled(false);
     }
 
     @Override
@@ -96,17 +98,38 @@ public class ForgotPasswordFragmentView extends Fragment implements ForgotPasswo
 
     @Override
     public void showRecoveryEmailSentToast() {
-        Toasty.success(getContext(), "Recovery email sent", Toast.LENGTH_SHORT).show();
+        if (recoveryEmailSent != null){
+            recoveryEmailSent.cancel();
+        }
+
+        String str = getString(R.string.forgot_password_fragment_view_recoverytoast);
+        recoveryEmailSent = Toasty.success(getContext(), str, Toast.LENGTH_SHORT);
+
+        recoveryEmailSent.show();
     }
 
     @Override
     public void showRecoveryEmailFailedToast() {
-        Toasty.warning(getContext(), "Email not sent. Please check your internet connection or try again").show();
+        if (recoveryEmailFailed != null){
+            recoveryEmailFailed.cancel();
+        }
+
+        String str = getString(R.string.forgot_password_fragment_view_recovery_failedtoast);
+
+        recoveryEmailFailed = Toasty.warning(getContext(), str, Toast.LENGTH_LONG);
+        recoveryEmailFailed.show();
     }
 
     @Override
     public void showTooManyRequestsToast() {
-        Toasty.warning(getContext(), "Too many requests sent. Please try again").show();
+        if (tooManyRequestsToast != null){
+            tooManyRequestsToast.cancel();
+        }
+
+        String str = getString(R.string.forgot_password_fragment_view_toomanyrequests_toast);
+        tooManyRequestsToast = Toasty.warning(getContext(), str);
+
+        tooManyRequestsToast.show();
     }
 
     //Configures all TextInputLayout to remove their errors every time text is inputted

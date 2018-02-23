@@ -1,4 +1,4 @@
-package com.tobipristupin.simplerun.ui.login;
+package com.tobipristupin.simplerun.ui.login.forgotpassword;
 
 import com.crashlytics.android.Crashlytics;
 import com.tobipristupin.simplerun.auth.FirebaseAuthManager;
@@ -8,9 +8,8 @@ import com.google.firebase.FirebaseTooManyRequestsException;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
-/**
- * Created by Tobi on 10/22/2017.
- */
+import java.util.Locale;
+
 
 public class ForgotPasswordPresenter {
 
@@ -21,16 +20,18 @@ public class ForgotPasswordPresenter {
     }
 
     public void onEmailTextInputTextChanged(){
-        view.setEmailTextInputError(false, null);
+        view.disableEmailError();
     }
 
     public void onSendEmailButtonClicked(String email){
         if (isValidEmail(email)){
             view.startLoadingAnimation();
             sendResetPasswordEmail(email);
-        } else {
-            view.setEmailTextInputError(true, "Invalid Email");
+            return;
         }
+
+        view.enableEmailError();
+
     }
 
     private boolean isValidEmail(String email){

@@ -56,7 +56,7 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_stats_activities, container, false);
 
-        pieChart = rootView.findViewById(R.id.stats_activities_distribution_chart);
+        pieChart = rootView.findViewById(R.id.fragment_stats_activities_distribution_chart);
         chartWeek = styleBarChart(new BarChart(getContext()));
         chartMonth = styleBarChart(new BarChart(getContext()));
         chart3Months = styleBarChart(new BarChart(getContext()));
@@ -83,11 +83,11 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
     private void initTabLayout(){
         TabLayout tabLayout = rootView.findViewById(R.id.stats_activities_frequency_tablayout);
 
-        tabLayout.addTab(tabLayout.newTab().setText("Week"));
-        tabLayout.addTab(tabLayout.newTab().setText("Month"));
-        tabLayout.addTab(tabLayout.newTab().setText("3Months"));
-        tabLayout.addTab(tabLayout.newTab().setText("6Months"));
-        tabLayout.addTab(tabLayout.newTab().setText("Year"));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.all_week));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.all_month));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.all_3months));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.all_6months));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.all_year));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -137,7 +137,7 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
 
         chart.setDrawGridBackground(false);
 
-        chart.setNoDataText("Oh no! It's empty!");
+        chart.setNoDataText(getString(R.string.all_empty_dataset));
         chart.setNoDataTextColor(getResources().getColor(android.R.color.black));
         chart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD);
 
@@ -154,7 +154,7 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
         pieChart.setEntryLabelTextSize(13);
         pieChart.setEntryLabelTypeface(Typeface.DEFAULT_BOLD);
         pieChart.getLegend().setEnabled(false);
-        pieChart.setNoDataText("Oh no! It's empty!");
+        pieChart.setNoDataText(getString(R.string.all_empty_dataset));
         pieChart.setNoDataTextColor(getResources().getColor(android.R.color.black));
         pieChart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD);
     }
@@ -210,8 +210,9 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
     }
 
     @Override
-    public void setPieChartData(List<PieEntry> data) {
-        PieDataSet set = new PieDataSet(data, "Distribution");
+    public void setPieChartData(List<PieEntry> pieEntries) {
+        addLabelsToPieData(pieEntries);
+        PieDataSet set = new PieDataSet(pieEntries, getString(R.string.stats_fragment_activities_view_piechart_label));
         set.setValueFormatter(new PercentFormatter());
 
         List<Integer> colors = new ArrayList<>();
@@ -229,8 +230,30 @@ public class StatsFragmentActivitiesView extends Fragment implements StatsActivi
         pieChart.invalidate();
     }
 
+    /**
+     * Adds labels to each PieEntry object. This is done here and not in the presenter because it requires
+     * localized strings the presenter has no access to.
+     * @param pieEntries List of pie entries
+     */
+    private void addLabelsToPieData(List<PieEntry> pieEntries){
+        String[] daysOfWeek = new String[]{
+                getString(R.string.all_monday),
+                getString(R.string.all_tuesday),
+                getString(R.string.all_wednesday),
+                getString(R.string.all_thursday),
+                getString(R.string.all_friday),
+                getString(R.string.all_saturday),
+                getString(R.string.all_sunday)
+        };
+
+        //pieEntries will always be size 7 (one for each day of the week)
+        for (int i = 0; i < pieEntries.size(); i++) {
+            pieEntries.get(i).setLabel(daysOfWeek[i]);
+        }
+    }
+
     private void setChartData(List<BarEntry> barData, BarChart chart){
-        BarDataSet barDataSet = new BarDataSet(barData, "Activities");
+        BarDataSet barDataSet = new BarDataSet(barData, getString(R.string.stats_fragment_activities_view_barchart_label));
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkOrange));
         barDataSet.setValueFormatter(new IValueFormatter() {

@@ -1,4 +1,4 @@
-package com.tobipristupin.simplerun.ui.login;
+package com.tobipristupin.simplerun.ui.login.newaccount;
 
 
 import android.util.Log;
@@ -13,6 +13,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.tobipristupin.simplerun.interfaces.ErrorType;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -31,8 +32,8 @@ public class NewAccountPresenter {
 
     public void onCreateAccountButtonClick(String email, String password, String password2){
          if (validateFields(email, password, password2)){
-             //Matching passwords have been validated, no need to pass both.
              view.startLoadingAnimation();
+             //Matching passwords have been validated, no need to pass both.
              createAccount(email, password);
          }
     }
@@ -42,31 +43,31 @@ public class NewAccountPresenter {
 
 
         if (email.isEmpty()) {
-            view.setEmailTextInputError(true, "Field is required");
+            view.enableEmailError(ErrorType.EmailLogin.REQUIRED_FIELD);
             return false;
         } else if (password.isEmpty()) {
-            view.setPasswordTextInputError(true, "Field is required");
+            view.enablePasswordError(ErrorType.PasswordLogin.REQUIRED_FIELD);
             return false;
         } else if (password2.isEmpty()) {
-            view.setPassword2TextInputError(true, "Field is required");
+            view.enablePassword2Error(ErrorType.PasswordLogin.REQUIRED_FIELD);
             return false;
         }
 
         if (!validator.isValid(email)) {
-            view.setEmailTextInputError(true, "Invalid email");
+            view.enableEmailError(ErrorType.EmailLogin.INVALID_EMAIL);
             return false;
         }
 
         if (password.length() <= 6) {
-            view.setPasswordTextInputError(true, "Password must be longer than 6 characters");
+            view.enablePasswordError(ErrorType.PasswordLogin.SHORT_PASSWORD);
             return false;
         } else if (password2.length() <= 6) {
-            view.setPassword2TextInputError(true, "Password must be longer than 6 characters");
+            view.enablePassword2Error(ErrorType.PasswordLogin.SHORT_PASSWORD);
             return false;
         }
 
         if (!password.equals(password2)){
-            view.setPasswordTextInputError(true, "Passwords do not match");
+            view.enablePasswordError(ErrorType.PasswordLogin.PASSWORD_DONT_MATCH);
             return false;
         }
 
@@ -100,15 +101,15 @@ public class NewAccountPresenter {
     }
 
     public void onEmailTextInputTextChanged(){
-        view.setEmailTextInputError(false, null);
+        view.disableEmailError();
     }
 
     public void onPasswordTextInputTextChanged(){
-        view.setPasswordTextInputError(false, null);
+        view.disablePasswordError();
     }
 
     public void onPassword2TextInputTextChanged(){
-        view.setPassword2TextInputError(false, null);
+        view.disablePassword2Error();
     }
 
     public void onGoogleLogInClick(){

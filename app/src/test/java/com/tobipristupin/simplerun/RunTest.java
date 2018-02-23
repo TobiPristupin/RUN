@@ -1,7 +1,7 @@
-package com.example.tobias.run;
+package com.tobipristupin.simplerun;
 
-import com.example.tobias.run.data.model.Distance;
-import com.example.tobias.run.data.model.Run;
+import com.tobipristupin.simplerun.data.model.Distance;
+import com.tobipristupin.simplerun.data.model.Run;
 
 import org.junit.Assert;
 import org.junit.Test;

@@ -60,7 +60,7 @@ public class EditorPresenter {
 
         view.setRatingText(String.valueOf(runToEdit.getRating()));
 
-        view.setSupportActionBarTitle("Edit Run");
+        view.setActionBarEditTitle();
     }
 
     public void onSaveButtonPressed(){
@@ -116,7 +116,7 @@ public class EditorPresenter {
 
     private boolean isValid(String... values){
         for(String value : values){
-            if (value == null || value.equals("None")){
+            if (value == null || value.equals(view.getEmptyFieldText())){
                 return false;
             }
         }

@@ -4,9 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.tobipristupin.simplerun.ui.login.fragments.ForgotPasswordFragmentView;
-import com.tobipristupin.simplerun.ui.login.fragments.LoginFragmentView;
-import com.tobipristupin.simplerun.ui.login.fragments.NewAccountFragmentView;
+import com.tobipristupin.simplerun.ui.login.forgotpassword.ForgotPasswordFragmentView;
+import com.tobipristupin.simplerun.ui.login.loginview.LoginFragmentView;
+import com.tobipristupin.simplerun.ui.login.newaccount.NewAccountFragmentView;
 
 /**
  * Created by Tobi on 9/15/2017.

@@ -5,35 +5,35 @@
         <item
             android:id="@+id/navview_menu_history"
             android:icon="@drawable/ic_editor_format_list_bulleted"
-            android:title="History"/>
+            android:title="@string/navview_menu_history"/>
         <item
             android:id="@+id/navview_menu_stats"
             android:icon="@drawable/ic_line_chart"
-            android:title="Analyze"/>
+            android:title="@string/navview_menu_analyze"/>
 
     </group>
     <item
-        android:title="Other">
+        android:title="@string/navview_menu_other">
         <menu>
             <item
                 android:id="@+id/navview_menu_settings"
                 android:icon="@drawable/ic_action_settings"
-                android:title="Settings" />
+                android:title="@string/navview_menu_settings" />
 
             <item
                 android:id="@+id/navview_menu_about"
                 android:icon="@drawable/ic_info_outline_medium"
-                android:title="About"/>
+                android:title="@string/navview_menu_about"/>
 
             <item
                 android:id="@+id/navview_menu_libs"
                 android:icon="@drawable/ic_code_medium"
-                android:title="Open Source Libraries" />
+                android:title="@string/navview_menu_open_source_libraries" />
 
             <item
                 android:id="@+id/navview_menu_rate_us"
                 android:icon="@drawable/ic_heart"
-                android:title="Rate Us" />
+                android:title="@string/navview_menu_rate_us" />
 
         </menu>
     </item>

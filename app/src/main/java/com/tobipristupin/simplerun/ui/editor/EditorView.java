@@ -30,5 +30,10 @@ public interface EditorView {
 
     void setRatingText(String text);
 
-    void setSupportActionBarTitle(String text);
+    void setActionBarEditTitle();
+
+    /**
+     * @return text used to denote an empty field
+     */
+    String getEmptyFieldText();
 }

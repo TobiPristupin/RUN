@@ -143,6 +143,7 @@ public class LibraryItemsActivityView extends AppCompatActivity {
         libraries.add(new LibraryItem("Recycler View Animator", "https://github.com/wasabeef/recyclerview-animators"));
         libraries.add(new LibraryItem("Material Spinner", "https://github.com/jaredrummler/MaterialSpinner"));
         libraries.add(new LibraryItem("Circle Image View", "https://github.com/hdodenhof/CircleImageView"));
+        libraries.add(new LibraryItem("shared-firebase-preferences", "https://github.com/crysxd/shared-firebase-preferences"));
     }
 
 

@@ -1,6 +1,6 @@
 package com.tobipristupin.simplerun.ui.stats.mileage;
 
-import com.tobipristupin.simplerun.utils.StateChange;
+import com.tobipristupin.simplerun.utils.State;
 import com.github.mikephil.charting.data.BarEntry;
 
 import java.util.List;
@@ -44,12 +44,12 @@ public interface StatsMileageView {
     void setTotalDistanceYear(String text);
 
 
-    void setMonthIncreaseText(String text, StateChange change);
+    void setMonthIncreaseText(String text, State change);
 
-    void set3MonthsIncreaseText(String text, StateChange change);
+    void set3MonthsIncreaseText(String text, State change);
 
-    void set6MonthsIncreaseText(String text, StateChange change);
+    void set6MonthsIncreaseText(String text, State change);
 
-    void setYearIncreaseText(String text, StateChange change);
+    void setYearIncreaseText(String text, State change);
 
 }

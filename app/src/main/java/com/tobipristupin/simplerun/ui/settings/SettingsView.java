@@ -2,6 +2,7 @@ package com.tobipristupin.simplerun.ui.settings;
 
 import android.content.DialogInterface;
 
+import com.tobipristupin.simplerun.data.model.Distance;
 import com.tobipristupin.simplerun.ui.settings.dialogs.DistanceUnitDialog;
 
 /**
@@ -10,7 +11,7 @@ import com.tobipristupin.simplerun.ui.settings.dialogs.DistanceUnitDialog;
 
 public interface SettingsView {
 
-    void setDistanceUnitText(String text);
+    void setDistanceUnitText(Distance.Unit unit);
 
     void showDistanceUnitDialog(DistanceUnitDialog.OnClickListener OnClickListener);
 
@@ -18,7 +19,7 @@ public interface SettingsView {
 
     void loadLogIn();
 
-    void sendEmailIntent(String mailTo, String subject, String body);
+    void sendEmailIntent(String mailTo);
 
     void showNoEmailAppError();
 

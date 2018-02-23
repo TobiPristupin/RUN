@@ -1,6 +1,8 @@
-package com.tobipristupin.simplerun.ui.login;
+package com.tobipristupin.simplerun.ui.login.newaccount;
 
 import android.support.annotation.Nullable;
+
+import com.tobipristupin.simplerun.interfaces.ErrorType;
 
 /**
  * Created by Tobi on 10/22/2017.
@@ -8,11 +10,17 @@ import android.support.annotation.Nullable;
 
 public interface NewAccountView {
 
-    void setEmailTextInputError(boolean enabled, @Nullable String error);
+    void enableEmailError(ErrorType.EmailLogin type);
 
-    void setPasswordTextInputError(boolean enabled, @Nullable String error);
+    void disableEmailError();
 
-    void setPassword2TextInputError(boolean enabled, @Nullable String error);
+    void enablePasswordError(ErrorType.PasswordLogin type);
+
+    void disablePasswordError();
+
+    void enablePassword2Error(ErrorType.PasswordLogin type);
+
+    void disablePassword2Error();
 
     void sendIntentMainActivity();
 

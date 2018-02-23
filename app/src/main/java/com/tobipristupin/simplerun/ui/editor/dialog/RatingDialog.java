@@ -31,16 +31,16 @@ public class RatingDialog {
 
         initRatingBar();
 
-        builder.setTitle("Rating");
+        builder.setTitle(R.string.rating_dialog_title);
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.rating_dialog_negative_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
 
-        builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.rating_dialog_positive_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 listener.onClick(formatValues());
@@ -68,8 +68,7 @@ public class RatingDialog {
      * @return formatted value.
      */
     private String formatValues(){
-        String value = "" + (int) ratingBar.getRating();
-        return value;
+        return  "" + (int) ratingBar.getRating();
     }
 
     public interface onPositiveButtonListener {

@@ -42,16 +42,17 @@ public class DistanceDialog {
         initNumberPickers();
         initUnitText();
 
-        builder.setTitle("Distance");
+        builder.setTitle(R.string.distance_dialog_distance);
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+        builder.setNegativeButton(R.string.distance_dialog_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
 
-        builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.distance_dialog_done, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 listener.onClick(formatValues());

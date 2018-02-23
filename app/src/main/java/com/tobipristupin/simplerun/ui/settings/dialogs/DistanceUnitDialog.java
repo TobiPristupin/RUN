@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
 import com.tobipristupin.simplerun.data.model.Distance;
 
@@ -24,12 +25,14 @@ public class DistanceUnitDialog {
     public AlertDialog makeDialog(Context context) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        builder.setTitle("Distance Unit");
+        builder.setTitle(R.string.distance_unit_dialog_distanceunit);
 
         Distance.Unit distanceUnit = preferencesRepository.getDistanceUnit();
 
         int checkedItem = distanceUnit.equals(Distance.Unit.KM) ? 0 : 1;
-        CharSequence[] items = new String[]{"Metric (" + Distance.Unit.KM + ")", "Imperial (" + Distance.Unit.MILE + ")"};
+        CharSequence[] items = new String[]{context.getString(R.string.all_metric) + " (" + Distance.Unit.KM + ")"
+                , context.getString(R.string.all_imperial)  + " (" + Distance.Unit.MILE + ")"};
+
         builder.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

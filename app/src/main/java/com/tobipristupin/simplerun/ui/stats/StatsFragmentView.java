@@ -41,7 +41,7 @@ public class StatsFragmentView extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Analyze");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.stats_analyze);
     }
 
     private void initViewPager(){
@@ -54,7 +54,9 @@ public class StatsFragmentView extends Fragment {
 
     private class StatsPagerAdapter extends FragmentPagerAdapter {
 
-        private String[] TAB_TITLES = {"Mileage", "PR's", "Activities"};
+        private String[] TAB_TITLES = {getString(R.string.stats_fragment_view_mileage),
+                getString(R.string.stats_fragment_view_prs),
+                getString(R.string.stats_fragment_view_activities)};
 
         public StatsPagerAdapter(FragmentManager fm) {
             super(fm);

@@ -1,5 +1,7 @@
 package com.tobipristupin.simplerun.ui.stats.mileage;
 
+import android.annotation.SuppressLint;
+
 import com.tobipristupin.simplerun.data.RunPredicates;
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
 import com.tobipristupin.simplerun.data.model.Distance;
@@ -8,7 +10,7 @@ import com.tobipristupin.simplerun.interfaces.Observable;
 import com.tobipristupin.simplerun.interfaces.Observer;
 import com.tobipristupin.simplerun.utils.DateUtils;
 import com.tobipristupin.simplerun.utils.RunUtils;
-import com.tobipristupin.simplerun.utils.StateChange;
+import com.tobipristupin.simplerun.utils.State;
 import com.github.mikephil.charting.data.BarEntry;
 
 import org.joda.time.DateTime;
@@ -107,33 +109,34 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
         view.setTotalDistanceYear(mileageYear);
     }
 
+    @SuppressLint("DefaultLocale")
     private void updateIncreaseText(){
         double monthIncrease = getMonthMileage() - getPastMonthMileageTotal();
         if (monthIncrease >= 0){
-            view.setMonthIncreaseText("+" + String.format("%.1f", monthIncrease), StateChange.INCREASE);
+            view.setMonthIncreaseText("+" + String.format("%.1f", monthIncrease), State.INCREASE);
         } else {
-            view.setMonthIncreaseText(String.format("%.1f", monthIncrease), StateChange.DECREASE);
+            view.setMonthIncreaseText(String.format("%.1f", monthIncrease), State.DECREASE);
         }
 
         double months3Increase = RunUtils.addArray(get3MonthsMileage()) - getPast3MonthsMileageTotal();
         if (months3Increase >= 0){
-            view.set3MonthsIncreaseText("+" + String.format("%.1f", months3Increase), StateChange.INCREASE);
+            view.set3MonthsIncreaseText("+" + String.format("%.1f", months3Increase), State.INCREASE);
         } else {
-            view.set3MonthsIncreaseText(String.format("%.1f", months3Increase), StateChange.DECREASE);
+            view.set3MonthsIncreaseText(String.format("%.1f", months3Increase), State.DECREASE);
         }
 
         double months6Increase = RunUtils.addArray(get6MonthsMileage()) - getPast6MonthsMileageTotal();
         if (months6Increase >= 0){
-            view.set6MonthsIncreaseText("+" + String.format("%.1f", months6Increase), StateChange.INCREASE);
+            view.set6MonthsIncreaseText("+" + String.format("%.1f", months6Increase), State.INCREASE);
         } else {
-            view.set6MonthsIncreaseText(String.format("%.1f", months6Increase), StateChange.DECREASE);
+            view.set6MonthsIncreaseText(String.format("%.1f", months6Increase), State.DECREASE);
         }
 
         double yearIncrease = RunUtils.addArray(getYearMileage()) - getPastYearMileage();
         if (yearIncrease >= 0){
-            view.setYearIncreaseText("+" + String.format("%.1f", yearIncrease), StateChange.INCREASE);
+            view.setYearIncreaseText("+" + String.format("%.1f", yearIncrease), State.INCREASE);
         } else {
-            view.setYearIncreaseText(String.format("%.1f", yearIncrease), StateChange.DECREASE);
+            view.setYearIncreaseText(String.format("%.1f", yearIncrease), State.DECREASE);
         }
     }
 

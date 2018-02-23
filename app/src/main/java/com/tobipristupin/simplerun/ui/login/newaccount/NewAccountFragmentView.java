@@ -1,4 +1,4 @@
-package com.tobipristupin.simplerun.ui.login.fragments;
+package com.tobipristupin.simplerun.ui.login.newaccount;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -16,17 +16,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.interfaces.ErrorType;
+import com.tobipristupin.simplerun.ui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
-import com.tobipristupin.simplerun.ui.login.NewAccountPresenter;
-import com.tobipristupin.simplerun.ui.login.NewAccountView;
 import com.tobipristupin.simplerun.ui.main.MainActivityView;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import es.dmoral.toasty.Toasty;
 
 /**
  * Created by Tobi on 9/15/2017.
@@ -36,6 +34,7 @@ public class NewAccountFragmentView extends Fragment implements NewAccountView {
 
     private static final int RC_SIGN_IN = 1379;
     private View rootView;
+
     private TextInputLayout emailLayout;
     private TextInputLayout passwordLayout;
     private TextInputLayout passwordLayout2;
@@ -43,22 +42,92 @@ public class NewAccountFragmentView extends Fragment implements NewAccountView {
     private AVLoadingIndicatorView loadingIndicator;
     private NewAccountPresenter presenter;
 
+    private ToastyWrapper createAccountToast = new ToastyWrapper();
+    private ToastyWrapper weakPasswordToast = new ToastyWrapper();
+    private ToastyWrapper accountCollisionToast = new ToastyWrapper();
+    private ToastyWrapper googleSignInToast = new ToastyWrapper();
+
+    @Nullable
     @Override
-    public void setEmailTextInputError(boolean enabled, @Nullable String error) {
-        emailLayout.setErrorEnabled(enabled);
-        emailLayout.setError(error);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_new_account, container, false);
+
+        emailLayout = rootView.findViewById(R.id.new_account_email);
+        passwordLayout = rootView.findViewById(R.id.new_account_password1);
+        passwordLayout2 = rootView.findViewById(R.id.new_account_password2);
+        loadingIndicator = rootView.findViewById(R.id.new_account_loading_indicator);
+        createAccountButton = rootView.findViewById(R.id.new_account_create_account_button);
+
+        presenter = new NewAccountPresenter(this);
+
+        //Configures all TextInputLayout to remove their errors every time text is inputted
+        setLayoutErrorReset();
+        initCreateAccountButton();
+        initGoogleLogIn();
+        initReturnButton();
+
+        return rootView;
     }
 
     @Override
-    public void setPasswordTextInputError(boolean enabled, @Nullable String error) {
-        passwordLayout.setErrorEnabled(enabled);
-        passwordLayout.setError(error);
+    public void enableEmailError(ErrorType.EmailLogin type) {
+        emailLayout.setErrorEnabled(true);
+
+        switch (type) {
+            case INVALID_EMAIL :
+                emailLayout.setError(getString(R.string.all_invalid_email));
+                break;
+            case REQUIRED_FIELD :
+                emailLayout.setError(getString(R.string.all_required_field));
+                break;
+            default :
+                emailLayout.setError(getString(R.string.all_error));
+        }
     }
 
     @Override
-    public void setPassword2TextInputError(boolean enabled, @Nullable String error) {
-        passwordLayout2.setErrorEnabled(enabled);
-        passwordLayout2.setError(error);
+    public void disableEmailError() {
+        emailLayout.setErrorEnabled(false);
+    }
+
+    @Override
+    public void enablePasswordError(ErrorType.PasswordLogin type) {
+        enablePasswordViewError(passwordLayout, type);
+    }
+
+    @Override
+    public void disablePasswordError() {
+        passwordLayout.setErrorEnabled(false);
+    }
+
+    @Override
+    public void enablePassword2Error(ErrorType.PasswordLogin type) {
+        enablePasswordViewError(passwordLayout2, type);
+    }
+
+    @Override
+    public void disablePassword2Error() {
+        passwordLayout2.setErrorEnabled(false);
+    }
+
+    private void enablePasswordViewError(TextInputLayout view, ErrorType.PasswordLogin type){
+        view.setErrorEnabled(true);
+
+        switch (type) {
+            case REQUIRED_FIELD :
+                view.setError(getString(R.string.all_required_field));
+                break;
+            case SHORT_PASSWORD :
+                view.setError(getString(R.string.all_short_password));
+                break;
+            case INVALID_CREDENTIALS :
+                view.setError(getString(R.string.all_invalid_credentials));
+                break;
+            case PASSWORD_DONT_MATCH :
+                view.setError(getString(R.string.all_passwords_dont_match));
+            default :
+                view.setError(getString(R.string.all_error));
+        }
     }
 
     @Override
@@ -92,17 +161,20 @@ public class NewAccountFragmentView extends Fragment implements NewAccountView {
 
     @Override
     public void showCreateAccountErrorToast() {
-        Toasty.warning(getContext(), "Unable to create new account").show();
+        String str = getString(R.string.new_account_fragment_view_account_error_toast);
+        createAccountToast.showWarning(getContext(), str);
     }
 
     @Override
     public void showWeakPasswordErrorToast() {
-        Toasty.warning(getContext(), "Password is not strong enough").show();
+        String str = getString(R.string.new_account_fragment_view_password_toast);
+        weakPasswordToast.showWarning(getContext(), str);
     }
 
     @Override
     public void showUserCollisionToast() {
-        Toasty.warning(getContext(), "User with same email already exists").show();
+        String str = getString(R.string.new_account_fragment_view_collision_toast);
+        accountCollisionToast.showWarning(getContext(), str);
     }
 
     @Override
@@ -114,7 +186,8 @@ public class NewAccountFragmentView extends Fragment implements NewAccountView {
 
     @Override
     public void showGoogleSignInFailedToast() {
-        Toasty.warning(getContext(), "Google authentication failed. Check your internet connection or try again").show();
+        String str = getString(R.string.new_account_fragment_view_auth_failed_toast);
+        googleSignInToast.showWarning(getContext(), str);
     }
 
     private void initCreateAccountButton() {
@@ -199,28 +272,6 @@ public class NewAccountFragmentView extends Fragment implements NewAccountView {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             presenter.onGoogleSignInResult(result);
         }
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_new_account, container, false);
-
-        emailLayout = rootView.findViewById(R.id.new_account_email);
-        passwordLayout = rootView.findViewById(R.id.new_account_password1);
-        passwordLayout2 = rootView.findViewById(R.id.new_account_password2);
-        loadingIndicator = rootView.findViewById(R.id.new_account_loading_indicator);
-        createAccountButton = rootView.findViewById(R.id.new_account_create_account_button);
-
-        presenter = new NewAccountPresenter(this);
-
-        //Configures all TextInputLayout to remove their errors every time text is inputted
-        setLayoutErrorReset();
-        initCreateAccountButton();
-        initGoogleLogIn();
-        initReturnButton();
-
-        return rootView;
     }
 
     private void initReturnButton(){

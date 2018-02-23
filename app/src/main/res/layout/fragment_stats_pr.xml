@@ -28,7 +28,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="5dp"
-                android:text="Best Performances"
+                android:text="@string/fragment_stats_pr_best_performances"
                 android:textColor="@android:color/white"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -96,7 +96,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="5dp"
-                android:text="Personal Bests"
+                android:text="@string/fragment_stats_pr_personalbests"
                 android:textColor="@android:color/white"
                 android:textSize="30sp"
                 android:textStyle="bold" />

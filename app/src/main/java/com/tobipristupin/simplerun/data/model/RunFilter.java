@@ -1,37 +1,50 @@
 package com.tobipristupin.simplerun.data.model;
 
 
+import android.content.res.Resources;
+
+import com.tobipristupin.simplerun.R;
+
 /**
  * Enum to represent different date filters that can be applied to sort Runs
  */
 
 public enum RunFilter {
-    WEEK("Week"), MONTH("Month"), YEAR("Year"), ALL("All");
+    WEEK(R.string.all_week), MONTH(R.string.all_month), YEAR(R.string.all_year), ALL(R.string.all_all);
 
-    private String value;
+    private int resId;
 
-    RunFilter(String value) {
-        this.value = value;
+    RunFilter(int resId) {
+        this.resId = resId;
     }
 
-    public static RunFilter get(String value) {
-        switch (value.toLowerCase()) {
-            case "week":
-                return WEEK;
-            case "month":
-                return MONTH;
-            case "year":
-                return YEAR;
-            case "all":
-                return ALL;
-            default:
-                throw new RuntimeException();
+    public static RunFilter fromResId(int resId) {
+        for (RunFilter filter : RunFilter.values()){
+            if (filter.getResId() == resId){
+                return filter;
+            }
         }
+
+        throw new IllegalArgumentException("resId doesn't exist");
     }
 
+    public static RunFilter fromString(String value, Resources resources){
+        for (RunFilter filter : RunFilter.values()){
+            String stringFromResources = resources.getString(filter.getResId());
 
-    @Override
-    public String toString() {
-        return value;
+            if (value.equalsIgnoreCase(stringFromResources)){
+                return filter;
+            }
+        }
+
+        throw new IllegalArgumentException("Value doesn't exist");
+    }
+
+    public String toStringLocalized(Resources resources) {
+        return resources.getString(resId);
+    }
+
+    public int getResId(){
+        return resId;
     }
 }

@@ -22,15 +22,14 @@ public class SettingsPresenter {
     }
 
     public void onCreateView() {
-        String distanceUnitText = formatDistanceUnitText(getDistanceUnit());
-        view.setDistanceUnitText(distanceUnitText);
+        view.setDistanceUnitText(getDistanceUnit());
     }
 
     public void onDistanceUnitClick() {
         DistanceUnitDialog.OnClickListener listener = new DistanceUnitDialog.OnClickListener() {
             @Override
             public void onOptionSelected(Distance.Unit unit) {
-                view.setDistanceUnitText(formatDistanceUnitText(unit));
+                view.setDistanceUnitText(getDistanceUnit());
                 preferencesRepository.setDistanceUnit(unit);
             }
         };
@@ -52,8 +51,7 @@ public class SettingsPresenter {
     }
 
     public void onHelpAndFeedbackClick() {
-        view.sendEmailIntent("justrunapp@gmail.com", "Help and Feedback", "If submitting " +
-                "a bug report, please add device model and Android version.");
+        view.sendEmailIntent("justrunapp@gmail.com");
     }
 
     public void onAboutClick() {
@@ -66,17 +64,6 @@ public class SettingsPresenter {
 
     public void onLibrariesClick() {
         view.sendLibrariesViewIntent();
-    }
-
-    private String formatDistanceUnitText(Distance.Unit unit) {
-        String text;
-        if (unit == Distance.Unit.KM) {
-            text = "Metric (" + Distance.Unit.KM + ")";
-        } else {
-            text = "Imperial (" + Distance.Unit.MILE + ")";
-        }
-
-        return text;
     }
 
     private Distance.Unit getDistanceUnit() {

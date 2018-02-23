@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="RUN"
+        android:text="@string/all_run"
         android:textColor="@android:color/white"
         android:textSize="70sp"
         android:textStyle="italic|bold"
@@ -32,7 +32,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:background="@android:color/transparent"
-        android:text="Forgot password?"
+        android:text="@string/fragment_login_forgot"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="16sp"
@@ -47,7 +47,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:background="@android:color/transparent"
-        android:text="@string/new_account"
+        android:text="@string/login_new_account"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="16sp"
@@ -101,7 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusedByDefault="true"
-            android:hint="Email"
+            android:hint="@string/activity_settings_emailhint"
             android:inputType="textEmailAddress"
             android:textColor="@android:color/white" />
 
@@ -130,7 +130,7 @@
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:hint="@string/fragment_new_account_passwordhint"
             android:inputType="textPassword"
             android:textColor="@android:color/white" />
 

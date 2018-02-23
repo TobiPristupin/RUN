@@ -122,8 +122,10 @@ public class MainActivityView extends AppCompatActivity implements MainView {
     @Override
     public void showAboutDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivityView.this);
-        builder.setTitle("About");
-        builder.setMessage(String.format(getResources().getString(R.string.about_dialog), BuildConfig.VERSION_NAME));
+
+        String title = getString(R.string.main_activity_view_dialog_title);
+        builder.setTitle(title);
+        builder.setMessage(getString(R.string.about_dialog, BuildConfig.VERSION_NAME));
         builder.show();
     }
 

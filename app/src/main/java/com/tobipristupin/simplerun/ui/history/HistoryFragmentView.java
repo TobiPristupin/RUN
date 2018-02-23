@@ -3,6 +3,7 @@ package com.tobipristupin.simplerun.ui.history;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -30,7 +31,7 @@ import com.tobipristupin.simplerun.data.manager.FirebaseRepository;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.ui.editor.EditorActivityView;
 import com.tobipristupin.simplerun.ui.history.adapter.HistoryRecyclerViewAdapter;
-import com.tobipristupin.simplerun.utils.VerticalDividerItemDecoration;
+import com.tobipristupin.simplerun.ui.VerticalDividerItemDecoration;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
@@ -86,7 +87,10 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("History");
+
+        String title = getString(R.string.all_history);
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
     }
 
     @Override
@@ -123,7 +127,10 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     private void initDateSpinner(){
         dateSpinner = rootView.findViewById(R.id.history_date_spinner);
 
-        spinnerItems.addAll(Arrays.asList(RunFilter.MONTH.toString(), RunFilter.WEEK.toString(), RunFilter.YEAR.toString(), RunFilter.ALL.toString()));
+        spinnerItems.addAll(Arrays.asList(RunFilter.MONTH.toStringLocalized(getResources()),
+                RunFilter.WEEK.toStringLocalized(getResources()),
+                RunFilter.YEAR.toStringLocalized(getResources()),
+                RunFilter.ALL.toStringLocalized(getResources())));
 
         dateSpinner.setItems(spinnerItems);
 
@@ -243,11 +250,6 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
         actionMode.invalidate();
     }
 
-
-    /**
-     * Updates Recycler View's adapter data set with new data
-     * @param data
-     */
     @Override
     public void setData(List<Run> data) {
         ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(0, 0);
@@ -260,12 +262,12 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     @Override
     public RunFilter getDataFilter() {
         String value = dateSpinner.getItems().get(dateSpinner.getSelectedIndex()).toString();
-        return RunFilter.get(value);
+        return RunFilter.fromString(value, getResources());
     }
 
     @Override
     public void setSpinnerSelectedItem(RunFilter filter) {
-        dateSpinner.setSelectedIndex(spinnerItems.indexOf(filter.toString()));
+        dateSpinner.setSelectedIndex(spinnerItems.indexOf(filter.toStringLocalized(getResources())));
     }
 
     @Override
@@ -285,22 +287,23 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     @Override
     public void showDeleteDialog(final List<Integer> selectedItems) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Delete");
 
-        if (selectedItems.size() > 1){
-            builder.setMessage("Are you sure you want to delete " + selectedItems.size() + " items? You won't be able to recover them.");
-        } else {
-            builder.setMessage("Are you sure you want to delete one item? You won't be able to recover it.");
-        }
+        String title = getString(R.string.history_fragment_view_dialog_title);
+        builder.setTitle(title);
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        String text = getResources().getQuantityString(R.plurals.history_fragment_view_dialog_text, selectedItems.size(), selectedItems.size());
+        builder.setMessage(text);
+
+        String negativeText = getString(R.string.history_fragment_view_cancel);
+        builder.setNegativeButton(negativeText, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
             }
         });
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        String positiveText = getString(R.string.history_fragment_view_yes);
+        builder.setPositiveButton(positiveText, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 presenter.onDeleteDialogYes(selectedItems);
@@ -315,7 +318,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
         Intent intent = new Intent(getContext(), EditorActivityView.class);
 
         if (runToEdit != null){
-            intent.putExtra(getString(R.string.run_intent_key), runToEdit);
+            intent.putExtra(EditorActivityView.INTENT_KEY, runToEdit);
         }
 
         startActivity(intent);

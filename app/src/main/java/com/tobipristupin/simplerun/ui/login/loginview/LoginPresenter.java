@@ -1,4 +1,4 @@
-package com.tobipristupin.simplerun.ui.login;
+package com.tobipristupin.simplerun.ui.login.loginview;
 
 
 import android.util.Log;
@@ -12,8 +12,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.tobipristupin.simplerun.interfaces.ErrorType;
 
 import org.apache.commons.validator.routines.EmailValidator;
+
+import java.util.Locale;
 
 
 public class LoginPresenter {
@@ -26,11 +29,11 @@ public class LoginPresenter {
     }
 
     public void onEmailTextInputTextChanged(){
-        view.setEmailTextInputError(false, null);
+        view.disableEmailError();
     }
 
     public void onPasswordTextInputTextChanged(){
-        view.setPasswordTextInputError(false, null);
+        view.disablePasswordError();
     }
 
     public void attemptEmailLogin(String email, String password){
@@ -49,9 +52,10 @@ public class LoginPresenter {
                 @Override
                 public void onLoginFailed(Exception e) {
                     Crashlytics.logException(e);
+
                     view.stopLoadingAnimation();
                     if (e instanceof FirebaseAuthInvalidCredentialsException){
-                        view.setPasswordTextInputError(true, "Invalid Credentials");
+                        view.enablePasswordError(ErrorType.PasswordLogin.INVALID_CREDENTIALS);
                     } else {
                         view.showUnexpectedLoginErrorToast();
                     }
@@ -106,23 +110,22 @@ public class LoginPresenter {
         EmailValidator validator = EmailValidator.getInstance();
 
         if (email.isEmpty()){
-            view.setEmailTextInputError(true, "Required field");
+            view.enableEmailError(ErrorType.EmailLogin.REQUIRED_FIELD);
             return false;
         }
         if (password.isEmpty()){
-            view.setPasswordTextInputError(true, "Required Field");
+            view.enablePasswordError(ErrorType.PasswordLogin.REQUIRED_FIELD);
             return false;
         }
         if (!validator.isValid(email)){
-            view.setEmailTextInputError(true, "Invalid Email");
+            view.enableEmailError(ErrorType.EmailLogin.INVALID_EMAIL);
             return false;
         }
         if (password.length() <= 6){
-            view.setPasswordTextInputError(true, "Password must be longer than 6 characters");
+            view.enablePasswordError(ErrorType.PasswordLogin.SHORT_PASSWORD);
             return false;
         }
 
         return true;
     }
-
 }

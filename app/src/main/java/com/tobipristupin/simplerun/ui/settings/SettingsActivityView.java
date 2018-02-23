@@ -20,6 +20,7 @@ import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.data.interfaces.RunRepository;
 import com.tobipristupin.simplerun.data.manager.FirebaseRepository;
 import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
+import com.tobipristupin.simplerun.data.model.Distance;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
 import com.tobipristupin.simplerun.ui.settings.dialogs.DistanceUnitDialog;
 import com.tobipristupin.simplerun.ui.settings.libraries.LibraryItemsActivityView;
@@ -29,14 +30,11 @@ import es.dmoral.toasty.Toasty;
 public class SettingsActivityView extends AppCompatActivity implements SettingsView {
 
     private SettingsPresenter presenter;
-    private RunRepository repo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
-        repo = new FirebaseRepository();
 
         presenter = new SettingsPresenter(this, new SharedPrefRepository(SettingsActivityView.this));
 
@@ -119,7 +117,14 @@ public class SettingsActivityView extends AppCompatActivity implements SettingsV
     }
 
     @Override
-    public void setDistanceUnitText(String text) {
+    public void setDistanceUnitText(Distance.Unit unit) {
+        String text;
+        if (unit == Distance.Unit.KM) {
+            text = getString(R.string.all_metric) + " (" + Distance.Unit.KM + ")";
+        } else {
+            text = getString(R.string.all_imperial) + " (" + Distance.Unit.MILE + ")";
+        }
+
         TextView distanceUnit = findViewById(R.id.settings_distanceunit_selection);
         distanceUnit.setText(text);
     }
@@ -133,9 +138,9 @@ public class SettingsActivityView extends AppCompatActivity implements SettingsV
     @Override
     public void showSignOutDialog(final DialogInterface.OnClickListener onClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivityView.this);
-        builder.setMessage("Are you sure you want to log out?");
-        builder.setPositiveButton("Yes", onClickListener);
-        builder.setNegativeButton("No", null);
+        builder.setMessage(R.string.settings_activity_view_signoutdialog_title);
+        builder.setPositiveButton(R.string.settings_activity_view_signoutdialog_positive, onClickListener);
+        builder.setNegativeButton(R.string.settings_activity_view_signoutdialog_negative, null);
         builder.create().show();
     }
 
@@ -150,20 +155,19 @@ public class SettingsActivityView extends AppCompatActivity implements SettingsV
 
     /**
      * @param mailTo  recipient
-     * @param subject subject
-     * @param body    body. Build version name is automatically added to body
      */
     @Override
-    public void sendEmailIntent(String mailTo, String subject, @Nullable String body) {
+    public void sendEmailIntent(String mailTo) {
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setData(Uri.parse("mailto:"));
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{mailTo});
+
+        String subject = getString(R.string.settings_activity_view_email_subject);
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
 
-        String bodyString = "\n\n\n\nVersion: " + BuildConfig.VERSION_NAME;
-        if (body != null && !body.isEmpty()) {
-            bodyString += "\n\n" + body;
-        }
+        String bodyString = getString(R.string.settings_acttivity_view_email_bodyversion) + BuildConfig.VERSION_NAME;
+        bodyString += getString(R.string.settings_acttivity_view_email_body_desc);
+
 
         intent.putExtra(Intent.EXTRA_TEXT, bodyString);
 
@@ -176,7 +180,7 @@ public class SettingsActivityView extends AppCompatActivity implements SettingsV
 
     @Override
     public void showNoEmailAppError() {
-        Toasty.warning(SettingsActivityView.this, "No valid email app found, message could not be sent").show();
+        Toasty.warning(SettingsActivityView.this, getString(R.string.settings_activity_view_noemailerror_toast)).show();
     }
 
     @Override
@@ -189,8 +193,9 @@ public class SettingsActivityView extends AppCompatActivity implements SettingsV
     @Override
     public void showAboutDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivityView.this);
-        builder.setTitle("About");
+        builder.setTitle(R.string.settings_activity_view_aboutdialog_title);
         builder.setMessage(String.format(getResources().getString(R.string.about_dialog), BuildConfig.VERSION_NAME));
         builder.show();
     }
+
 }

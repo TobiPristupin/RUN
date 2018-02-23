@@ -38,6 +38,8 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
 
     private RunRepository repo;
     private EditorPresenter presenter;
+    public static final String INTENT_KEY = "editor_activity_intent";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,7 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
         presenter = new EditorPresenter(this, repo, new SharedPrefRepository(EditorActivityView.this));
 
         Intent intent = getIntent();
-        Run runFromIntent = intent.getParcelableExtra(getString(R.string.run_intent_key));
+        Run runFromIntent = intent.getParcelableExtra(INTENT_KEY);
 
         presenter.onCreateView(runFromIntent);
 
@@ -63,12 +65,12 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
 
     @Override
     public void showAddedRunSuccessfullyToast() {
-        Toasty.success(EditorActivityView.this, "Successfully Added", Toast.LENGTH_SHORT).show();
+        Toasty.success(EditorActivityView.this, getString(R.string.editor_activityview_added), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showInvalidFieldsToast() {
-        Toasty.warning(EditorActivityView.this, "Fill in all the fields", Toast.LENGTH_SHORT).show();
+        Toasty.warning(EditorActivityView.this, getString(R.string.editor_activityview_fillin), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -123,8 +125,8 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
     }
 
     @Override
-    public void setSupportActionBarTitle(String text) {
-        getSupportActionBar().setTitle(text);
+    public void setActionBarEditTitle() {
+        getSupportActionBar().setTitle(R.string.editor_activity_view_toolbar_edit);
     }
 
     @Override
@@ -145,6 +147,11 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
         }
 
         return true;
+    }
+
+    @Override
+    public String getEmptyFieldText() {
+        return getString(R.string.editor_activity_view_empty_field);
     }
 
     public void initToolbar() {

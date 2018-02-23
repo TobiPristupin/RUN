@@ -1,4 +1,4 @@
-package com.tobipristupin.simplerun.ui.login.fragments;
+package com.tobipristupin.simplerun.ui.login.loginview;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,9 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.interfaces.ErrorType;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
-import com.tobipristupin.simplerun.ui.login.LoginPresenter;
-import com.tobipristupin.simplerun.ui.login.LoginView;
 import com.tobipristupin.simplerun.ui.main.MainActivityView;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -36,28 +35,74 @@ public class LoginFragmentView extends Fragment implements LoginView {
     private static final int RC_SIGN_IN = 1516;
     private View rootView;
     private LoginPresenter presenter;
+
     private TextInputLayout emailLayout;
     private TextInputLayout passwordLayout;
     private FabButton fabButton;
+    private Toast loginErrorToast;
+    private Toast googleSignInFailedToast;
 
-    /**
-     * @param enabled Should be enabled to errors
-     * @param error Error message to be displayed
-     */
+    @Nullable
     @Override
-    public void setEmailTextInputError(boolean enabled, @Nullable String error) {
-        emailLayout.setError(error);
-        emailLayout.setErrorEnabled(enabled);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_login, container, false);
+
+        presenter = new LoginPresenter(this);
+
+        emailLayout = rootView.findViewById(R.id.login_email);
+        passwordLayout = rootView.findViewById(R.id.login_password);
+        fabButton = rootView.findViewById(R.id.login_button);
+
+        initLogInFab();
+        setTextInputErrorReset();
+        initGoogleLogIn();
+        initBottomButtons();
+        return rootView;
     }
 
-    /**
-     * @param enabled Should be enabled to errors
-     * @param error Error message to be displayed
-     */
     @Override
-    public void setPasswordTextInputError(boolean enabled, @Nullable String error) {
-        passwordLayout.setError(error);
-        passwordLayout.setErrorEnabled(enabled);
+    public void enableEmailError(ErrorType.EmailLogin type) {
+        emailLayout.setErrorEnabled(true);
+
+        switch (type) {
+            case INVALID_EMAIL :
+                emailLayout.setError(getString(R.string.all_invalid_email));
+                break;
+            case REQUIRED_FIELD :
+                emailLayout.setError(getString(R.string.all_required_field));
+                break;
+            default :
+                emailLayout.setError(getString(R.string.all_error));
+        }
+    }
+
+    @Override
+    public void disableEmailError() {
+        emailLayout.setErrorEnabled(false);
+    }
+
+    @Override
+    public void enablePasswordError(ErrorType.PasswordLogin type) {
+        passwordLayout.setErrorEnabled(true);
+
+        switch (type) {
+            case REQUIRED_FIELD :
+                passwordLayout.setError(getString(R.string.all_required_field));
+                break;
+            case SHORT_PASSWORD :
+                passwordLayout.setError(getString(R.string.all_short_password));
+                break;
+            case INVALID_CREDENTIALS :
+                passwordLayout.setError(getString(R.string.all_invalid_credentials));
+                break;
+            default :
+                passwordLayout.setError(getString(R.string.all_error));
+        }
+    }
+
+    @Override
+    public void disablePasswordError() {
+        passwordLayout.setErrorEnabled(false);
     }
 
     @Override
@@ -81,7 +126,14 @@ public class LoginFragmentView extends Fragment implements LoginView {
 
     @Override
     public void showUnexpectedLoginErrorToast() {
-        Toasty.warning(getContext(), "An error has occurred. Please try again", Toast.LENGTH_SHORT).show();
+        if (loginErrorToast != null){
+            loginErrorToast.cancel();
+        }
+
+        String str = getString(R.string.login_fragment_view_errortoast);
+
+        loginErrorToast = Toasty.warning(getContext(), str, Toast.LENGTH_SHORT);
+        loginErrorToast.show();
     }
 
     @Override
@@ -93,7 +145,15 @@ public class LoginFragmentView extends Fragment implements LoginView {
 
     @Override
     public void showGoogleSignInFailedToast() {
-        Toasty.warning(getContext(), "Google authentication failed. Check your internet connection or try again").show();
+        if (googleSignInFailedToast != null){
+            googleSignInFailedToast.cancel();
+        }
+
+        String str = getString(R.string.login_fragment_view_google_toast);
+
+        googleSignInFailedToast = Toasty.warning(getContext(), str);
+
+        googleSignInFailedToast.show();
     }
 
     private void initLogInFab(){
@@ -165,24 +225,6 @@ public class LoginFragmentView extends Fragment implements LoginView {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             presenter.onGoogleSignInResult(result);
         }
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_login, container, false);
-
-        presenter = new LoginPresenter(this);
-
-        emailLayout = rootView.findViewById(R.id.login_email);
-        passwordLayout = rootView.findViewById(R.id.login_password);
-        fabButton = rootView.findViewById(R.id.login_button);
-
-        initLogInFab();
-        setTextInputErrorReset();
-        initGoogleLogIn();
-        initBottomButtons();
-        return rootView;
     }
 
     private void initBottomButtons(){

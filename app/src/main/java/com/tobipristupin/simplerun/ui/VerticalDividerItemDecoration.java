@@ -1,4 +1,4 @@
-package com.tobipristupin.simplerun.utils;
+package com.tobipristupin.simplerun.ui;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;

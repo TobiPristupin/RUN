@@ -37,16 +37,16 @@ public class TimeDialog  {
 
         initNumberPickers();
 
-        builder.setTitle("Time");
+        builder.setTitle(R.string.time_dialog_title);
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.time_dialog_negative_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
 
-        builder.setPositiveButton("done", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.time_dialog_positive_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 listener.onClick(formatValues());

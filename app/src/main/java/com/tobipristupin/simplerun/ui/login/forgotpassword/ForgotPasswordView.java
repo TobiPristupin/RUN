@@ -1,4 +1,4 @@
-package com.tobipristupin.simplerun.ui.login;
+package com.tobipristupin.simplerun.ui.login.forgotpassword;
 
 import android.support.annotation.Nullable;
 
@@ -8,7 +8,9 @@ import android.support.annotation.Nullable;
 
 public interface ForgotPasswordView {
 
-    void setEmailTextInputError(boolean enabled, @Nullable String error);
+    void enableEmailError();
+
+    void disableEmailError();
 
     void startLoadingAnimation();
 

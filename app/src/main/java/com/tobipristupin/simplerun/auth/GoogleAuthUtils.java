@@ -20,6 +20,10 @@ import es.dmoral.toasty.Toasty;
 
 public class GoogleAuthUtils {
 
+    public interface ApiClientCallback {
+        void onConnectionFailed(@NonNull ConnectionResult connectionResult);
+    }
+
     public static GoogleSignInOptions getSignInOptions(Context context){
         GoogleSignInOptions googleSignIn = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(context.getString(R.string.default_web_client_id))
@@ -28,13 +32,12 @@ public class GoogleAuthUtils {
         return googleSignIn;
     }
 
-    public static GoogleApiClient getApiClient(final FragmentActivity fragmentActivity, GoogleSignInOptions signInOptions, final String tag){
+    public static GoogleApiClient getApiClient(final FragmentActivity fragmentActivity, GoogleSignInOptions signInOptions, ApiClientCallback callback){
         final GoogleApiClient googleApiClient = new GoogleApiClient.Builder(fragmentActivity)
                 .enableAutoManage(fragmentActivity, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        Log.d(tag, "GoogleConnectionFailed: " + connectionResult);
-                        Toasty.warning(fragmentActivity, "Unable to connect to Google. Check your internet connection", Toast.LENGTH_SHORT).show();
+                        callback.onConnectionFailed(connectionResult);
                     }
                 })
                 .addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions)

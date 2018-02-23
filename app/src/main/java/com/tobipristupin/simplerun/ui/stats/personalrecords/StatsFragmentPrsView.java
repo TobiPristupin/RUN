@@ -1,5 +1,6 @@
 package com.tobipristupin.simplerun.ui.stats.personalrecords;
 
+import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -74,12 +75,12 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
     private void initTabLayout(){
         TabLayout tabLayout = rootView.findViewById(R.id.stats_prs_tablayout);
 
-        tabLayout.addTab(tabLayout.newTab().setText("400m"));
-        tabLayout.addTab(tabLayout.newTab().setText("Mile"));
-        tabLayout.addTab(tabLayout.newTab().setText("5k"));
-        tabLayout.addTab(tabLayout.newTab().setText("10k"));
-        tabLayout.addTab(tabLayout.newTab().setText("21k"));
-        tabLayout.addTab(tabLayout.newTab().setText("42k"));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.stats_fragment_prs_view_400m));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.stats_fragment_prs_view_mile));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.stats_fragment_prs_view_5k));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.stats_fragment_prs_view_10k));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.stats_fragment_prs_view_21k));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.stats_fragment_prs_view_42k));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -114,17 +115,17 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
     
     private void initPersonalBests(){
         View farthestDistance = rootView.findViewById(R.id.stats_prs_farthest_run);
-        ((TextView) farthestDistance.findViewById(R.id.personal_best_item_title)).setText("Farthest Distance");
+        ((TextView) farthestDistance.findViewById(R.id.personal_best_item_title)).setText(R.string.stats_fragment_prs_view_farthest);
         ((TextView) farthestDistance.findViewById(R.id.personal_best_item_date)).setText("?");
         ((TextView) farthestDistance.findViewById(R.id.personal_best_item_value)).setText("0");
 
         View fastestPace = rootView.findViewById(R.id.stats_prs_fastest_pace);
-        ((TextView) fastestPace.findViewById(R.id.personal_best_item_title)).setText("Fastest Avg Pace");
+        ((TextView) fastestPace.findViewById(R.id.personal_best_item_title)).setText(R.string.stats_fragment_prs_view_fastest);
         ((TextView) fastestPace.findViewById(R.id.personal_best_item_date)).setText("?");
         ((TextView) fastestPace.findViewById(R.id.personal_best_item_value)).setText("0");
 
         View longestDuration = rootView.findViewById(R.id.stats_prs_longest_duration);
-        ((TextView) longestDuration.findViewById(R.id.personal_best_item_title)).setText("Longest Duration");
+        ((TextView) longestDuration.findViewById(R.id.personal_best_item_title)).setText(R.string.stats_fragment_prs_view_longest);
         ((TextView) longestDuration.findViewById(R.id.personal_best_item_date)).setText("?");
         ((TextView) longestDuration.findViewById(R.id.personal_best_item_value)).setText("0");
     }
@@ -155,7 +156,7 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
 
         chart.setDrawOrder(new CombinedChart.DrawOrder[]{CombinedChart.DrawOrder.SCATTER, CombinedChart.DrawOrder.LINE});
 
-        chart.setNoDataText("Oh no! It's empty!");
+        chart.setNoDataText(getString(R.string.all_empty_dataset));
         chart.setNoDataTextColor(getResources().getColor(android.R.color.black));
         chart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD);
 
@@ -230,7 +231,7 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
         CombinedData combinedData = new CombinedData();
 
         ScatterData scData = new ScatterData();
-        ScatterDataSet scatterDataSet = new ScatterDataSet(scatterData, "Time");
+        ScatterDataSet scatterDataSet = new ScatterDataSet(scatterData, getString(R.string.stats_fragment_prs_view_time));
         scatterDataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
         scatterDataSet.setScatterShapeSize(25);
         scatterDataSet.setValueFormatter(new TimeValueFormatter());
@@ -240,7 +241,7 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
         scData.addDataSet(scatterDataSet);
 
         LineData lineData = new LineData();
-        LineDataSet bestLineDataSet = new LineDataSet(lineDataBest, "Best Time");
+        LineDataSet bestLineDataSet = new LineDataSet(lineDataBest, getString(R.string.stats_fragment_prs_view_besttime));
         bestLineDataSet.enableDashedLine(25, 15, 0);
         bestLineDataSet.setColor(getResources().getColor(R.color.colorPrimary));
         bestLineDataSet.setDrawCircles(false);
@@ -248,7 +249,7 @@ public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
         bestLineDataSet.setDrawValues(false);
 
 
-        LineDataSet averageLineDataSet = new LineDataSet(lineDataAverage, "Average Time");
+        LineDataSet averageLineDataSet = new LineDataSet(lineDataAverage, getString(R.string.stats_fragment_prs_view_average));
         averageLineDataSet.enableDashedLine(15, 5, 0);
         averageLineDataSet.setColor(getResources().getColor(R.color.Blue));
         averageLineDataSet.setDrawCircles(false);
