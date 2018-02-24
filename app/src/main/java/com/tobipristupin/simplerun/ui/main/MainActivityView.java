@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.crashlytics.android.Crashlytics;
 import com.tobipristupin.simplerun.BuildConfig;
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
 import com.tobipristupin.simplerun.ui.history.HistoryFragmentView;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
 import com.tobipristupin.simplerun.ui.settings.SettingsActivityView;
@@ -38,7 +39,7 @@ import com.squareup.picasso.Picasso;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class MainActivityView extends AppCompatActivity implements MainView {
+public class MainActivityView extends BaseAppCompatActivity implements MainView {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -108,7 +109,7 @@ public class MainActivityView extends AppCompatActivity implements MainView {
     @Override
     public void initViews() {
         initDrawerLayout();
-        initToolbar();
+        initToolbar(R.id.main_toolbar, R.drawable.ic_navigation_menu);
         initNavHeader();
 
         if (savedInstanceState == null) {
@@ -194,16 +195,6 @@ public class MainActivityView extends AppCompatActivity implements MainView {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Set toolbar defined in xml layout as support action toolbar and add button to open DrawerLayout
-     */
-    private void initToolbar(){
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_menu);
     }
 }
 

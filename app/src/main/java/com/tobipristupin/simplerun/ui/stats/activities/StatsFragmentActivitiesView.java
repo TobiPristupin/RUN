@@ -33,10 +33,6 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Tobi on 1/12/2018.
- */
-
 public class StatsFragmentActivitiesView extends Fragment implements StatsActivitiesView {
 
     private View rootView;

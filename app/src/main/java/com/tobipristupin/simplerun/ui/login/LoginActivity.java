@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
 import com.tobipristupin.simplerun.auth.GoogleAuthUtils;
 import com.tobipristupin.simplerun.ui.login.adapter.LoginFragmentPagerAdapter;
 import com.tobipristupin.simplerun.utils.LoginPageTransformer;
@@ -21,7 +22,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import es.dmoral.toasty.Toasty;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseAppCompatActivity {
 
     private final String TAG = "LoginActivity";
     private GoogleSignInOptions signInOptions;

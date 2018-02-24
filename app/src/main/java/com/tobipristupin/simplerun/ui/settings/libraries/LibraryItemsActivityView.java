@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
 import com.tobipristupin.simplerun.data.model.LibraryItem;
 import com.tobipristupin.simplerun.ui.main.MainActivityView;
 import com.tobipristupin.simplerun.ui.settings.SettingsActivityView;
@@ -30,7 +31,7 @@ import java.util.List;
  * callingActivityKey.
  */
 
-public class LibraryItemsActivityView extends AppCompatActivity {
+public class LibraryItemsActivityView extends BaseAppCompatActivity {
 
     public static final String callingActivityKey = "callFrom";
     private List<LibraryItem> libraries = new ArrayList<>();
@@ -47,7 +48,8 @@ public class LibraryItemsActivityView extends AppCompatActivity {
             throw new RuntimeException("Missing calling activity data in intent");
         }
 
-        initToolbar();
+        initToolbar(R.id.settings_libraries_toolbar, R.drawable.ic_arrow_back_white_24dp);
+        changeStatusBarColor(R.color.colorPrimaryDark);
         populateLibrariesList();
         initRecyclerView();
     }
@@ -96,24 +98,6 @@ public class LibraryItemsActivityView extends AppCompatActivity {
         }
 
         return i;
-    }
-
-    private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.settings_libraries_toolbar);
-        setSupportActionBar(toolbar);
-        changeStatusBarColor();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
-    }
-
-    private void changeStatusBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-        }
     }
 
     private void initRecyclerView() {

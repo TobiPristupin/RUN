@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
 import com.tobipristupin.simplerun.data.interfaces.RunRepository;
 import com.tobipristupin.simplerun.data.manager.FirebaseRepository;
 import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
@@ -34,7 +35,7 @@ import es.dmoral.toasty.Toasty;
 /**
  * Activity to create and edit runs.
  */
-public class EditorActivityView extends AppCompatActivity implements EditorView {
+public class EditorActivityView extends BaseAppCompatActivity implements EditorView {
 
     private RunRepository repo;
     private EditorPresenter presenter;
@@ -46,7 +47,8 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
-        initToolbar();
+        initToolbar(R.id.editor_toolbar, R.drawable.ic_close_white_24dp);
+        changeStatusBarColor(R.color.colorPrimaryDark);
 
         repo = new FirebaseRepository();
         presenter = new EditorPresenter(this, repo, new SharedPrefRepository(EditorActivityView.this));
@@ -154,28 +156,6 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
         return getString(R.string.editor_activity_view_empty_field);
     }
 
-    public void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.editor_toolbar);
-        setSupportActionBar(toolbar);
-        changeStatusBarColor();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
-    }
-
-    /**
-     * AppTheme status bar color attr is set to transparent for the drawerLayout in main activity.
-     * this activity uses the primary dark color as status bar color. This method sets it during runtime.
-     */
-    private void changeStatusBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-        }
-    }
-
     private void initDateField() {
         RelativeLayout dateView = findViewById(R.id.editor_date_view);
 
@@ -281,24 +261,5 @@ public class EditorActivityView extends AppCompatActivity implements EditorView 
 
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

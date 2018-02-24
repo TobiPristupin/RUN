@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.tobipristupin.simplerun.BuildConfig;
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
 import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
@@ -24,7 +25,7 @@ import com.tobipristupin.simplerun.ui.settings.libraries.LibraryItemsActivityVie
 
 import es.dmoral.toasty.Toasty;
 
-public class SettingsActivityView extends AppCompatActivity implements SettingsView {
+public class SettingsActivityView extends BaseAppCompatActivity implements SettingsView {
 
     private SettingsPresenter presenter;
 
@@ -35,7 +36,8 @@ public class SettingsActivityView extends AppCompatActivity implements SettingsV
 
         presenter = new SettingsPresenter(this, new SharedPrefRepository(SettingsActivityView.this));
 
-        initToolbar();
+        initToolbar(R.id.settings_toolbar, R.drawable.ic_arrow_back_white_24dp);
+        changeStatusBarColor(R.color.colorPrimaryDark);
         initDistanceUnit();
         initSignOut();
         initLibraries();
@@ -43,24 +45,6 @@ public class SettingsActivityView extends AppCompatActivity implements SettingsV
         initAbout();
 
         presenter.onCreateView();
-    }
-
-    private void initToolbar(){
-        Toolbar toolbar = findViewById(R.id.settings_toolbar);
-        setSupportActionBar(toolbar);
-        changeStatusBarColor();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
-    }
-
-    private void changeStatusBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-        }
     }
 
     private void initDistanceUnit() {
