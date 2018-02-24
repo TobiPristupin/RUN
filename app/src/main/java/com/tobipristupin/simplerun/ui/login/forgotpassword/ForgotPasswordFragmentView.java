@@ -116,7 +116,7 @@ public class ForgotPasswordFragmentView extends Fragment implements ForgotPasswo
 
         String str = getString(R.string.forgot_password_fragment_view_recovery_failedtoast);
 
-        recoveryEmailFailed = Toasty.warning(getContext(), str, Toast.LENGTH_LONG);
+        recoveryEmailFailed = Toasty.warning(getContext(), str, Toast.LENGTH_SHORT);
         recoveryEmailFailed.show();
     }
 

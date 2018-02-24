@@ -165,8 +165,9 @@ public class SettingsActivityView extends AppCompatActivity implements SettingsV
         String subject = getString(R.string.settings_activity_view_email_subject);
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
 
-        String bodyString = getString(R.string.settings_acttivity_view_email_bodyversion) + BuildConfig.VERSION_NAME;
-        bodyString += getString(R.string.settings_acttivity_view_email_body_desc);
+        String bodyString = "\n\n\n\n" + getString(R.string.settings_acttivity_view_email_bodyversion) + " " + BuildConfig.VERSION_NAME;
+        bodyString += "\n" + getString(R.string.settings_acttivity_view_email_body_desc);
+        System.out.println(bodyString);
 
 
         intent.putExtra(Intent.EXTRA_TEXT, bodyString);

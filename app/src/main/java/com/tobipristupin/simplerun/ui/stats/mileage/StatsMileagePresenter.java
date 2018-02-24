@@ -1,6 +1,7 @@
 package com.tobipristupin.simplerun.ui.stats.mileage;
 
 import android.annotation.SuppressLint;
+import android.icu.text.NumberFormat;
 
 import com.tobipristupin.simplerun.data.RunPredicates;
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
@@ -16,6 +17,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import org.joda.time.DateTime;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -90,8 +92,7 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
     }
 
     private void updateTotalDistanceText(){
-        DecimalFormat df = new DecimalFormat();
-        df.setMaximumFractionDigits(2);
+        DecimalFormat df = getDecimalFormat();
 
         String mileageWeek = df.format(getWeekMileage()) + " " + getDistanceUnit();
         view.setTotalDistanceWeek(mileageWeek);
@@ -109,34 +110,38 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
         view.setTotalDistanceYear(mileageYear);
     }
 
-    @SuppressLint("DefaultLocale")
     private void updateIncreaseText(){
+        DecimalFormat df = getDecimalFormat();
+
+        /*When passing the increase string to the view, there is no need to prefix it with '-' when
+        the value is negative because the number will already contain it*/
+
         double monthIncrease = getMonthMileage() - getPastMonthMileageTotal();
         if (monthIncrease >= 0){
-            view.setMonthIncreaseText("+" + String.format("%.1f", monthIncrease), State.INCREASE);
+            view.setMonthIncreaseText("+" + df.format(monthIncrease), State.INCREASE);
         } else {
-            view.setMonthIncreaseText(String.format("%.1f", monthIncrease), State.DECREASE);
+            view.setMonthIncreaseText(df.format(monthIncrease), State.DECREASE);
         }
 
         double months3Increase = RunUtils.addArray(get3MonthsMileage()) - getPast3MonthsMileageTotal();
         if (months3Increase >= 0){
-            view.set3MonthsIncreaseText("+" + String.format("%.1f", months3Increase), State.INCREASE);
+            view.set3MonthsIncreaseText("+" + df.format(months3Increase), State.INCREASE);
         } else {
-            view.set3MonthsIncreaseText(String.format("%.1f", months3Increase), State.DECREASE);
+            view.set3MonthsIncreaseText(df.format(months3Increase), State.DECREASE);
         }
 
         double months6Increase = RunUtils.addArray(get6MonthsMileage()) - getPast6MonthsMileageTotal();
         if (months6Increase >= 0){
-            view.set6MonthsIncreaseText("+" + String.format("%.1f", months6Increase), State.INCREASE);
+            view.set6MonthsIncreaseText("+" + df.format(months6Increase), State.INCREASE);
         } else {
-            view.set6MonthsIncreaseText(String.format("%.1f", months6Increase), State.DECREASE);
+            view.set6MonthsIncreaseText(df.format(months6Increase), State.DECREASE);
         }
 
         double yearIncrease = RunUtils.addArray(getYearMileage()) - getPastYearMileage();
         if (yearIncrease >= 0){
-            view.setYearIncreaseText("+" + String.format("%.1f", yearIncrease), State.INCREASE);
+            view.setYearIncreaseText("+" + df.format(yearIncrease), State.INCREASE);
         } else {
-            view.setYearIncreaseText(String.format("%.1f", yearIncrease), State.DECREASE);
+            view.setYearIncreaseText(df.format(yearIncrease), State.DECREASE);
         }
     }
 
@@ -321,6 +326,13 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
 
     private Distance.Unit getDistanceUnit(){
         return preferencesRepository.getDistanceUnit();
+    }
+
+    private DecimalFormat getDecimalFormat(){
+        java.text.NumberFormat nf = java.text.NumberFormat.getInstance(Locale.getDefault());
+        DecimalFormat df = (DecimalFormat) nf;
+        df.applyPattern("#.#");
+        return df;
     }
 
 

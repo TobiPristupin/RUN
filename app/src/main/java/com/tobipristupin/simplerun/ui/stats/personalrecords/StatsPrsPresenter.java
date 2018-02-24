@@ -52,7 +52,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
     private void updatePersonalBests(){
         Run farthest = RunUtils.getLongestRun(runList);
         if (farthest == null){
-            view.setFarthestDistanceText("0", "?");
+            view.setFarthestDistanceText("?", "?");
         } else {
             String distance = RunUtils.distanceToString(farthest.getDistance(getDistanceUnit()), getDistanceUnit());
             String date = RunUtils.dateToString(farthest.getDate());
@@ -61,8 +61,8 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
 
 
         Run fastestPace = RunUtils.getFastestPace(runList);
-        if (fastestPace == null){
-            view.setFastestPaceText("0", "?");
+        if (fastestPace == null || fastestPace.getPace(Distance.Unit.KM) == 0){
+            view.setFastestPaceText("?", "?");
         } else {
             String pace = RunUtils.paceToString(fastestPace.getPace(getDistanceUnit()), getDistanceUnit());
             String date = RunUtils.dateToString(fastestPace.getDate());
@@ -71,7 +71,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
 
         Run longest = RunUtils.getLongestDuration(runList);
         if (longest == null){
-            view.setLongestDurationText("0", "?");
+            view.setLongestDurationText("?", "?");
         } else {
             String time = RunUtils.timeToString(longest.getTime(), true);
             String date = RunUtils.dateToString(longest.getDate());

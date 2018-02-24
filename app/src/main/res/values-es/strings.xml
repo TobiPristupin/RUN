@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Simple Run</string>
-    <string name="login_new_account"><u>¿Nuevo aquí? Crea una cuenta</u></string>
+    <string name="login_new_account"><u>Crea una cuenta</u></string>
     <string name="fragment_new_account_return"><u>Volver</u></string>
     <string name="activity_editor_distance">Distancia</string>
     <string name="activity_editor_time">Tiempo</string>
@@ -23,7 +23,7 @@
     <string name="fragment_forgot_resetlink">Pon tu email, y te enviaremos un link para resetear</string>
     <string name="activity_settings_send">Enviar</string>
     <string name="fragment_history_empty">Oh no! está vacío!</string>
-    <string name="fragment_login_forgot">¿Olvidaste la contraseña?</string>
+    <string name="fragment_login_forgot"><u>¿Olvidaste la contraseña?</u></string>
     <string name="fragment_new_account_passwordhint">Contraseña</string>
     <string name="fragment_new_account_repeatpassword">Repetir Constraseña</string>
     <string name="fragment_new_account_createaccount">Crear Cuenta</string>
@@ -51,7 +51,7 @@
     <string name="distance_unit_dialog_distanceunit">Unidad de medida</string>
     <string name="all_metric">Métrico Decimal</string>
     <string name="all_imperial">Imperial</string>
-    <string name="editor_activityview_added">Añadida con exito</string>
+    <string name="editor_activityview_added">Añadida con éxito</string>
     <string name="editor_activityview_fillin">Llena todos los campos</string>
     <string name="forgot_password_fragment_view_recoverytoast">Email de recuperación enviado</string>
     <string name="forgot_password_fragment_view_recovery_failedtoast">Email no enviado. Por favor revisa tu conneción a internet y prueba de nuevo</string>
@@ -126,5 +126,7 @@
     <string name="all_sunday">Domingo</string>
     <string name="all_all">Todas</string>
     <string name="stats_fragment_mileage_view_distance">Distancia</string>
-    <string name="about_dialog">Run Simple Version %1$s \\n\\nTu único registro de running. Maneja con facilidad tus actividades         y observa tendencias y evoluciones \\n\\n Desarollado por Tobias Pristupin</string>
+    <string name="about_dialog">Run Simple Version %1$s \n\nTu único registro de running. Maneja con facilidad tus actividades y observa tendencias y evoluciones. \n\n Desarollado por Tobias Pristupin</string>
+    <string name="editor_activity_view_title">Añadir</string>
+    <string name="activity_library_title">Bibliotecas Open Source</string>
 </resources>

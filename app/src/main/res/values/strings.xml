@@ -5,7 +5,7 @@
     <string name="fragment_new_account_return"><u>Return</u></string>
     <integer name="slide_animation_duration">300</integer>
     <string name="about_dialog">Run Simple Version %1$s \n\nYour own running tracker. Easily manage your activities
-        and observe trends over time \n\n Developed by Tobias Pristupin</string>
+        and observe trends over time. \n\n Developed by Tobias Pristupin</string>
     <string name="activity_editor_distance">Distance</string>
     <string name="editor_activity_view_empty_field" translatable="false">N/A</string>
     <string name="activity_editor_time">Time</string>
@@ -26,10 +26,10 @@
     <string name="activity_settings_aboutdeveloper">About the developer</string>
     <string name="all_run" translatable="false">RUN</string>
     <string name="fragment_forgot_resetlink">Enter your email, and we\'ll send you a reset link</string>
-    <string name="activity_settings_email">Email</string>
+    <string name="activity_settings_email" translatable="false">Email</string>
     <string name="activity_settings_send">SEND</string>
     <string name="fragment_history_empty">Oh dear! it\'s empty!</string>
-    <string name="fragment_login_forgot">Forgot password?</string>
+    <string name="fragment_login_forgot"><u>Forgot password?</u></string>
     <string name="activity_settings_emailhint" translatable="false">Email</string>
     <string name="fragment_new_account_emailhint" translatable="false">Email</string>
     <string name="fragment_new_account_passwordhint">Password</string>
@@ -138,6 +138,8 @@
     <string name="all_sunday">Sunday</string>
     <string name="all_all">All</string>
     <string name="stats_fragment_mileage_view_distance">Distance</string>
+    <string name="editor_activity_view_title">Add Manual Entry</string>
+    <string name="activity_library_title">Open Source Libraries</string>
     <plurals name="history_fragment_view_dialog_text">
         <item quantity="one">Are you sure you want to delete one item? You won't be able to recover it.</item>
         <item quantity="other">Are you sure you want to delete %1$d items? you won't be able to recover them</item>

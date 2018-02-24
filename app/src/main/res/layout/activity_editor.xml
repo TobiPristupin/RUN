@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:background="@color/colorPrimary"
-        app:title="Add Manual Entry"
+        app:title="@string/editor_activity_view_title"
         app:titleTextColor="@android:color/white" />
 
 

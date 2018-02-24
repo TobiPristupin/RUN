@@ -29,8 +29,8 @@ public class SettingsPresenter {
         DistanceUnitDialog.OnClickListener listener = new DistanceUnitDialog.OnClickListener() {
             @Override
             public void onOptionSelected(Distance.Unit unit) {
-                view.setDistanceUnitText(getDistanceUnit());
                 preferencesRepository.setDistanceUnit(unit);
+                view.setDistanceUnitText(unit);
             }
         };
 
