@@ -1,10 +1,10 @@
 package com.tobipristupin.simplerun.data.interfaces;
 
-import com.tobipristupin.simplerun.data.model.Distance;
+import com.tobipristupin.simplerun.data.model.DistanceUnit;
 
 public interface SettingsRepository {
 
-    Distance.Unit getDistanceUnit();
+    DistanceUnit getDistanceUnit();
 
-    void setDistanceUnit(Distance.Unit unit);
+    void setDistanceUnit(DistanceUnit unit);
 }

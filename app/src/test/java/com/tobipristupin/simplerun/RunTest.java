@@ -1,6 +1,6 @@
 package com.tobipristupin.simplerun;
 
-import com.tobipristupin.simplerun.data.model.Distance;
+import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.data.model.Run;
 
 import org.junit.Assert;
@@ -41,15 +41,15 @@ public class RunTest {
 
     @Test public void testPaceUpdate(){
         Run run = Run.fromKilometers(1, 1000, 0, 0);
-        long kmPace1 = run.getPace(Distance.Unit.KM);
+        long kmPace1 = run.getPace(DistanceUnit.KM);
 
         run.setTime(2000);
-        long kmPace2 = run.getPace(Distance.Unit.KM);
+        long kmPace2 = run.getPace(DistanceUnit.KM);
 
         Assert.assertEquals(false, kmPace1 == kmPace2);
 
         run.setDistanceKilometres(5);
-        long kmPace3 = run.getPace(Distance.Unit.KM);
+        long kmPace3 = run.getPace(DistanceUnit.KM);
 
         Assert.assertEquals(false, kmPace2 == kmPace3);
     }

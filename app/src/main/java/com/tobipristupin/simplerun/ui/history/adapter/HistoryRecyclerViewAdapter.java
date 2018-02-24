@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.data.DiffCallback;
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
-import com.tobipristupin.simplerun.data.model.Distance;
+import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.utils.RunUtils;
 
@@ -48,7 +48,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
     public void onBindViewHolder(final HistoryViewHolder holder, int position) {
         final Run run = runs.get(holder.getAdapterPosition());
 
-        Distance.Unit unit = getDistanceUnit();
+        DistanceUnit unit = getDistanceUnit();
 
         holder.ratingBar.setRating(run.getRating());
         holder.date.setText(RunUtils.dateToString(run.getDate()));
@@ -82,7 +82,7 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         diffResult.dispatchUpdatesTo(this);
     }
 
-    private Distance.Unit getDistanceUnit(){
+    private DistanceUnit getDistanceUnit(){
         return preferencesRepository.getDistanceUnit();
     }
 

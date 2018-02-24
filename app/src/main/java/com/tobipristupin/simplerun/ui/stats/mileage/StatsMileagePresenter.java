@@ -1,11 +1,8 @@
 package com.tobipristupin.simplerun.ui.stats.mileage;
 
-import android.annotation.SuppressLint;
-import android.icu.text.NumberFormat;
-
 import com.tobipristupin.simplerun.data.RunPredicates;
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
-import com.tobipristupin.simplerun.data.model.Distance;
+import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.interfaces.Observable;
 import com.tobipristupin.simplerun.interfaces.Observer;
@@ -17,7 +14,6 @@ import com.github.mikephil.charting.data.BarEntry;
 import org.joda.time.DateTime;
 
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -324,7 +320,7 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
     }
 
 
-    private Distance.Unit getDistanceUnit(){
+    private DistanceUnit getDistanceUnit(){
         return preferencesRepository.getDistanceUnit();
     }
 

@@ -3,7 +3,7 @@ package com.tobipristupin.simplerun.ui.settings;
 import android.content.DialogInterface;
 
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
-import com.tobipristupin.simplerun.data.model.Distance;
+import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.ui.settings.dialogs.DistanceUnitDialog;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -28,7 +28,7 @@ public class SettingsPresenter {
     public void onDistanceUnitClick() {
         DistanceUnitDialog.OnClickListener listener = new DistanceUnitDialog.OnClickListener() {
             @Override
-            public void onOptionSelected(Distance.Unit unit) {
+            public void onOptionSelected(DistanceUnit unit) {
                 preferencesRepository.setDistanceUnit(unit);
                 view.setDistanceUnitText(unit);
             }
@@ -66,7 +66,7 @@ public class SettingsPresenter {
         view.sendLibrariesViewIntent();
     }
 
-    private Distance.Unit getDistanceUnit() {
+    private DistanceUnit getDistanceUnit() {
         return preferencesRepository.getDistanceUnit();
     }
 }

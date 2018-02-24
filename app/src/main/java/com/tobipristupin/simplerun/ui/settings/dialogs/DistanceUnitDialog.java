@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
-import com.tobipristupin.simplerun.data.model.Distance;
+import com.tobipristupin.simplerun.data.model.DistanceUnit;
 
 /**
  * Created by Tobi on 1/27/2018.
@@ -27,19 +27,19 @@ public class DistanceUnitDialog {
 
         builder.setTitle(R.string.distance_unit_dialog_distanceunit);
 
-        Distance.Unit distanceUnit = preferencesRepository.getDistanceUnit();
+        DistanceUnit distanceUnit = preferencesRepository.getDistanceUnit();
 
-        int checkedItem = distanceUnit.equals(Distance.Unit.KM) ? 0 : 1;
-        CharSequence[] items = new String[]{context.getString(R.string.all_metric) + " (" + Distance.Unit.KM + ")"
-                , context.getString(R.string.all_imperial)  + " (" + Distance.Unit.MILE + ")"};
+        int checkedItem = distanceUnit.equals(DistanceUnit.KM) ? 0 : 1;
+        CharSequence[] items = new String[]{context.getString(R.string.all_metric) + " (" + DistanceUnit.KM + ")"
+                , context.getString(R.string.all_imperial)  + " (" + DistanceUnit.MILE + ")"};
 
         builder.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
-                    listener.onOptionSelected(Distance.Unit.KM);
+                    listener.onOptionSelected(DistanceUnit.KM);
                 } else {
-                    listener.onOptionSelected(Distance.Unit.MILE);
+                    listener.onOptionSelected(DistanceUnit.MILE);
                 }
                 dialog.dismiss();
             }
@@ -50,6 +50,6 @@ public class DistanceUnitDialog {
     }
 
     public interface OnClickListener {
-        void onOptionSelected(Distance.Unit unit);
+        void onOptionSelected(DistanceUnit unit);
     }
 }

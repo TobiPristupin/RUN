@@ -2,7 +2,7 @@ package com.tobipristupin.simplerun.ui.stats.personalrecords;
 
 import com.tobipristupin.simplerun.data.RunPredicates;
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
-import com.tobipristupin.simplerun.data.model.Distance;
+import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.interfaces.Observable;
 import com.tobipristupin.simplerun.interfaces.Observer;
@@ -61,7 +61,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
 
 
         Run fastestPace = RunUtils.getFastestPace(runList);
-        if (fastestPace == null || fastestPace.getPace(Distance.Unit.KM) == 0){
+        if (fastestPace == null || fastestPace.getPace(DistanceUnit.KM) == 0){
             view.setFastestPaceText("?", "?");
         } else {
             String pace = RunUtils.paceToString(fastestPace.getPace(getDistanceUnit()), getDistanceUnit());
@@ -207,7 +207,7 @@ public class StatsPrsPresenter implements Observer<List<Run>> {
         return averageRunData;
     }
 
-    private Distance.Unit getDistanceUnit(){
+    private DistanceUnit getDistanceUnit(){
         return preferencesRepository.getDistanceUnit();
     }
 

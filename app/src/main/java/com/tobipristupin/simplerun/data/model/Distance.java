@@ -28,8 +28,8 @@ public class Distance implements Parcelable {
     private double distanceMi;
     private double floatingPointEpsilon = 0.099;
 
-    public Distance(double distance, Unit unit){
-        if (unit == Unit.MILE){
+    public Distance(double distance, DistanceUnit unit){
+        if (unit == DistanceUnit.MILE){
             distanceMi = distance;
             distanceKm = mileToKm(distance);
         } else  {
@@ -77,8 +77,8 @@ public class Distance implements Parcelable {
         return distanceMi;
     }
 
-    public double getDistance(Unit unit){
-        if (unit == Unit.MILE){
+    public double getDistance(DistanceUnit unit){
+        if (unit == DistanceUnit.MILE){
             return getDistanceMi();
         }
 
@@ -104,8 +104,8 @@ public class Distance implements Parcelable {
     }
 
     @Exclude
-    public void setDistance(Unit unit, double distance){
-        if (unit == Unit.MILE){
+    public void setDistance(DistanceUnit unit, double distance){
+        if (unit == DistanceUnit.MILE){
             distanceMi = distance;
             distanceKm = mileToKm(distance);
         } else  {
@@ -141,30 +141,4 @@ public class Distance implements Parcelable {
         dest.writeDouble(distanceMi);
     }
 
-    public enum Unit {
-        KM("km"), MILE("mi");
-
-        private String value;
-
-        Unit(String value){
-            this.value = value;
-        }
-
-
-        public static Unit get(String value) {
-            switch (value.toLowerCase()) {
-                case "km":
-                    return KM;
-                case "mi":
-                    return MILE;
-                default:
-                    throw new RuntimeException();
-            }
-        }
-
-        @Override
-        public String toString() {
-            return value;
-        }
-    }
 }

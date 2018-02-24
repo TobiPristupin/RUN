@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,10 +16,8 @@ import android.widget.TextView;
 
 import com.tobipristupin.simplerun.BuildConfig;
 import com.tobipristupin.simplerun.R;
-import com.tobipristupin.simplerun.data.interfaces.RunRepository;
-import com.tobipristupin.simplerun.data.manager.FirebaseRepository;
 import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
-import com.tobipristupin.simplerun.data.model.Distance;
+import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
 import com.tobipristupin.simplerun.ui.settings.dialogs.DistanceUnitDialog;
 import com.tobipristupin.simplerun.ui.settings.libraries.LibraryItemsActivityView;
@@ -117,12 +114,12 @@ public class SettingsActivityView extends AppCompatActivity implements SettingsV
     }
 
     @Override
-    public void setDistanceUnitText(Distance.Unit unit) {
+    public void setDistanceUnitText(DistanceUnit unit) {
         String text;
-        if (unit == Distance.Unit.KM) {
-            text = getString(R.string.all_metric) + " (" + Distance.Unit.KM + ")";
+        if (unit == DistanceUnit.KM) {
+            text = getString(R.string.all_metric) + " (" + DistanceUnit.KM + ")";
         } else {
-            text = getString(R.string.all_imperial) + " (" + Distance.Unit.MILE + ")";
+            text = getString(R.string.all_imperial) + " (" + DistanceUnit.MILE + ")";
         }
 
         TextView distanceUnit = findViewById(R.id.settings_distanceunit_selection);

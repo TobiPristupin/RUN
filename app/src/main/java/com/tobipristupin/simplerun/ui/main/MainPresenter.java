@@ -74,7 +74,7 @@ public class MainPresenter {
 
     public Uri getUserPhotoUrl(){
         Uri uri = null;
-        /* Dirty hack to get photo url from google provider and not firebase, because firebase stores
+        /* Dirty hack to fromString photo url from google provider and not firebase, because firebase stores
          image in low quality*/
         for (UserInfo info : user.getProviderData()){
             if (info.getProviderId().equals("google.com")){

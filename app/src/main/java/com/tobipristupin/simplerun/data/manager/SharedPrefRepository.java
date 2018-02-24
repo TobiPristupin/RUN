@@ -8,7 +8,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
-import com.tobipristupin.simplerun.data.model.Distance;
+import com.tobipristupin.simplerun.data.model.DistanceUnit;
 
 import java.util.Locale;
 
@@ -48,21 +48,21 @@ public class SharedPrefRepository implements PreferencesRepository {
     }
 
     @Override
-    public Distance.Unit getDistanceUnit() {
+    public DistanceUnit getDistanceUnit() {
         String unit = preferences.getString(DISTANCE_UNIT_KEY, null);
         /*This shouldn't happen, it should be covered by initialization in constructor, but I'm gonna cover it twice
          because I don't trust myself.*/
         if (unit == null){
             //Initialize to default value
-            setDistanceUnit(Distance.Unit.MILE);
-            return Distance.Unit.MILE;
+            setDistanceUnit(DistanceUnit.MILE);
+            return DistanceUnit.MILE;
         }
 
-        return Distance.Unit.get(unit);
+        return DistanceUnit.fromString(unit);
     }
 
     @Override
-    public void setDistanceUnit(Distance.Unit unit) {
+    public void setDistanceUnit(DistanceUnit unit) {
         //Apply automatically pushes changes to server
         preferences.edit().putString(DISTANCE_UNIT_KEY, unit.toString()).apply();
     }
@@ -72,7 +72,7 @@ public class SharedPrefRepository implements PreferencesRepository {
     }
 
     private void initialize(){
-        setDistanceUnit(Distance.Unit.MILE);
+        setDistanceUnit(DistanceUnit.MILE);
     }
 
 }

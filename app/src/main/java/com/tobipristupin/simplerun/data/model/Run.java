@@ -73,7 +73,7 @@ public class Run implements Parcelable, Comparable<Run> {
             throw new IllegalArgumentException();
         }
 
-        Distance distance = new Distance(distanceKm, Distance.Unit.KM);
+        Distance distance = new Distance(distanceKm, DistanceUnit.KM);
         return new Run(distance, time, date, rating);
     }
 
@@ -90,7 +90,7 @@ public class Run implements Parcelable, Comparable<Run> {
             throw new IllegalArgumentException();
         }
 
-        Distance distance = new Distance(distanceMi, Distance.Unit.MILE);
+        Distance distance = new Distance(distanceMi, DistanceUnit.MILE);
         return new Run(distance, time, date, rating);
     }
 
@@ -124,7 +124,7 @@ public class Run implements Parcelable, Comparable<Run> {
 
 
     @Exclude
-    public double getDistance(Distance.Unit unit){
+    public double getDistance(DistanceUnit unit){
         return distance.getDistance(unit);
     }
 
@@ -145,8 +145,8 @@ public class Run implements Parcelable, Comparable<Run> {
     }
 
     @Exclude
-    public long getPace(Distance.Unit unit){
-        if (unit == Distance.Unit.KM){
+    public long getPace(DistanceUnit unit){
+        if (unit == DistanceUnit.KM){
             return kilometrePace;
         }
 
@@ -155,8 +155,8 @@ public class Run implements Parcelable, Comparable<Run> {
 
     @Exclude
     public void setDistance(String distanceString){
-        String km = Distance.Unit.KM.toString();
-        String mi = Distance.Unit.MILE.toString();
+        String km = DistanceUnit.KM.toString();
+        String mi = DistanceUnit.MILE.toString();
 
         if (!(distanceString.contains(km) || distanceString.contains(mi))){
             throw new IllegalArgumentException("Distance does not contain unit");
@@ -217,13 +217,13 @@ public class Run implements Parcelable, Comparable<Run> {
 
     @Exclude
     public void setDistanceKilometres(double distanceKilometres){
-        distance.setDistance(Distance.Unit.KM, distanceKilometres);
+        distance.setDistance(DistanceUnit.KM, distanceKilometres);
         updatePace();
     }
 
     @Exclude
     public void setDistanceMiles(double distanceMiles){
-        distance.setDistance(Distance.Unit.MILE, distanceMiles);
+        distance.setDistance(DistanceUnit.MILE, distanceMiles);
         updatePace();
     }
 
@@ -272,7 +272,7 @@ public class Run implements Parcelable, Comparable<Run> {
 
         if (this.getId() != null && run.getId() != null && !this.getId().equals(run.getId())) return false;
         if (this.getDate() != run.getDate()) return false;
-        if (this.getDistance(Distance.Unit.KM) != run.getDistance(Distance.Unit.KM)) return false;
+        if (this.getDistance(DistanceUnit.KM) != run.getDistance(DistanceUnit.KM)) return false;
         if (this.getRating() != run.getRating()) return false;
         if (this.getTime() != run.getTime()) return false;
         //No need to check for mile or km pace because pace is computed off time and distance.

@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
 import com.tobipristupin.simplerun.data.interfaces.RunRepository;
-import com.tobipristupin.simplerun.data.model.Distance;
+import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.utils.RunUtils;
 
@@ -47,7 +47,7 @@ public class EditorPresenter {
     }
 
     private void setViewEditMode(){
-        Distance.Unit unit = preferencesRepository.getDistanceUnit();
+        DistanceUnit unit = preferencesRepository.getDistanceUnit();
 
         String distanceText = RunUtils.distanceToString(runToEdit.getDistance(unit), unit);
         view.setDistanceText(distanceText);
@@ -125,7 +125,7 @@ public class EditorPresenter {
 
     private Run createRunFromData(String distanceText, String ratingText, String timeText, String dateText){
         Run run;
-        if (distanceText.contains(Distance.Unit.KM.toString())){
+        if (distanceText.contains(DistanceUnit.KM.toString())){
             run = Run.fromKilometers(distanceText, timeText, dateText, ratingText);
         } else {
             run = Run.fromMiles(distanceText, timeText, dateText, ratingText);

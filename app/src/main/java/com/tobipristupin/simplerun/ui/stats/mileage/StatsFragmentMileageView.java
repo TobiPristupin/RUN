@@ -16,7 +16,7 @@ import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
 import com.tobipristupin.simplerun.data.manager.FirebaseRunsSingleton;
 import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
-import com.tobipristupin.simplerun.data.model.Distance;
+import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.utils.GenericAxisValueFormatter;
 import com.tobipristupin.simplerun.utils.State;
 import com.github.mikephil.charting.charts.BarChart;
@@ -130,7 +130,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
 
     @SuppressLint("SetTextI18n")
     private void initOverviewItems(){
-        Distance.Unit unit = preferencesRepository.getDistanceUnit();
+        DistanceUnit unit = preferencesRepository.getDistanceUnit();
 
         /*This is ugly but I couldn't find a way to make it better. If by any chance you are reading this (why?) and
         have a good idea on how to create a template layout and fill it in at runtime without using a recycler view or list view
@@ -329,7 +329,7 @@ public class StatsFragmentMileageView extends Fragment implements StatsMileageVi
     }
 
     private void setGraphData(List<BarEntry> barEntries, BarChart chart){
-        Distance.Unit unit = preferencesRepository.getDistanceUnit();
+        DistanceUnit unit = preferencesRepository.getDistanceUnit();
         BarDataSet barDataSet = new BarDataSet(barEntries,
                 getString(R.string.stats_fragment_mileage_view_distance) + " (" + unit + ")");
 

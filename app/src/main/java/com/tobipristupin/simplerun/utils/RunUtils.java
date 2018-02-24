@@ -2,7 +2,7 @@ package com.tobipristupin.simplerun.utils;
 
 import android.support.annotation.Nullable;
 
-import com.tobipristupin.simplerun.data.model.Distance;
+import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.data.model.Run;
 
 import org.apache.commons.collections.Predicate;
@@ -76,7 +76,7 @@ public class RunUtils {
         Run farthest = runs.get(0);
 
         for (Run r : runs){
-            if (r.getDistance(Distance.Unit.KM) > farthest.getDistance(Distance.Unit.KM)){
+            if (r.getDistance(DistanceUnit.KM) > farthest.getDistance(DistanceUnit.KM)){
                 farthest = r;
             }
         }
@@ -92,7 +92,7 @@ public class RunUtils {
         Run fastest = runs.get(0);
 
         for (Run r : runs){
-            if (r.getPace(Distance.Unit.KM) < fastest.getPace(Distance.Unit.KM)){
+            if (r.getPace(DistanceUnit.KM) < fastest.getPace(DistanceUnit.KM)){
                 fastest = r;
             }
         }
@@ -135,7 +135,7 @@ public class RunUtils {
         return sum;
     }
 
-    public static double addMileage(List<Run> runs, Distance.Unit unit) {
+    public static double addMileage(List<Run> runs, DistanceUnit unit) {
         double sum = 0;
         for (Run r : runs) {
             sum += r.getDistance(unit);
@@ -150,7 +150,7 @@ public class RunUtils {
      * @param unit
      * @return distance in the format of "1 km/mi"
      */
-    public static String distanceToString(double distance, Distance.Unit unit){
+    public static String distanceToString(double distance, DistanceUnit unit){
         distance = roundNearestTenth(distance);
         DecimalFormat df = new DecimalFormat("0.00");
         String distanceText = df.format(distance) + " " + unit.toString();
@@ -266,7 +266,7 @@ public class RunUtils {
      * @param unit
      * @return pace in format mm:ss/unit or hh:mm:ss/unit if the pace contains hours.
      */
-    public static String paceToString(long paceTimeUnix, Distance.Unit unit){
+    public static String paceToString(long paceTimeUnix, DistanceUnit unit){
         Period period = new Period(paceTimeUnix);
         String paceText = new StringBuilder()
                 .append(String.format(Locale.getDefault(), "%02d", period.getMinutes()))
