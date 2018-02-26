@@ -14,6 +14,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
 import com.tobipristupin.simplerun.auth.GoogleAuthUtils;
+import com.tobipristupin.simplerun.ui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.login.adapter.LoginFragmentPagerAdapter;
 import com.tobipristupin.simplerun.utils.LoginPageTransformer;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -27,7 +28,7 @@ public class LoginActivity extends BaseAppCompatActivity {
     private final String TAG = "LoginActivity";
     private GoogleSignInOptions signInOptions;
     private GoogleApiClient apiClient;
-    private Toast connectionFailedToast;
+    private ToastyWrapper connectionFailedToast = new ToastyWrapper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,14 +60,7 @@ public class LoginActivity extends BaseAppCompatActivity {
     }
 
     private void showOnConnectionFailedToast(){
-        if (connectionFailedToast != null){
-            connectionFailedToast.cancel();
-        }
-
-        String str = getString(R.string.login_activity_unabletoconnect_toast);
-        connectionFailedToast = Toasty.warning(LoginActivity.this, str);
-
-        connectionFailedToast.show();
+        connectionFailedToast.showWarning(LoginActivity.this, getString(R.string.login_activity_unabletoconnect_toast));
     }
 
     public GoogleApiClient getGoogleApiClient(){

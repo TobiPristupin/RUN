@@ -3,16 +3,12 @@ package com.tobipristupin.simplerun.auth;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.tobipristupin.simplerun.R;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-
-import es.dmoral.toasty.Toasty;
 
 /**
  * Utils class for Google Sign In Auth process.

@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.ui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.login.BaseLoginFragment;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -31,9 +32,9 @@ public class ForgotPasswordFragmentView extends BaseLoginFragment implements For
     private Button sendButton;
     private ForgotPasswordPresenter presenter;
 
-    private Toast recoveryEmailSent;
-    private Toast recoveryEmailFailed;
-    private Toast tooManyRequestsToast;
+    private ToastyWrapper recoveryEmailSent = new ToastyWrapper();
+    private ToastyWrapper recoveryEmailFailed = new ToastyWrapper();
+    private ToastyWrapper tooManyRequestsToast = new ToastyWrapper();
 
     @Nullable
     @Override
@@ -92,38 +93,20 @@ public class ForgotPasswordFragmentView extends BaseLoginFragment implements For
 
     @Override
     public void showRecoveryEmailSentToast() {
-        if (recoveryEmailSent != null){
-            recoveryEmailSent.cancel();
-        }
-
         String str = getString(R.string.forgot_password_fragment_view_recoverytoast);
-        recoveryEmailSent = Toasty.success(getContext(), str, Toast.LENGTH_SHORT);
-
-        recoveryEmailSent.show();
+        recoveryEmailSent.showSuccess(getContext(), str, Toast.LENGTH_SHORT);
     }
 
     @Override
     public void showRecoveryEmailFailedToast() {
-        if (recoveryEmailFailed != null){
-            recoveryEmailFailed.cancel();
-        }
-
         String str = getString(R.string.forgot_password_fragment_view_recovery_failedtoast);
-
-        recoveryEmailFailed = Toasty.warning(getContext(), str, Toast.LENGTH_SHORT);
-        recoveryEmailFailed.show();
+        recoveryEmailFailed.showWarning(getContext(), str, Toast.LENGTH_SHORT);
     }
 
     @Override
     public void showTooManyRequestsToast() {
-        if (tooManyRequestsToast != null){
-            tooManyRequestsToast.cancel();
-        }
-
         String str = getString(R.string.forgot_password_fragment_view_toomanyrequests_toast);
-        tooManyRequestsToast = Toasty.warning(getContext(), str);
-
-        tooManyRequestsToast.show();
+        tooManyRequestsToast.showWarning(getContext(), str);
     }
 
     private void initReturnButton(){

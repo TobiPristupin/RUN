@@ -19,6 +19,7 @@ import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
 import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
+import com.tobipristupin.simplerun.ui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
 import com.tobipristupin.simplerun.ui.settings.dialogs.DistanceUnitDialog;
 import com.tobipristupin.simplerun.ui.settings.libraries.LibraryItemsActivityView;
@@ -28,6 +29,8 @@ import es.dmoral.toasty.Toasty;
 public class SettingsActivityView extends BaseAppCompatActivity implements SettingsView {
 
     private SettingsPresenter presenter;
+
+    private ToastyWrapper noEmailErrorToasty = new ToastyWrapper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +165,7 @@ public class SettingsActivityView extends BaseAppCompatActivity implements Setti
 
     @Override
     public void showNoEmailAppError() {
-        Toasty.warning(SettingsActivityView.this, getString(R.string.settings_activity_view_noemailerror_toast)).show();
+        noEmailErrorToasty.showWarning(SettingsActivityView.this, getString(R.string.settings_activity_view_noemailerror_toast));
     }
 
     @Override

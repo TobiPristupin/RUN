@@ -24,6 +24,7 @@ import com.tobipristupin.simplerun.data.interfaces.RunRepository;
 import com.tobipristupin.simplerun.data.manager.FirebaseRepository;
 import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
 import com.tobipristupin.simplerun.data.model.Run;
+import com.tobipristupin.simplerun.ui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.editor.dialog.DistanceDialog;
 import com.tobipristupin.simplerun.ui.editor.dialog.RatingDialog;
 import com.tobipristupin.simplerun.ui.editor.dialog.TimeDialog;
@@ -40,6 +41,9 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
     private RunRepository repo;
     private EditorPresenter presenter;
     public static final String INTENT_KEY = "editor_activity_intent";
+
+    private ToastyWrapper addedRunToasty = new ToastyWrapper();
+    private ToastyWrapper invalidFieldToasty = new ToastyWrapper();
 
 
     @Override
@@ -67,12 +71,12 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
 
     @Override
     public void showAddedRunSuccessfullyToast() {
-        Toasty.success(EditorActivityView.this, getString(R.string.editor_activityview_added), Toast.LENGTH_SHORT).show();
+        addedRunToasty.showSuccess(EditorActivityView.this, getString(R.string.editor_activityview_added), Toast.LENGTH_SHORT);
     }
 
     @Override
     public void showInvalidFieldsToast() {
-        Toasty.warning(EditorActivityView.this, getString(R.string.editor_activityview_fillin), Toast.LENGTH_SHORT).show();
+        invalidFieldToasty.showWarning(EditorActivityView.this, getString(R.string.editor_activityview_fillin), Toast.LENGTH_SHORT);
     }
 
     @Override

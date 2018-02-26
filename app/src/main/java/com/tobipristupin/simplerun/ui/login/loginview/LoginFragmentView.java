@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.interfaces.ErrorType;
+import com.tobipristupin.simplerun.ui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.login.BaseLoginFragment;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
 import com.tobipristupin.simplerun.ui.main.MainActivityView;
@@ -40,8 +41,8 @@ public class LoginFragmentView extends BaseLoginFragment implements LoginView {
     private TextInputLayout emailLayout;
     private TextInputLayout passwordLayout;
     private FabButton fabButton;
-    private Toast loginErrorToast;
-    private Toast googleSignInFailedToast;
+    private ToastyWrapper loginErrorToast = new ToastyWrapper();
+    private ToastyWrapper googleSignInFailedToast = new ToastyWrapper();
 
     @Nullable
     @Override
@@ -119,14 +120,8 @@ public class LoginFragmentView extends BaseLoginFragment implements LoginView {
 
     @Override
     public void showUnexpectedLoginErrorToast() {
-        if (loginErrorToast != null){
-            loginErrorToast.cancel();
-        }
-
         String str = getString(R.string.login_fragment_view_errortoast);
-
-        loginErrorToast = Toasty.warning(getContext(), str, Toast.LENGTH_SHORT);
-        loginErrorToast.show();
+        loginErrorToast.showWarning(getContext(), str, Toast.LENGTH_SHORT);
     }
 
     @Override
@@ -138,15 +133,8 @@ public class LoginFragmentView extends BaseLoginFragment implements LoginView {
 
     @Override
     public void showGoogleSignInFailedToast() {
-        if (googleSignInFailedToast != null){
-            googleSignInFailedToast.cancel();
-        }
-
         String str = getString(R.string.login_fragment_view_google_toast);
-
-        googleSignInFailedToast = Toasty.warning(getContext(), str);
-
-        googleSignInFailedToast.show();
+        googleSignInFailedToast.showWarning(getContext(), str);
     }
 
     private void initLogInFab(){
