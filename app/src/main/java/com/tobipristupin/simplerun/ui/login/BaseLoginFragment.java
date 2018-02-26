@@ -9,11 +9,12 @@ import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.app.BaseFragment;
 
 /**
  * Class that contains base methods used in all login fragments
  */
-public class BaseLoginFragment extends Fragment {
+public class BaseLoginFragment extends BaseFragment {
 
     /**
      * Configures all TextInputLayout to remove their errors every time text is inputted

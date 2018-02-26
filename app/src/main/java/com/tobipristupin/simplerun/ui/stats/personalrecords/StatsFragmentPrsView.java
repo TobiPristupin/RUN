@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.app.BaseFragment;
 import com.tobipristupin.simplerun.data.manager.FirebaseRunsSingleton;
 import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
 import com.tobipristupin.simplerun.utils.TimeValueFormatter;
@@ -28,11 +29,8 @@ import com.github.mikephil.charting.data.ScatterDataSet;
 
 import java.util.List;
 
-/**
- * Created by Tobi on 11/28/2017.
- */
 
-public class StatsFragmentPrsView extends Fragment implements StatsPrsView {
+public class StatsFragmentPrsView extends BaseFragment implements StatsPrsView {
 
     private View rootView;
     private ViewAnimator viewAnimator;

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.app.BaseFragment;
 import com.tobipristupin.simplerun.ui.stats.activities.StatsFragmentActivitiesView;
 import com.tobipristupin.simplerun.ui.stats.mileage.StatsFragmentMileageView;
 import com.tobipristupin.simplerun.ui.stats.personalrecords.StatsFragmentPrsView;
@@ -21,7 +22,7 @@ import com.tobipristupin.simplerun.ui.stats.personalrecords.StatsFragmentPrsView
 /**
  * StatsFragmentView displays statistics of tracked runs with graphs
  */
-public class StatsFragmentView extends Fragment {
+public class StatsFragmentView extends BaseFragment {
 
     private static final int TAB_COUNT = 3;
     private View rootView;

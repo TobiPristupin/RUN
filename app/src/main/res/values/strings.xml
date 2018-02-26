@@ -142,7 +142,7 @@
     <string name="activity_library_title">Open Source Libraries</string>
     <string name="forgot_password_return"><u>Return</u></string>
     <plurals name="history_fragment_view_dialog_text">
-        <item quantity="one">Are you sure you want to delete one item? You won't be able to recover it.</item>
-        <item quantity="other">Are you sure you want to delete %1$d items? you won't be able to recover them</item>
+        <item quantity="one">Are you sure you want to delete one item? You won\'t be able to recover it.</item>
+        <item quantity="other">Are you sure you want to delete %1$d items? You won\'t be able to recover them</item>
     </plurals>
 </resources>

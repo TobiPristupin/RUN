@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ViewAnimator;
 
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.app.BaseFragment;
 import com.tobipristupin.simplerun.data.manager.FirebaseRunsSingleton;
 import com.tobipristupin.simplerun.utils.GenericAxisValueFormatter;
 import com.github.mikephil.charting.animation.Easing;
@@ -33,7 +34,7 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatsFragmentActivitiesView extends Fragment implements StatsActivitiesView {
+public class StatsFragmentActivitiesView extends BaseFragment implements StatsActivitiesView {
 
     private View rootView;
     private StatsActivitiesPresenter presenter;

@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.app.BaseFragment;
 import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
 import com.tobipristupin.simplerun.data.model.RunFilter;
 import com.tobipristupin.simplerun.data.manager.FirebaseRunsSingleton;
@@ -45,13 +46,15 @@ import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
  * in MainActivityView as History.
  */
 
-public class HistoryFragmentView extends Fragment implements HistoryView {
+public class HistoryFragmentView extends BaseFragment implements HistoryView {
 
     private View rootView;
     private HistoryRecyclerViewAdapter adapter;
     private ActionModeCallback modeCallback = new ActionModeCallback();
     private ActionMode actionMode;
     private HistoryPresenter presenter;
+    private DrawerLayout drawerLayout;
+    private DrawerLayout.DrawerListener drawerListener;
 
     private RecyclerView recyclerView;
     private MaterialSpinner dateSpinner;
@@ -87,8 +90,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        android.support.v7.widget.Toolbar toolbar = getActivity().findViewById(R.id.main_toolbar);
-        toolbar.setTitle(getString(R.string.all_history));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.all_history);
     }
 
     @Override
@@ -103,9 +105,15 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
         presenter.onDetachView();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        drawerLayout.removeDrawerListener(drawerListener);
+    }
+
     private void initNavigationDrawer(){
-        DrawerLayout drawer = getActivity().findViewById(R.id.main_activity_drawer_layout);
-        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+        drawerLayout = getActivity().findViewById(R.id.main_activity_drawer_layout);
+        drawerListener = new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 finishActionMode();
@@ -119,7 +127,9 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
 
             @Override
             public void onDrawerStateChanged(int newState) {}
-        });
+        };
+
+        drawerLayout.addDrawerListener(drawerListener);
     }
 
     private void initDateSpinner(){
@@ -296,7 +306,7 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
         builder.setNegativeButton(negativeText, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
+                dialogInterface.cancel();
             }
         });
 

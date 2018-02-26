@@ -130,4 +130,8 @@
     <string name="editor_activity_view_title">Añadir</string>
     <string name="activity_library_title">Bibliotecas Open Source</string>
     <string name="forgot_password_return"><u>Volver</u></string>
+    <plurals name="history_fragment_view_dialog_text">
+        <item quantity="one">¿Estás seguro que quieres eliminar un item? No podrás recuperarlo.</item>
+        <item quantity="other">¿Estás seguro que quieres eliminar %1$d items? No podrás recuperarlos</item>
+    </plurals>
 </resources>

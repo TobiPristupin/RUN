@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.app.BaseFragment;
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
 import com.tobipristupin.simplerun.data.manager.FirebaseRunsSingleton;
 import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
@@ -28,7 +29,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import java.util.List;
 
 
-public class StatsFragmentMileageView extends Fragment implements StatsMileageView {
+public class StatsFragmentMileageView extends BaseFragment implements StatsMileageView {
 
     private View rootView;
 
