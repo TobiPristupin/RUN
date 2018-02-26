@@ -2,9 +2,8 @@ package com.tobipristupin.simplerun.utils;
 
 import org.joda.time.DateTime;
 
-/**
- * Created by Tobi on 11/5/2017.
- */
+import java.util.Locale;
+
 
 public class DateUtils {
 
@@ -163,5 +162,54 @@ public class DateUtils {
                 dayOfYear().withMinimumValue().minusYears(1).plusMonths(plusMonths).dayOfMonth().withMaximumValue()
                 .withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59).getMillis() / 1000;
         return timestamp;
+    }
+
+
+    /**
+     * Joda time incorrectly formats month names and weekdays when using locales other than english.
+     * Joda time produces strings with period at the end and without capitalizing. This method correctly reformats
+     * those strings. If the string is already formatted correctly, such as when using english locale, nothing will be done.
+     * @return formatted month or day string
+     */
+    public static String formatDateString(String value){
+        if (value.length() < 1){
+            return value;
+        }
+
+        value = value.replace(".", "");
+        value = value.substring(0, 1).toUpperCase() + value.substring(1);
+
+        return value;
+    }
+
+    /**
+     * Returns a given month as localized short text, so February would be Feb. This methods also
+     * formats correctly the value when using specific locales. See {@link #formatDateString(String)} for a
+     * more detailed explanation of the formatting.
+     * @param dateTime
+     * @return Month of datetime as short text
+     */
+    public static String getMonthShortText(DateTime dateTime){
+        return formatDateString(dateTime.monthOfYear().getAsShortText(Locale.getDefault()));
+    }
+
+    /**
+     * Returns a given month as localized short text, such as "February". This methods also
+     * formats correctly the value when using specific locales. See {@link #formatDateString(String)} for a
+     * more detailed explanation of the formatting.
+     * @param dateTime
+     * @return Month of datetime as text
+     */
+    public static String getMonthText(DateTime dateTime){
+        return formatDateString(dateTime.monthOfYear().getAsText(Locale.getDefault()));
+    }
+
+    /**
+     * Extracts the day of month from a given datetime.
+     * @param dateTime
+     * @return day of month such as 1 or 31
+     */
+    public static String getDayOfMonthString(DateTime dateTime){
+        return dateTime.dayOfMonth().getAsString();
     }
 }

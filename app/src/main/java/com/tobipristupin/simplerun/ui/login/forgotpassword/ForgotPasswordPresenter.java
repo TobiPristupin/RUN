@@ -19,10 +19,6 @@ public class ForgotPasswordPresenter {
         this.view = view;
     }
 
-    public void onEmailTextInputTextChanged(){
-        view.disableEmailError();
-    }
-
     public void onSendEmailButtonClicked(String email){
         if (isValidEmail(email)){
             view.startLoadingAnimation();

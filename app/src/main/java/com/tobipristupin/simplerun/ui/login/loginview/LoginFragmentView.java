@@ -1,13 +1,16 @@
 package com.tobipristupin.simplerun.ui.login.loginview;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ import android.widget.Toast;
 
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.interfaces.ErrorType;
+import com.tobipristupin.simplerun.ui.login.BaseLoginFragment;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
 import com.tobipristupin.simplerun.ui.main.MainActivityView;
 import com.google.android.gms.auth.api.Auth;
@@ -26,11 +30,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import es.dmoral.toasty.Toasty;
 import mbanje.kurt.fabbutton.FabButton;
 
-/**
- * Created by Tobi on 9/15/2017.
- */
 
-public class LoginFragmentView extends Fragment implements LoginView {
+public class LoginFragmentView extends BaseLoginFragment implements LoginView {
 
     private static final int RC_SIGN_IN = 1516;
     private View rootView;
@@ -53,10 +54,12 @@ public class LoginFragmentView extends Fragment implements LoginView {
         passwordLayout = rootView.findViewById(R.id.login_password);
         fabButton = rootView.findViewById(R.id.login_button);
 
+        setLayoutErrorReset(emailLayout, passwordLayout);
+
         initLogInFab();
-        setTextInputErrorReset();
         initGoogleLogIn();
         initBottomButtons();
+
         return rootView;
     }
 
@@ -77,11 +80,6 @@ public class LoginFragmentView extends Fragment implements LoginView {
     }
 
     @Override
-    public void disableEmailError() {
-        emailLayout.setErrorEnabled(false);
-    }
-
-    @Override
     public void enablePasswordError(ErrorType.PasswordLogin type) {
         passwordLayout.setErrorEnabled(true);
 
@@ -98,11 +96,6 @@ public class LoginFragmentView extends Fragment implements LoginView {
             default :
                 passwordLayout.setError(getString(R.string.all_error));
         }
-    }
-
-    @Override
-    public void disablePasswordError() {
-        passwordLayout.setErrorEnabled(false);
     }
 
     @Override
@@ -164,38 +157,6 @@ public class LoginFragmentView extends Fragment implements LoginView {
                 String email = emailLayout.getEditText().getText().toString().trim();
                 String password = passwordLayout.getEditText().getText().toString().trim();
                 presenter.attemptEmailLogin(email, password);
-            }
-        });
-    }
-
-    private void setTextInputErrorReset(){
-        emailLayout.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                presenter.onEmailTextInputTextChanged();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-        passwordLayout.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                presenter.onPasswordTextInputTextChanged();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
             }
         });
     }

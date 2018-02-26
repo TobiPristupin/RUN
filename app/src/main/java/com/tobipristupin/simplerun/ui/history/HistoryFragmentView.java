@@ -3,7 +3,6 @@ package com.tobipristupin.simplerun.ui.history;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -88,9 +87,8 @@ public class HistoryFragmentView extends Fragment implements HistoryView {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        String title = getString(R.string.all_history);
-
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
+        android.support.v7.widget.Toolbar toolbar = getActivity().findViewById(R.id.main_toolbar);
+        toolbar.setTitle(getString(R.string.all_history));
     }
 
     @Override

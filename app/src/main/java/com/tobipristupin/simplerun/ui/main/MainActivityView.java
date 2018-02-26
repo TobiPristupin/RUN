@@ -109,7 +109,8 @@ public class MainActivityView extends BaseAppCompatActivity implements MainView 
     @Override
     public void initViews() {
         initDrawerLayout();
-        initToolbar(R.id.main_toolbar, R.drawable.ic_navigation_menu);
+        Toolbar toolbar = initToolbar(R.id.main_toolbar, R.drawable.ic_navigation_menu);
+//        TextView toolbarTitle = toolbar.findViewById(R.id.main_toolbar_text)
         initNavHeader();
 
         if (savedInstanceState == null) {

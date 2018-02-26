@@ -196,6 +196,7 @@ public class RunUtils {
 
         //Unix time is in milli, DateTime is in sec, so multiply by 1000 to convert
         String dateText = formatter.print(new DateTime(date * 1000L));
+        dateText = DateUtils.formatDateString(dateText);
         return dateText;
     }
 

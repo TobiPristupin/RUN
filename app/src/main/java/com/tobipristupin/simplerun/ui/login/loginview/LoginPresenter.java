@@ -28,14 +28,6 @@ public class LoginPresenter {
         this.view = view;
     }
 
-    public void onEmailTextInputTextChanged(){
-        view.disableEmailError();
-    }
-
-    public void onPasswordTextInputTextChanged(){
-        view.disablePasswordError();
-    }
-
     public void attemptEmailLogin(String email, String password){
         AuthManager authManager = new FirebaseAuthManager();
 

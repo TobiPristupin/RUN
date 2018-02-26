@@ -100,18 +100,6 @@ public class NewAccountPresenter {
         });
     }
 
-    public void onEmailTextInputTextChanged(){
-        view.disableEmailError();
-    }
-
-    public void onPasswordTextInputTextChanged(){
-        view.disablePasswordError();
-    }
-
-    public void onPassword2TextInputTextChanged(){
-        view.disablePassword2Error();
-    }
-
     public void onGoogleLogInClick(){
         view.startLoadingAnimation();
         view.sendGoogleSignInIntent();

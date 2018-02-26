@@ -129,4 +129,5 @@
     <string name="about_dialog">Run Simple Version %1$s \n\nTu único registro de running. Maneja con facilidad tus actividades y observa tendencias y evoluciones. \n\n Desarollado por Tobias Pristupin</string>
     <string name="editor_activity_view_title">Añadir</string>
     <string name="activity_library_title">Bibliotecas Open Source</string>
+    <string name="forgot_password_return"><u>Volver</u></string>
 </resources>

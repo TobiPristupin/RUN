@@ -64,4 +64,6 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(homeAsUpDrawable);
         return toolbar;
     }
+
+
 }

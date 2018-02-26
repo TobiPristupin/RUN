@@ -16,15 +16,13 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.ui.login.BaseLoginFragment;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import es.dmoral.toasty.Toasty;
 
-/**
- * Created by Tobi on 9/15/2017.
- */
 
-public class ForgotPasswordFragmentView extends Fragment implements ForgotPasswordView {
+public class ForgotPasswordFragmentView extends BaseLoginFragment implements ForgotPasswordView {
 
     private static final String TAG = "LoginActivity";
     private View rootView;
@@ -47,7 +45,8 @@ public class ForgotPasswordFragmentView extends Fragment implements ForgotPasswo
         sendButton = rootView.findViewById(R.id.forgot_password_send_button);
         presenter = new ForgotPasswordPresenter(this);
 
-        //Configures all TextInputLayout to remove their errors every time text is inputted
+        setLayoutErrorReset(emailLayout);
+
         setLayoutErrorReset();
         initSendButton();
         initReturnButton();
@@ -70,11 +69,6 @@ public class ForgotPasswordFragmentView extends Fragment implements ForgotPasswo
     public void enableEmailError() {
         emailLayout.setErrorEnabled(true);
         emailLayout.setError(getString(R.string.all_invalid_email));
-    }
-
-    @Override
-    public void disableEmailError() {
-        emailLayout.setErrorEnabled(false);
     }
 
     @Override
@@ -130,24 +124,6 @@ public class ForgotPasswordFragmentView extends Fragment implements ForgotPasswo
         tooManyRequestsToast = Toasty.warning(getContext(), str);
 
         tooManyRequestsToast.show();
-    }
-
-    //Configures all TextInputLayout to remove their errors every time text is inputted
-    private void setLayoutErrorReset(){
-        emailLayout.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                presenter.onEmailTextInputTextChanged();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
     }
 
     private void initReturnButton(){

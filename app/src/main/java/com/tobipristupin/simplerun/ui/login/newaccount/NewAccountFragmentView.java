@@ -18,6 +18,7 @@ import android.widget.Button;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.interfaces.ErrorType;
 import com.tobipristupin.simplerun.ui.ToastyWrapper;
+import com.tobipristupin.simplerun.ui.login.BaseLoginFragment;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
 import com.tobipristupin.simplerun.ui.main.MainActivityView;
 import com.google.android.gms.auth.api.Auth;
@@ -26,11 +27,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.wang.avi.AVLoadingIndicatorView;
 
-/**
- * Created by Tobi on 9/15/2017.
- */
-
-public class NewAccountFragmentView extends Fragment implements NewAccountView {
+public class NewAccountFragmentView extends BaseLoginFragment implements NewAccountView {
 
     private static final int RC_SIGN_IN = 1379;
     private View rootView;
@@ -60,7 +57,8 @@ public class NewAccountFragmentView extends Fragment implements NewAccountView {
 
         presenter = new NewAccountPresenter(this);
 
-        //Configures all TextInputLayout to remove their errors every time text is inputted
+        setLayoutErrorReset(emailLayout, passwordLayout, passwordLayout2);
+
         setLayoutErrorReset();
         initCreateAccountButton();
         initGoogleLogIn();
@@ -86,28 +84,13 @@ public class NewAccountFragmentView extends Fragment implements NewAccountView {
     }
 
     @Override
-    public void disableEmailError() {
-        emailLayout.setErrorEnabled(false);
-    }
-
-    @Override
     public void enablePasswordError(ErrorType.PasswordLogin type) {
         enablePasswordViewError(passwordLayout, type);
     }
 
     @Override
-    public void disablePasswordError() {
-        passwordLayout.setErrorEnabled(false);
-    }
-
-    @Override
     public void enablePassword2Error(ErrorType.PasswordLogin type) {
         enablePasswordViewError(passwordLayout2, type);
-    }
-
-    @Override
-    public void disablePassword2Error() {
-        passwordLayout2.setErrorEnabled(false);
     }
 
     private void enablePasswordViewError(TextInputLayout view, ErrorType.PasswordLogin type){
@@ -125,6 +108,7 @@ public class NewAccountFragmentView extends Fragment implements NewAccountView {
                 break;
             case PASSWORD_DONT_MATCH :
                 view.setError(getString(R.string.all_passwords_dont_match));
+                break;
             default :
                 view.setError(getString(R.string.all_error));
         }
@@ -202,54 +186,6 @@ public class NewAccountFragmentView extends Fragment implements NewAccountView {
             }
         });
 
-    }
-
-    //Configures all TextInputLayout to remove their errors every time text is inputted
-    private void setLayoutErrorReset() {
-        emailLayout.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                presenter.onEmailTextInputTextChanged();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-        passwordLayout.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                presenter.onPasswordTextInputTextChanged();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-        passwordLayout2.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                presenter.onPassword2TextInputTextChanged();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
     }
 
     private void initGoogleLogIn(){

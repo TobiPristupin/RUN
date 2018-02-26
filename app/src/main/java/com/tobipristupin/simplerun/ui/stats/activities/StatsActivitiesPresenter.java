@@ -14,7 +14,6 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 
 public class StatsActivitiesPresenter implements Observer<List<Run>> {
@@ -151,34 +150,38 @@ public class StatsActivitiesPresenter implements Observer<List<Run>> {
 
     private void updateChartXLabels(){
         DateTime dateTime = new DateTime();
-        Locale locale = Locale.getDefault();
 
-        String[] xLabelWeek = { dateTime.withDayOfWeek(1).dayOfMonth().getAsString()
-                + "-" + dateTime.withDayOfWeek(7).dayOfMonth().getAsString()
-                + " " + dateTime.monthOfYear().getAsShortText(Locale.getDefault()) };
+        //Format {day of month}-{day of month} {month short text} e.g. 19-26 Feb
+        String[] xLabelWeek = {
+                DateUtils.getDayOfMonthString(dateTime.withDayOfWeek(1))
+                + "-" + DateUtils.getDayOfMonthString(dateTime.withDayOfWeek(7))
+                + " " + DateUtils.getMonthShortText(dateTime)};
         view.setGraphWeekXLabels(xLabelWeek);
 
-        String[] xLabelsMonth = {dateTime.monthOfYear().getAsText(locale)};
+        String[] xLabelsMonth = {DateUtils.getMonthText(dateTime)};
         view.setGraphMonthXLabels(xLabelsMonth);
 
+        //Format {month} e.g. February
         String[] xLabels3Months = {
-                dateTime.minusMonths(2).monthOfYear().getAsText(locale),
-                dateTime.minusMonths(1).monthOfYear().getAsText(locale),
-                dateTime.monthOfYear().getAsText(locale)
+                DateUtils.getMonthText(dateTime.minusMonths(2)),
+                DateUtils.getMonthText(dateTime.minusMonths(1)),
+                DateUtils.getMonthText(dateTime)
         };
         view.setGraph3MonthsXLabels(xLabels3Months);
 
+        //Format {month short text}-{month short text} e.g Jan-Feb
         String[] xLabels6Months = {
-                dateTime.minusMonths(5).monthOfYear().getAsShortText(locale) + "-" + dateTime.minusMonths(4).monthOfYear().getAsShortText(locale),
-                dateTime.minusMonths(3).monthOfYear().getAsShortText(locale) + "-" + dateTime.minusMonths(2).monthOfYear().getAsShortText(locale),
-                dateTime.minusMonths(1).monthOfYear().getAsShortText(locale) + "-" + dateTime.monthOfYear().getAsShortText(locale)
+                DateUtils.getMonthShortText(dateTime.minusMonths(5)) + "-" + DateUtils.getMonthShortText(dateTime.minusMonths(4)),
+                DateUtils.getMonthShortText(dateTime.minusMonths(3)) + "-" + DateUtils.getMonthShortText(dateTime.minusMonths(2)),
+                DateUtils.getMonthShortText(dateTime.minusMonths(1)) + "-" + DateUtils.getMonthShortText(dateTime)
         };
         view.setGraph6MonthsXLabels(xLabels6Months);
 
+        //Format {month short text}-{month short text} e.g Jan-Feb
         String[] xLabelsYear = {
-                dateTime.withMonthOfYear(1).monthOfYear().getAsShortText(locale) + "-" + dateTime.withMonthOfYear(4).monthOfYear().getAsShortText(locale),
-                dateTime.withMonthOfYear(5).monthOfYear().getAsShortText(locale) + "-" + dateTime.withMonthOfYear(8).monthOfYear().getAsShortText(locale),
-                dateTime.withMonthOfYear(9).monthOfYear().getAsShortText(locale) + "-" + dateTime.withMonthOfYear(12).monthOfYear().getAsShortText(locale),
+                DateUtils.getMonthShortText(dateTime.withMonthOfYear(1)) + "-" + DateUtils.getMonthShortText(dateTime.withMonthOfYear(4)),
+                DateUtils.getMonthShortText(dateTime.withMonthOfYear(5)) + "-" + DateUtils.getMonthShortText(dateTime.withMonthOfYear(8)),
+                DateUtils.getMonthShortText(dateTime.withMonthOfYear(9)) + "-" + DateUtils.getMonthShortText(dateTime.withMonthOfYear(12)),
         };
         view.setGraphYearXLabels(xLabelsYear);
     }

@@ -12,11 +12,7 @@ public interface LoginView {
 
     void enableEmailError(ErrorType.EmailLogin type);
 
-    void disableEmailError();
-
     void enablePasswordError(ErrorType.PasswordLogin type);
-
-    void disablePasswordError();
 
     void startLoadingAnimation();
 
