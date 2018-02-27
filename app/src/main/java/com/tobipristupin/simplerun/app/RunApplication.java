@@ -26,6 +26,11 @@ public class RunApplication extends Application {
 
     private RefWatcher refWatcher;
 
+    public static RefWatcher getRefWatcher(Context context) {
+        RunApplication application = (RunApplication) context.getApplicationContext();
+        return application.refWatcher;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -40,11 +45,12 @@ public class RunApplication extends Application {
 
         CrashlyticsCore core = new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build();
         Fabric.with(this, new Crashlytics.Builder().core(core).build());
-    }
 
-    public static RefWatcher getRefWatcher(Context context) {
-        RunApplication application = (RunApplication) context.getApplicationContext();
-        return application.refWatcher;
+        Resources resources = getResources();
+        Configuration configuration = resources.getConfiguration();
+        DisplayMetrics displayMetrics = resources.getDisplayMetrics();
+        configuration.setLocale(new Locale("es"));
+        resources.updateConfiguration(configuration, displayMetrics);
     }
 }
 

@@ -4,8 +4,12 @@
     <string name="login_new_account"><u>New here? Sign up</u></string>
     <string name="fragment_new_account_return"><u>Return</u></string>
     <integer name="slide_animation_duration">300</integer>
-    <string name="about_dialog">Run Simple Version %1$s \n\nYour own running tracker. Easily manage your activities
-        and observe trends over time. \n\n Developed by Tobias Pristupin</string>
+    <string name="about_dialog">Run Simple Version %1$s \n\nYour own running tracker.
+        Easily manage your activities and observe trends over time.
+        \n\n Developed by Tobias Pristupin
+        \n\nThis app is open source and licensed under the MIT License.
+        \n\nYou can check out the code over at:\nhttps://github.com/TobiPristupin/RUN
+        \n\nFeel free to contribute and submit issues :)</string>
     <string name="activity_editor_distance">Distance</string>
     <string name="editor_activity_view_empty_field" translatable="false">N/A</string>
     <string name="activity_editor_time">Time</string>
@@ -92,7 +96,7 @@
     <string name="settings_activity_view_signoutdialog_title">Are you sure you want to log out?</string>
     <string name="settings_activity_view_signoutdialog_positive">Yes</string>
     <string name="settings_activity_view_signoutdialog_negative">No</string>
-    <string name="settings_activity_view_aboutdialog_title">About</string>
+    <string name="aboutdialog_title">About</string>
     <string name="settings_activity_view_noemailerror_toast">No valid email app found, message could not be sent</string>
     <string name="settings_activity_view_email_subject">Help and Feedback</string>
     <string name="settings_acttivity_view_email_bodyversion">Version:</string>

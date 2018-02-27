@@ -2,17 +2,12 @@ package com.tobipristupin.simplerun.ui.settings.libraries;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
@@ -48,7 +43,7 @@ public class LibraryItemsActivityView extends BaseAppCompatActivity {
             throw new RuntimeException("Missing calling activity data in intent");
         }
 
-        initToolbar(R.id.settings_libraries_toolbar, R.drawable.ic_arrow_back_white_24dp);
+        setSupportActionBar(R.id.settings_libraries_toolbar, R.drawable.ic_arrow_back_white_24dp);
         changeStatusBarColor(R.color.colorPrimaryDark);
         populateLibrariesList();
         initRecyclerView();

@@ -18,23 +18,20 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
-import com.tobipristupin.simplerun.BuildConfig;
+import com.squareup.picasso.Picasso;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
+import com.tobipristupin.simplerun.ui.AboutDialog;
 import com.tobipristupin.simplerun.ui.history.HistoryFragmentView;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
 import com.tobipristupin.simplerun.ui.settings.SettingsActivityView;
 import com.tobipristupin.simplerun.ui.settings.libraries.LibraryItemsActivityView;
 import com.tobipristupin.simplerun.ui.stats.StatsFragmentView;
-import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -109,9 +106,8 @@ public class MainActivityView extends BaseAppCompatActivity implements MainView 
     @Override
     public void initViews() {
         initDrawerLayout();
-        Toolbar toolbar = initToolbar(R.id.main_toolbar, R.drawable.ic_navigation_menu);
-//        TextView toolbarTitle = toolbar.findViewById(R.id.main_toolbar_text)
         initNavHeader();
+        setSupportActionBar(R.id.main_toolbar, R.drawable.ic_navigation_menu);
 
         if (savedInstanceState == null) {
             //If app hasn't loaded the views previously
@@ -123,12 +119,7 @@ public class MainActivityView extends BaseAppCompatActivity implements MainView 
 
     @Override
     public void showAboutDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivityView.this);
-
-        String title = getString(R.string.main_activity_view_dialog_title);
-        builder.setTitle(title);
-        builder.setMessage(getString(R.string.about_dialog, BuildConfig.VERSION_NAME));
-        builder.show();
+        AboutDialog.showDialog(MainActivityView.this);
     }
 
     @Override
@@ -144,6 +135,7 @@ public class MainActivityView extends BaseAppCompatActivity implements MainView 
             startActivity(goToMarket);
         } catch (ActivityNotFoundException e) {
             Crashlytics.logException(e);
+
             startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
         }

@@ -3,14 +3,9 @@ package com.tobipristupin.simplerun.ui.settings;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,12 +14,11 @@ import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
 import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
+import com.tobipristupin.simplerun.ui.AboutDialog;
 import com.tobipristupin.simplerun.ui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
 import com.tobipristupin.simplerun.ui.settings.dialogs.DistanceUnitDialog;
 import com.tobipristupin.simplerun.ui.settings.libraries.LibraryItemsActivityView;
-
-import es.dmoral.toasty.Toasty;
 
 public class SettingsActivityView extends BaseAppCompatActivity implements SettingsView {
 
@@ -39,7 +33,7 @@ public class SettingsActivityView extends BaseAppCompatActivity implements Setti
 
         presenter = new SettingsPresenter(this, new SharedPrefRepository(SettingsActivityView.this));
 
-        initToolbar(R.id.settings_toolbar, R.drawable.ic_arrow_back_white_24dp);
+        setSupportActionBar(R.id.settings_toolbar, R.drawable.ic_arrow_back_white_24dp);
         changeStatusBarColor(R.color.colorPrimaryDark);
         initDistanceUnit();
         initSignOut();
@@ -177,10 +171,7 @@ public class SettingsActivityView extends BaseAppCompatActivity implements Setti
 
     @Override
     public void showAboutDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivityView.this);
-        builder.setTitle(R.string.settings_activity_view_aboutdialog_title);
-        builder.setMessage(String.format(getResources().getString(R.string.about_dialog), BuildConfig.VERSION_NAME));
-        builder.show();
+        AboutDialog.showDialog(SettingsActivityView.this);
     }
 
 }

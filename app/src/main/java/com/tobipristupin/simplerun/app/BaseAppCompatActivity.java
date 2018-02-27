@@ -32,7 +32,7 @@ public class BaseAppCompatActivity extends AppCompatActivity {
      * @param homeAsUpIndicator
      * @return toolbar view
      */
-    protected Toolbar initToolbar(int viewId, boolean homeAsUpIndicator){
+    protected Toolbar setSupportActionBar(int viewId, boolean homeAsUpIndicator) {
         Toolbar toolbar;
 
         try {
@@ -59,8 +59,8 @@ public class BaseAppCompatActivity extends AppCompatActivity {
      * @param homeAsUpDrawable drawable id to be used in homeAsUpIndicator
      * @return toolbar view
      */
-    protected Toolbar initToolbar(int viewId, int homeAsUpDrawable){
-        Toolbar toolbar = initToolbar(viewId, true);
+    protected Toolbar setSupportActionBar(int viewId, int homeAsUpDrawable) {
+        Toolbar toolbar = setSupportActionBar(viewId, true);
         getSupportActionBar().setHomeAsUpIndicator(homeAsUpDrawable);
         return toolbar;
     }

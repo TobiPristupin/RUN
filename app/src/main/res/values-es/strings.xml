@@ -84,7 +84,7 @@
     <string name="settings_activity_view_signoutdialog_title">¿Estás seguro que quieres cerrar sesión?</string>
     <string name="settings_activity_view_signoutdialog_positive">Si</string>
     <string name="settings_activity_view_signoutdialog_negative">No</string>
-    <string name="settings_activity_view_aboutdialog_title">Acerca de</string>
+    <string name="aboutdialog_title">Acerca de</string>
     <string name="settings_activity_view_noemailerror_toast">No se encontró una aplicación de email válida, mensaje no se pudo enviar</string>
     <string name="settings_activity_view_email_subject">Ayuda y sugerencias</string>
     <string name="settings_acttivity_view_email_bodyversion">Version:</string>
@@ -126,7 +126,12 @@
     <string name="all_sunday">Domingo</string>
     <string name="all_all">Todas</string>
     <string name="stats_fragment_mileage_view_distance">Distancia</string>
-    <string name="about_dialog">Run Simple Version %1$s \n\nTu único registro de running. Maneja con facilidad tus actividades y observa tendencias y evoluciones. \n\n Desarollado por Tobias Pristupin</string>
+    <string name="about_dialog">Run Simple Version %1$s
+        \n\nTu único registro de running. Maneja con facilidad tus actividades y observa tendencias y evoluciones.
+        \n\nDesarollado por Tobias Pristupin
+        \n\nEsta aplicación es Open Source y licensiada bajo la licensia MIT.
+        \n\nPuedes chequear el código fuente aquí:  https://github.com/TobiPristupin/RUN
+        \n\nSiéntete bienvenido a contribuir y reportar errores :)</string>
     <string name="editor_activity_view_title">Añadir</string>
     <string name="activity_library_title">Bibliotecas Open Source</string>
     <string name="forgot_password_return"><u>Volver</u></string>

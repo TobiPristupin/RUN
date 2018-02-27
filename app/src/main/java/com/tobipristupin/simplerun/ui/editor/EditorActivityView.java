@@ -2,16 +2,11 @@ package com.tobipristupin.simplerun.ui.editor;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -31,17 +26,14 @@ import com.tobipristupin.simplerun.ui.editor.dialog.TimeDialog;
 
 import java.util.Calendar;
 
-import es.dmoral.toasty.Toasty;
-
 /**
  * Activity to create and edit runs.
  */
 public class EditorActivityView extends BaseAppCompatActivity implements EditorView {
 
+    public static final String INTENT_KEY = "editor_activity_intent";
     private RunRepository repo;
     private EditorPresenter presenter;
-    public static final String INTENT_KEY = "editor_activity_intent";
-
     private ToastyWrapper addedRunToasty = new ToastyWrapper();
     private ToastyWrapper invalidFieldToasty = new ToastyWrapper();
 
@@ -51,7 +43,7 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
-        initToolbar(R.id.editor_toolbar, R.drawable.ic_close_white_24dp);
+        setSupportActionBar(R.id.editor_toolbar, R.drawable.ic_close_white_24dp);
         changeStatusBarColor(R.color.colorPrimaryDark);
 
         repo = new FirebaseRepository();
@@ -136,6 +128,11 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
     }
 
     @Override
+    public String getEmptyFieldText() {
+        return getString(R.string.editor_activity_view_empty_field);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.editor_toolbar_menu, menu);
         return true;
@@ -153,11 +150,6 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
         }
 
         return true;
-    }
-
-    @Override
-    public String getEmptyFieldText() {
-        return getString(R.string.editor_activity_view_empty_field);
     }
 
     private void initDateField() {

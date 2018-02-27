@@ -5,10 +5,6 @@ import android.content.DialogInterface;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.ui.settings.dialogs.DistanceUnitDialog;
 
-/**
- * Created by Tobi on 1/27/2018.
- */
-
 public interface SettingsView {
 
     void setDistanceUnitText(DistanceUnit unit);
