@@ -224,6 +224,42 @@
 
         </RelativeLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/Grey" />
+
+        <RelativeLayout
+            android:id="@+id/settings_license_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp">
+
+            <TextView
+                android:id="@+id/settings_license_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="16dp"
+                android:text="@string/settings_activity_license"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/settings_license_text"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/settings_activity_license_and_credits"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+
     </LinearLayout>
 
 </ScrollView>

@@ -35,13 +35,19 @@ public class SettingsActivityView extends BaseAppCompatActivity implements Setti
 
         setSupportActionBar(R.id.settings_toolbar, R.drawable.ic_arrow_back_white_24dp);
         changeStatusBarColor(R.color.colorPrimaryDark);
+
+        initViews();
+
+        presenter.onCreateView();
+    }
+
+    private void initViews(){
         initDistanceUnit();
         initSignOut();
         initLibraries();
         initHelpAndFeedback();
         initAbout();
-
-        presenter.onCreateView();
+        initLicense();
     }
 
     private void initDistanceUnit() {
@@ -90,6 +96,16 @@ public class SettingsActivityView extends BaseAppCompatActivity implements Setti
             @Override
             public void onClick(View v) {
                 presenter.onAboutClick();
+            }
+        });
+    }
+
+    private void initLicense(){
+        RelativeLayout view = findViewById(R.id.settings_license_container);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.onLicenseClick();
             }
         });
     }
@@ -172,4 +188,11 @@ public class SettingsActivityView extends BaseAppCompatActivity implements Setti
         AboutDialog.showDialog(SettingsActivityView.this);
     }
 
+    @Override
+    public void showLicenseDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivityView.this);
+        builder.setTitle(getString(R.string.settings_activity_license));
+        builder.setMessage(getText(R.string.license_dialog));
+        builder.show();
+    }
 }

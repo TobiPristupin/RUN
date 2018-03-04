@@ -66,6 +66,10 @@ public class SettingsPresenter {
         view.sendLibrariesViewIntent();
     }
 
+    public void onLicenseClick(){
+        view.showLicenseDialog();
+    }
+
     private DistanceUnit getDistanceUnit() {
         return preferencesRepository.getDistanceUnit();
     }

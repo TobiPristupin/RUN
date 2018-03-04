@@ -22,4 +22,6 @@ public interface SettingsView {
     void sendLibrariesViewIntent();
 
     void showAboutDialog();
+
+    void showLicenseDialog();
 }
