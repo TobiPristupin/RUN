@@ -1,5 +1,6 @@
 package com.tobipristupin.simplerun.ui.stats.personalrecords;
 
+import com.github.mikephil.charting.data.Entry;
 import com.tobipristupin.simplerun.data.RunPredicates;
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
@@ -7,7 +8,6 @@ import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.interfaces.Observable;
 import com.tobipristupin.simplerun.interfaces.Observer;
 import com.tobipristupin.simplerun.utils.RunUtils;
-import com.github.mikephil.charting.data.Entry;
 
 import java.util.ArrayList;
 import java.util.Collections;

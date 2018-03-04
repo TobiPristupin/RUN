@@ -4,18 +4,17 @@ package com.tobipristupin.simplerun.ui.login.newaccount;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.tobipristupin.simplerun.auth.FirebaseAuthManager;
-import com.tobipristupin.simplerun.auth.interfaces.AuthCallbacks;
-import com.tobipristupin.simplerun.auth.interfaces.AuthManager;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.tobipristupin.simplerun.auth.FirebaseAuthManager;
+import com.tobipristupin.simplerun.auth.interfaces.AuthCallbacks;
+import com.tobipristupin.simplerun.auth.interfaces.AuthManager;
 import com.tobipristupin.simplerun.interfaces.ErrorType;
-
-import org.apache.commons.validator.routines.EmailValidator;
+import com.tobipristupin.simplerun.utils.EmailValidator;
 
 /**
  * Created by Tobi on 10/22/2017.
@@ -39,9 +38,6 @@ public class NewAccountPresenter {
     }
 
     private boolean validateFields(String email, String password, String password2){
-        EmailValidator validator = EmailValidator.getInstance();
-
-
         if (email.isEmpty()) {
             view.enableEmailError(ErrorType.EmailLogin.REQUIRED_FIELD);
             return false;
@@ -53,7 +49,7 @@ public class NewAccountPresenter {
             return false;
         }
 
-        if (!validator.isValid(email)) {
+        if (!EmailValidator.isValid(email)) {
             view.enableEmailError(ErrorType.EmailLogin.INVALID_EMAIL);
             return false;
         }
@@ -140,6 +136,7 @@ public class NewAccountPresenter {
             }
         });
     }
+
 
 
 }

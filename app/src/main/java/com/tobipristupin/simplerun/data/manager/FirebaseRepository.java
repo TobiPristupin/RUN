@@ -1,12 +1,12 @@
 package com.tobipristupin.simplerun.data.manager;
 
 
-import com.tobipristupin.simplerun.data.interfaces.RunRepository;
-import com.tobipristupin.simplerun.data.model.Run;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tobipristupin.simplerun.data.interfaces.RunRepository;
+import com.tobipristupin.simplerun.data.model.Run;
 
 public class FirebaseRepository implements RunRepository {
 

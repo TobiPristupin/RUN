@@ -6,6 +6,7 @@ import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
 import com.tobipristupin.simplerun.data.interfaces.RunRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.data.model.Run;
+import com.tobipristupin.simplerun.utils.DateUtils;
 import com.tobipristupin.simplerun.utils.RunUtils;
 
 import org.joda.time.DateTime;
@@ -111,7 +112,7 @@ public class EditorPresenter {
 
         DateTime dateText = new DateTime(year, month + 1, dayOfMonth, 0, 0);
 
-        view.setDateText(formatter.print(dateText));
+        view.setDateText(DateUtils.formatDateString(formatter.print(dateText)));
     }
 
     private boolean isValid(String... values){

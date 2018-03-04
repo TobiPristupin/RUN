@@ -4,13 +4,13 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.tobipristupin.simplerun.auth.interfaces.AuthCallbacks;
-import com.tobipristupin.simplerun.auth.interfaces.AuthManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.tobipristupin.simplerun.auth.interfaces.AuthCallbacks;
+import com.tobipristupin.simplerun.auth.interfaces.AuthManager;
 
 /**
  * Created by Tobi on 10/22/2017.

@@ -1,5 +1,6 @@
 package com.tobipristupin.simplerun.ui.editor.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -23,6 +24,7 @@ public class RatingDialog {
         this.listener = listener;
     }
 
+    @SuppressLint("InflateParams")
     public AlertDialog makeDialog(Activity activity) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         LayoutInflater inflater = activity.getLayoutInflater();

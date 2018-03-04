@@ -1,12 +1,6 @@
 package com.tobipristupin.simplerun.ui.main;
 
-/**
- * Main Activity and entry point of application. Implements MainView interface.
- *
- *@author Tobias Pristupin
- *@version 1.0
- *@since January 9 2017
- */
+
 
 
 import android.content.ActivityNotFoundException;
@@ -35,7 +29,13 @@ import com.tobipristupin.simplerun.ui.stats.StatsFragmentView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
+/**
+ * Main Activity and entry point of application. Implements MainView interface.
+ *
+ *@author Tobias Pristupin
+ *@version 1.0
+ *@since January 9 2017
+ */
 public class MainActivityView extends BaseAppCompatActivity implements MainView {
 
     private DrawerLayout drawerLayout;

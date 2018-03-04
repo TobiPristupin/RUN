@@ -5,13 +5,17 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseFragment;
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
@@ -20,11 +24,6 @@ import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.utils.GenericAxisValueFormatter;
 import com.tobipristupin.simplerun.utils.State;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 
 import java.util.List;
 
@@ -263,7 +262,7 @@ public class StatsFragmentMileageView extends BaseFragment implements StatsMilea
     @Override
     public void setTotalDistanceWeek(String text){
         weekTotalDistance = text;
-        /**
+        /*
          * totalDistanceTextView text is updated when any tab is selected. Because presenter has a delay
          * when retrieving data from the network, when tab 0 is selected the totalDistanceMonth text has not
          * been initialized and so the textview's text is null. The following lines of code ensure that as soon

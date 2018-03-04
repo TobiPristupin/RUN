@@ -2,9 +2,8 @@ package com.tobipristupin.simplerun.app;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.util.DisplayMetrics;
+import android.support.multidex.MultiDexApplication;
+import android.util.Patterns;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
@@ -13,8 +12,6 @@ import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.tobipristupin.simplerun.BuildConfig;
 
-import java.util.Locale;
-
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -22,7 +19,7 @@ import io.fabric.sdk.android.Fabric;
  * in order to call setPersistenceEnabled(), which has to be called when app starts
  */
 
-public class RunApplication extends Application {
+public class RunApplication extends MultiDexApplication {
 
     private RefWatcher refWatcher;
 
@@ -46,11 +43,12 @@ public class RunApplication extends Application {
         CrashlyticsCore core = new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build();
         Fabric.with(this, new Crashlytics.Builder().core(core).build());
 
-        Resources resources = getResources();
-        Configuration configuration = resources.getConfiguration();
-        DisplayMetrics displayMetrics = resources.getDisplayMetrics();
-        configuration.setLocale(new Locale("es"));
-        resources.updateConfiguration(configuration, displayMetrics);
+//        Resources resources = getResources();
+//        Configuration configuration = resources.getConfiguration();
+//        DisplayMetrics displayMetrics = resources.getDisplayMetrics();
+//        configuration.setLocale(new Locale("es"));
+//        resources.updateConfiguration(configuration, displayMetrics);
     }
+
 }
 

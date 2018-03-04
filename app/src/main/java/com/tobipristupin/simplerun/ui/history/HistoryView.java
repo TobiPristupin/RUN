@@ -2,8 +2,8 @@ package com.tobipristupin.simplerun.ui.history;
 
 import android.support.annotation.Nullable;
 
-import com.tobipristupin.simplerun.data.model.RunFilter;
 import com.tobipristupin.simplerun.data.model.Run;
+import com.tobipristupin.simplerun.data.model.RunFilter;
 
 import java.util.List;
 

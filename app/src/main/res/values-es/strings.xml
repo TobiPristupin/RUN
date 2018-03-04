@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Simple Run</string>
+    <string name="app_name">Simple Running</string>
     <string name="login_new_account"><u>Crea una cuenta</u></string>
     <string name="fragment_new_account_return"><u>Volver</u></string>
     <string name="activity_editor_distance">Distancia</string>
@@ -135,6 +135,7 @@
     <string name="editor_activity_view_title">Añadir</string>
     <string name="activity_library_title">Bibliotecas Open Source</string>
     <string name="forgot_password_return"><u>Volver</u></string>
+    <string name="all_username_doesnt_exist">Nombre de usuario no existe</string>
     <plurals name="history_fragment_view_dialog_text">
         <item quantity="one">¿Estás seguro que quieres eliminar un item? No podrás recuperarlo.</item>
         <item quantity="other">¿Estás seguro que quieres eliminar %1$d items? No podrás recuperarlos</item>

@@ -1,13 +1,13 @@
 package com.tobipristupin.simplerun.ui.stats.activities;
 
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.PieEntry;
 import com.tobipristupin.simplerun.data.RunPredicates;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.interfaces.Observable;
 import com.tobipristupin.simplerun.interfaces.Observer;
 import com.tobipristupin.simplerun.utils.DateUtils;
 import com.tobipristupin.simplerun.utils.RunUtils;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.PieEntry;
 
 import org.joda.time.DateTime;
 

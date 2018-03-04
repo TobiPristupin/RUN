@@ -89,7 +89,7 @@ public class DistanceDialog {
      * @return formatted value.
      */
     private String formatValues(){
-        String distance = null;
+        String distance;
         distance = "" + numberPickerWhole.getValue() + "." + numberPickerDecimal.getValue() + " " +
                 preferencesRepository.getDistanceUnit().toString();
         return distance;

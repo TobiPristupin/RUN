@@ -1,6 +1,9 @@
-package com.example.tobias.run;
+package com.tobipristupin.simplerun;
 
-import com.example.tobias.run.data.model.Distance;
+
+
+import com.tobipristupin.simplerun.data.model.Distance;
+import com.tobipristupin.simplerun.data.model.DistanceUnit;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,16 +15,16 @@ import org.junit.Test;
 public class DistanceTest {
 
 
-    private final Distance distanceKm = new Distance(1, Distance.Unit.KM);
-    private final Distance distance2Km = new Distance(2, Distance.Unit.KM);
+    private final Distance distanceKm = new Distance(1, DistanceUnit.KM);
+    private final Distance distance2Km = new Distance(2, DistanceUnit.KM);
 
 
     @Test public void testEqualsDistance(){
-        Assert.assertEquals(true, new Distance(42, Distance.Unit.KM).equalsDistance(42, 26.2));
+        Assert.assertEquals(true, new Distance(42, DistanceUnit.KM).equalsDistance(42, 26.2));
 
-        Assert.assertEquals(true, new Distance(26.2, Distance.Unit.MILE).equalsDistance(42, 26.2));
+        Assert.assertEquals(true, new Distance(26.2, DistanceUnit.MILE).equalsDistance(42, 26.2));
 
-        Assert.assertEquals(false, new Distance(17, Distance.Unit.KM).equalsDistance(20, 17));
+        Assert.assertEquals(false, new Distance(17, DistanceUnit.KM).equalsDistance(20, 17));
     }
 
     @Test public void testHashCode(){

@@ -1,7 +1,7 @@
 package com.tobipristupin.simplerun.ui.stats.mileage;
 
-import com.tobipristupin.simplerun.utils.State;
 import com.github.mikephil.charting.data.BarEntry;
+import com.tobipristupin.simplerun.utils.State;
 
 import java.util.List;
 

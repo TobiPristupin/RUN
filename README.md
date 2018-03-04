@@ -1,5 +1,5 @@
 
-Simple Run is an Android application that let's users track their running
+Simple Running is an Android application that let's users track their running
 with a high level of customization and visualize their trends and evolution in varied ways.
 
 Anyone is welcome to contribute. Especially if you could fix some bugs for me.
@@ -25,3 +25,5 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+SIMPLE RUNNING IS NOT LIABLE FOR ANY DAMAGE OR LOSS OF DATA

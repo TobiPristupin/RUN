@@ -4,8 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import com.tobipristupin.simplerun.utils.RunUtils;
 import com.google.firebase.database.Exclude;
+import com.tobipristupin.simplerun.utils.RunUtils;
 
 import org.joda.time.Period;
 
@@ -51,11 +51,11 @@ public class Run implements Parcelable, Comparable<Run> {
         this.milePace = calculatePace(this.distance.getDistanceMi(), time);
     }
 
-    @Deprecated
     /**
      * This no-arg constructor is required and should only be used by firebase, never by a user,
      * because it will lead to the object being in an invalid state where no fields are initialized.
      */
+    @Deprecated
     public Run(){}
 
     private Run(Parcel in) {
@@ -227,20 +227,20 @@ public class Run implements Parcelable, Comparable<Run> {
         updatePace();
     }
 
-    @Deprecated
     /**
      * Setter required for Firebase, should not be used by user as pace should never be set manually,
      * only computed off distance and time values, to avoid inconsistencies.
      */
+    @Deprecated
     public void setKilometrePace(long kmPace){
         this.kilometrePace = kmPace;
     }
 
-    @Deprecated
     /**
      * Setter required for Firebase, should not be used by user as pace should never be set manually,
      * only computed off distance and time values, to avoid inconsistencies.
      */
+    @Deprecated
     public void setMilePace(long milePace){
         this.milePace = milePace;
     }

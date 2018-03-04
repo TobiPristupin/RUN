@@ -1,9 +1,9 @@
 package com.tobipristupin.simplerun.ui.history;
 
-import com.tobipristupin.simplerun.data.model.RunFilter;
 import com.tobipristupin.simplerun.data.RunPredicates;
 import com.tobipristupin.simplerun.data.interfaces.RunRepository;
 import com.tobipristupin.simplerun.data.model.Run;
+import com.tobipristupin.simplerun.data.model.RunFilter;
 import com.tobipristupin.simplerun.interfaces.Observable;
 import com.tobipristupin.simplerun.interfaces.Observer;
 import com.tobipristupin.simplerun.utils.DateUtils;

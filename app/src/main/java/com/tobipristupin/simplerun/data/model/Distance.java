@@ -38,11 +38,12 @@ public class Distance implements Parcelable {
         }
     }
 
-    @Deprecated
+
     /**
      * This no-arg constructor is required and should only be used by firebase, never by a user,
      * because it will lead to the object being in an invalid state where no fields are initialized.
      */
+    @Deprecated
     public Distance(){}
 
     private Distance(Parcel in){
@@ -85,20 +86,21 @@ public class Distance implements Parcelable {
         return getDistanceKm();
     }
 
-    @Deprecated
+
     /**
      * Method should only be used by firebase, as it might leave the object in an invalid state.
      * use setDistance(Distance.Unit) instead.
      */
+    @Deprecated
     public void setDistanceKm(double distanceKm) {
         this.distanceKm = distanceKm;
     }
 
-    @Deprecated
     /**
      * Method should only be used by firebase, as it might leave the object in an invalid state.
      * use setDistance(Distance.Unit) instead.
      */
+    @Deprecated
     public void setDistanceMi(double distanceMi) {
         this.distanceMi = distanceMi;
     }

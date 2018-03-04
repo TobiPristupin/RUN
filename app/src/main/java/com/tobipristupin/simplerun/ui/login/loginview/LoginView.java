@@ -1,7 +1,5 @@
 package com.tobipristupin.simplerun.ui.login.loginview;
 
-import android.support.annotation.Nullable;
-
 import com.tobipristupin.simplerun.interfaces.ErrorType;
 
 /**

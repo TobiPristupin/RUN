@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Simple Run</string>
+    <string name="app_name">Simple Running</string>
     <string name="preference_key" translatable="false">run_shared_pref</string>
     <string name="login_new_account"><u>New here? Sign up</u></string>
     <string name="fragment_new_account_return"><u>Return</u></string>
@@ -145,6 +145,7 @@
     <string name="editor_activity_view_title">Add Manual Entry</string>
     <string name="activity_library_title">Open Source Libraries</string>
     <string name="forgot_password_return"><u>Return</u></string>
+    <string name="all_username_doesnt_exist">Username doesn\'t exist</string>
     <plurals name="history_fragment_view_dialog_text">
         <item quantity="one">Are you sure you want to delete one item? You won\'t be able to recover it.</item>
         <item quantity="other">Are you sure you want to delete %1$d items? You won\'t be able to recover them</item>

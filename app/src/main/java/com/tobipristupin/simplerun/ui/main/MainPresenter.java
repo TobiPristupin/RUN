@@ -3,11 +3,10 @@ package com.tobipristupin.simplerun.ui.main;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
-import com.tobipristupin.simplerun.data.manager.FirebaseRunsSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.tobipristupin.simplerun.data.manager.FirebaseRunsSingleton;
 
 /**
  * Presenter for MainView implementation

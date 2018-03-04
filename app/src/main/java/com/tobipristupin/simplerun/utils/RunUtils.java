@@ -4,8 +4,8 @@ import android.support.annotation.Nullable;
 
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.data.model.Run;
+import com.tobipristupin.simplerun.interfaces.Predicate;
 
-import org.apache.commons.collections.Predicate;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
@@ -16,9 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by Tobi on 10/15/2017.
- */
 
 public class RunUtils {
 
@@ -32,7 +29,7 @@ public class RunUtils {
      * @param predicate
      * @return filtered ArrayList
      */
-    public static List<Run> filterList(List<Run> runs, Predicate predicate){
+    public static List<Run> filterList(List<Run> runs, Predicate<Run> predicate){
         List<Run> filteredList = new ArrayList<>();
         for (Run tr : runs){
             if (predicate.evaluate(tr)){
@@ -219,7 +216,7 @@ public class RunUtils {
      * @return time in unix timestamp
      */
     public static long timeToUnix(String time){
-        String[] timeUnits = new String[3];
+        String[] timeUnits;
         //Split time into hours seconds minutes
         timeUnits = time.split(":");
 
@@ -239,7 +236,7 @@ public class RunUtils {
     public static long dateToUnix(String date){
         //Remove irrelevant day information
         date = date.split(",")[1].trim();
-        String[] dateUnits = new String[3];
+        String[] dateUnits;
         //Split into year month day
         dateUnits = date.split("/");
 

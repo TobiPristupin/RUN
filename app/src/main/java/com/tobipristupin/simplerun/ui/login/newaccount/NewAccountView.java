@@ -1,7 +1,5 @@
 package com.tobipristupin.simplerun.ui.login.newaccount;
 
-import android.support.annotation.Nullable;
-
 import com.tobipristupin.simplerun.interfaces.ErrorType;
 
 

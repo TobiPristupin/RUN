@@ -4,24 +4,22 @@ package com.tobipristupin.simplerun.ui.login.loginview;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.tobipristupin.simplerun.auth.FirebaseAuthManager;
-import com.tobipristupin.simplerun.auth.interfaces.AuthCallbacks;
-import com.tobipristupin.simplerun.auth.interfaces.AuthManager;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.tobipristupin.simplerun.auth.FirebaseAuthManager;
+import com.tobipristupin.simplerun.auth.interfaces.AuthCallbacks;
+import com.tobipristupin.simplerun.auth.interfaces.AuthManager;
 import com.tobipristupin.simplerun.interfaces.ErrorType;
-
-import org.apache.commons.validator.routines.EmailValidator;
-
-import java.util.Locale;
+import com.tobipristupin.simplerun.utils.EmailValidator;
 
 
 public class LoginPresenter {
 
-    public static final String TAG = "LoginPresenter";
+    private static final String TAG = "LoginPresenter";
     private LoginView view;
 
     public LoginPresenter(LoginView view){
@@ -31,34 +29,58 @@ public class LoginPresenter {
     public void attemptEmailLogin(String email, String password){
         AuthManager authManager = new FirebaseAuthManager();
 
-        if (fieldsAreValid(email, password)) {
-            view.startLoadingAnimation();
-
-            authManager.logInWithEmailAndPassword(email, password, new AuthCallbacks.LoginCallback() {
-                @Override
-                public void onLoginSuccess() {
-                    view.stopLoadingAnimation();
-                    view.sendIntentMainActivity();
-                }
-
-                @Override
-                public void onLoginFailed(Exception e) {
-                    Crashlytics.logException(e);
-
-                    view.stopLoadingAnimation();
-                    if (e instanceof FirebaseAuthInvalidCredentialsException){
-                        view.enablePasswordError(ErrorType.PasswordLogin.INVALID_CREDENTIALS);
-                    } else {
-                        view.showUnexpectedLoginErrorToast();
-                    }
-                }
-            });
+        if (!fieldsAreValid(email, password)){
+            return;
         }
+
+        view.startLoadingAnimation();
+
+        authManager.logInWithEmailAndPassword(email, password, new AuthCallbacks.LoginCallback() {
+            @Override
+            public void onLoginSuccess() {
+                LoginPresenter.this.onLoginSuccess();
+            }
+
+            @Override
+            public void onLoginFailed(Exception e) {
+                LoginPresenter.this.onLoginFailed(e);
+            }
+        });
     }
 
     public void onGoogleLogInClick(){
         view.startLoadingAnimation();
         view.sendGoogleSignInIntent();
+    }
+
+    private void onLoginSuccess(){
+        view.stopLoadingAnimation();
+        view.sendIntentMainActivity();
+    }
+
+    private void onLoginFailed(Exception e){
+        Crashlytics.logException(e);
+
+        view.stopLoadingAnimation();
+        if (e instanceof FirebaseAuthInvalidCredentialsException){
+            view.enablePasswordError(ErrorType.PasswordLogin.INVALID_CREDENTIALS);
+        } if (e instanceof FirebaseAuthInvalidUserException){
+            view.enableEmailError(ErrorType.EmailLogin.USERNAME_DOESNT_EXIST);
+        } else {
+            view.showUnexpectedLoginErrorToast();
+        }
+    }
+
+    private void onGoogleSignInSuccess(GoogleSignInResult result){
+        Log.d(TAG, "HandleGoogleSignInResult: Success");
+        GoogleSignInAccount account = result.getSignInAccount();
+        authenticateGoogleLogin(account);
+    }
+
+    private void onGoogleSignInFailed(GoogleSignInResult result){
+        Log.d(TAG, "HandleGoogleSignInResult: Failed. Status code " + result.getStatus().getStatusCode());
+        view.stopLoadingAnimation();
+        view.showGoogleSignInFailedToast();
     }
 
     /**
@@ -68,14 +90,9 @@ public class LoginPresenter {
      */
     public void onGoogleSignInResult(GoogleSignInResult result){
         if (result.isSuccess()){
-            Log.d(TAG, "HandleGoogleSignInResult: Success");
-            GoogleSignInAccount account = result.getSignInAccount();
-
-            authenticateGoogleLogin(account);
+            onGoogleSignInSuccess(result);
         } else {
-            Log.d(TAG, "HandleGoogleSignInResult: Failed. Status code " + result.getStatus().getStatusCode());
-            view.stopLoadingAnimation();
-            view.showGoogleSignInFailedToast();
+            onGoogleSignInFailed(result);
         }
     }
 
@@ -85,22 +102,17 @@ public class LoginPresenter {
         authManager.logInWithCredentials(credential, new AuthCallbacks.LoginCallback() {
             @Override
             public void onLoginSuccess() {
-                view.stopLoadingAnimation();
-                view.sendIntentMainActivity();
+                LoginPresenter.this.onLoginSuccess();
             }
 
             @Override
             public void onLoginFailed(Exception e) {
-                Crashlytics.logException(e);
-                view.stopLoadingAnimation();
-                view.showGoogleSignInFailedToast();
+                LoginPresenter.this.onLoginFailed(e);
             }
         });
     }
 
-    public boolean fieldsAreValid(String email, String password){
-        EmailValidator validator = EmailValidator.getInstance();
-
+    private boolean fieldsAreValid(String email, String password){
         if (email.isEmpty()){
             view.enableEmailError(ErrorType.EmailLogin.REQUIRED_FIELD);
             return false;
@@ -109,7 +121,7 @@ public class LoginPresenter {
             view.enablePasswordError(ErrorType.PasswordLogin.REQUIRED_FIELD);
             return false;
         }
-        if (!validator.isValid(email)){
+        if (!EmailValidator.isValid(email)){
             view.enableEmailError(ErrorType.EmailLogin.INVALID_EMAIL);
             return false;
         }
@@ -120,4 +132,5 @@ public class LoginPresenter {
 
         return true;
     }
+
 }

@@ -1,22 +1,15 @@
 package com.tobipristupin.simplerun.ui.stats.personalrecords;
 
-import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
-import com.tobipristupin.simplerun.R;
-import com.tobipristupin.simplerun.app.BaseFragment;
-import com.tobipristupin.simplerun.data.manager.FirebaseRunsSingleton;
-import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
-import com.tobipristupin.simplerun.utils.TimeValueFormatter;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -26,6 +19,11 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.ScatterData;
 import com.github.mikephil.charting.data.ScatterDataSet;
+import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.app.BaseFragment;
+import com.tobipristupin.simplerun.data.manager.FirebaseRunsSingleton;
+import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
+import com.tobipristupin.simplerun.utils.TimeValueFormatter;
 
 import java.util.List;
 

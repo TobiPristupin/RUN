@@ -145,8 +145,6 @@ public class SettingsActivityView extends BaseAppCompatActivity implements Setti
 
         String bodyString = "\n\n\n\n" + getString(R.string.settings_acttivity_view_email_bodyversion) + " " + BuildConfig.VERSION_NAME;
         bodyString += "\n" + getString(R.string.settings_acttivity_view_email_body_desc);
-        System.out.println(bodyString);
-
 
         intent.putExtra(Intent.EXTRA_TEXT, bodyString);
 

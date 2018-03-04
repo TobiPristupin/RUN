@@ -1,14 +1,11 @@
 package com.tobipristupin.simplerun.ui.login.forgotpassword;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.FirebaseTooManyRequestsException;
 import com.tobipristupin.simplerun.auth.FirebaseAuthManager;
 import com.tobipristupin.simplerun.auth.interfaces.AuthCallbacks;
 import com.tobipristupin.simplerun.auth.interfaces.AuthManager;
-import com.google.firebase.FirebaseTooManyRequestsException;
-
-import org.apache.commons.validator.routines.EmailValidator;
-
-import java.util.Locale;
+import com.tobipristupin.simplerun.utils.EmailValidator;
 
 
 public class ForgotPasswordPresenter {
@@ -20,19 +17,13 @@ public class ForgotPasswordPresenter {
     }
 
     public void onSendEmailButtonClicked(String email){
-        if (isValidEmail(email)){
-            view.startLoadingAnimation();
-            sendResetPasswordEmail(email);
+        if (!EmailValidator.isValid(email)){
+            view.enableEmailError();
             return;
         }
 
-        view.enableEmailError();
-
-    }
-
-    private boolean isValidEmail(String email){
-        EmailValidator validator = EmailValidator.getInstance();
-        return validator.isValid(email);
+        view.startLoadingAnimation();
+        sendResetPasswordEmail(email);
     }
 
     private void sendResetPasswordEmail(String email){

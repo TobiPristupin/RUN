@@ -1,5 +1,6 @@
 package com.tobipristupin.simplerun.ui.stats.mileage;
 
+import com.github.mikephil.charting.data.BarEntry;
 import com.tobipristupin.simplerun.data.RunPredicates;
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
@@ -9,7 +10,6 @@ import com.tobipristupin.simplerun.interfaces.Observer;
 import com.tobipristupin.simplerun.utils.DateUtils;
 import com.tobipristupin.simplerun.utils.RunUtils;
 import com.tobipristupin.simplerun.utils.State;
-import com.github.mikephil.charting.data.BarEntry;
 
 import org.joda.time.DateTime;
 

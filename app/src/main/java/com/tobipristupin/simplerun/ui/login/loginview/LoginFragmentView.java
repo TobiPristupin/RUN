@@ -1,34 +1,27 @@
 package com.tobipristupin.simplerun.ui.login.loginview;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.interfaces.ErrorType;
 import com.tobipristupin.simplerun.ui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.login.BaseLoginFragment;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
 import com.tobipristupin.simplerun.ui.main.MainActivityView;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
 
-import es.dmoral.toasty.Toasty;
 import mbanje.kurt.fabbutton.FabButton;
 
 
@@ -74,6 +67,9 @@ public class LoginFragmentView extends BaseLoginFragment implements LoginView {
                 break;
             case REQUIRED_FIELD :
                 emailLayout.setError(getString(R.string.all_required_field));
+                break;
+            case USERNAME_DOESNT_EXIST :
+                emailLayout.setError(getString(R.string.all_username_doesnt_exist));
                 break;
             default :
                 emailLayout.setError(getString(R.string.all_error));

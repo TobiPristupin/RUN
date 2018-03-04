@@ -2,13 +2,9 @@ package com.tobipristupin.simplerun.ui.login;
 
 
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.PasswordTransformationMethod;
 
-import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseFragment;
 
 /**

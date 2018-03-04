@@ -4,16 +4,11 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ViewAnimator;
 
-import com.tobipristupin.simplerun.R;
-import com.tobipristupin.simplerun.app.BaseFragment;
-import com.tobipristupin.simplerun.data.manager.FirebaseRunsSingleton;
-import com.tobipristupin.simplerun.utils.GenericAxisValueFormatter;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.Chart;
@@ -30,6 +25,10 @@ import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.app.BaseFragment;
+import com.tobipristupin.simplerun.data.manager.FirebaseRunsSingleton;
+import com.tobipristupin.simplerun.utils.GenericAxisValueFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -183,27 +182,27 @@ public class StatsFragmentActivitiesView extends BaseFragment implements StatsAc
 
     @Override
     public void setGraphWeekXLabels(String[] labels) {
-        chartWeek.getXAxis().setValueFormatter(new GenericAxisValueFormatter<String>(labels));
+        chartWeek.getXAxis().setValueFormatter(new GenericAxisValueFormatter<>(labels));
     }
 
     @Override
     public void setGraphMonthXLabels(String[] labels) {
-        chartMonth.getXAxis().setValueFormatter(new GenericAxisValueFormatter<String>(labels));
+        chartMonth.getXAxis().setValueFormatter(new GenericAxisValueFormatter<>(labels));
     }
 
     @Override
     public void setGraph3MonthsXLabels(String[] labels) {
-        chart3Months.getXAxis().setValueFormatter(new GenericAxisValueFormatter<String>(labels));
+        chart3Months.getXAxis().setValueFormatter(new GenericAxisValueFormatter<>(labels));
     }
 
     @Override
     public void setGraph6MonthsXLabels(String[] labels) {
-        chart6Months.getXAxis().setValueFormatter(new GenericAxisValueFormatter<String>(labels));
+        chart6Months.getXAxis().setValueFormatter(new GenericAxisValueFormatter<>(labels));
     }
 
     @Override
     public void setGraphYearXLabels(String[] labels) {
-        chartYear.getXAxis().setValueFormatter(new GenericAxisValueFormatter<String>(labels));
+        chartYear.getXAxis().setValueFormatter(new GenericAxisValueFormatter<>(labels));
     }
 
     @Override

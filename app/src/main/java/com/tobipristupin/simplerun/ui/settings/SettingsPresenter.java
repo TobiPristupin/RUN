@@ -2,10 +2,10 @@ package com.tobipristupin.simplerun.ui.settings;
 
 import android.content.DialogInterface;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.ui.settings.dialogs.DistanceUnitDialog;
-import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * Presenter for SettingsView implementation

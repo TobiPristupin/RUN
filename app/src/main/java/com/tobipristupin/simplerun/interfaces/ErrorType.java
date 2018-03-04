@@ -7,7 +7,7 @@ package com.tobipristupin.simplerun.interfaces;
 public interface ErrorType {
 
     enum EmailLogin implements ErrorType {
-        INVALID_EMAIL, REQUIRED_FIELD
+        INVALID_EMAIL, REQUIRED_FIELD, USERNAME_DOESNT_EXIST
     }
 
     enum PasswordLogin implements ErrorType {
