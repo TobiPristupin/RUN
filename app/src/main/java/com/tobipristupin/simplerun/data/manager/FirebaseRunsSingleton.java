@@ -1,7 +1,5 @@
 package com.tobipristupin.simplerun.data.manager;
 
-import android.util.Log;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -12,6 +10,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.interfaces.Observable;
 import com.tobipristupin.simplerun.interfaces.Observer;
+import com.tobipristupin.simplerun.utils.LogWrapper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,7 +68,7 @@ public class FirebaseRunsSingleton implements Observable {
    }
 
    private void onDataCancelled(DatabaseError error){
-       Log.w(TAG, "Query error " + error.getMessage());
+       LogWrapper.warn(TAG, "Query error " + error.getMessage());
    }
 
    private void onDataChange(DataSnapshot snapshot){
@@ -99,7 +98,7 @@ public class FirebaseRunsSingleton implements Observable {
     public void detachObserver(Observer o) {
         //remove method returns false if object is not present.
         if (!observerList.remove(o)){
-            Log.d(TAG, "Attempting to remove observer not subscribed");
+            LogWrapper.info(TAG, "Attempting to remove observer not subscribed");
         }
     }
 

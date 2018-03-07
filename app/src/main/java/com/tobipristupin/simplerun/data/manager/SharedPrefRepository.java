@@ -1,7 +1,6 @@
 package com.tobipristupin.simplerun.data.manager;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -9,6 +8,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
+import com.tobipristupin.simplerun.utils.LogWrapper;
 
 import java.util.Locale;
 
@@ -76,7 +76,7 @@ public class SharedPrefRepository implements PreferencesRepository {
     }
 
     private void onPullFailed(Exception e){
-        Log.w(TAG, "pull failed " + e.toString());
+        LogWrapper.warn(TAG, "pull failed " + e.toString());
         Crashlytics.logException(e);
     }
 

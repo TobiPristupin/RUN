@@ -1,8 +1,6 @@
 package com.tobipristupin.simplerun.ui.login.newaccount;
 
 
-import android.util.Log;
-
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -15,10 +13,8 @@ import com.tobipristupin.simplerun.auth.interfaces.AuthCallbacks;
 import com.tobipristupin.simplerun.auth.interfaces.AuthManager;
 import com.tobipristupin.simplerun.interfaces.ErrorType;
 import com.tobipristupin.simplerun.utils.EmailValidator;
+import com.tobipristupin.simplerun.utils.LogWrapper;
 
-/**
- * Created by Tobi on 10/22/2017.
- */
 
 public class NewAccountPresenter {
 
@@ -108,11 +104,11 @@ public class NewAccountPresenter {
      */
     public void onGoogleSignInResult(GoogleSignInResult result){
         if (result.isSuccess()){
-            Log.d(TAG, "HandleGoogleSignInResult: Success");
+            LogWrapper.info(TAG, "HandleGoogleSignInResult: Success");
             GoogleSignInAccount account = result.getSignInAccount();
             authenticateGoogleSignIn(account);
         } else {
-            Log.d(TAG, "HandleGoogleSignInResult: Failed. Status code " + result.getStatus().getStatusCode());
+            LogWrapper.info(TAG, "HandleGoogleSignInResult: Failed. Status code " + result.getStatus().getStatusCode());
             view.stopLoadingAnimation();
             view.showGoogleSignInFailedToast();
         }

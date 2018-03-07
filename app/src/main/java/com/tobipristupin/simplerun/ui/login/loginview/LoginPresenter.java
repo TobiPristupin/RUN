@@ -1,7 +1,6 @@
 package com.tobipristupin.simplerun.ui.login.loginview;
 
 
-import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -15,6 +14,7 @@ import com.tobipristupin.simplerun.auth.interfaces.AuthCallbacks;
 import com.tobipristupin.simplerun.auth.interfaces.AuthManager;
 import com.tobipristupin.simplerun.interfaces.ErrorType;
 import com.tobipristupin.simplerun.utils.EmailValidator;
+import com.tobipristupin.simplerun.utils.LogWrapper;
 
 
 public class LoginPresenter {
@@ -72,13 +72,13 @@ public class LoginPresenter {
     }
 
     private void onGoogleSignInSuccess(GoogleSignInResult result){
-        Log.d(TAG, "HandleGoogleSignInResult: Success");
+        LogWrapper.info(TAG, "HandleGoogleSignInResult: Success");
         GoogleSignInAccount account = result.getSignInAccount();
         authenticateGoogleLogin(account);
     }
 
     private void onGoogleSignInFailed(GoogleSignInResult result){
-        Log.d(TAG, "HandleGoogleSignInResult: Failed. Status code " + result.getStatus().getStatusCode());
+        LogWrapper.info(TAG, "HandleGoogleSignInResult: Failed. Status code " + result.getStatus().getStatusCode());
         view.stopLoadingAnimation();
         view.showGoogleSignInFailedToast();
     }

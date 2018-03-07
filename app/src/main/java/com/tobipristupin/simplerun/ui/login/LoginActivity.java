@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.WindowManager;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -16,6 +15,7 @@ import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
 import com.tobipristupin.simplerun.auth.GoogleAuthUtils;
 import com.tobipristupin.simplerun.ui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.login.adapter.LoginFragmentPagerAdapter;
+import com.tobipristupin.simplerun.utils.LogWrapper;
 import com.tobipristupin.simplerun.utils.LoginPageTransformer;
 
 
@@ -35,7 +35,7 @@ public class LoginActivity extends BaseAppCompatActivity {
         apiClient = GoogleAuthUtils.getApiClient(LoginActivity.this, signInOptions, new GoogleAuthUtils.ApiClientCallback() {
             @Override
             public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                Log.w(TAG, "Google connection failed " + connectionResult.getErrorMessage());
+                LogWrapper.warn(TAG, "Google connection failed " + connectionResult.getErrorMessage());
                 showOnConnectionFailedToast();
             }
         });

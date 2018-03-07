@@ -1,7 +1,6 @@
 package com.tobipristupin.simplerun.auth;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -11,6 +10,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.tobipristupin.simplerun.auth.interfaces.AuthCallbacks;
 import com.tobipristupin.simplerun.auth.interfaces.AuthManager;
+import com.tobipristupin.simplerun.utils.LogWrapper;
+
 
 
 public class FirebaseAuthManager implements AuthManager {
@@ -24,10 +25,10 @@ public class FirebaseAuthManager implements AuthManager {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    Log.d(TAG, "FirebaseSignInWithEmail: Successful");
+                    LogWrapper.info(TAG, "FirebaseSignInWithEmail: Successful");
                     callback.onLoginSuccess();
                 } else {
-                    Log.w(TAG, "FirebaseSignInWithEmail: Failed "  + task.getException());
+                    LogWrapper.warn(TAG, "FirebaseSignInWithEmail: Failed "  + task.getException());
                     Crashlytics.logException(task.getException());
                     callback.onLoginFailed(task.getException());
                 }
@@ -41,10 +42,10 @@ public class FirebaseAuthManager implements AuthManager {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    Log.d(TAG, "FirebaseSignInWithCredentials: Successful");
+                    LogWrapper.info(TAG, "FirebaseSignInWithCredentials: Success");
                     callback.onLoginSuccess();
                 } else {
-                    Log.w(TAG, "FirebaseSignInWithCredentials: Failed " + task.getException());
+                    LogWrapper.warn(TAG, "FirebaseSignInWithCredentials: Failed " + task.getException());
                     Crashlytics.logException(task.getException());
                     callback.onLoginFailed(task.getException());
                 }
@@ -58,10 +59,10 @@ public class FirebaseAuthManager implements AuthManager {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){
-                    Log.d(TAG, "FirebaseSendResetEmail: Successful");
+                    LogWrapper.info(TAG, "FirebaseSendResetEmail: Successful");
                     callback.onLoginSuccess();
                 } else {
-                    Log.w(TAG, "FirebaseSendResetEmail: Failed " + task.getException());
+                    LogWrapper.warn(TAG, "FirebaseSendResetEmail: Failed " + task.getException());
                     Crashlytics.logException(task.getException());
                     callback.onLoginFailed(task.getException());
                 }
@@ -75,14 +76,15 @@ public class FirebaseAuthManager implements AuthManager {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    Log.d(TAG, "FirebaseCreateNewAccount: Successful");
+                    LogWrapper.info(TAG, "FirebaseCreateNewAccount: Successful");
                     callback.onLoginSuccess();
                 } else {
-                    Log.w(TAG, "FirebaseCreateNewAccount: Failed " + task.getException());
+                    LogWrapper.warn(TAG, "FirebaseCreateNewAccount: Failed " + task.getException());
                     Crashlytics.logException(task.getException());
                     callback.onLoginFailed(task.getException());
                 }
             }
         });
     }
+
 }

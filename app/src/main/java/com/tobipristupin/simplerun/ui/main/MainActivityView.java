@@ -27,6 +27,9 @@ import com.tobipristupin.simplerun.ui.settings.SettingsActivityView;
 import com.tobipristupin.simplerun.ui.settings.libraries.LibraryItemsActivityView;
 import com.tobipristupin.simplerun.ui.stats.StatsFragmentView;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
