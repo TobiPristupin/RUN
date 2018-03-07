@@ -59,7 +59,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"
-                android:text="@string/editor_activity_view_empty_field" />
+                android:text="@string/all_empty_field" />
 
         </RelativeLayout>
 
@@ -94,7 +94,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"
-                android:text="@string/editor_activity_view_empty_field" />
+                android:text="@string/all_empty_field" />
 
         </RelativeLayout>
 
@@ -129,7 +129,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"
-                android:text="@string/editor_activity_view_empty_field" />
+                android:text="@string/all_empty_field" />
 
         </RelativeLayout>
 
@@ -165,7 +165,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"
-                android:text="@string/editor_activity_view_empty_field" />
+                android:text="@string/all_empty_field" />
 
         </RelativeLayout>
 

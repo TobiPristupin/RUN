@@ -11,7 +11,7 @@
         \n\nYou can check out the code over at:\nhttps://github.com/TobiPristupin/RUN
         \n\nFeel free to contribute and submit issues :)</string>
     <string name="activity_editor_distance">Distance</string>
-    <string name="editor_activity_view_empty_field" translatable="false">N/A</string>
+    <string name="all_empty_field" translatable="false">N/A</string>
     <string name="activity_editor_time">Time</string>
     <string name="activity_editor_date">Date</string>
     <string name="activity_editor_rating">Rating</string>

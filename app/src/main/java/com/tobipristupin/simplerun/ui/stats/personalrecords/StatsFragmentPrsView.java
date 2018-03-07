@@ -25,6 +25,8 @@ import com.tobipristupin.simplerun.data.manager.FirebaseRunsSingleton;
 import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
 import com.tobipristupin.simplerun.utils.TimeValueFormatter;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 
@@ -112,18 +114,12 @@ public class StatsFragmentPrsView extends BaseFragment implements StatsPrsView {
     private void initPersonalBests(){
         View farthestDistance = rootView.findViewById(R.id.stats_prs_farthest_run);
         ((TextView) farthestDistance.findViewById(R.id.personal_best_item_title)).setText(R.string.stats_fragment_prs_view_farthest);
-        ((TextView) farthestDistance.findViewById(R.id.personal_best_item_date)).setText("?");
-        ((TextView) farthestDistance.findViewById(R.id.personal_best_item_value)).setText("0");
 
         View fastestPace = rootView.findViewById(R.id.stats_prs_fastest_pace);
         ((TextView) fastestPace.findViewById(R.id.personal_best_item_title)).setText(R.string.stats_fragment_prs_view_fastest);
-        ((TextView) fastestPace.findViewById(R.id.personal_best_item_date)).setText("?");
-        ((TextView) fastestPace.findViewById(R.id.personal_best_item_value)).setText("0");
 
         View longestDuration = rootView.findViewById(R.id.stats_prs_longest_duration);
         ((TextView) longestDuration.findViewById(R.id.personal_best_item_title)).setText(R.string.stats_fragment_prs_view_longest);
-        ((TextView) longestDuration.findViewById(R.id.personal_best_item_date)).setText("?");
-        ((TextView) longestDuration.findViewById(R.id.personal_best_item_value)).setText("0");
     }
 
     /**
@@ -193,29 +189,47 @@ public class StatsFragmentPrsView extends BaseFragment implements StatsPrsView {
 
     @Override
     public void setFarthestDistanceText(String distance, String date) {
-        ((TextView) rootView.findViewById(R.id.stats_prs_farthest_run).findViewById(R.id.personal_best_item_value))
-                .setText(distance);
+        View personalBestItem = rootView.findViewById(R.id.stats_prs_farthest_run);
+        TextView valueTextView = personalBestItem.findViewById(R.id.personal_best_item_value);
+        TextView dateTextView = personalBestItem.findViewById(R.id.personal_best_item_date);
 
-        ((TextView) rootView.findViewById(R.id.stats_prs_farthest_run).findViewById(R.id.personal_best_item_date))
-                .setText(date);
+        setRecordsValue(valueTextView, distance);
+        setRecordsDate(dateTextView, date);
     }
 
     @Override
     public void setLongestDurationText(String duration, String date) {
-        ((TextView) rootView.findViewById(R.id.stats_prs_longest_duration).findViewById(R.id.personal_best_item_value))
-                .setText(duration);
+        View personalBestItem = rootView.findViewById(R.id.stats_prs_longest_duration);
+        TextView valueTextView = personalBestItem.findViewById(R.id.personal_best_item_value);
+        TextView dateTextView = personalBestItem.findViewById(R.id.personal_best_item_date);
 
-        ((TextView) rootView.findViewById(R.id.stats_prs_longest_duration).findViewById(R.id.personal_best_item_date))
-                .setText(date);
+        setRecordsValue(valueTextView, duration);
+        setRecordsDate(dateTextView, date);
     }
 
     @Override
     public void setFastestPaceText(String pace, String date) {
-        ((TextView) rootView.findViewById(R.id.stats_prs_fastest_pace).findViewById(R.id.personal_best_item_value))
-                .setText(pace);
+        View personalBestItem = rootView.findViewById(R.id.stats_prs_fastest_pace);
+        TextView valueTextView = personalBestItem.findViewById(R.id.personal_best_item_value);
+        TextView dateTextView = personalBestItem.findViewById(R.id.personal_best_item_date);
 
-        ((TextView) rootView.findViewById(R.id.stats_prs_fastest_pace).findViewById(R.id.personal_best_item_date))
-                .setText(date);
+        setRecordsValue(valueTextView, pace);
+        setRecordsDate(dateTextView, date);
+    }
+
+    private void setRecordsValue(TextView view, String value){
+        view.setText(value);
+//        if (Integer.parseInt(value) > 0){
+//            view.setTextColor(getResources().getColor(R.color.Green));
+//        } else {
+//            view.setTextColor(getResources().getColor(R.color.Red));
+//        }
+
+        view.setTextColor(getResources().getColor(R.color.Green));
+    }
+
+    private void setRecordsDate(TextView view, String value){
+        view.setText(value);
     }
 
     private void setChartData(List<Entry> scatterData, List<Entry> lineDataBest, List<Entry> lineDataAverage, CombinedChart combinedChart){

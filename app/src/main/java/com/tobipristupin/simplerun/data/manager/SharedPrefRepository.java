@@ -19,28 +19,22 @@ public class SharedPrefRepository implements PreferencesRepository {
     private SharedFirebasePreferences preferences;
     private static final String TAG = "SharedPrefRepository";
     private static final String DISTANCE_UNIT_KEY = "distance_unit";
-
+    private Context context;
 
     public SharedPrefRepository(Context context) {
+        this.context = context;
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String key = getPreferencesKeyFromUser(user);
 
-        String key = context.getString(R.string.preference_key) + "_" + user.getUid();
-        SharedFirebasePreferences.setPathPattern(String.format(Locale.ENGLISH, "users/%s/settings", user.getUid()));
+        /*setDatabasePath has to be called before getting the instance of SharedFirebasePreferences
+        * for the new path to be applied. This order dependency / bug comes is from the library not from the
+        * app*/
+        setDatabasePath(user);
 
         this.preferences = SharedFirebasePreferences.getInstance(context, key, Context.MODE_PRIVATE);
 
-        preferences.pull().addOnPullCompleteListener(new SharedFirebasePreferences.OnPullCompleteListener() {
-            @Override
-            public void onPullSucceeded(SharedFirebasePreferences sharedFirebasePreferences) {
 
-            }
-
-            @Override
-            public void onPullFailed(Exception e) {
-                Log.w(TAG, "pull failed " + e.toString());
-                Crashlytics.logException(e);
-            }
-        });
+        pullFromDatabase();
 
         if (!isInitialized()){
             initialize();
@@ -67,12 +61,49 @@ public class SharedPrefRepository implements PreferencesRepository {
         preferences.edit().putString(DISTANCE_UNIT_KEY, unit.toString()).apply();
     }
 
+    private void pullFromDatabase(){
+        preferences.pull().addOnPullCompleteListener(new SharedFirebasePreferences.OnPullCompleteListener() {
+            @Override
+            public void onPullSucceeded(SharedFirebasePreferences sharedFirebasePreferences) {
+
+            }
+
+            @Override
+            public void onPullFailed(Exception e) {
+                SharedPrefRepository.this.onPullFailed(e);
+            }
+        });
+    }
+
+    private void onPullFailed(Exception e){
+        Log.w(TAG, "pull failed " + e.toString());
+        Crashlytics.logException(e);
+    }
+
     private boolean isInitialized(){
         return preferences.getString(DISTANCE_UNIT_KEY, null) != null;
     }
 
     private void initialize(){
         setDistanceUnit(DistanceUnit.MILE);
+    }
+
+    /**
+     * Each user has a shared preferences file for themselves. This method returns the name
+     * of that file given the user.
+     * @param user
+     * @return
+     */
+    private String getPreferencesKeyFromUser(FirebaseUser user){
+        return context.getString(R.string.preference_key) + "_" + user.getUid();
+    }
+
+    /**
+     * Sets the database path the firebase shared preferences will be reading and writing from
+     * @param user
+     */
+    private void setDatabasePath(FirebaseUser user){
+        SharedFirebasePreferences.setPathPattern(String.format(Locale.ENGLISH, "users/%s/settings", user.getUid()));
     }
 
 }

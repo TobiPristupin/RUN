@@ -129,7 +129,7 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
 
     @Override
     public String getEmptyFieldText() {
-        return getString(R.string.editor_activity_view_empty_field);
+        return getString(R.string.all_empty_field);
     }
 
     @Override

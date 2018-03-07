@@ -12,13 +12,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.tobipristupin.simplerun.auth.interfaces.AuthCallbacks;
 import com.tobipristupin.simplerun.auth.interfaces.AuthManager;
 
-/**
- * Created by Tobi on 10/22/2017.
- */
 
 public class FirebaseAuthManager implements AuthManager {
 
-    public static final String TAG = "FirebaseAuthManager";
+    private static final String TAG = "FirebaseAuthManager";
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     @Override

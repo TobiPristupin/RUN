@@ -114,14 +114,20 @@ public class Run implements Parcelable, Comparable<Run> {
     }
 
     private long calculatePace(double distance, long time){
-        //Period is inputted time in millis and converts it to hh:mm:ss
         Period periodFromTime = new Period(time);
-        double timeInSeconds = periodFromTime.getHours() * 3600f + periodFromTime.getMinutes() * 60f + periodFromTime.getSeconds();
+        double timeInSeconds = getTimeInSeconds(periodFromTime);
         double paceInMilliseconds = timeInSeconds / distance;
         //Multiply pace by 1000 to convert it to millis from seconds.
-        return (long) paceInMilliseconds * 1000;
+        return convertMillisToTimestamp(paceInMilliseconds);
     }
 
+    private double getTimeInSeconds(Period period){
+        return period.getHours() * 3600f + period.getMinutes() * 60f + period.getSeconds();
+    }
+
+    private long convertMillisToTimestamp(double millis){
+        return (long) millis * 1000;
+    }
 
     @Exclude
     public double getDistance(DistanceUnit unit){

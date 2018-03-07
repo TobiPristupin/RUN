@@ -34,23 +34,17 @@ public class FirebaseRunsSingleton implements Observable {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-
         DatabaseReference runsDatabaseReferences = firebaseDatabase.getReference("users/" + user.getUid() + "/runs/");
 
         runsDatabaseReferences.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                cachedRuns.clear();
-                for (DataSnapshot data : dataSnapshot.getChildren()){
-                    Run tr = data.getValue(Run.class);
-                    cachedRuns.add(tr);
-                }
-                notifyUpdateObservers();
+                FirebaseRunsSingleton.this.onDataChange(dataSnapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "Query error " + databaseError.getMessage());
+                FirebaseRunsSingleton.this.onDataCancelled(databaseError);
             }
 
         });
@@ -72,6 +66,23 @@ public class FirebaseRunsSingleton implements Observable {
 
    private void clearCache(){
        cachedRuns.clear();
+   }
+
+   private void onDataCancelled(DatabaseError error){
+       Log.w(TAG, "Query error " + error.getMessage());
+   }
+
+   private void onDataChange(DataSnapshot snapshot){
+       clearCache();
+       addRunsToCache(snapshot);
+       notifyUpdateObservers();
+   }
+
+   private void addRunsToCache(DataSnapshot snapshot){
+       for (DataSnapshot data : snapshot.getChildren()){
+           Run tr = data.getValue(Run.class);
+           cachedRuns.add(tr);
+       }
    }
 
     @Override

@@ -6,6 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.tobipristupin.simplerun.R;
+
 /**
  * Base class that implements methods common to all activities
  */
@@ -26,43 +28,36 @@ public class BaseAppCompatActivity extends AppCompatActivity {
     }
 
     /**
-     * Sets toolbar defined in xml as default support action toolbar. If homeAsUpIndicator is
-     * true adds the homeAsUpIndicator
+     * Sets toolbar defined in xml as default support action toolbar and adds
+     * homeAsUpIndicator
      * @param viewId
-     * @param homeAsUpIndicator
-     * @return toolbar view
      */
-    protected Toolbar setSupportActionBar(int viewId, boolean homeAsUpIndicator) {
-        Toolbar toolbar;
-
-        try {
-            toolbar = findViewById(viewId);
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Wtf what is wrong with you? you're supposed to pass a toolbar view what are you doing");
-        }
-
+    protected void setSupportActionBar(int viewId) {
+        Toolbar toolbar = findViewById(viewId);
         setSupportActionBar(toolbar);
-
-        if (homeAsUpIndicator) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-
-        return toolbar;
+        setHomeAsUpEnabled();
     }
 
+    private void setHomeAsUpEnabled() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+    private void setHomeAsUpDrawable(int drawable){
+        getSupportActionBar().setHomeAsUpIndicator(drawable);
+    }
+
+
     /**
-     * Sets toolbar defined in xml as default support action toolbar. This method always enables the
-     * homeAsUpIndicator and uses the drawable passed, contrary to overloaded version of this method who enables it based on arguments.
+     * Sets toolbar defined in xml as default support action toolbar and adds
+     * homeAsUpIndicator with drawable
      *
      * @param viewId toolbar id
      * @param homeAsUpDrawable drawable id to be used in homeAsUpIndicator
-     * @return toolbar view
      */
-    protected Toolbar setSupportActionBar(int viewId, int homeAsUpDrawable) {
-        Toolbar toolbar = setSupportActionBar(viewId, true);
-        getSupportActionBar().setHomeAsUpIndicator(homeAsUpDrawable);
-        return toolbar;
+    protected void setSupportActionBar(int viewId, int homeAsUpDrawable) {
+        setSupportActionBar(viewId);
+        setHomeAsUpDrawable(homeAsUpDrawable);
     }
 
 

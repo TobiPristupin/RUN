@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?selectableItemBackground">
+    android:foreground="?selectableItemBackground"
+    android:layout_margin="10dp">
 
     <TextView
         android:id="@+id/personal_best_item_title"
@@ -17,7 +17,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:textColor="@android:color/black"
-        android:textSize="14sp"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Farthest Distance" />
@@ -28,11 +29,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:layout_marginTop="4dp"
-        android:textSize="12sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/personal_best_item_title"
         app:layout_constraintTop_toBottomOf="@+id/personal_best_item_title"
-        tools:text="Aug 19, 2017" />
+        tools:text="Aug 19, 2017"
+        android:text="@string/all_empty_field"/>
 
     <TextView
         android:id="@+id/personal_best_item_value"
@@ -41,11 +43,13 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="10.53 mi" />
+        tools:text="10.53 mi"
+        android:textColor="@color/Red"
+        android:text="@string/all_empty_field"/>
 
 </android.support.constraint.ConstraintLayout>

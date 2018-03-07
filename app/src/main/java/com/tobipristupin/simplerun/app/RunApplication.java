@@ -1,9 +1,10 @@
 package com.tobipristupin.simplerun.app;
 
-import android.app.Application;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.support.multidex.MultiDexApplication;
-import android.util.Patterns;
+import android.util.DisplayMetrics;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
@@ -12,12 +13,10 @@ import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.tobipristupin.simplerun.BuildConfig;
 
+import java.util.Locale;
+
 import io.fabric.sdk.android.Fabric;
 
-/**
- * This class overrides the onCreate method of Application
- * in order to call setPersistenceEnabled(), which has to be called when app starts
- */
 
 public class RunApplication extends MultiDexApplication {
 
@@ -31,23 +30,46 @@ public class RunApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
+
+        if (isInAnalyzerProcess()) {
             return;
         }
-        refWatcher = LeakCanary.install(this);
 
+        initLeakCanary();
+        initFirebase();
+        initCrashylitics();
+    }
+
+    /**
+     * If app is in leak canary analyzer process it shouldn't be initialized because
+     * that process is dedicated to Leak Canary for heap analysis
+     */
+    private boolean isInAnalyzerProcess(){
+        return LeakCanary.isInAnalyzerProcess(this);
+    }
+
+    private void initFirebase(){
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+    }
 
+    private void initCrashylitics(){
         CrashlyticsCore core = new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build();
         Fabric.with(this, new Crashlytics.Builder().core(core).build());
+    }
 
-//        Resources resources = getResources();
-//        Configuration configuration = resources.getConfiguration();
-//        DisplayMetrics displayMetrics = resources.getDisplayMetrics();
-//        configuration.setLocale(new Locale("es"));
-//        resources.updateConfiguration(configuration, displayMetrics);
+    private void initLeakCanary(){
+        refWatcher = LeakCanary.install(this);
+    }
+
+    /**
+     * Use only for testing
+     */
+    private void enableSpanishLocale(){
+        Resources resources = getResources();
+        Configuration configuration = resources.getConfiguration();
+        DisplayMetrics displayMetrics = resources.getDisplayMetrics();
+        configuration.setLocale(new Locale("es"));
+        resources.updateConfiguration(configuration, displayMetrics);
     }
 
 }
