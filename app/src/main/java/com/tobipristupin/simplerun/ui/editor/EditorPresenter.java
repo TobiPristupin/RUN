@@ -1,9 +1,7 @@
 package com.tobipristupin.simplerun.ui.editor;
 
-import android.support.annotation.Nullable;
-
 import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
-import com.tobipristupin.simplerun.data.interfaces.RunRepository;
+import com.tobipristupin.simplerun.data.interfaces.Repository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.utils.DateUtils;
@@ -13,6 +11,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.text.DecimalFormat;
 import java.util.Locale;
 
 /**
@@ -24,12 +23,12 @@ public class EditorPresenter {
     private EditorView view;
     private Run runToEdit;
     private boolean editMode;
-    private RunRepository runRepository;
+    private Repository<Run> repository;
     private PreferencesRepository preferencesRepository;
 
-    public EditorPresenter(EditorView view, RunRepository runRepository, PreferencesRepository preferencesRepository) {
+    public EditorPresenter(EditorView view, Repository<Run> repository, PreferencesRepository preferencesRepository) {
         this.view = view;
-        this.runRepository = runRepository;
+        this.repository = repository;
         this.preferencesRepository = preferencesRepository;
     }
 
@@ -39,7 +38,7 @@ public class EditorPresenter {
      * instead of modifying an existing one.
      * @param runToEdit
      */
-    public void onCreateView(@Nullable Run runToEdit){
+    public void onCreateView(Run runToEdit){
         if (runToEdit != null) {
             this.runToEdit = runToEdit;
             editMode = true;
@@ -89,16 +88,23 @@ public class EditorPresenter {
         view.finishView();
     }
 
-    public void onDistanceDialogPositiveButton(String text){
-        view.setDistanceText(text);
+    public void onDistanceDialogPositiveButton(int wholeNum, int fractionalNum){
+        String distance = "" + wholeNum + "." + fractionalNum + " " +
+                preferencesRepository.getDistanceUnit().toString();
+
+        view.setDistanceText(distance);
     }
 
-    public void onTimeDialogPositiveButton(String text){
-        view.setTimeText(text);
+    public void onTimeDialogPositiveButton(int hours, int minutes, int seconds){
+        DecimalFormat df = new DecimalFormat("00");
+        String time = df.format(hours) + ":"
+                + df.format(minutes) + ":"
+                + df.format(seconds);
+        view.setTimeText(time);
     }
 
-    public void onRatingDialogPositiveButton(String text){
-        view.setRatingText(text);
+    public void onRatingDialogPositiveButton(int rating){
+        view.setRatingText(String.valueOf(rating));
     }
 
     public void onDateDialogPositiveButton(int year, int month, int dayOfMonth){
@@ -146,9 +152,9 @@ public class EditorPresenter {
 
     private void addRunToDatabase(Run run){
         if (editMode){
-            runRepository.updateRun(run);
+            repository.update(run);
         } else {
-            runRepository.addRun(run);
+            repository.add(run);
         }
     }
 

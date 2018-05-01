@@ -5,10 +5,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.tobipristupin.simplerun.data.interfaces.RunRepository;
+import com.tobipristupin.simplerun.data.interfaces.Repository;
 import com.tobipristupin.simplerun.data.model.Run;
 
-public class FirebaseRepository implements RunRepository {
+public class FirebaseRepository implements Repository<Run> {
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -16,19 +16,19 @@ public class FirebaseRepository implements RunRepository {
     private DatabaseReference runsDatabaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/runs/");
 
     @Override
-    public void addRun(Run run) {
+    public void add(Run run) {
         DatabaseReference ref = runsDatabaseRef.push();
         run.setId(ref.getKey());
         ref.setValue(run);
     }
 
     @Override
-    public void deleteRun(Run run) {
+    public void delete(Run run) {
         runsDatabaseRef.child(run.getId()).removeValue();
     }
 
     @Override
-    public void updateRun(Run run) {
+    public void update(Run run) {
         runsDatabaseRef.child(run.getId()).setValue(run);
     }
 }

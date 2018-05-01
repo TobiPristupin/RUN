@@ -1,6 +1,5 @@
 package com.tobipristupin.simplerun.data;
 
-import android.support.annotation.Nullable;
 import android.support.v7.util.DiffUtil;
 
 import com.tobipristupin.simplerun.data.model.Run;
@@ -39,11 +38,5 @@ public class DiffCallback extends DiffUtil.Callback {
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
         return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
-    }
-
-    @Nullable
-    @Override
-    public Object getChangePayload(int oldItemPosition, int newItemPosition) {
-        return super.getChangePayload(oldItemPosition, newItemPosition);
     }
 }

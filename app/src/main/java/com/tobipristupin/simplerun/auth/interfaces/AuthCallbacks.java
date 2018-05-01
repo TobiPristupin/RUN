@@ -7,7 +7,9 @@ package com.tobipristupin.simplerun.auth.interfaces;
 public interface AuthCallbacks {
 
     interface LoginCallback{
+
         void onLoginSuccess();
+
         void onLoginFailed(Exception e);
     }
 

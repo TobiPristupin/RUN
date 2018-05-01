@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
-import com.tobipristupin.simplerun.data.interfaces.RunRepository;
+import com.tobipristupin.simplerun.data.interfaces.Repository;
 import com.tobipristupin.simplerun.data.manager.FirebaseRepository;
 import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
 import com.tobipristupin.simplerun.data.model.Run;
@@ -32,7 +32,7 @@ import java.util.Calendar;
 public class EditorActivityView extends BaseAppCompatActivity implements EditorView {
 
     public static final String INTENT_KEY = "editor_activity_intent";
-    private RunRepository repo;
+    private Repository<Run> repo;
     private EditorPresenter presenter;
     private ToastyWrapper addedRunToasty = new ToastyWrapper();
     private ToastyWrapper invalidFieldToasty = new ToastyWrapper();
@@ -215,12 +215,15 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
     }
 
     private void showDistanceDialog(){
-        DistanceDialog distanceDialog = new DistanceDialog(new DistanceDialog.onPositiveButtonListener() {
+        DistanceDialog distanceDialog = new DistanceDialog(
+                new SharedPrefRepository(EditorActivityView.this),
+
+                new DistanceDialog.onPositiveButtonListener() {
                     @Override
-                    public void onClick(String distanceValue) {
-                        presenter.onDistanceDialogPositiveButton(distanceValue);
+                    public void onClick(int wholeNum, int fractionalNum) {
+                        presenter.onDistanceDialogPositiveButton(wholeNum, fractionalNum);
                     }
-                }, new SharedPrefRepository(EditorActivityView.this));
+                });
 
         distanceDialog.makeDialog(EditorActivityView.this).show();
     }
@@ -228,8 +231,8 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
     private void showTimeDialog(){
         TimeDialog dialog = new TimeDialog(new TimeDialog.onPositiveButtonListener() {
             @Override
-            public void onClick(String timeValue) {
-                presenter.onTimeDialogPositiveButton(timeValue);
+            public void onClick(int hour, int minute, int second) {
+                presenter.onTimeDialogPositiveButton(hour, minute, second);
             }
         });
 
@@ -239,7 +242,7 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
     private void showRatingDialog(){
         RatingDialog ratingDialog = new RatingDialog(new RatingDialog.onPositiveButtonListener() {
             @Override
-            public void onClick(String ratingValue) {
+            public void onClick(int ratingValue) {
                 presenter.onRatingDialogPositiveButton(ratingValue);
             }
         });

@@ -2,9 +2,6 @@ package com.tobipristupin.simplerun.auth.interfaces;
 
 import com.google.firebase.auth.AuthCredential;
 
-/**
- * Created by Tobi on 10/22/2017.
- */
 
 public interface AuthManager {
 

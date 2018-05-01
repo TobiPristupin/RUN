@@ -19,52 +19,38 @@ import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
 
 public class DistanceDialog {
 
+    public interface onPositiveButtonListener {
+        void onClick(int wholeNum, int fractionalNum);
+    }
 
     private View rootView;
     private NumberPicker numberPickerWhole;
     private NumberPicker numberPickerDecimal;
     private onPositiveButtonListener listener;
     private PreferencesRepository preferencesRepository;
+    private AlertDialog.Builder builder;
 
-    public DistanceDialog(onPositiveButtonListener listener, PreferencesRepository repository) {
+    public DistanceDialog(PreferencesRepository repository, onPositiveButtonListener listener) {
         this.listener = listener;
         this.preferencesRepository = repository;
     }
 
-    @SuppressLint("InflateParams")
-    public AlertDialog makeDialog(Activity activity){
+    public AlertDialog makeDialog(Activity activity) {
+        builder = new AlertDialog.Builder(activity);
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        LayoutInflater inflater = activity.getLayoutInflater();
-        rootView = inflater.inflate(R.layout.distance_dialog, null);
-        builder.setView(rootView);
+        rootView = setViewAndReturnIt(activity);
 
         initNumberPickers();
         initUnitText();
 
-        builder.setTitle(R.string.distance_dialog_distance);
-
-
-        builder.setNegativeButton(R.string.distance_dialog_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.setPositiveButton(R.string.distance_dialog_done, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                listener.onClick(formatValues());
-                dialog.dismiss();
-            }
-        });
+        setTitle();
+        registerOnNegativeButton();
+        registerOnPositiveButton();
 
         return builder.create();
-
     }
 
-    private void initNumberPickers(){
+    private void initNumberPickers() {
         numberPickerWhole = rootView.findViewById(R.id.distance_picker_whole);
         numberPickerWhole.setMaxValue(99);
         numberPickerWhole.setMinValue(0);
@@ -76,27 +62,52 @@ public class DistanceDialog {
         numberPickerWhole.setValue(1);
     }
 
-    /**
-     * Checks if distance unit is set to km or mi, and sets text of TextView accordingly.
-     */
-    private void initUnitText(){
+    private void initUnitText() {
         TextView unitText = rootView.findViewById(R.id.distance_unit);
         unitText.setText(preferencesRepository.getDistanceUnit().toString());
     }
 
-    /**
-     * Gets values from number pickers and formats them for display.
-     * @return formatted value.
-     */
-    private String formatValues(){
-        String distance;
-        distance = "" + numberPickerWhole.getValue() + "." + numberPickerDecimal.getValue() + " " +
-                preferencesRepository.getDistanceUnit().toString();
-        return distance;
+    @SuppressLint("InflateParams")
+    private View inflateLayout(Activity activity){
+        LayoutInflater inflater = activity.getLayoutInflater();
+        return inflater.inflate(R.layout.distance_dialog, null);
     }
 
-    public interface onPositiveButtonListener {
-        void onClick(String distanceValue);
+    private void onNegativeClick(DialogInterface dialog, int which){
+        dialog.cancel();
+    }
+
+    private void onPositiveClick(DialogInterface dialog, int which){
+        listener.onClick(numberPickerWhole.getValue(), numberPickerDecimal.getValue());
+        dialog.dismiss();
+    }
+
+    private View setViewAndReturnIt(Activity activity){
+        View view = inflateLayout(activity);
+        builder.setView(view);
+        return view;
+    }
+
+    private void setTitle(){
+        builder.setTitle(R.string.distance_dialog_distance);
+    }
+
+    private void registerOnNegativeButton(){
+        builder.setNegativeButton(R.string.distance_dialog_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onNegativeClick(dialog, which);
+            }
+        });
+    }
+
+    private void registerOnPositiveButton(){
+        builder.setPositiveButton(R.string.distance_dialog_done, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onPositiveClick(dialog, which);
+            }
+        });
     }
 
 }

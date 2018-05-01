@@ -1,7 +1,7 @@
 package com.tobipristupin.simplerun.ui.history;
 
 import com.tobipristupin.simplerun.data.RunPredicates;
-import com.tobipristupin.simplerun.data.interfaces.RunRepository;
+import com.tobipristupin.simplerun.data.interfaces.Repository;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.data.model.RunFilter;
 import com.tobipristupin.simplerun.interfaces.Observable;
@@ -23,9 +23,9 @@ public class HistoryPresenter implements Observer<List<Run>>{
     private List<Run> allRunsList = new ArrayList<>(); //Holds all runs
     private List<Run> displayedRunsList = new ArrayList<>(); //Holds all runs currently displayed in view
     private Observable observable;
-    private RunRepository repository;
+    private Repository<Run> repository;
 
-    public HistoryPresenter(HistoryView view, Observable model, RunRepository repository) {
+    public HistoryPresenter(HistoryView view, Observable model, Repository<Run> repository) {
         this.view = view;
         this.observable = model;
         this.repository = repository;
@@ -124,7 +124,7 @@ public class HistoryPresenter implements Observer<List<Run>>{
 
     public void deleteRun(List<Integer> indexList){
         for (Integer index : indexList){
-            repository.deleteRun(displayedRunsList.get(index));
+            repository.delete(displayedRunsList.get(index));
         }
     }
 
