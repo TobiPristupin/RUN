@@ -72,7 +72,7 @@ public class EditorPresenterTest {
     @Test
     public void shouldUpdateViewsDate(){
         presenter.onDateDialogPositiveButton(2018, 5, 1);
-        Mockito.verify(view).setDateText("Tue, 5/4/2018");
+        Mockito.verify(view).setDateText("Tue, 5/1/2018");
     }
 
 }

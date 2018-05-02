@@ -228,11 +228,6 @@ public class RunUtils {
         return timePeriod.toStandardDuration().getMillis();
     }
 
-    /**
-     *
-     * @param date in format "E, e/MMM/YYYY"
-     * @return date in unix timestamp
-     */
     public static long dateToUnix(String date){
         //Remove irrelevant day information
         date = date.split(",")[1].trim();

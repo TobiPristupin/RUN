@@ -76,6 +76,10 @@ public class EditorPresenter {
         }
 
         addRunToDatabase(run);
+        notifyViewRunAdded();
+    }
+
+    private void notifyViewRunAdded(){
         view.showAddedRunSuccessfullyToast();
         view.finishView();
     }
@@ -104,8 +108,12 @@ public class EditorPresenter {
         view.setRatingText(String.valueOf(rating));
     }
 
+    /**
+     * @param month range 1-12
+     * @param dayOfMonth range 1-31
+     */
     public void onDateDialogPositiveButton(int year, int month, int dayOfMonth){
-        DateTime date = new DateTime(year, month + 1, dayOfMonth, 0, 0);
+        DateTime date = new DateTime(year, month, dayOfMonth, 0, 0);
         view.setDateText(DateUtils.datetimeToString(date));
     }
 

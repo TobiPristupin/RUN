@@ -207,7 +207,8 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
         DatePickerDialog dateDialog = new DatePickerDialog(EditorActivityView.this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                presenter.onDateDialogPositiveButton(year, month, dayOfMonth);
+                //Add one to month because date dialog uses a 0-11 range while presenter accepts 1-12
+                presenter.onDateDialogPositiveButton(year, month + 1, dayOfMonth);
             }
         }, year, month, dayOfMonth);
 
