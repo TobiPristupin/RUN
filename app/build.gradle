@@ -59,12 +59,14 @@ dependencies {
     implementation 'com.github.crysxd:shared-firebase-preferences:1.0.1'
     implementation 'com.android.support:multidex:1.0.2'
     implementation 'javax.mail:mail:1.4.7'
-    implementation ('com.crashlytics.sdk.android:crashlytics:2.9.0@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.0@aar') {
         transitive = true
     }
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.18.3'
+    androidTestImplementation 'org.mockito:mockito-android:2.18.3'
 }
 
 

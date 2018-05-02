@@ -294,15 +294,7 @@ public class Run implements Parcelable, Comparable<Run> {
 
     @Override
     public int compareTo(@NonNull Run o) {
-        if (date == o.date){
-            return 0;
-        }
-
-        if (date > o.date){
-            return 1;
-        }
-
-        return -1;
+        return Long.compare(date, o.date);
     }
 
     @Override

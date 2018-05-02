@@ -1,6 +1,8 @@
 package com.tobipristupin.simplerun.utils;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Locale;
 
@@ -212,4 +214,17 @@ public class DateUtils {
     public static String getDayOfMonthString(DateTime dateTime){
         return dateTime.dayOfMonth().getAsString();
     }
+
+    public static String datetimeToString(DateTime dateTime){
+        DateTimeFormatter formatter;
+
+        if (Locale.getDefault().equals(Locale.US)) {
+            formatter = DateTimeFormat.forPattern("E, M/d/y");
+        } else {
+            formatter = DateTimeFormat.forPattern("E, d/M/y");
+        }
+
+        return formatDateString(formatter.print(dateTime));
+    }
 }
+

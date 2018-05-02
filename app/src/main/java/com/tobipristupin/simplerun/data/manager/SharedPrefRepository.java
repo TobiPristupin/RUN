@@ -33,7 +33,6 @@ public class SharedPrefRepository implements PreferencesRepository {
 
         this.preferences = SharedFirebasePreferences.getInstance(context, key, Context.MODE_PRIVATE);
 
-
         pullFromDatabase();
 
         if (!isInitialized()){

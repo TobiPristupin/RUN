@@ -1,4 +1,4 @@
-package com.tobipristupin.simplerun;
+package com.tobipristupin.simplerun.model;
 
 
 

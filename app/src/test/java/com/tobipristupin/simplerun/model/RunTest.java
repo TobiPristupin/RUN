@@ -1,4 +1,4 @@
-package com.tobipristupin.simplerun;
+package com.tobipristupin.simplerun.model;
 
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.data.model.Run;

@@ -17,7 +17,6 @@ import java.util.Locale;
 /**
  * Presenter used in EditorActivityView.
  */
-
 public class EditorPresenter {
 
     private EditorView view;
@@ -33,10 +32,9 @@ public class EditorPresenter {
     }
 
     /**
-     * If Run was passed, that means intent for activity was sent with a Run
+     * If Run is not null, that means intent for activity was sent with a Run
      * that should be edited. If runToEdit is null, a new Run should be created
      * instead of modifying an existing one.
-     * @param runToEdit
      */
     public void onCreateView(Run runToEdit){
         if (runToEdit != null) {
@@ -51,15 +49,11 @@ public class EditorPresenter {
 
         String distanceText = RunUtils.distanceToString(runToEdit.getDistance(unit), unit);
         view.setDistanceText(distanceText);
-
         String dateText = RunUtils.dateToString(runToEdit.getDate());
         view.setDateText(dateText);
-
         String timeText = RunUtils.timeToString(runToEdit.getTime(), true);
         view.setTimeText(timeText);
-
         view.setRatingText(String.valueOf(runToEdit.getRating()));
-
         view.setActionBarEditTitle();
     }
 
@@ -70,13 +64,11 @@ public class EditorPresenter {
         String dateText = view.getDateText();
 
         if (!isValid(distanceText, timeText, ratingText, dateText)) {
-            view.showInvalidFieldsToast();
-            view.vibrate();
+            invalidInput();
             return;
         }
 
         Run run;
-
         if (editMode){
             run = putDataIntoExistingRun(distanceText, ratingText, timeText, dateText);
         } else {
@@ -86,6 +78,11 @@ public class EditorPresenter {
         addRunToDatabase(run);
         view.showAddedRunSuccessfullyToast();
         view.finishView();
+    }
+
+    private void invalidInput(){
+        view.showInvalidFieldsToast();
+        view.vibrate();
     }
 
     public void onDistanceDialogPositiveButton(int wholeNum, int fractionalNum){
@@ -108,17 +105,8 @@ public class EditorPresenter {
     }
 
     public void onDateDialogPositiveButton(int year, int month, int dayOfMonth){
-        DateTimeFormatter formatter;
-
-        if (Locale.getDefault().equals(Locale.US)) {
-            formatter = DateTimeFormat.forPattern("E, M/d/y");
-        } else {
-            formatter = DateTimeFormat.forPattern("E, d/M/y");
-        }
-
-        DateTime dateText = new DateTime(year, month + 1, dayOfMonth, 0, 0);
-
-        view.setDateText(DateUtils.formatDateString(formatter.print(dateText)));
+        DateTime date = new DateTime(year, month + 1, dayOfMonth, 0, 0);
+        view.setDateText(DateUtils.datetimeToString(date));
     }
 
     private boolean isValid(String... values){
@@ -159,3 +147,4 @@ public class EditorPresenter {
     }
 
 }
+
