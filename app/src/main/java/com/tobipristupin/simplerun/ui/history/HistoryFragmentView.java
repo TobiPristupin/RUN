@@ -25,7 +25,6 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseFragment;
 import com.tobipristupin.simplerun.data.repository.FirebaseRepository;
-import com.tobipristupin.simplerun.data.repository.FirebaseRunsSingleton;
 import com.tobipristupin.simplerun.data.repository.SharedPrefRepository;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.data.model.RunFilter;

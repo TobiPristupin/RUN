@@ -5,8 +5,7 @@ import com.tobipristupin.simplerun.data.RunPredicates;
 import com.tobipristupin.simplerun.data.repository.PreferencesRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.data.model.Run;
-import com.tobipristupin.simplerun.interfaces.Observable;
-import com.tobipristupin.simplerun.interfaces.Observer;
+import com.tobipristupin.simplerun.data.repository.Repository;
 import com.tobipristupin.simplerun.utils.DateUtils;
 import com.tobipristupin.simplerun.utils.RunUtils;
 import com.tobipristupin.simplerun.utils.State;
@@ -18,25 +17,47 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
-public class StatsMileagePresenter implements Observer<List<Run>> {
+
+public class StatsMileagePresenter {
 
     private StatsMileageView view;
-    private Observable observable;
     private List<Run> runList = new ArrayList<>();
+    private Repository<Run> runRepository;
     private PreferencesRepository preferencesRepository;
+    private Disposable repositorySubscription;
 
-    public StatsMileagePresenter(StatsMileageView view, Observable observable, PreferencesRepository preferencesRepository) {
+    public StatsMileagePresenter(StatsMileageView view, Repository<Run> runRepository, PreferencesRepository preferencesRepository) {
         this.view = view;
-        this.observable = observable;
+        this.runRepository = runRepository;
         this.preferencesRepository = preferencesRepository;
-        this.observable.attachObserver(this);
 
         updateChartXLabels();
+        subscribeToData();
     }
 
-    @Override
-    public void updateData(List<Run> data) {
+    private void subscribeToData(){
+        repositorySubscription = runRepository.fetch().subscribeWith(new DisposableObserver<List<Run>>(){
+            @Override
+            public void onNext(List<Run> runs) {
+                onNewData(runs);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void onNewData(List<Run> data){
         runList = data;
         updateBarChartWeek();
         updateBarChartMonth();
@@ -48,7 +69,9 @@ public class StatsMileagePresenter implements Observer<List<Run>> {
     }
 
     public void onDetachView(){
-        observable.detachObserver(this);
+        if (repositorySubscription != null){
+            repositorySubscription.dispose();
+        }
     }
 
     private void updateChartXLabels(){

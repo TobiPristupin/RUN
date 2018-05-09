@@ -18,8 +18,8 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseFragment;
+import com.tobipristupin.simplerun.data.repository.FirebaseRepository;
 import com.tobipristupin.simplerun.data.repository.PreferencesRepository;
-import com.tobipristupin.simplerun.data.repository.FirebaseRunsSingleton;
 import com.tobipristupin.simplerun.data.repository.SharedPrefRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.utils.GenericAxisValueFormatter;
@@ -71,7 +71,7 @@ public class StatsFragmentMileageView extends BaseFragment implements StatsMilea
         initTabLayout();
 
 
-        presenter = new StatsMileagePresenter(this, FirebaseRunsSingleton.getInstance(), new SharedPrefRepository(getContext()));
+        presenter = new StatsMileagePresenter(this, FirebaseRepository.getInstance(), new SharedPrefRepository(getContext()));
 
 
         return rootView;

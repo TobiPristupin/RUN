@@ -4,8 +4,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieEntry;
 import com.tobipristupin.simplerun.data.RunPredicates;
 import com.tobipristupin.simplerun.data.model.Run;
-import com.tobipristupin.simplerun.interfaces.Observable;
-import com.tobipristupin.simplerun.interfaces.Observer;
+import com.tobipristupin.simplerun.data.repository.Repository;
 import com.tobipristupin.simplerun.utils.DateUtils;
 import com.tobipristupin.simplerun.utils.RunUtils;
 
@@ -15,28 +14,46 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
-public class StatsActivitiesPresenter implements Observer<List<Run>> {
+
+public class StatsActivitiesPresenter {
 
     private StatsActivitiesView view;
-    private Observable observable;
     private List<Run> runList = new ArrayList<>();
+    private Repository<Run> runRepository;
+    private Disposable repositorySubscription;
 
-    public StatsActivitiesPresenter(StatsActivitiesView view, Observable observable) {
+    public StatsActivitiesPresenter(StatsActivitiesView view, Repository<Run> runRepository) {
         this.view = view;
-        this.observable = observable;
-
-        this.observable.attachObserver(this);
+        this.runRepository = runRepository;
 
         updateChartXLabels();
+        subscribeToData();
     }
 
-    public void onDetachView(){
-        this.observable.detachObserver(this);
+    private void subscribeToData(){
+        repositorySubscription = runRepository.fetch().subscribeWith(new DisposableObserver<List<Run>>(){
+
+            @Override
+            public void onNext(List<Run> runs) {
+                onNewData(runs);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
-    @Override
-    public void updateData(List<Run> data) {
+    private void onNewData(List<Run> data){
         runList = data;
         updateWeekChartData();
         updateMonthChartData();
@@ -44,6 +61,12 @@ public class StatsActivitiesPresenter implements Observer<List<Run>> {
         update6MonthsChartData();
         updateYearChartData();
         updatePieChartData();
+    }
+
+    public void onDetachView(){
+        if (repositorySubscription != null){
+            repositorySubscription.dispose();
+        }
     }
 
     private void updatePieChartData(){

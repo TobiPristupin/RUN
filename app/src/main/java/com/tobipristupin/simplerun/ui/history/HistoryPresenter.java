@@ -4,8 +4,6 @@ import com.tobipristupin.simplerun.data.RunPredicates;
 import com.tobipristupin.simplerun.data.repository.Repository;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.data.model.RunFilter;
-import com.tobipristupin.simplerun.interfaces.Observable;
-import com.tobipristupin.simplerun.interfaces.Observer;
 import com.tobipristupin.simplerun.utils.DateUtils;
 import com.tobipristupin.simplerun.utils.RunUtils;
 
@@ -16,11 +14,9 @@ import java.util.List;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
-/**
- * Presenter for HistoryView implementation. Implements Observer interface.
- */
 
-public class HistoryPresenter implements Observer<List<Run>>{
+
+public class HistoryPresenter {
 
     private HistoryView view;
     private List<Run> allRunsList = new ArrayList<>(); //Holds all runs
@@ -68,13 +64,6 @@ public class HistoryPresenter implements Observer<List<Run>>{
 
     public void onStartView(){
         showEmptyViewIfNecessary();
-    }
-
-    @Override
-    public void updateData(List<Run> data) {
-        allRunsList.clear();
-        allRunsList.addAll(data);
-        updateViewData();
     }
 
     public void onSpinnerItemSelected(){

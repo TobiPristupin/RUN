@@ -21,7 +21,7 @@ import com.github.mikephil.charting.data.ScatterData;
 import com.github.mikephil.charting.data.ScatterDataSet;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseFragment;
-import com.tobipristupin.simplerun.data.repository.FirebaseRunsSingleton;
+import com.tobipristupin.simplerun.data.repository.FirebaseRepository;
 import com.tobipristupin.simplerun.data.repository.SharedPrefRepository;
 import com.tobipristupin.simplerun.utils.TimeValueFormatter;
 
@@ -58,7 +58,7 @@ public class StatsFragmentPrsView extends BaseFragment implements StatsPrsView {
         initTabLayout();
         initPersonalBests();
 
-        presenter = new StatsPrsPresenter(this, FirebaseRunsSingleton.getInstance(), new SharedPrefRepository(getContext()));
+        presenter = new StatsPrsPresenter(this, FirebaseRepository.getInstance(), new SharedPrefRepository(getContext()));
         return rootView;
     }
 

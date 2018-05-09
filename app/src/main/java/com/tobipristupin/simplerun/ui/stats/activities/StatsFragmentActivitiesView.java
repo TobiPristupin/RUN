@@ -27,7 +27,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseFragment;
-import com.tobipristupin.simplerun.data.repository.FirebaseRunsSingleton;
+import com.tobipristupin.simplerun.data.repository.FirebaseRepository;
 import com.tobipristupin.simplerun.utils.GenericAxisValueFormatter;
 
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ public class StatsFragmentActivitiesView extends BaseFragment implements StatsAc
         initTabLayout();
         initPieChart();
 
-        presenter = new StatsActivitiesPresenter(this, FirebaseRunsSingleton.getInstance());
+        presenter = new StatsActivitiesPresenter(this, FirebaseRepository.getInstance());
 
         return rootView;
     }

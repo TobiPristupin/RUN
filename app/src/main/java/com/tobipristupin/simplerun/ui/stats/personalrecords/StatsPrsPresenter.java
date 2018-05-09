@@ -5,38 +5,61 @@ import com.tobipristupin.simplerun.data.RunPredicates;
 import com.tobipristupin.simplerun.data.repository.PreferencesRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.data.model.Run;
-import com.tobipristupin.simplerun.interfaces.Observable;
-import com.tobipristupin.simplerun.interfaces.Observer;
+import com.tobipristupin.simplerun.data.repository.Repository;
 import com.tobipristupin.simplerun.utils.RunUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class StatsPrsPresenter implements Observer<List<Run>> {
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
+
+public class StatsPrsPresenter {
 
     private StatsPrsView view;
-    private Observable observable;
+    private Repository<Run> runRepository;
+    private Disposable repositorySubscription;
     private List<Run> runList;
     private PreferencesRepository preferencesRepository;
 
-    public StatsPrsPresenter(StatsPrsView view, Observable observable, PreferencesRepository repository) {
+    public StatsPrsPresenter(StatsPrsView view, Repository<Run> runRepository, PreferencesRepository repository) {
         this.view = view;
-        this.observable = observable;
+        this.runRepository = runRepository;
         this.preferencesRepository = repository;
 
-        this.observable.attachObserver(this);
+        subscribeToData();
+    }
+
+    private void subscribeToData(){
+        repositorySubscription = runRepository.fetch().subscribeWith(new DisposableObserver<List<Run>>(){
+
+            @Override
+            public void onNext(List<Run> runs) {
+                onNewData(runs);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void onNewData(List<Run> data){
+        runList = data;
+        updateChartData();
     }
 
     public void onDetachView(){
-        observable.detachObserver(this);
-    }
-
-    @Override
-    public void updateData(List<Run> data) {
-        runList = data;
-
-        updateChartData();
+        if (repositorySubscription != null){
+            repositorySubscription.dispose();
+        }
     }
 
     private void updateChartData(){
