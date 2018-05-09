@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.tobipristupin.simplerun.BuildConfig;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
-import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
+import com.tobipristupin.simplerun.data.repository.SharedPrefRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.ui.AboutDialog;
 import com.tobipristupin.simplerun.ui.ToastyWrapper;

@@ -21,11 +21,9 @@ import com.github.mikephil.charting.data.ScatterData;
 import com.github.mikephil.charting.data.ScatterDataSet;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseFragment;
-import com.tobipristupin.simplerun.data.manager.FirebaseRunsSingleton;
-import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
+import com.tobipristupin.simplerun.data.repository.FirebaseRunsSingleton;
+import com.tobipristupin.simplerun.data.repository.SharedPrefRepository;
 import com.tobipristupin.simplerun.utils.TimeValueFormatter;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 

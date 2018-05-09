@@ -1,4 +1,4 @@
-package com.tobipristupin.simplerun.data.manager;
+package com.tobipristupin.simplerun.data.repository;
 
 import android.content.Context;
 
@@ -6,7 +6,6 @@ import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.tobipristupin.simplerun.R;
-import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.utils.LogWrapper;
 

@@ -15,9 +15,9 @@ import android.widget.Toast;
 
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
-import com.tobipristupin.simplerun.data.interfaces.Repository;
-import com.tobipristupin.simplerun.data.manager.FirebaseRepository;
-import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
+import com.tobipristupin.simplerun.data.repository.Repository;
+import com.tobipristupin.simplerun.data.repository.FirebaseRepository;
+import com.tobipristupin.simplerun.data.repository.SharedPrefRepository;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.ui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.editor.dialog.DistanceDialog;
@@ -46,7 +46,7 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
         setSupportActionBar(R.id.editor_toolbar, R.drawable.ic_close_white_24dp);
         changeStatusBarColor(R.color.colorPrimaryDark);
 
-        repo = new FirebaseRepository();
+        repo = FirebaseRepository.getInstance();
         presenter = new EditorPresenter(this, repo, new SharedPrefRepository(EditorActivityView.this));
 
         Intent intent = getIntent();

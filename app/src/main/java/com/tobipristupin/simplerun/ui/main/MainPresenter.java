@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
-import com.tobipristupin.simplerun.data.manager.FirebaseRunsSingleton;
+import com.tobipristupin.simplerun.data.repository.FirebaseRunsSingleton;
 
 /**
  * Presenter for MainView implementation

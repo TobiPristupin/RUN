@@ -1,7 +1,7 @@
 package com.tobipristupin.simplerun.ui.editor;
 
-import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
-import com.tobipristupin.simplerun.data.interfaces.Repository;
+import com.tobipristupin.simplerun.data.repository.PreferencesRepository;
+import com.tobipristupin.simplerun.data.repository.Repository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.data.model.Run;
 

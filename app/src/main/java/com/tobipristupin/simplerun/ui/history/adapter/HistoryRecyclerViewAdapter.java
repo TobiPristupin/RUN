@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.data.DiffCallback;
-import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
+import com.tobipristupin.simplerun.data.repository.PreferencesRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.utils.RunUtils;

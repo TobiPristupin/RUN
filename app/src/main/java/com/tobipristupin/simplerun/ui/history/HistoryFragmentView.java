@@ -24,9 +24,9 @@ import android.widget.RelativeLayout;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseFragment;
-import com.tobipristupin.simplerun.data.manager.FirebaseRepository;
-import com.tobipristupin.simplerun.data.manager.FirebaseRunsSingleton;
-import com.tobipristupin.simplerun.data.manager.SharedPrefRepository;
+import com.tobipristupin.simplerun.data.repository.FirebaseRepository;
+import com.tobipristupin.simplerun.data.repository.FirebaseRunsSingleton;
+import com.tobipristupin.simplerun.data.repository.SharedPrefRepository;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.data.model.RunFilter;
 import com.tobipristupin.simplerun.ui.VerticalDividerItemDecoration;
@@ -80,7 +80,7 @@ public class HistoryFragmentView extends BaseFragment implements HistoryView {
         initFab();
         initNavigationDrawer();
 
-        presenter = new HistoryPresenter(this, FirebaseRunsSingleton.getInstance(), new FirebaseRepository());
+        presenter = new HistoryPresenter(this, FirebaseRepository.getInstance());
 
         return rootView;
     }

@@ -1,4 +1,4 @@
-package com.tobipristupin.simplerun.data.interfaces;
+package com.tobipristupin.simplerun.data.repository;
 
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 

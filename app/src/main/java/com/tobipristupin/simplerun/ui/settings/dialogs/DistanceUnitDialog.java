@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 
 import com.tobipristupin.simplerun.R;
-import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
+import com.tobipristupin.simplerun.data.repository.PreferencesRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 
 /**

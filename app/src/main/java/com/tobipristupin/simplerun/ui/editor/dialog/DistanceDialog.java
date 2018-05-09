@@ -10,7 +10,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.tobipristupin.simplerun.R;
-import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
+import com.tobipristupin.simplerun.data.repository.PreferencesRepository;
 
 /**
  * Dialog that allows user to set a distance value for a new tracked run. Sends data to parent Activity

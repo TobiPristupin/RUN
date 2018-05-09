@@ -1,7 +1,7 @@
 package com.tobipristupin.simplerun.ui.history;
 
 import com.tobipristupin.simplerun.data.RunPredicates;
-import com.tobipristupin.simplerun.data.interfaces.Repository;
+import com.tobipristupin.simplerun.data.repository.Repository;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.data.model.RunFilter;
 import com.tobipristupin.simplerun.interfaces.Observable;
@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
+
 /**
  * Presenter for HistoryView implementation. Implements Observer interface.
  */
@@ -22,29 +25,51 @@ public class HistoryPresenter implements Observer<List<Run>>{
     private HistoryView view;
     private List<Run> allRunsList = new ArrayList<>(); //Holds all runs
     private List<Run> displayedRunsList = new ArrayList<>(); //Holds all runs currently displayed in view
-    private Observable observable;
     private Repository<Run> repository;
+    private Disposable subscription;
 
-    public HistoryPresenter(HistoryView view, Observable model, Repository<Run> repository) {
+    public HistoryPresenter(HistoryView view, Repository<Run> repository) {
         this.view = view;
-        this.observable = model;
         this.repository = repository;
-        model.attachObserver(this);
+        subscribeToData();
+    }
+
+    private void subscribeToData(){
+        subscription = repository.fetch().subscribeWith(new DisposableObserver<List<Run>>(){
+
+            @Override
+            public void onNext(List<Run> runs) {
+                onNewData(runs);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void onNewData(List<Run> runs){
+        allRunsList.clear();
+        allRunsList.addAll(runs);
+        updateViewData();
     }
 
     public void onDetachView(){
-        //Unsubscribe from observable observers list
-        observable.detachObserver(this);
+        if (subscription != null){
+            subscription.dispose();
+        }
     }
 
     public void onStartView(){
         showEmptyViewIfNecessary();
     }
 
-    /**
-     * Called from observable to to update data
-     * @param data
-     */
     @Override
     public void updateData(List<Run> data) {
         allRunsList.clear();
@@ -122,7 +147,7 @@ public class HistoryPresenter implements Observer<List<Run>>{
     }
 
 
-    public void deleteRun(List<Integer> indexList){
+    private void deleteRun(List<Integer> indexList){
         for (Integer index : indexList){
             repository.delete(displayedRunsList.get(index));
         }

@@ -1,4 +1,4 @@
-package com.tobipristupin.simplerun.data.manager;
+package com.tobipristupin.simplerun.data.repository;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

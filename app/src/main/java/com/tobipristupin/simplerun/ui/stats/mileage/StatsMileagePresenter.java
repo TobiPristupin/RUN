@@ -2,7 +2,7 @@ package com.tobipristupin.simplerun.ui.stats.mileage;
 
 import com.github.mikephil.charting.data.BarEntry;
 import com.tobipristupin.simplerun.data.RunPredicates;
-import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
+import com.tobipristupin.simplerun.data.repository.PreferencesRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.interfaces.Observable;

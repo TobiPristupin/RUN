@@ -1,18 +1,15 @@
 package com.tobipristupin.simplerun.ui.editor;
 
-import com.tobipristupin.simplerun.data.interfaces.PreferencesRepository;
-import com.tobipristupin.simplerun.data.interfaces.Repository;
+import com.tobipristupin.simplerun.data.repository.PreferencesRepository;
+import com.tobipristupin.simplerun.data.repository.Repository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.utils.DateUtils;
 import com.tobipristupin.simplerun.utils.RunUtils;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.text.DecimalFormat;
-import java.util.Locale;
 
 /**
  * Presenter used in EditorActivityView.
