@@ -58,7 +58,7 @@ public class StatsFragmentPrsView extends BaseFragment implements StatsPrsView {
         initTabLayout();
         initPersonalBests();
 
-        presenter = new StatsPrsPresenter(this, FirebaseRepository.getInstance(), new SharedPrefRepository(getContext()));
+        presenter = new StatsPrsPresenter(this, new FirebaseRepository(), new SharedPrefRepository(getContext()));
         return rootView;
     }
 

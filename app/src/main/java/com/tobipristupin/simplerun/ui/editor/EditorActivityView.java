@@ -46,7 +46,7 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
         setSupportActionBar(R.id.editor_toolbar, R.drawable.ic_close_white_24dp);
         changeStatusBarColor(R.color.colorPrimaryDark);
 
-        repo = FirebaseRepository.getInstance();
+        repo = new FirebaseRepository();
         presenter = new EditorPresenter(this, repo, new SharedPrefRepository(EditorActivityView.this));
 
         Intent intent = getIntent();

@@ -79,7 +79,7 @@ public class HistoryFragmentView extends BaseFragment implements HistoryView {
         initFab();
         initNavigationDrawer();
 
-        presenter = new HistoryPresenter(this, FirebaseRepository.getInstance());
+        presenter = new HistoryPresenter(this, new FirebaseRepository());
 
         return rootView;
     }

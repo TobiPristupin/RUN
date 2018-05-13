@@ -71,7 +71,7 @@ public class StatsFragmentMileageView extends BaseFragment implements StatsMilea
         initTabLayout();
 
 
-        presenter = new StatsMileagePresenter(this, FirebaseRepository.getInstance(), new SharedPrefRepository(getContext()));
+        presenter = new StatsMileagePresenter(this, new FirebaseRepository(), new SharedPrefRepository(getContext()));
 
 
         return rootView;

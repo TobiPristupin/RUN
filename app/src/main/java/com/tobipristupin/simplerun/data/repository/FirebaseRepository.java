@@ -25,16 +25,9 @@ public class FirebaseRepository implements Repository<Run> {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseUser user = firebaseAuth.getCurrentUser();
     private DatabaseReference runsDatabaseRef = firebaseDatabase.getReference("users/" + user.getUid() + "/runs/");
-    private Observable<List<Run>> observable;
+    private static Observable<List<Run>> observable;
+
     private static final String TAG = "FirebaseRepository";
-
-    private static final FirebaseRepository instance = new FirebaseRepository();
-
-    private FirebaseRepository(){}
-
-    public static FirebaseRepository getInstance(){
-        return instance;
-    }
 
     @Override
     public void add(Run run) {
@@ -63,22 +56,25 @@ public class FirebaseRepository implements Repository<Run> {
     }
 
     private Observable<List<Run>> createObservable(){
-        return Observable.create(new ObservableOnSubscribe<List<Run>>() {
-            @Override
-            public void subscribe(ObservableEmitter<List<Run>> emitter) throws Exception {
-                runsDatabaseRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        onNewData(dataSnapshot, emitter);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        onDataCancelled(databaseError, emitter);
-                    }
-                });
-            }
+        return Observable.create((ObservableOnSubscribe<List<Run>>) emitter -> {
+            ValueEventListener databaseListener = createDatabaseConnection(emitter);
+            runsDatabaseRef.addValueEventListener(databaseListener);
+            emitter.setCancellable(() -> runsDatabaseRef.removeEventListener(databaseListener));
         }).replay(1).refCount();
+    }
+
+    private ValueEventListener createDatabaseConnection(ObservableEmitter<List<Run>> emitter){
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                onNewData(dataSnapshot, emitter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                onDataCancelled(databaseError, emitter);
+            }
+        };
     }
 
     private void onNewData(DataSnapshot snapshot, ObservableEmitter<List<Run>> emitter){

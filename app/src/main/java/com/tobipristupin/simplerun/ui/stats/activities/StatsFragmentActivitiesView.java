@@ -65,7 +65,7 @@ public class StatsFragmentActivitiesView extends BaseFragment implements StatsAc
         initTabLayout();
         initPieChart();
 
-        presenter = new StatsActivitiesPresenter(this, FirebaseRepository.getInstance());
+        presenter = new StatsActivitiesPresenter(this, new FirebaseRepository());
 
         return rootView;
     }
