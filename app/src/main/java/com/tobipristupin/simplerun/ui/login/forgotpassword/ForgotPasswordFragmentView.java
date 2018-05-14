@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.tobipristupin.simplerun.R;
-import com.tobipristupin.simplerun.ui.ToastyWrapper;
+import com.tobipristupin.simplerun.ui.sharedui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.login.BaseLoginFragment;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -51,13 +51,10 @@ public class ForgotPasswordFragmentView extends BaseLoginFragment implements For
     }
 
     private void initSendButton(){
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Check if email is valid before starting loading animation
-                String email = emailLayout.getEditText().getText().toString().trim();
-                presenter.onSendEmailButtonClicked(email);
-            }
+        sendButton.setOnClickListener(view -> {
+            //Check if email is valid before starting loading animation
+            String email = emailLayout.getEditText().getText().toString().trim();
+            presenter.onSendEmailButtonClicked(email);
         });
     }
 
@@ -107,12 +104,7 @@ public class ForgotPasswordFragmentView extends BaseLoginFragment implements For
     private void initReturnButton(){
         Button button = rootView.findViewById(R.id.forgot_password_return);
         final ViewPager viewPager = getActivity().findViewById(R.id.login_viewpager);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewPager.setCurrentItem(1);
-            }
-        });
+        button.setOnClickListener(view -> viewPager.setCurrentItem(1));
     }
 
 }

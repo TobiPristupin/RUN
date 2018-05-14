@@ -7,7 +7,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -20,15 +19,12 @@ import com.crashlytics.android.Crashlytics;
 import com.squareup.picasso.Picasso;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
-import com.tobipristupin.simplerun.ui.AboutDialog;
+import com.tobipristupin.simplerun.ui.sharedui.AboutDialog;
 import com.tobipristupin.simplerun.ui.history.HistoryFragmentView;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
 import com.tobipristupin.simplerun.ui.settings.SettingsActivityView;
 import com.tobipristupin.simplerun.ui.settings.libraries.LibraryItemsActivityView;
 import com.tobipristupin.simplerun.ui.stats.StatsFragmentView;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -61,12 +57,9 @@ public class MainActivityView extends BaseAppCompatActivity implements MainView 
     }
 
     private void initDrawerLayout(){
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                openFragment(item);
-                return true;
-            }
+        navigationView.setNavigationItemSelectedListener(item -> {
+            openFragment(item);
+            return true;
         });
     }
 

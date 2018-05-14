@@ -78,22 +78,12 @@ public class TimeDialog {
     }
 
     private void registerOnNegativeClick(){
-        builder.setNegativeButton(R.string.time_dialog_negative_button, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        builder.setNegativeButton(R.string.time_dialog_negative_button, (dialog, which) -> dialog.cancel());
     }
 
     private void registerOnPositiveClick(){
-        builder.setPositiveButton(R.string.time_dialog_positive_button, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                listener.onClick(numberPickerHour.getValue(), numberPickerMinute.getValue(),
-                        numberPickerSecond.getValue());
-            }
-        });
+        builder.setPositiveButton(R.string.time_dialog_positive_button, (dialog, which) -> listener.onClick(numberPickerHour.getValue(), numberPickerMinute.getValue(),
+                numberPickerSecond.getValue()));
     }
 
 //    private String formatValues() {

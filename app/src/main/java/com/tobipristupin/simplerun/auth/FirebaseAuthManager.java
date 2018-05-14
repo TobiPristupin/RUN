@@ -21,68 +21,56 @@ public class FirebaseAuthManager implements AuthManager {
 
     @Override
     public void logInWithEmailAndPassword(String email, String password, final AuthCallbacks.LoginCallback callback) {
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    LogWrapper.info(TAG, "FirebaseSignInWithEmail: Successful");
-                    callback.onLoginSuccess();
-                } else {
-                    LogWrapper.warn(TAG, "FirebaseSignInWithEmail: Failed "  + task.getException());
-                    Crashlytics.logException(task.getException());
-                    callback.onLoginFailed(task.getException());
-                }
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                LogWrapper.info(TAG, "FirebaseSignInWithEmail: Successful");
+                callback.onLoginSuccess();
+            } else {
+                LogWrapper.warn(TAG, "FirebaseSignInWithEmail: Failed "  + task.getException());
+                Crashlytics.logException(task.getException());
+                callback.onLoginFailed(task.getException());
             }
         });
     }
 
     @Override
     public void logInWithCredentials(AuthCredential credential, final AuthCallbacks.LoginCallback callback) {
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    LogWrapper.info(TAG, "FirebaseSignInWithCredentials: Success");
-                    callback.onLoginSuccess();
-                } else {
-                    LogWrapper.warn(TAG, "FirebaseSignInWithCredentials: Failed " + task.getException());
-                    Crashlytics.logException(task.getException());
-                    callback.onLoginFailed(task.getException());
-                }
+        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                LogWrapper.info(TAG, "FirebaseSignInWithCredentials: Success");
+                callback.onLoginSuccess();
+            } else {
+                LogWrapper.warn(TAG, "FirebaseSignInWithCredentials: Failed " + task.getException());
+                Crashlytics.logException(task.getException());
+                callback.onLoginFailed(task.getException());
             }
         });
     }
 
     @Override
     public void sendResetPasswordEmail(String email, final AuthCallbacks.LoginCallback callback) {
-        firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
-                    LogWrapper.info(TAG, "FirebaseSendResetEmail: Successful");
-                    callback.onLoginSuccess();
-                } else {
-                    LogWrapper.warn(TAG, "FirebaseSendResetEmail: Failed " + task.getException());
-                    Crashlytics.logException(task.getException());
-                    callback.onLoginFailed(task.getException());
-                }
+        firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                LogWrapper.info(TAG, "FirebaseSendResetEmail: Successful");
+                callback.onLoginSuccess();
+            } else {
+                LogWrapper.warn(TAG, "FirebaseSendResetEmail: Failed " + task.getException());
+                Crashlytics.logException(task.getException());
+                callback.onLoginFailed(task.getException());
             }
         });
     }
 
     @Override
     public void createNewAccount(String email, String password, final AuthCallbacks.LoginCallback callback) {
-        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    LogWrapper.info(TAG, "FirebaseCreateNewAccount: Successful");
-                    callback.onLoginSuccess();
-                } else {
-                    LogWrapper.warn(TAG, "FirebaseCreateNewAccount: Failed " + task.getException());
-                    Crashlytics.logException(task.getException());
-                    callback.onLoginFailed(task.getException());
-                }
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                LogWrapper.info(TAG, "FirebaseCreateNewAccount: Successful");
+                callback.onLoginSuccess();
+            } else {
+                LogWrapper.warn(TAG, "FirebaseCreateNewAccount: Failed " + task.getException());
+                Crashlytics.logException(task.getException());
+                callback.onLoginFailed(task.getException());
             }
         });
     }

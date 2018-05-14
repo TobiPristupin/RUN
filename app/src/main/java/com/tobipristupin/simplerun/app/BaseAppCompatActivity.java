@@ -18,7 +18,7 @@ public class BaseAppCompatActivity extends AppCompatActivity {
      * AppTheme status bar color attr is set to transparent for the drawerLayout in main activity.
      * this activity uses the primary dark color as status bar color. This method sets it during runtime.
      */
-    protected void changeStatusBarColor(int resId) {
+    public void changeStatusBarColor(int resId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

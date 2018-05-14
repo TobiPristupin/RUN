@@ -38,12 +38,7 @@ public class LibrariesItemAdapter extends RecyclerView.Adapter<LibrariesItemAdap
     public void onBindViewHolder(ViewHolder holder, int position) {
         final LibraryItem library = libraries.get(position);
         holder.name.setText(library.getName());
-        holder.website.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onWebsiteButtonClick(library);
-            }
-        });
+        holder.website.setOnClickListener(v -> listener.onWebsiteButtonClick(library));
     }
 
     @Override

@@ -7,7 +7,6 @@ import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,7 +18,7 @@ import com.tobipristupin.simplerun.data.repository.Repository;
 import com.tobipristupin.simplerun.data.repository.FirebaseRepository;
 import com.tobipristupin.simplerun.data.repository.SharedPrefRepository;
 import com.tobipristupin.simplerun.data.model.Run;
-import com.tobipristupin.simplerun.ui.ToastyWrapper;
+import com.tobipristupin.simplerun.ui.sharedui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.editor.dialog.DistanceDialog;
 import com.tobipristupin.simplerun.ui.editor.dialog.RatingDialog;
 import com.tobipristupin.simplerun.ui.editor.dialog.TimeDialog;
@@ -155,46 +154,25 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
     private void initDateField() {
         RelativeLayout dateView = findViewById(R.id.editor_date_view);
 
-        dateView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialog();
-            }
-        });
+        dateView.setOnClickListener(v -> showDatePickerDialog());
     }
 
     private void initDistanceField() {
         RelativeLayout distanceView = findViewById(R.id.editor_distance_view);
 
-        distanceView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDistanceDialog();
-            }
-        });
+        distanceView.setOnClickListener(v -> showDistanceDialog());
     }
 
     private void initTimeField() {
         RelativeLayout timeView = findViewById(R.id.editor_time_view);
 
-        timeView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTimeDialog();
-            }
-
-        });
+        timeView.setOnClickListener(v -> showTimeDialog());
     }
 
     private void initRatingField() {
         RelativeLayout field = findViewById(R.id.editor_rating_view);
 
-        field.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showRatingDialog();
-            }
-        });
+        field.setOnClickListener(v -> showRatingDialog());
     }
 
     private void showDatePickerDialog(){
@@ -204,12 +182,9 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
         int month = calendar.get(Calendar.MONTH);
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog dateDialog = new DatePickerDialog(EditorActivityView.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                //Add one to month because date dialog uses a 0-11 range while presenter accepts 1-12
-                presenter.onDateDialogPositiveButton(year, month + 1, dayOfMonth);
-            }
+        DatePickerDialog dateDialog = new DatePickerDialog(EditorActivityView.this, (view, year1, month1, dayOfMonth1) -> {
+            //Add one to month because date dialog uses a 0-11 range while presenter accepts 1-12
+            presenter.onDateDialogPositiveButton(year1, month1 + 1, dayOfMonth1);
         }, year, month, dayOfMonth);
 
         dateDialog.show();
@@ -219,34 +194,19 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
         DistanceDialog distanceDialog = new DistanceDialog(
                 new SharedPrefRepository(EditorActivityView.this),
 
-                new DistanceDialog.onPositiveButtonListener() {
-                    @Override
-                    public void onClick(int wholeNum, int fractionalNum) {
-                        presenter.onDistanceDialogPositiveButton(wholeNum, fractionalNum);
-                    }
-                });
+                (wholeNum, fractionalNum) -> presenter.onDistanceDialogPositiveButton(wholeNum, fractionalNum));
 
         distanceDialog.makeDialog(EditorActivityView.this).show();
     }
 
     private void showTimeDialog(){
-        TimeDialog dialog = new TimeDialog(new TimeDialog.onPositiveButtonListener() {
-            @Override
-            public void onClick(int hour, int minute, int second) {
-                presenter.onTimeDialogPositiveButton(hour, minute, second);
-            }
-        });
+        TimeDialog dialog = new TimeDialog((hour, minute, second) -> presenter.onTimeDialogPositiveButton(hour, minute, second));
 
         dialog.makeDialog(EditorActivityView.this).show();
     }
 
     private void showRatingDialog(){
-        RatingDialog ratingDialog = new RatingDialog(new RatingDialog.onPositiveButtonListener() {
-            @Override
-            public void onClick(int ratingValue) {
-                presenter.onRatingDialogPositiveButton(ratingValue);
-            }
-        });
+        RatingDialog ratingDialog = new RatingDialog(ratingValue -> presenter.onRatingDialogPositiveButton(ratingValue));
 
         ratingDialog.makeDialog(EditorActivityView.this).show();
     }

@@ -97,12 +97,9 @@ public class LibraryItemsActivityView extends BaseAppCompatActivity {
 
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.settings_libraries_recyclerview);
-        LibrariesItemAdapter.onClickListener listener = new LibrariesItemAdapter.onClickListener() {
-            @Override
-            public void onWebsiteButtonClick(LibraryItem library) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(library.getUrl()));
-                startActivity(intent);
-            }
+        LibrariesItemAdapter.onClickListener listener = library -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(library.getUrl()));
+            startActivity(intent);
         };
 
         LibrariesItemAdapter adapter = new LibrariesItemAdapter(libraries, listener);

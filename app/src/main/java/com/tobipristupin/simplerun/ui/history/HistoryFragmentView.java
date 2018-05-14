@@ -1,7 +1,6 @@
 package com.tobipristupin.simplerun.ui.history;
 
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,12 +22,13 @@ import android.widget.RelativeLayout;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
 import com.tobipristupin.simplerun.app.BaseFragment;
 import com.tobipristupin.simplerun.data.repository.FirebaseRepository;
 import com.tobipristupin.simplerun.data.repository.SharedPrefRepository;
 import com.tobipristupin.simplerun.data.model.Run;
 import com.tobipristupin.simplerun.data.model.RunFilter;
-import com.tobipristupin.simplerun.ui.VerticalDividerItemDecoration;
+import com.tobipristupin.simplerun.ui.sharedui.VerticalDividerItemDecoration;
 import com.tobipristupin.simplerun.ui.editor.EditorActivityView;
 import com.tobipristupin.simplerun.ui.history.adapter.HistoryRecyclerViewAdapter;
 
@@ -87,8 +87,7 @@ public class HistoryFragmentView extends BaseFragment implements HistoryView {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.all_history);
+        changeStatusBarTitle(R.string.all_history);
     }
 
     @Override
@@ -133,19 +132,16 @@ public class HistoryFragmentView extends BaseFragment implements HistoryView {
     private void initDateSpinner(){
         dateSpinner = rootView.findViewById(R.id.history_date_spinner);
 
-        spinnerItems.addAll(Arrays.asList(RunFilter.MONTH.toStringLocalized(getResources()),
+        spinnerItems.addAll(Arrays.asList(
+                RunFilter.MONTH.toStringLocalized(getResources()),
                 RunFilter.WEEK.toStringLocalized(getResources()),
                 RunFilter.YEAR.toStringLocalized(getResources()),
-                RunFilter.ALL.toStringLocalized(getResources())));
+                RunFilter.ALL.toStringLocalized(getResources())
+        ));
 
         dateSpinner.setItems(spinnerItems);
 
-        dateSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                presenter.onSpinnerItemSelected();
-            }
-        });
+        dateSpinner.setOnItemSelectedListener((view, position, id, item) -> presenter.onSpinnerItemSelected());
     }
 
 
@@ -163,9 +159,7 @@ public class HistoryFragmentView extends BaseFragment implements HistoryView {
         recyclerView.getItemAnimator().setAddDuration(750);
         recyclerView.getItemAnimator().setRemoveDuration(500);
 
-
-        adapter = new HistoryRecyclerViewAdapter(getContext(), getAdapterOnItemClicked(), new SharedPrefRepository(getContext()));
-
+        adapter = new HistoryRecyclerViewAdapter(getContext(), createAdapterOnItemClicked(), new SharedPrefRepository(getContext()));
 
         AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(adapter);
         animationAdapter.setDuration(500);
@@ -173,61 +167,68 @@ public class HistoryFragmentView extends BaseFragment implements HistoryView {
         recyclerView.setAdapter(animationAdapter);
     }
 
-    private HistoryRecyclerViewAdapter.OnItemClicked getAdapterOnItemClicked(){
+    private HistoryRecyclerViewAdapter.OnItemClicked createAdapterOnItemClicked(){
         return new HistoryRecyclerViewAdapter.OnItemClicked() {
 
             @Override
             public void onClick(int position) {
                 if (actionMode != null){
-                    adapter.toggleSelection(position);
-                    presenter.toggleItemSelection(adapter.getSelectedItems());
+                    refreshSelectedItems(position);
                 }
             }
 
             @Override
             public boolean onLongClick(int position) {
                 if (actionMode == null){
-                    actionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(modeCallback);
+                    actionMode = startActionMode();
                 }
 
-                adapter.toggleSelection(position);
-                presenter.toggleItemSelection(adapter.getSelectedItems());
+                refreshSelectedItems(position);
                 return true;
+            }
+
+            private void refreshSelectedItems(int clickPosition){
+                adapter.toggleSelection(clickPosition);
+                presenter.refreshItemSelection(adapter.getSelectedItems());
             }
         };
     }
 
+    private ActionMode startActionMode(){
+        return ((AppCompatActivity) getActivity()).startSupportActionMode(modeCallback);
+    }
+
     private void initFab(){
         final FloatingActionButton fab = rootView.findViewById(R.id.history_fab_button);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), EditorActivityView.class);
-                startActivity(intent);
-            }
+        fab.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), EditorActivityView.class);
+            startActivity(intent);
         });
 
-        //Hide fab when recycler view is scrolled in any direction
+        //Hide fab when recycler view is scrolled
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 switch (newState){
                     case RecyclerView.SCROLL_STATE_IDLE :
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                fab.show();
-                            }
-                        }, 500);
+                        showFab(fab);
                         break;
                     default :
-                        fab.hide();
+                        hideFab(fab);
                         break;
                 }
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
+    }
+
+    private void showFab(FloatingActionButton fab){
+        Handler handler = new Handler();
+        handler.postDelayed(fab::show, 500);
+    }
+
+    private void hideFab(FloatingActionButton fab){
+        fab.hide();
     }
 
     @Override
@@ -272,11 +273,6 @@ public class HistoryFragmentView extends BaseFragment implements HistoryView {
     }
 
     @Override
-    public void setSpinnerSelectedItem(RunFilter filter) {
-        dateSpinner.setSelectedIndex(spinnerItems.indexOf(filter.toStringLocalized(getResources())));
-    }
-
-    @Override
     public void showEmptyView() {
         animateViews(true, emptyViewHeader, emptyViewImage);
     }
@@ -301,20 +297,10 @@ public class HistoryFragmentView extends BaseFragment implements HistoryView {
         builder.setMessage(text);
 
         String negativeText = getString(R.string.history_fragment_view_cancel);
-        builder.setNegativeButton(negativeText, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-            }
-        });
+        builder.setNegativeButton(negativeText, (dialogInterface, i) -> dialogInterface.cancel());
 
         String positiveText = getString(R.string.history_fragment_view_yes);
-        builder.setPositiveButton(positiveText, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                presenter.onDeleteDialogYes(selectedItems);
-            }
-        });
+        builder.setPositiveButton(positiveText, (dialogInterface, i) -> presenter.onDeleteDialogYes(selectedItems));
 
         builder.create().show();
     }
@@ -354,11 +340,11 @@ public class HistoryFragmentView extends BaseFragment implements HistoryView {
         if (activated){
             spinnerLayout.setBackgroundColor(getResources().getColor(R.color.actionMode));
             dateSpinner.setBackgroundColor(getResources().getColor(R.color.actionMode));
-            getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+            ((BaseAppCompatActivity) getActivity()).changeStatusBarColor(R.color.colorPrimary);
         } else {
             spinnerLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             dateSpinner.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            getActivity().getWindow().setStatusBarColor(getResources().getColor(android.R.color.transparent));
+            ((BaseAppCompatActivity) getActivity()).changeStatusBarColor(R.color.colorPrimary);
         }
 
     }
@@ -367,7 +353,7 @@ public class HistoryFragmentView extends BaseFragment implements HistoryView {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate (R.menu.history_selected_item_menu, menu);
+            mode.getMenuInflater().inflate(R.menu.history_selected_item_menu, menu);
             return true;
         }
 

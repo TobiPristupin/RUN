@@ -252,12 +252,7 @@ public class StatsFragmentActivitiesView extends BaseFragment implements StatsAc
         BarDataSet barDataSet = new BarDataSet(barData, getString(R.string.stats_fragment_activities_view_barchart_label));
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkOrange));
-        barDataSet.setValueFormatter(new IValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                return String.valueOf((int) value);
-            }
-        });
+        barDataSet.setValueFormatter((value, entry, dataSetIndex, viewPortHandler) -> String.valueOf((int) value));
 
         chart.setData(new BarData(barDataSet));
         chart.invalidate();

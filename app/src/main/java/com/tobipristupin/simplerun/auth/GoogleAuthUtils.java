@@ -30,12 +30,7 @@ public class GoogleAuthUtils {
 
     public static GoogleApiClient getApiClient(final FragmentActivity fragmentActivity, GoogleSignInOptions signInOptions, ApiClientCallback callback){
         final GoogleApiClient googleApiClient = new GoogleApiClient.Builder(fragmentActivity)
-                .enableAutoManage(fragmentActivity, new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        callback.onConnectionFailed(connectionResult);
-                    }
-                })
+                .enableAutoManage(fragmentActivity, connectionResult -> callback.onConnectionFailed(connectionResult))
                 .addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions)
                 .build();
 

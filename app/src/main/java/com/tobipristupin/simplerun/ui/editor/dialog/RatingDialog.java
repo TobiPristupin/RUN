@@ -43,12 +43,9 @@ public class RatingDialog {
     private void initRatingBar() {
         ratingBar = rootView.findViewById(R.id.rating_rating_bar);
 
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                if (rating < 1) {
-                    ratingBar.setRating(1);
-                }
+        ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            if (rating < 1) {
+                ratingBar.setRating(1);
             }
         });
     }
@@ -82,20 +79,10 @@ public class RatingDialog {
     }
 
     private void registerOnNegativeButton(){
-        builder.setNegativeButton(R.string.rating_dialog_negative_button, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                onNegativeClick(dialog, which);
-            }
-        });
+        builder.setNegativeButton(R.string.rating_dialog_negative_button, (dialog, which) -> onNegativeClick(dialog, which));
     }
 
     private void registerOnPositiveButton(){
-        builder.setPositiveButton(R.string.rating_dialog_positive_button, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                onPositiveClick(dialog, which);
-            }
-        });
+        builder.setPositiveButton(R.string.rating_dialog_positive_button, (dialog, which) -> onPositiveClick(dialog, which));
     }
 }

@@ -14,6 +14,7 @@ import java.util.List;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
+import static com.tobipristupin.simplerun.utils.RunUtils.*;
 
 
 public class HistoryPresenter {
@@ -71,40 +72,42 @@ public class HistoryPresenter {
         updateViewData();
     }
 
-    /**
-     * Filters current data according to view's filter and sends it to the view.
-     * Then finishes action mode in view and shows the view's empty view if needed.
-     */
     public void updateViewData(){
-        RunFilter filter = view.getDataFilter();
-        displayedRunsList.clear();
-
-        switch (filter){
-            case WEEK:
-                List<Run> weekRuns = RunUtils.filterList(allRunsList,
-                        RunPredicates.isRunBetween(DateUtils.getStartOfWeek(), DateUtils.getEndOfWeek()));
-                displayedRunsList.addAll(weekRuns);
-                break;
-            case MONTH:
-                List<Run> monthRuns = RunUtils.filterList(allRunsList,
-                        RunPredicates.isRunBetween(DateUtils.getStartOfMonth(), DateUtils.getEndOfMonth()));
-                displayedRunsList.addAll(monthRuns);
-                break;
-            case YEAR:
-                List<Run> yearRuns = RunUtils.filterList(allRunsList,
-                        RunPredicates.isRunBetween(DateUtils.getStartOfYear(), DateUtils.getEndOfYear()));
-                displayedRunsList.addAll(yearRuns);
-                break;
-            case ALL:
-                displayedRunsList.addAll(allRunsList);
-        }
-
-        Collections.sort(displayedRunsList);
-        view.setData(displayedRunsList);
         //Exit selection state, user isn't allowed to change filter with selected items.
         view.finishActionMode();
 
+        updateDisplayedRunList();
+        view.setData(displayedRunsList);
+
         showEmptyViewIfNecessary();
+    }
+
+    private void updateDisplayedRunList(){
+        RunFilter filter = view.getDataFilter();
+        List<Run> filteredRuns = getFilteredRuns(filter);
+
+        displayedRunsList.clear();
+        displayedRunsList.addAll(filteredRuns);
+
+        Collections.sort(displayedRunsList);
+    }
+
+    private List<Run> getFilteredRuns(RunFilter filter){
+        switch (filter){
+            case WEEK:
+                return filterList(allRunsList,
+                        RunPredicates.isRunBetween(DateUtils.getStartOfWeek(), DateUtils.getEndOfWeek()));
+            case MONTH:
+                return filterList(allRunsList,
+                        RunPredicates.isRunBetween(DateUtils.getStartOfMonth(), DateUtils.getEndOfMonth()));
+            case YEAR:
+                return filterList(allRunsList,
+                        RunPredicates.isRunBetween(DateUtils.getStartOfYear(), DateUtils.getEndOfYear()));
+            case ALL:
+                return allRunsList;
+        }
+
+        return allRunsList;
     }
 
     private boolean shouldShowEmptyView(){
@@ -112,13 +115,12 @@ public class HistoryPresenter {
     }
 
     /**
-     * Toggle the selection state of an item
-     *
-     * If the item was the last one in the selection and is unselected, the selection is stopped.
+     * If the item was the last one in the selection and is unselected, selection mode is stopped.
      * Note that the selection must already be started (actionMode in historyView must not be null).
      */
-    public void toggleItemSelection(List<Integer> selectedItems){
+    public void refreshItemSelection(List<Integer> selectedItems){
         int selectedItemCount = selectedItems.size();
+
         if (selectedItemCount == 0){
             view.finishActionMode();
             return;

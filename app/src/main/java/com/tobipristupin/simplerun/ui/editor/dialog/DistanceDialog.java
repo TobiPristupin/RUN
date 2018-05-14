@@ -93,21 +93,11 @@ public class DistanceDialog {
     }
 
     private void registerOnNegativeButton(){
-        builder.setNegativeButton(R.string.distance_dialog_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                onNegativeClick(dialog, which);
-            }
-        });
+        builder.setNegativeButton(R.string.distance_dialog_cancel, (dialog, which) -> onNegativeClick(dialog, which));
     }
 
     private void registerOnPositiveButton(){
-        builder.setPositiveButton(R.string.distance_dialog_done, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                onPositiveClick(dialog, which);
-            }
-        });
+        builder.setPositiveButton(R.string.distance_dialog_done, (dialog, which) -> onPositiveClick(dialog, which));
     }
 
 }

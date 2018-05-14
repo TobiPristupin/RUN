@@ -18,7 +18,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.interfaces.ErrorType;
-import com.tobipristupin.simplerun.ui.ToastyWrapper;
+import com.tobipristupin.simplerun.ui.sharedui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.login.BaseLoginFragment;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
 import com.tobipristupin.simplerun.ui.main.MainActivityView;
@@ -172,27 +172,19 @@ public class NewAccountFragmentView extends BaseLoginFragment implements NewAcco
     }
 
     private void initCreateAccountButton() {
-        createAccountButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final String email = emailLayout.getEditText().getText().toString().trim();
-                final String password = passwordLayout.getEditText().getText().toString().trim();
-                final String password2 = passwordLayout2.getEditText().getText().toString().trim();
+        createAccountButton.setOnClickListener(view -> {
+            final String email = emailLayout.getEditText().getText().toString().trim();
+            final String password = passwordLayout.getEditText().getText().toString().trim();
+            final String password2 = passwordLayout2.getEditText().getText().toString().trim();
 
-                presenter.onCreateAccountButtonClick(email, password, password2);
-            }
+            presenter.onCreateAccountButtonClick(email, password, password2);
         });
 
     }
 
     private void initGoogleLogIn(){
         SignInButton signInButton = rootView.findViewById(R.id.new_account_google_button);
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.onGoogleLogInClick();
-            }
-        });
+        signInButton.setOnClickListener(view -> presenter.onGoogleLogInClick());
 
     }
 
@@ -210,11 +202,6 @@ public class NewAccountFragmentView extends BaseLoginFragment implements NewAcco
     private void initReturnButton(){
         Button button = rootView.findViewById(R.id.new_account_return);
         final ViewPager viewPager = getActivity().findViewById(R.id.login_viewpager);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewPager.setCurrentItem(1);
-            }
-        });
+        button.setOnClickListener(view -> viewPager.setCurrentItem(1));
     }
 }

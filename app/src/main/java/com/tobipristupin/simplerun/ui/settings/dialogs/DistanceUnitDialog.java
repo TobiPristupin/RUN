@@ -33,16 +33,13 @@ public class DistanceUnitDialog {
         CharSequence[] items = new String[]{context.getString(R.string.all_metric) + " (" + DistanceUnit.KM + ")"
                 , context.getString(R.string.all_imperial)  + " (" + DistanceUnit.MILE + ")"};
 
-        builder.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == 0) {
-                    listener.onOptionSelected(DistanceUnit.KM);
-                } else {
-                    listener.onOptionSelected(DistanceUnit.MILE);
-                }
-                dialog.dismiss();
+        builder.setSingleChoiceItems(items, checkedItem, (dialog, which) -> {
+            if (which == 0) {
+                listener.onOptionSelected(DistanceUnit.KM);
+            } else {
+                listener.onOptionSelected(DistanceUnit.MILE);
             }
+            dialog.dismiss();
         });
 
 

@@ -1,4 +1,4 @@
-package com.tobipristupin.simplerun.ui;
+package com.tobipristupin.simplerun.ui.sharedui;
 
 
 import android.content.Context;

@@ -22,8 +22,6 @@ public interface HistoryView {
 
     RunFilter getDataFilter();
 
-    void setSpinnerSelectedItem(RunFilter filter);
-
     void showEmptyView();
 
     void removeEmptyView();

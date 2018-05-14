@@ -17,7 +17,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.interfaces.ErrorType;
-import com.tobipristupin.simplerun.ui.ToastyWrapper;
+import com.tobipristupin.simplerun.ui.sharedui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.login.BaseLoginFragment;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
 import com.tobipristupin.simplerun.ui.main.MainActivityView;
@@ -135,25 +135,17 @@ public class LoginFragmentView extends BaseLoginFragment implements LoginView {
 
     private void initLogInFab(){
         //EditText error resets every time text is inputted
-        fabButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = emailLayout.getEditText().getText().toString().trim();
-                String password = passwordLayout.getEditText().getText().toString().trim();
-                presenter.attemptEmailLogin(email, password);
-            }
+        fabButton.setOnClickListener(view -> {
+            String email = emailLayout.getEditText().getText().toString().trim();
+            String password = passwordLayout.getEditText().getText().toString().trim();
+            presenter.attemptEmailLogin(email, password);
         });
     }
 
     //Initializes everything related to Google Sign In
     private void initGoogleLogIn(){
         SignInButton googleBtn = rootView.findViewById(R.id.login_google_button);
-        googleBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.onGoogleLogInClick();
-            }
-        });
+        googleBtn.setOnClickListener(v -> presenter.onGoogleLogInClick());
     }
 
     /**
@@ -175,19 +167,9 @@ public class LoginFragmentView extends BaseLoginFragment implements LoginView {
     private void initBottomButtons(){
         TextView newAccount = rootView.findViewById(R.id.login_newaccount);
         final ViewPager viewPager = getActivity().findViewById(R.id.login_viewpager);
-        newAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewPager.setCurrentItem(2);
-            }
-        });
+        newAccount.setOnClickListener(view -> viewPager.setCurrentItem(2));
 
         TextView forgotPassword = rootView.findViewById(R.id.login_forgotpassword);
-        forgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewPager.setCurrentItem(0);
-            }
-        });
+        forgotPassword.setOnClickListener(view -> viewPager.setCurrentItem(0));
     }
 }

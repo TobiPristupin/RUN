@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,8 +13,8 @@ import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
 import com.tobipristupin.simplerun.data.repository.SharedPrefRepository;
 import com.tobipristupin.simplerun.data.model.DistanceUnit;
-import com.tobipristupin.simplerun.ui.AboutDialog;
-import com.tobipristupin.simplerun.ui.ToastyWrapper;
+import com.tobipristupin.simplerun.ui.sharedui.AboutDialog;
+import com.tobipristupin.simplerun.ui.sharedui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
 import com.tobipristupin.simplerun.ui.settings.dialogs.DistanceUnitDialog;
 import com.tobipristupin.simplerun.ui.settings.libraries.LibraryItemsActivityView;
@@ -52,62 +51,32 @@ public class SettingsActivityView extends BaseAppCompatActivity implements Setti
 
     private void initDistanceUnit() {
         RelativeLayout distanceView = findViewById(R.id.settings_distanceunit_container);
-        distanceView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.onDistanceUnitClick();
-            }
-        });
+        distanceView.setOnClickListener(v -> presenter.onDistanceUnitClick());
     }
 
     private void initSignOut() {
         RelativeLayout signOutView = findViewById(R.id.settings_signout_container);
-        signOutView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.onSignOutClick();
-            }
-        });
+        signOutView.setOnClickListener(v -> presenter.onSignOutClick());
     }
 
     private void initHelpAndFeedback() {
         RelativeLayout view = findViewById(R.id.settings_help_container);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.onHelpAndFeedbackClick();
-            }
-        });
+        view.setOnClickListener(v -> presenter.onHelpAndFeedbackClick());
     }
 
     private void initLibraries() {
         RelativeLayout view = findViewById(R.id.settings_libs_container);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.onLibrariesClick();
-            }
-        });
+        view.setOnClickListener(v -> presenter.onLibrariesClick());
     }
 
     private void initAbout() {
         RelativeLayout view = findViewById(R.id.settings_about_container);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.onAboutClick();
-            }
-        });
+        view.setOnClickListener(v -> presenter.onAboutClick());
     }
 
     private void initLicense(){
         RelativeLayout view = findViewById(R.id.settings_license_container);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.onLicenseClick();
-            }
-        });
+        view.setOnClickListener(v -> presenter.onLicenseClick());
     }
 
     @Override

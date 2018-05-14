@@ -49,12 +49,9 @@ public class MainPresenter {
     }
 
     private void initAuthStateListener(){
-        authListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (user == null){
-                    view.loadLogIn();
-                }
+        authListener = firebaseAuth -> {
+            if (user == null){
+                view.loadLogIn();
             }
         };
     }
