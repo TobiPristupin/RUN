@@ -27,6 +27,11 @@ import java.util.List;
  */
 public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecyclerViewAdapter.HistoryViewHolder> {
 
+    public interface OnItemClicked {
+        void onClick(int position);
+        boolean onLongClick(int position);
+    }
+
     private ArrayList<Run> runs = new ArrayList<>();
     private Context context;
     private OnItemClicked clickListener;
@@ -36,6 +41,10 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
         this.context = context;
         this.clickListener = clickListener;
         this.preferencesRepository = repository;
+    }
+
+    public HistoryRecyclerViewAdapter(Context context, PreferencesRepository repository){
+        this(context, null, repository);
     }
 
     @Override
@@ -70,25 +79,19 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
 
     /**
      * Called from view to update data set. Uses diffUtil to calculate view updates
-     * @param newList
      */
     public void updateItems(List<Run> newList){
-        final DiffCallback diff = new DiffCallback(newList, this.runs);
+        final DiffCallback diff = new DiffCallback(newList, runs);
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diff);
 
-        this.runs.clear();
-        Collections.sort(newList);
-        this.runs.addAll(newList);
+        runs.clear();
+        runs.addAll(newList);
+        Collections.sort(runs);
         diffResult.dispatchUpdatesTo(this);
     }
 
     private DistanceUnit getDistanceUnit(){
         return preferencesRepository.getDistanceUnit();
-    }
-
-    public interface OnItemClicked {
-        void onClick(int position);
-        boolean onLongClick(int position);
     }
 
     public class HistoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -115,15 +118,19 @@ public class HistoryRecyclerViewAdapter extends SelectableAdapter<HistoryRecycle
 
         @Override
         public void onClick(View view) {
-            clickListener.onClick(getAdapterPosition());
+            if (clickListener != null){
+                clickListener.onClick(getAdapterPosition());
+            }
         }
 
         @Override
         public boolean onLongClick(View view) {
-            return clickListener.onLongClick(getAdapterPosition());
+            if (clickListener != null){
+                return clickListener.onLongClick(getAdapterPosition());
+            }
+
+            return true;
         }
-
-
     }
 
 
