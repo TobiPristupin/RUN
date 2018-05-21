@@ -9,7 +9,7 @@ import com.tobipristupin.simplerun.R;
  * Base fragment for all app that contains base methods
  */
 
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
 
     /**
      * Adds reference watcher from leak canary to detect memory leaks

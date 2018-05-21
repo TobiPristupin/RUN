@@ -12,7 +12,7 @@ import com.tobipristupin.simplerun.R;
  * Base class that implements methods common to all activities
  */
 
-public class BaseAppCompatActivity extends AppCompatActivity {
+public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
     /**
      * AppTheme status bar color attr is set to transparent for the drawerLayout in main activity.

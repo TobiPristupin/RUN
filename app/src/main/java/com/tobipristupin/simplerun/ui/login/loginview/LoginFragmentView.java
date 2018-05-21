@@ -1,7 +1,9 @@
 package com.tobipristupin.simplerun.ui.login.loginview;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.ViewPager;
@@ -25,11 +27,11 @@ import com.tobipristupin.simplerun.ui.main.MainActivityView;
 import mbanje.kurt.fabbutton.FabButton;
 
 
-public class LoginFragmentView extends BaseLoginFragment implements LoginView {
+public class LoginFragmentView extends BaseLoginFragment {
 
     private static final int RC_SIGN_IN = 1516;
     private View rootView;
-    private LoginPresenter presenter;
+    private LoginViewModel viewModel;
 
     private TextInputLayout emailLayout;
     private TextInputLayout passwordLayout;
@@ -39,10 +41,8 @@ public class LoginFragmentView extends BaseLoginFragment implements LoginView {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_login, container, false);
-
-        presenter = new LoginPresenter(this);
 
         emailLayout = rootView.findViewById(R.id.login_email);
         passwordLayout = rootView.findViewById(R.id.login_password);
@@ -58,101 +58,115 @@ public class LoginFragmentView extends BaseLoginFragment implements LoginView {
     }
 
     @Override
-    public void enableEmailError(ErrorType.EmailLogin type) {
-        emailLayout.setErrorEnabled(true);
-
-        switch (type) {
-            case INVALID_EMAIL :
-                emailLayout.setError(getString(R.string.all_invalid_email));
-                break;
-            case REQUIRED_FIELD :
-                emailLayout.setError(getString(R.string.all_required_field));
-                break;
-            case USERNAME_DOESNT_EXIST :
-                emailLayout.setError(getString(R.string.all_username_doesnt_exist));
-                break;
-            default :
-                emailLayout.setError(getString(R.string.all_error));
-        }
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        bindViewModel();
     }
 
-    @Override
-    public void enablePasswordError(ErrorType.PasswordLogin type) {
-        passwordLayout.setErrorEnabled(true);
-
-        switch (type) {
-            case REQUIRED_FIELD :
-                passwordLayout.setError(getString(R.string.all_required_field));
-                break;
-            case SHORT_PASSWORD :
-                passwordLayout.setError(getString(R.string.all_short_password));
-                break;
-            case INVALID_CREDENTIALS :
-                passwordLayout.setError(getString(R.string.all_invalid_credentials));
-                break;
-            default :
-                passwordLayout.setError(getString(R.string.all_error));
-        }
+    private void bindViewModel(){
+        bindMainActivityIntent();
+        bindLoadingAnimation();
+        bindGoogleSignInIntentAction();
+        bindErrorToasts();
+        bindErrorMessages();
+        bindViewPagerPosition();
     }
 
-    @Override
-    public void startLoadingAnimation() {
-        fabButton.showProgress(true);
+    private void bindMainActivityIntent(){
+        viewModel.getSendIntentToMainActivityAction().observe(this, (nothing) -> {
+            Intent intent = new Intent(getContext(), MainActivityView.class);
+            //Flags prevent user from returning to LoginActivity when pressing back button
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        });
     }
 
-    @Override
-    public void stopLoadingAnimation() {
-        fabButton.showProgress(false);
+    private void bindLoadingAnimation(){
+        viewModel.getShowLoadingAnimation().observe(this, (state) -> {
+            fabButton.showProgress(state);
+        });
     }
 
-    @Override
-    public void sendIntentMainActivity() {
-        Intent intent = new Intent(getContext(), MainActivityView.class);
-        //Flags prevent user from returning to LoginActivity when pressing back button
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+    private void bindGoogleSignInIntentAction(){
+        viewModel.getGoogleSignInIntentAction().observe(this, (nothing) -> {
+            GoogleApiClient apiClient = ((LoginActivity) getActivity()).getGoogleApiClient();
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        });
     }
 
-    @Override
-    public void showUnexpectedLoginErrorToast() {
-        String str = getString(R.string.login_fragment_view_errortoast);
-        loginErrorToast.showWarning(getContext(), str, Toast.LENGTH_SHORT);
+    private void bindErrorToasts(){
+        viewModel.getShowLoginErrorToast().observe(this, (nothing) -> {
+            String str = getString(R.string.login_fragment_view_errortoast);
+            loginErrorToast.showWarning(getContext(), str, Toast.LENGTH_SHORT);
+        });
+        viewModel.getShowGoogleSignInErrorToastAction().observe(this, (nothing) -> {
+            String str = getString(R.string.login_fragment_view_google_toast);
+            googleSignInFailedToast.showWarning(getContext(), str);
+        });
     }
 
-    @Override
-    public void sendGoogleSignInIntent() {
-        GoogleApiClient apiClient = ((LoginActivity) getActivity()).getGoogleApiClient();
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+    private void bindErrorMessages(){
+        viewModel.getEmailError().observe(this, (error) -> {
+            emailLayout.setErrorEnabled(true);
+
+            switch (error) {
+                case INVALID_EMAIL :
+                    emailLayout.setError(getString(R.string.all_invalid_email));
+                    break;
+                case REQUIRED_FIELD :
+                    emailLayout.setError(getString(R.string.all_required_field));
+                    break;
+                case USERNAME_DOESNT_EXIST :
+                    emailLayout.setError(getString(R.string.all_username_doesnt_exist));
+                    break;
+                default :
+                    emailLayout.setError(getString(R.string.all_error));
+            }
+        });
+
+        viewModel.getPasswordError().observe(this, (error) -> {
+            switch (error) {
+                case REQUIRED_FIELD :
+                    passwordLayout.setError(getString(R.string.all_required_field));
+                    break;
+                case SHORT_PASSWORD :
+                    passwordLayout.setError(getString(R.string.all_short_password));
+                    break;
+                case INVALID_CREDENTIALS :
+                    passwordLayout.setError(getString(R.string.all_invalid_credentials));
+                    break;
+                default :
+                    passwordLayout.setError(getString(R.string.all_error));
+            }
+        });
     }
 
-    @Override
-    public void showGoogleSignInFailedToast() {
-        String str = getString(R.string.login_fragment_view_google_toast);
-        googleSignInFailedToast.showWarning(getContext(), str);
+    private void bindViewPagerPosition(){
+        viewModel.getViewPagerPosition().observe(this, (position) -> {
+            final ViewPager viewPager = getActivity().findViewById(R.id.login_viewpager);
+            viewPager.setCurrentItem(position);
+        });
     }
 
     private void initLogInFab(){
-        //EditText error resets every time text is inputted
         fabButton.setOnClickListener(view -> {
             String email = emailLayout.getEditText().getText().toString().trim();
             String password = passwordLayout.getEditText().getText().toString().trim();
-            presenter.attemptEmailLogin(email, password);
+            viewModel.attemptEmailLogin(email, password);
         });
     }
 
     //Initializes everything related to Google Sign In
     private void initGoogleLogIn(){
         SignInButton googleBtn = rootView.findViewById(R.id.login_google_button);
-        googleBtn.setOnClickListener(v -> presenter.onGoogleLogInClick());
+        googleBtn.setOnClickListener(v -> viewModel.attemptGoogleLogIn());
     }
 
     /**
      * Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-     * @param requestCode
-     * @param resultCode
-     * @param data
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -160,16 +174,15 @@ public class LoginFragmentView extends BaseLoginFragment implements LoginView {
 
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            presenter.onGoogleSignInResult(result);
+            viewModel.onGoogleSignInResult(result);
         }
     }
 
     private void initBottomButtons(){
         TextView newAccount = rootView.findViewById(R.id.login_newaccount);
-        final ViewPager viewPager = getActivity().findViewById(R.id.login_viewpager);
-        newAccount.setOnClickListener(view -> viewPager.setCurrentItem(2));
+        newAccount.setOnClickListener(view -> viewModel.onNewAccountClicked());
 
         TextView forgotPassword = rootView.findViewById(R.id.login_forgotpassword);
-        forgotPassword.setOnClickListener(view -> viewPager.setCurrentItem(0));
+        forgotPassword.setOnClickListener(view -> viewModel.onForgotPasswordClicked());
     }
 }

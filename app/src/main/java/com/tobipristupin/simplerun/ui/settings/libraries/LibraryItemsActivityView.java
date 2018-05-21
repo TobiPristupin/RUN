@@ -1,5 +1,7 @@
 package com.tobipristupin.simplerun.ui.settings.libraries;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -80,19 +82,19 @@ public class LibraryItemsActivityView extends BaseAppCompatActivity {
     }
 
     private Intent getParentActivityIntentImpl() {
-        Intent i;
+        Intent intent;
 
         if (callingActivity.equals(SettingsActivityView.class.toString())) {
-            i = new Intent(LibraryItemsActivityView.this, SettingsActivityView.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent = new Intent(LibraryItemsActivityView.this, SettingsActivityView.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         } else if (callingActivity.equals(MainActivityView.class.toString())) {
-            i = new Intent(LibraryItemsActivityView.this, MainActivityView.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent = new Intent(LibraryItemsActivityView.this, MainActivityView.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         } else {
             throw new RuntimeException("Calling activity could not be determined");
         }
 
-        return i;
+        return intent;
     }
 
     private void initRecyclerView() {
