@@ -1,6 +1,10 @@
 package com.tobipristupin.simplerun.app;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Build;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Window;
@@ -58,6 +62,10 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     protected void setSupportActionBar(int viewId, int homeAsUpDrawable) {
         setSupportActionBar(viewId);
         setHomeAsUpDrawable(homeAsUpDrawable);
+    }
+
+    protected <T extends ViewModel> T obtainViewModel(FragmentActivity fragmentActivity, Class<T> c){
+        return ViewModelProviders.of(fragmentActivity).get(c);
     }
 
 

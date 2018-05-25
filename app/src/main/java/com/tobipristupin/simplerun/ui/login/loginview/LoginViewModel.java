@@ -16,19 +16,20 @@ import com.tobipristupin.simplerun.auth.interfaces.AuthManager;
 import com.tobipristupin.simplerun.interfaces.ErrorType;
 import com.tobipristupin.simplerun.utils.EmailValidator;
 import com.tobipristupin.simplerun.utils.LogWrapper;
-import com.tobipristupin.simplerun.utils.SingleLiveEvent;
+import com.tobipristupin.simplerun.utils.VoidLiveAction;
 
 public class LoginViewModel extends ViewModel {
 
-    private SingleLiveEvent<Void> intentToMainActivityAction = new SingleLiveEvent<>();
-    private SingleLiveEvent<Void> googleSignInIntentAction = new SingleLiveEvent<>();
-    private SingleLiveEvent<Void> showLoginErrorToast = new SingleLiveEvent<>();
-    private SingleLiveEvent<Void> showGoogleSignInErrorToast = new SingleLiveEvent<>();
+    private VoidLiveAction intentToMainActivityAction = new VoidLiveAction();
+    private VoidLiveAction googleSignInIntentAction = new VoidLiveAction();
+    private VoidLiveAction showLoginErrorToast = new VoidLiveAction();
+    private VoidLiveAction showGoogleSignInErrorToast = new VoidLiveAction();
+    private VoidLiveAction openForgotPasswordPage = new VoidLiveAction();
+    private VoidLiveAction openNewAccountPage = new VoidLiveAction();
 
     private MutableLiveData<Boolean> showLoadingAnimation = new MutableLiveData<>();
     private MutableLiveData<ErrorType.EmailLogin> emailError = new MutableLiveData<>();
     private MutableLiveData<ErrorType.PasswordLogin> passwordError = new MutableLiveData<>();
-    private MutableLiveData<Integer> viewPagerPosition = new MutableLiveData<>();
 
     private static final String TAG = "LoginViewModel";
     
@@ -61,9 +62,8 @@ public class LoginViewModel extends ViewModel {
     }
 
     /**
-     * sendGoogleSignInIntent will start an activity for result, which will then return its result
+     * googleSignInIntent will start an activity for result, which will then return its result
      * to view's onActivityResult which will call this method with the result of the login.
-     * @param result
      */
     public void onGoogleSignInResult(GoogleSignInResult result){
         if (result.isSuccess()){
@@ -74,11 +74,11 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void onNewAccountClicked(){
-        viewPagerPosition.postValue(2);
+        openNewAccountPage.call();
     }
 
     public void onForgotPasswordClicked(){
-        viewPagerPosition.postValue(0);
+        openForgotPasswordPage.call();
     }
 
     private void onGoogleSignInSuccess(GoogleSignInResult result){
@@ -150,7 +150,7 @@ public class LoginViewModel extends ViewModel {
     }
 
     
-    public SingleLiveEvent<Void> getSendIntentToMainActivityAction() {
+    public VoidLiveAction getSendIntentToMainActivityAction() {
         return intentToMainActivityAction;
     }
 
@@ -158,16 +158,24 @@ public class LoginViewModel extends ViewModel {
         return showLoadingAnimation;
     }
 
-    public SingleLiveEvent<Void> getGoogleSignInIntentAction() {
+    public VoidLiveAction getGoogleSignInIntentAction() {
         return googleSignInIntentAction;
     }
 
-    public SingleLiveEvent<Void> getShowLoginErrorToast() {
+    public VoidLiveAction getShowLoginErrorToast() {
         return showLoginErrorToast;
     }
 
-    public SingleLiveEvent<Void> getShowGoogleSignInErrorToastAction() {
+    public VoidLiveAction getShowGoogleSignInErrorToastAction() {
         return showGoogleSignInErrorToast;
+    }
+
+    public VoidLiveAction getOpenForgotPasswordPageAction() {
+        return openForgotPasswordPage;
+    }
+
+    public VoidLiveAction getOpenNewAccountPageAction() {
+        return openNewAccountPage;
     }
 
     public MutableLiveData<ErrorType.EmailLogin> getEmailError() {
@@ -178,7 +186,4 @@ public class LoginViewModel extends ViewModel {
         return passwordError;
     }
 
-    public MutableLiveData<Integer> getViewPagerPosition() {
-        return viewPagerPosition;
-    }
 }

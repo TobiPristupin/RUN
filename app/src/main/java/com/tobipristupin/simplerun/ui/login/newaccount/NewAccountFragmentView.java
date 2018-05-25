@@ -160,7 +160,7 @@ public class NewAccountFragmentView extends BaseLoginFragment implements NewAcco
 
     @Override
     public void sendGoogleSignInIntent() {
-        GoogleApiClient apiClient = ((LoginActivity) getActivity()).getGoogleApiClient();
+        GoogleApiClient apiClient = ((LoginActivity) getActivity()).getClient();
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }

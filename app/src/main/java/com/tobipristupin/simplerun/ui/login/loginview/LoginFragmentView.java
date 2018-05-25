@@ -1,7 +1,8 @@
 package com.tobipristupin.simplerun.ui.login.loginview;
 
-import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,15 +11,16 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.tobipristupin.simplerun.R;
-import com.tobipristupin.simplerun.interfaces.ErrorType;
+import com.tobipristupin.simplerun.databinding.FragmentLoginBinding;
+import com.tobipristupin.simplerun.ui.login.GoogleApiClientProvider;
+import com.tobipristupin.simplerun.ui.login.Page;
+import com.tobipristupin.simplerun.ui.login.PageChanger;
 import com.tobipristupin.simplerun.ui.sharedui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.login.BaseLoginFragment;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
@@ -30,8 +32,10 @@ import mbanje.kurt.fabbutton.FabButton;
 public class LoginFragmentView extends BaseLoginFragment {
 
     private static final int RC_SIGN_IN = 1516;
-    private View rootView;
+    private FragmentLoginBinding binding;
     private LoginViewModel viewModel;
+    private GoogleApiClientProvider googleApiClientProvider;
+    private PageChanger pageChanger;
 
     private TextInputLayout emailLayout;
     private TextInputLayout passwordLayout;
@@ -42,11 +46,12 @@ public class LoginFragmentView extends BaseLoginFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_login, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
+        binding.setModel(viewModel);
 
-        emailLayout = rootView.findViewById(R.id.login_email);
-        passwordLayout = rootView.findViewById(R.id.login_password);
-        fabButton = rootView.findViewById(R.id.login_button);
+        emailLayout = binding.loginEmail;
+        passwordLayout = binding.loginPassword;
+        fabButton = binding.loginButton;
 
         setLayoutErrorReset(emailLayout, passwordLayout);
 
@@ -54,14 +59,26 @@ public class LoginFragmentView extends BaseLoginFragment {
         initGoogleLogIn();
         initBottomButtons();
 
-        return rootView;
+        return binding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        viewModel = obtainViewModel(this, LoginViewModel.class);
         bindViewModel();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            pageChanger = (PageChanger) getActivity();
+            googleApiClientProvider = (GoogleApiClientProvider) getActivity();
+        } catch (ClassCastException e){
+            throw new RuntimeException("Parent Activity must implement PageChanger and GoogleApiClient " +
+                    "interfaces");
+        }
     }
 
     private void bindViewModel(){
@@ -70,11 +87,20 @@ public class LoginFragmentView extends BaseLoginFragment {
         bindGoogleSignInIntentAction();
         bindErrorToasts();
         bindErrorMessages();
-        bindViewPagerPosition();
+        bindChangePageActions();
+    }
+
+    private void bindChangePageActions() {
+        viewModel.getOpenForgotPasswordPageAction().observe(this, (aVoid) -> {
+            pageChanger.changeTo(Page.FORGOT_PASSWORD);
+        });
+        viewModel.getOpenNewAccountPageAction().observe(this, (aVoid) -> {
+            pageChanger.changeTo(Page.NEW_ACCOUNT);
+        });
     }
 
     private void bindMainActivityIntent(){
-        viewModel.getSendIntentToMainActivityAction().observe(this, (nothing) -> {
+        viewModel.getSendIntentToMainActivityAction().observe(this, (aVoid) -> {
             Intent intent = new Intent(getContext(), MainActivityView.class);
             //Flags prevent user from returning to LoginActivity when pressing back button
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -84,25 +110,26 @@ public class LoginFragmentView extends BaseLoginFragment {
     }
 
     private void bindLoadingAnimation(){
-        viewModel.getShowLoadingAnimation().observe(this, (state) -> {
-            fabButton.showProgress(state);
+        //No way to start progress through xml properties, so no databinding
+        viewModel.getShowLoadingAnimation().observe(this, aBoolean -> {
+            fabButton.showProgress(aBoolean);
         });
     }
 
     private void bindGoogleSignInIntentAction(){
-        viewModel.getGoogleSignInIntentAction().observe(this, (nothing) -> {
-            GoogleApiClient apiClient = ((LoginActivity) getActivity()).getGoogleApiClient();
+        viewModel.getGoogleSignInIntentAction().observe(this, (aVoid) -> {
+            GoogleApiClient apiClient = googleApiClientProvider.getClient();
             Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });
     }
 
     private void bindErrorToasts(){
-        viewModel.getShowLoginErrorToast().observe(this, (nothing) -> {
+        viewModel.getShowLoginErrorToast().observe(this, (aVoid) -> {
             String str = getString(R.string.login_fragment_view_errortoast);
             loginErrorToast.showWarning(getContext(), str, Toast.LENGTH_SHORT);
         });
-        viewModel.getShowGoogleSignInErrorToastAction().observe(this, (nothing) -> {
+        viewModel.getShowGoogleSignInErrorToastAction().observe(this, (aVoid) -> {
             String str = getString(R.string.login_fragment_view_google_toast);
             googleSignInFailedToast.showWarning(getContext(), str);
         });
@@ -144,12 +171,7 @@ public class LoginFragmentView extends BaseLoginFragment {
         });
     }
 
-    private void bindViewPagerPosition(){
-        viewModel.getViewPagerPosition().observe(this, (position) -> {
-            final ViewPager viewPager = getActivity().findViewById(R.id.login_viewpager);
-            viewPager.setCurrentItem(position);
-        });
-    }
+
 
     private void initLogInFab(){
         fabButton.setOnClickListener(view -> {
@@ -161,8 +183,7 @@ public class LoginFragmentView extends BaseLoginFragment {
 
     //Initializes everything related to Google Sign In
     private void initGoogleLogIn(){
-        SignInButton googleBtn = rootView.findViewById(R.id.login_google_button);
-        googleBtn.setOnClickListener(v -> viewModel.attemptGoogleLogIn());
+        binding.loginGoogleButton.setOnClickListener(v -> viewModel.attemptGoogleLogIn());
     }
 
     /**
@@ -171,7 +192,6 @@ public class LoginFragmentView extends BaseLoginFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             viewModel.onGoogleSignInResult(result);
@@ -179,10 +199,7 @@ public class LoginFragmentView extends BaseLoginFragment {
     }
 
     private void initBottomButtons(){
-        TextView newAccount = rootView.findViewById(R.id.login_newaccount);
-        newAccount.setOnClickListener(view -> viewModel.onNewAccountClicked());
-
-        TextView forgotPassword = rootView.findViewById(R.id.login_forgotpassword);
-        forgotPassword.setOnClickListener(view -> viewModel.onForgotPasswordClicked());
+        binding.loginNewaccount.setOnClickListener(view -> viewModel.onNewAccountClicked());
+        binding.loginForgotpassword.setOnClickListener(view -> viewModel.onForgotPasswordClicked());
     }
 }

@@ -8,9 +8,6 @@ import com.tobipristupin.simplerun.ui.login.forgotpassword.ForgotPasswordFragmen
 import com.tobipristupin.simplerun.ui.login.loginview.LoginFragmentView;
 import com.tobipristupin.simplerun.ui.login.newaccount.NewAccountFragmentView;
 
-/**
- * Created by Tobi on 9/15/2017.
- */
 
 public class LoginFragmentPagerAdapter extends FragmentStatePagerAdapter {
 

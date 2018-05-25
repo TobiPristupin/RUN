@@ -3,6 +3,7 @@ apply plugin: 'io.fabric'
 
 
 android {
+
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
     defaultConfig {
@@ -14,6 +15,7 @@ android {
         versionName "1.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             debuggable false
@@ -25,6 +27,10 @@ android {
         debug {
             ext.enableCrashylitics = false
         }
+    }
+
+    dataBinding {
+        enabled = true
     }
 
     compileOptions {
