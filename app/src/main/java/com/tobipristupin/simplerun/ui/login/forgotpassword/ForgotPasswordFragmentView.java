@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.databinding.FragmentForgotPasswordBinding;
 import com.tobipristupin.simplerun.interfaces.ErrorType;
 import com.tobipristupin.simplerun.ui.login.Page;
 import com.tobipristupin.simplerun.ui.login.PageChanger;
@@ -25,7 +27,8 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 public class ForgotPasswordFragmentView extends BaseLoginFragment {
 
-    private View rootView;
+    private FragmentForgotPasswordBinding binding;
+
     private AVLoadingIndicatorView loadingIndicator;
     private TextInputLayout emailLayout;
     private Button sendButton;
@@ -38,17 +41,17 @@ public class ForgotPasswordFragmentView extends BaseLoginFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_forgot_password, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_forgot_password, container, false);
 
-        loadingIndicator = rootView.findViewById(R.id.forgot_password_loading_indicator);
-        emailLayout = rootView.findViewById(R.id.forgot_password_email);
-        sendButton = rootView.findViewById(R.id.forgot_password_send_button);
+        loadingIndicator = binding.forgotPasswordLoadingIndicator;
+        emailLayout = binding.forgotPasswordEmail;
+        sendButton = binding.forgotPasswordSendButton;
 
         setLayoutErrorReset(emailLayout);
         initSendButton();
         initReturnButton();
 
-        return rootView;
+        return binding.getRoot();
     }
 
     @Override
@@ -143,8 +146,7 @@ public class ForgotPasswordFragmentView extends BaseLoginFragment {
     }
 
     private void initReturnButton(){
-        Button button = rootView.findViewById(R.id.forgot_password_return);
-        button.setOnClickListener(view -> viewModel.onReturnButtonClick());
+        binding.forgotPasswordReturn.setOnClickListener(view -> viewModel.onReturnButtonClick());
     }
 
 }
