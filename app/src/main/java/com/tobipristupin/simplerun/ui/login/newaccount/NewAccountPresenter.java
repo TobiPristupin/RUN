@@ -9,20 +9,27 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.tobipristupin.simplerun.auth.FirebaseAuthManager;
-import com.tobipristupin.simplerun.auth.interfaces.AuthCallbacks;
-import com.tobipristupin.simplerun.auth.interfaces.AuthManager;
+import com.tobipristupin.simplerun.auth.AuthManager;
 import com.tobipristupin.simplerun.interfaces.ErrorType;
 import com.tobipristupin.simplerun.utils.EmailValidator;
 import com.tobipristupin.simplerun.utils.LogWrapper;
+
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 
 public class NewAccountPresenter {
 
     public static final String TAG = "NewAccountPresenter";
     private NewAccountView view;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public NewAccountPresenter(NewAccountView view) {
         this.view = view;
+    }
+
+    public void onDestroy(){
+        compositeDisposable.clear();
     }
 
     public void onCreateAccountButtonClick(String email, String password, String password2){
@@ -69,27 +76,22 @@ public class NewAccountPresenter {
 
     private void createAccount(String email, String password){
         AuthManager authManager = new FirebaseAuthManager();
-        authManager.createNewAccount(email, password, new AuthCallbacks.LoginCallback() {
-            @Override
-            public void onLoginSuccess() {
-                view.stopLoadingAnimation();
-                view.sendIntentMainActivity();
-            }
-
-            @Override
-            public void onLoginFailed(Exception e) {
-                Crashlytics.logException(e);
-                view.stopLoadingAnimation();
-                if (e instanceof FirebaseAuthWeakPasswordException){
-                    view.showWeakPasswordErrorToast();
-                } else if (e instanceof FirebaseAuthUserCollisionException){
-                    view.showUserCollisionToast();
-                } else {
-                    view.showCreateAccountErrorToast();
-                }
-
-            }
-        });
+        Disposable d = authManager.createNewAccount(email, password)
+                .subscribe(() -> {
+                    view.stopLoadingAnimation();
+                    view.sendIntentMainActivity();
+                }, throwable -> {
+                    Crashlytics.logException(throwable);
+                    view.stopLoadingAnimation();
+                    if (throwable instanceof FirebaseAuthWeakPasswordException){
+                        view.showWeakPasswordErrorToast();
+                    } else if (throwable instanceof FirebaseAuthUserCollisionException){
+                        view.showUserCollisionToast();
+                    } else {
+                        view.showCreateAccountErrorToast();
+                    }
+                });
+        compositeDisposable.add(d);
     }
 
     public void onGoogleLogInClick(){
@@ -117,20 +119,15 @@ public class NewAccountPresenter {
     private void authenticateGoogleSignIn(GoogleSignInAccount account){
         AuthManager authManager = new FirebaseAuthManager();
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-
-        authManager.logInWithCredentials(credential, new AuthCallbacks.LoginCallback() {
-            @Override
-            public void onLoginSuccess() {
-                view.stopLoadingAnimation();
-                view.sendIntentMainActivity();
-            }
-
-            @Override
-            public void onLoginFailed(Exception e) {
-                view.stopLoadingAnimation();
-                view.showGoogleSignInFailedToast();
-            }
-        });
+        Disposable d = authManager.logInWithCredentials(credential)
+                .subscribe(() -> {
+                    view.stopLoadingAnimation();
+                    view.sendIntentMainActivity();
+                }, throwable -> {
+                    view.stopLoadingAnimation();
+                    view.showGoogleSignInFailedToast();
+                });
+        compositeDisposable.add(d);
     }
 
 

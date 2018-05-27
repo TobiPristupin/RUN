@@ -11,12 +11,14 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.tobipristupin.simplerun.auth.FirebaseAuthManager;
-import com.tobipristupin.simplerun.auth.interfaces.AuthCallbacks;
-import com.tobipristupin.simplerun.auth.interfaces.AuthManager;
+import com.tobipristupin.simplerun.auth.AuthManager;
 import com.tobipristupin.simplerun.interfaces.ErrorType;
 import com.tobipristupin.simplerun.utils.EmailValidator;
 import com.tobipristupin.simplerun.utils.LogWrapper;
 import com.tobipristupin.simplerun.utils.VoidLiveAction;
+
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 public class LoginViewModel extends ViewModel {
 
@@ -26,34 +28,30 @@ public class LoginViewModel extends ViewModel {
     private VoidLiveAction showGoogleSignInErrorToast = new VoidLiveAction();
     private VoidLiveAction openForgotPasswordPage = new VoidLiveAction();
     private VoidLiveAction openNewAccountPage = new VoidLiveAction();
-
     private MutableLiveData<Boolean> showLoadingAnimation = new MutableLiveData<>();
     private MutableLiveData<ErrorType.EmailLogin> emailError = new MutableLiveData<>();
     private MutableLiveData<ErrorType.PasswordLogin> passwordError = new MutableLiveData<>();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private static final String TAG = "LoginViewModel";
     
 
     public void attemptEmailLogin(String email, String password){
-        AuthManager authManager = new FirebaseAuthManager();
-
         if (!fieldsAreValid(email, password)){
             return;
         }
 
         showLoadingAnimation.postValue(true);
 
-        authManager.logInWithEmailAndPassword(email, password, new AuthCallbacks.LoginCallback() {
-            @Override
-            public void onLoginSuccess() {
-                LoginViewModel.this.onLoginSuccess();
-            }
+        AuthManager authManager = new FirebaseAuthManager();
+        Disposable d = authManager.logInWithEmailAndPassword(email, password)
+                .subscribe(() -> {
+                    onLoginSuccess();
+                }, throwable -> {
+                    onLoginFailed(throwable);
+                });
 
-            @Override
-            public void onLoginFailed(Exception e) {
-                LoginViewModel.this.onLoginFailed(e);
-            }
-        });
+        compositeDisposable.add(d);
     }
 
     public void attemptGoogleLogIn(){
@@ -96,17 +94,15 @@ public class LoginViewModel extends ViewModel {
     private void authenticateGoogleLogin(GoogleSignInAccount account){
         AuthManager authManager = new FirebaseAuthManager();
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        authManager.logInWithCredentials(credential, new AuthCallbacks.LoginCallback() {
-            @Override
-            public void onLoginSuccess() {
-                LoginViewModel.this.onLoginSuccess();
-            }
 
-            @Override
-            public void onLoginFailed(Exception e) {
-                LoginViewModel.this.onLoginFailed(e);
-            }
-        });
+        Disposable d = authManager.logInWithCredentials(credential)
+                .subscribe(() -> {
+                    onLoginSuccess();
+                }, throwable -> {
+                    onLoginFailed(throwable);
+                });
+
+        compositeDisposable.add(d);
     }
 
     private void onLoginSuccess(){
@@ -114,7 +110,7 @@ public class LoginViewModel extends ViewModel {
         intentToMainActivityAction.call();
     }
 
-    private void onLoginFailed(Exception e) {
+    private void onLoginFailed(Throwable e) {
         Crashlytics.logException(e);
 
         showLoadingAnimation.postValue(false);
@@ -149,7 +145,12 @@ public class LoginViewModel extends ViewModel {
         return true;
     }
 
-    
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        compositeDisposable.clear();
+    }
+
     public VoidLiveAction getSendIntentToMainActivityAction() {
         return intentToMainActivityAction;
     }
