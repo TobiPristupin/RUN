@@ -2,6 +2,7 @@ package com.tobipristupin.simplerun.ui.login.forgotpassword;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.auth.FirebaseAuthManager;
 import com.tobipristupin.simplerun.databinding.FragmentForgotPasswordBinding;
 import com.tobipristupin.simplerun.ui.login.Page;
 import com.tobipristupin.simplerun.ui.login.PageChanger;
@@ -52,8 +54,9 @@ public class ForgotPasswordFragmentView extends BaseLoginFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = obtainViewModel(this, ForgotPasswordViewModel.class);
-        bindViewModel();
+        ViewModelProvider.Factory factory = new ForgotPasswordViewModel.Factory(new FirebaseAuthManager());
+        viewModel = obtainViewModel(this, ForgotPasswordViewModel.class, factory);
+        subscribeUI();
     }
 
     @Override
@@ -66,6 +69,10 @@ public class ForgotPasswordFragmentView extends BaseLoginFragment {
         }
     }
 
+    private void initReturnButton(){
+        binding.forgotPasswordReturn.setOnClickListener(view -> viewModel.onReturnButtonClick());
+    }
+
     private void initSendButton(){
         sendButton.setOnClickListener(view -> {
             String email = emailLayout.getEditText().getText().toString().trim();
@@ -73,7 +80,7 @@ public class ForgotPasswordFragmentView extends BaseLoginFragment {
         });
     }
 
-    private void bindViewModel(){
+    private void subscribeUI(){
         bindEmailError();
         bindLoading();
         bindToasts();
@@ -127,10 +134,6 @@ public class ForgotPasswordFragmentView extends BaseLoginFragment {
     private void stopLoadingAnimation() {
         loadingIndicator.smoothToHide();
         sendButton.animate().alpha(1.0f);
-    }
-
-    private void initReturnButton(){
-        binding.forgotPasswordReturn.setOnClickListener(view -> viewModel.onReturnButtonClick());
     }
 
 }

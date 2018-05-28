@@ -2,6 +2,8 @@ package com.tobipristupin.simplerun.ui.login.newaccount;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -11,7 +13,8 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.auth.AuthManager;
-import com.tobipristupin.simplerun.auth.FirebaseAuthManager;
+import com.tobipristupin.simplerun.ui.login.forgotpassword.ForgotPasswordViewModel;
+import com.tobipristupin.simplerun.ui.login.loginview.LoginViewModel;
 import com.tobipristupin.simplerun.utils.EmailValidator;
 import com.tobipristupin.simplerun.utils.LogWrapper;
 import com.tobipristupin.simplerun.utils.SingleLiveEvent;
@@ -21,18 +24,22 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 public class NewAccountViewModel extends ViewModel {
-    
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private static final String TAG = "NewAccountViewModel";
 
     private MutableLiveData<Integer> emailError = new MutableLiveData<>();
     private MutableLiveData<Integer> passwordError = new MutableLiveData<>();
     private MutableLiveData<Integer> password2Error = new MutableLiveData<>();
     private MutableLiveData<Boolean> loading = new MutableLiveData<>();
-
     private VoidSingleLiveEvent sendIntentMainActivity = new VoidSingleLiveEvent();
     private VoidSingleLiveEvent sendGoogleSignInIntent = new VoidSingleLiveEvent();
     private SingleLiveEvent<Integer> showErrorToast = new SingleLiveEvent<>();
+
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private static final String TAG = "NewAccountViewModel";
+    private AuthManager authManager;
+
+    private NewAccountViewModel(AuthManager authManager) {
+        this.authManager = authManager;
+    }
 
     public void onCreateAccountClick(String email, String password1, String password2){
         if (!validFields(email, password1, password2)){
@@ -61,7 +68,6 @@ public class NewAccountViewModel extends ViewModel {
     }
 
     private void authenticateGoogleSignIn(GoogleSignInAccount account){
-        AuthManager authManager = new FirebaseAuthManager();
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
 
         Disposable d = authManager.logInWithCredentials(credential)
@@ -76,8 +82,6 @@ public class NewAccountViewModel extends ViewModel {
     }
 
     private void createAccount(String email, String password){
-        AuthManager authManager = new FirebaseAuthManager();
-
         Disposable d = authManager.createNewAccount(email, password)
                 .subscribe(() -> {
                     onAuthSuccess();
@@ -175,5 +179,25 @@ public class NewAccountViewModel extends ViewModel {
 
     public VoidSingleLiveEvent getSendGoogleSignInIntent() {
         return sendGoogleSignInIntent;
+    }
+
+    public static class Factory implements ViewModelProvider.Factory {
+
+        private AuthManager authManager;
+
+        public Factory(AuthManager authManager) {
+            this.authManager = authManager;
+        }
+
+        @NonNull
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(NewAccountViewModel.class)){
+                return (T) new NewAccountViewModel(authManager);
+            }
+
+            throw new IllegalArgumentException("Unknown ViewModel class");
+        }
     }
 }

@@ -2,6 +2,10 @@ package com.tobipristupin.simplerun.ui.login.forgotpassword;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
+import android.support.annotation.NonNull;
+import android.test.suitebuilder.annotation.Suppress;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.FirebaseTooManyRequestsException;
@@ -23,6 +27,11 @@ public class ForgotPasswordViewModel extends ViewModel {
     private SingleLiveEvent<Integer> showErrorToastAction = new SingleLiveEvent<>();
     private VoidSingleLiveEvent openLoginPage = new VoidSingleLiveEvent();
     private Disposable resetEmailSubscription;
+    private AuthManager authManager;
+
+    private ForgotPasswordViewModel(AuthManager authManager) {
+        this.authManager = authManager;
+    }
 
     public void onSendEmailButtonClick(String email){
         if (!EmailValidator.isValid(email)){
@@ -39,7 +48,6 @@ public class ForgotPasswordViewModel extends ViewModel {
     }
 
     private void sendResetPasswordEmail(String email){
-        AuthManager authManager = new FirebaseAuthManager();
         resetEmailSubscription = authManager.sendResetPasswordEmail(email)
                 .subscribe(() -> {
                     onResetPasswordSuccess();
@@ -97,5 +105,25 @@ public class ForgotPasswordViewModel extends ViewModel {
 
     public VoidSingleLiveEvent getOpenLoginPage() {
         return openLoginPage;
+    }
+
+    public static class Factory implements ViewModelProvider.Factory {
+
+        private AuthManager authManager;
+
+        public Factory(AuthManager authManager) {
+            this.authManager = authManager;
+        }
+
+        @NonNull
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(ForgotPasswordViewModel.class)){
+                return (T) new ForgotPasswordViewModel(authManager);
+            }
+
+            throw new IllegalArgumentException("Unknown ViewModel class");
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.tobipristupin.simplerun.ui.login.loginview;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.support.annotation.NonNull;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -11,8 +13,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.tobipristupin.simplerun.R;
-import com.tobipristupin.simplerun.auth.FirebaseAuthManager;
 import com.tobipristupin.simplerun.auth.AuthManager;
+import com.tobipristupin.simplerun.ui.login.forgotpassword.ForgotPasswordViewModel;
 import com.tobipristupin.simplerun.utils.EmailValidator;
 import com.tobipristupin.simplerun.utils.LogWrapper;
 import com.tobipristupin.simplerun.utils.SingleLiveEvent;
@@ -32,8 +34,13 @@ public class LoginViewModel extends ViewModel {
     private MutableLiveData<Integer> emailError = new MutableLiveData<>();
     private MutableLiveData<Integer> passwordError = new MutableLiveData<>();
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private AuthManager authManager;
 
     private static final String TAG = "LoginViewModel";
+
+    private LoginViewModel(AuthManager manager){
+        this.authManager = manager;
+    }
     
 
     public void attemptEmailLogin(String email, String password){
@@ -43,7 +50,6 @@ public class LoginViewModel extends ViewModel {
 
         showLoadingAnimation.postValue(true);
 
-        AuthManager authManager = new FirebaseAuthManager();
         Disposable d = authManager.logInWithEmailAndPassword(email, password)
                 .subscribe(() -> {
                     onLoginSuccess();
@@ -92,7 +98,6 @@ public class LoginViewModel extends ViewModel {
     }
 
     private void authenticateGoogleLogin(GoogleSignInAccount account){
-        AuthManager authManager = new FirebaseAuthManager();
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
 
         Disposable d = authManager.logInWithCredentials(credential)
@@ -185,6 +190,26 @@ public class LoginViewModel extends ViewModel {
 
     public MutableLiveData<Integer> getPasswordError() {
         return passwordError;
+    }
+
+    public static class Factory implements ViewModelProvider.Factory {
+
+        private AuthManager authManager;
+
+        public Factory(AuthManager authManager) {
+            this.authManager = authManager;
+        }
+
+        @NonNull
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(LoginViewModel.class)){
+                return (T) new LoginViewModel(authManager);
+            }
+
+            throw new IllegalArgumentException("Unknown ViewModel class");
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package com.tobipristupin.simplerun.ui.login.loginview;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -10,12 +11,12 @@ import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.auth.FirebaseAuthManager;
 import com.tobipristupin.simplerun.databinding.FragmentLoginBinding;
 import com.tobipristupin.simplerun.ui.login.GoogleApiClientProvider;
 import com.tobipristupin.simplerun.ui.login.Page;
@@ -62,8 +63,9 @@ public class LoginFragmentView extends BaseLoginFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = obtainViewModel(this, LoginViewModel.class);
-        bindViewModel();
+        ViewModelProvider.Factory factory = new LoginViewModel.Factory(new FirebaseAuthManager());
+        viewModel = obtainViewModel(this, LoginViewModel.class, factory);
+        subscribeUI();
     }
 
     @Override
@@ -78,7 +80,7 @@ public class LoginFragmentView extends BaseLoginFragment {
         }
     }
 
-    private void bindViewModel(){
+    private void subscribeUI(){
         bindMainActivityIntent();
         bindLoadingAnimation();
         bindGoogleSignInIntentAction();

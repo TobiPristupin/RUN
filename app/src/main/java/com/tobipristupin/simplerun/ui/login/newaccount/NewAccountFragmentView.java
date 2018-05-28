@@ -2,6 +2,7 @@ package com.tobipristupin.simplerun.ui.login.newaccount;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -17,6 +18,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.tobipristupin.simplerun.R;
+import com.tobipristupin.simplerun.auth.FirebaseAuthManager;
 import com.tobipristupin.simplerun.databinding.FragmentNewAccountBinding;
 import com.tobipristupin.simplerun.ui.login.Page;
 import com.tobipristupin.simplerun.ui.login.PageChanger;
@@ -65,7 +67,8 @@ public class NewAccountFragmentView extends BaseLoginFragment  {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = obtainViewModel(this, NewAccountViewModel.class);
+        ViewModelProvider.Factory factory = new NewAccountViewModel.Factory(new FirebaseAuthManager());
+        viewModel = obtainViewModel(this, NewAccountViewModel.class, factory);
         bindViewModel();
     }
 
