@@ -1,16 +1,18 @@
 package com.tobipristupin.simplerun.ui.login;
 
 
+import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 
 import com.tobipristupin.simplerun.app.BaseFragment;
+import com.tobipristupin.simplerun.ui.main.MainActivityView;
 
 /**
  * Class that contains base methods used in all login fragments
  */
-public class BaseLoginFragment extends BaseFragment {
+public abstract class BaseLoginFragment extends BaseFragment {
 
     /**
      * Configures all TextInputLayout to remove their errors every time text is inputted
@@ -34,6 +36,14 @@ public class BaseLoginFragment extends BaseFragment {
                 }
             });
         }
+    }
+
+    protected void sendMainActivityIntent(){
+        Intent intent = new Intent(getContext(), MainActivityView.class);
+        //Flags prevent user from returning to LoginActivity when pressing back button
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
 }

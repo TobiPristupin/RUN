@@ -1,4 +1,4 @@
-package com.tobipristupin.simplerun.utils;
+package com.tobipristupin.simplerun.ui.login;
 
 import android.support.v4.view.ViewPager;
 import android.view.View;

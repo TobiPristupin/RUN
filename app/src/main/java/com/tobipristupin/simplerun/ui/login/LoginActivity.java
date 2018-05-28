@@ -18,9 +18,7 @@ import com.tobipristupin.simplerun.ui.login.forgotpassword.ForgotPasswordFragmen
 import com.tobipristupin.simplerun.ui.login.loginview.LoginFragmentView;
 import com.tobipristupin.simplerun.ui.login.newaccount.NewAccountFragmentView;
 import com.tobipristupin.simplerun.ui.sharedui.ToastyWrapper;
-import com.tobipristupin.simplerun.ui.login.adapter.LoginFragmentPagerAdapter;
 import com.tobipristupin.simplerun.utils.LogWrapper;
-import com.tobipristupin.simplerun.utils.LoginPageTransformer;
 
 
 public class LoginActivity extends BaseAppCompatActivity implements PageChanger, GoogleApiClientProvider {
@@ -57,7 +55,7 @@ public class LoginActivity extends BaseAppCompatActivity implements PageChanger,
     }
 
     private void showOnConnectionFailedToast(){
-        connectionFailedToast.showWarning(LoginActivity.this, getString(R.string.login_activity_unabletoconnect_toast));
+        connectionFailedToast.showWarning(LoginActivity.this, getString(R.string.login_unabletoconnect));
     }
 
     @Override

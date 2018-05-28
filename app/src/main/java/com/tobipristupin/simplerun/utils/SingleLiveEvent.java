@@ -34,9 +34,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * <p>
  * Note that only one observer is going to be notified of changes.
  */
-public class LiveAction<T> extends MutableLiveData<T> {
+public class SingleLiveEvent<T> extends MutableLiveData<T> {
 
-    private static final String TAG = "LiveAction";
+    private static final String TAG = "SingleLiveEvent";
 
     private final AtomicBoolean mPending = new AtomicBoolean(false);
 

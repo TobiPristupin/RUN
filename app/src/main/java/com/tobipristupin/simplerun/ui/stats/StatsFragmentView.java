@@ -55,9 +55,9 @@ public class StatsFragmentView extends BaseFragment {
 
     private class StatsPagerAdapter extends FragmentPagerAdapter {
 
-        private String[] TAB_TITLES = {getString(R.string.stats_fragment_view_mileage),
-                getString(R.string.stats_fragment_view_prs),
-                getString(R.string.stats_fragment_view_activities)};
+        private String[] TAB_TITLES = {getString(R.string.stats_mileage),
+                getString(R.string.stats_prs),
+                getString(R.string.stats_activities)};
 
         public StatsPagerAdapter(FragmentManager fm) {
             super(fm);

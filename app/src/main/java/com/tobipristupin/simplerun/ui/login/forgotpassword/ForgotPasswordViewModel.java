@@ -5,28 +5,28 @@ import android.arch.lifecycle.ViewModel;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.FirebaseTooManyRequestsException;
+import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.auth.FirebaseAuthManager;
 import com.tobipristupin.simplerun.auth.AuthManager;
-import com.tobipristupin.simplerun.interfaces.ErrorType;
 import com.tobipristupin.simplerun.utils.EmailValidator;
-import com.tobipristupin.simplerun.utils.VoidLiveAction;
+import com.tobipristupin.simplerun.utils.SingleLiveEvent;
+import com.tobipristupin.simplerun.utils.VoidSingleLiveEvent;
 
 import io.reactivex.disposables.Disposable;
 
 
 public class ForgotPasswordViewModel extends ViewModel {
 
-    private MutableLiveData<ErrorType.EmailLogin> emailError = new MutableLiveData<>();
+    private MutableLiveData<Integer> emailError = new MutableLiveData<>();
     private MutableLiveData<Boolean> loading = new MutableLiveData<>();
-    private VoidLiveAction showEmailSentToast = new VoidLiveAction();
-    private VoidLiveAction showTooManyRequestsToast = new VoidLiveAction();
-    private VoidLiveAction showEmailFailedToast = new VoidLiveAction();
-    private VoidLiveAction openLoginPage = new VoidLiveAction();
+    private SingleLiveEvent<Integer> showSuccessToastAction = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> showErrorToastAction = new SingleLiveEvent<>();
+    private VoidSingleLiveEvent openLoginPage = new VoidSingleLiveEvent();
     private Disposable resetEmailSubscription;
 
     public void onSendEmailButtonClick(String email){
         if (!EmailValidator.isValid(email)){
-            emailError.postValue(ErrorType.EmailLogin.INVALID_EMAIL);
+            emailError.postValue(R.string.all_invalid_email);
             return;
         }
 
@@ -52,15 +52,15 @@ public class ForgotPasswordViewModel extends ViewModel {
         Crashlytics.logException(throwable);
         loading.postValue(false);
         if (throwable instanceof FirebaseTooManyRequestsException){
-            showTooManyRequestsToast.call();
+            showErrorToast(R.string.forgot_password_toomanyrequests);
         } else {
-            showEmailFailedToast.call();
+            showErrorToast(R.string.forgot_password_recovery_failed);
         }
     }
 
     private void onResetPasswordSuccess(){
         loading.postValue(false);
-        showEmailSentToast.call();
+        showSuccessToast(R.string.forgot_password_recovery_sent);
     }
 
     @Override
@@ -71,7 +71,15 @@ public class ForgotPasswordViewModel extends ViewModel {
         }
     }
 
-    public MutableLiveData<ErrorType.EmailLogin> getEmailError() {
+    private void showSuccessToast(int resId){
+        showSuccessToastAction.setValue(resId);
+    }
+
+    private void showErrorToast(int resId){
+        showErrorToastAction.setValue(resId);
+    }
+
+    public MutableLiveData<Integer> getEmailError() {
         return emailError;
     }
 
@@ -79,19 +87,15 @@ public class ForgotPasswordViewModel extends ViewModel {
         return loading;
     }
 
-    public VoidLiveAction getShowEmailSentToast() {
-        return showEmailSentToast;
+    public SingleLiveEvent<Integer> getShowSuccessToast() {
+        return showSuccessToastAction;
     }
 
-    public VoidLiveAction getShowTooManyRequestsToast() {
-        return showTooManyRequestsToast;
+    public SingleLiveEvent<Integer> getShowErrorToast() {
+        return showErrorToastAction;
     }
 
-    public VoidLiveAction getShowEmailFailedToast() {
-        return showEmailFailedToast;
-    }
-
-    public VoidLiveAction getOpenLoginPage() {
+    public VoidSingleLiveEvent getOpenLoginPage() {
         return openLoginPage;
     }
 }

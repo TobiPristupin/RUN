@@ -137,29 +137,29 @@ public class StatsFragmentMileageView extends BaseFragment implements StatsMilea
         (which shouldn't be used here because the data never changes, nor scrolls, nor needs view recycling) send me a message
         in github*/
         View overviewItemMonth = rootView.findViewById(R.id.stats_mileage_overview_item_month);
-        ((TextView) overviewItemMonth.findViewById(R.id.overview_item_value_text)).setText(R.string.stats_fragment_mileage_view_thismonth);
-        ((TextView) overviewItemMonth.findViewById(R.id.overview_item_increase_text)).setText(R.string.stats_fragment_mileage_view_lastmonth);
+        ((TextView) overviewItemMonth.findViewById(R.id.overview_item_value_text)).setText(R.string.stats_mileage_thismonth);
+        ((TextView) overviewItemMonth.findViewById(R.id.overview_item_increase_text)).setText(R.string.stats_mileage_lastmonth);
         ((TextView) overviewItemMonth.findViewById(R.id.overview_item_value)).setText(0 + unit.toString());
         ((TextView) overviewItemMonth.findViewById(R.id.overview_item_increase_value)).setText(0 + "+");
         ((TextView) overviewItemMonth.findViewById(R.id.overview_item_increase_value)).setTextColor(getResources().getColor(R.color.Green));
 
         View overviewItem3Months = rootView.findViewById(R.id.stats_mileage_overview_item_3months);
-        ((TextView) overviewItem3Months.findViewById(R.id.overview_item_value_text)).setText(R.string.stats_fragment_mileage_view_this3months);
-        ((TextView) overviewItem3Months.findViewById(R.id.overview_item_increase_text)).setText(R.string.stats_fragment_mileage_view_last3months);
+        ((TextView) overviewItem3Months.findViewById(R.id.overview_item_value_text)).setText(R.string.stats_mileage_this3months);
+        ((TextView) overviewItem3Months.findViewById(R.id.overview_item_increase_text)).setText(R.string.stats_mileage_last3months);
         ((TextView) overviewItem3Months.findViewById(R.id.overview_item_value)).setText(0 + unit.toString());
         ((TextView) overviewItem3Months.findViewById(R.id.overview_item_increase_value)).setText(0 + "+");
         ((TextView) overviewItem3Months.findViewById(R.id.overview_item_increase_value)).setTextColor(getResources().getColor(R.color.Green));
 
         View overviewItem6Months = rootView.findViewById(R.id.stats_mileage_overview_item_6months);
-        ((TextView) overviewItem6Months.findViewById(R.id.overview_item_value_text)).setText(R.string.stats_fragment_mileage_view_this6months);
-        ((TextView) overviewItem6Months.findViewById(R.id.overview_item_increase_text)).setText(R.string.stats_fragment_mileage_view_last6months);
+        ((TextView) overviewItem6Months.findViewById(R.id.overview_item_value_text)).setText(R.string.stats_mileage_this6months);
+        ((TextView) overviewItem6Months.findViewById(R.id.overview_item_increase_text)).setText(R.string.stats_mileage_last6months);
         ((TextView) overviewItem6Months.findViewById(R.id.overview_item_value)).setText(0 + unit.toString());
         ((TextView) overviewItem6Months.findViewById(R.id.overview_item_increase_value)).setText(0 + "+");
         ((TextView) overviewItem6Months.findViewById(R.id.overview_item_increase_value)).setTextColor(getResources().getColor(R.color.Green));
 
         View overviewItemYear = rootView.findViewById(R.id.stats_mileage_overview_item_year);
-        ((TextView) overviewItemYear.findViewById(R.id.overview_item_value_text)).setText(R.string.stats_fragment_mileage_view_thisyear);
-        ((TextView) overviewItemYear.findViewById(R.id.overview_item_increase_text)).setText(R.string.stats_fragment_mileage_view_lastyear);
+        ((TextView) overviewItemYear.findViewById(R.id.overview_item_value_text)).setText(R.string.stats_mileage_thisyear);
+        ((TextView) overviewItemYear.findViewById(R.id.overview_item_increase_text)).setText(R.string.stats_mileage_lastyear);
         ((TextView) overviewItemYear.findViewById(R.id.overview_item_value)).setText(0 + unit.toString());
         ((TextView) overviewItemYear.findViewById(R.id.overview_item_increase_value)).setText(0 + "+");
         ((TextView) overviewItemYear.findViewById(R.id.overview_item_increase_value)).setTextColor(getResources().getColor(R.color.Green));
@@ -331,7 +331,7 @@ public class StatsFragmentMileageView extends BaseFragment implements StatsMilea
     private void setGraphData(List<BarEntry> barEntries, BarChart chart){
         DistanceUnit unit = preferencesRepository.getDistanceUnit();
         BarDataSet barDataSet = new BarDataSet(barEntries,
-                getString(R.string.stats_fragment_mileage_view_distance) + " (" + unit + ")");
+                getString(R.string.stats_mileage_distance) + " (" + unit + ")");
 
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkPink));

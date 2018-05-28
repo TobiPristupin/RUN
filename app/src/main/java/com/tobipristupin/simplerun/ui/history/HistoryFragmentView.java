@@ -290,16 +290,16 @@ public class HistoryFragmentView extends BaseFragment implements HistoryView {
     public void showDeleteDialog(final List<Integer> selectedItems) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        String title = getString(R.string.history_fragment_view_dialog_title);
+        String title = getString(R.string.history_dialog_title);
         builder.setTitle(title);
 
-        String text = getResources().getQuantityString(R.plurals.history_fragment_view_dialog_text, selectedItems.size(), selectedItems.size());
+        String text = getResources().getQuantityString(R.plurals.history_dialog_text, selectedItems.size(), selectedItems.size());
         builder.setMessage(text);
 
-        String negativeText = getString(R.string.history_fragment_view_cancel);
+        String negativeText = getString(R.string.history_cancel);
         builder.setNegativeButton(negativeText, (dialogInterface, i) -> dialogInterface.cancel());
 
-        String positiveText = getString(R.string.history_fragment_view_yes);
+        String positiveText = getString(R.string.history_yes);
         builder.setPositiveButton(positiveText, (dialogInterface, i) -> presenter.onDeleteDialogYes(selectedItems));
 
         builder.create().show();

@@ -7,41 +7,47 @@ import android.widget.Toast;
 import es.dmoral.toasty.Toasty;
 
 /**
- * Wrapper class for toastys that handles cancelling the toast when multiple toasts are shown
+ * Wrapper class for toasts that handles cancelling the toast when multiple toasts are shown
  * to avoid stacking them.
  */
 
 public class ToastyWrapper {
 
-    private Toast instance;
+    private Toast lastShown;
+
+    public void show(Toast t){
+        destroyPreviousInstance();
+        lastShown = t;
+        lastShown.show();
+    }
 
     public void showWarning(Context context, String text){
         destroyPreviousInstance();
-        instance = Toasty.warning(context, text, Toast.LENGTH_SHORT);
-        instance.show();
+        lastShown = Toasty.warning(context, text, Toast.LENGTH_SHORT);
+        lastShown.show();
     }
 
     public void showWarning(Context context, String text, int length){
         destroyPreviousInstance();
-        instance = Toasty.warning(context, text, length);
-        instance.show();
+        lastShown = Toasty.warning(context, text, length);
+        lastShown.show();
     }
 
     public void showSuccess(Context context, String text, int length){
         destroyPreviousInstance();
-        instance = Toasty.success(context, text, length);
-        instance.show();
+        lastShown = Toasty.success(context, text, length);
+        lastShown.show();
     }
 
     public void showSuccess(Context context, String text){
         destroyPreviousInstance();
-        instance = Toasty.success(context, text, Toast.LENGTH_SHORT);
-        instance.show();
+        lastShown = Toasty.success(context, text, Toast.LENGTH_SHORT);
+        lastShown.show();
     }
 
     private void destroyPreviousInstance(){
-        if (instance != null){
-            instance.cancel();
+        if (lastShown != null){
+            lastShown.cancel();
         }
     }
 }

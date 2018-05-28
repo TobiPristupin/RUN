@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
-            app:title="@string/activity_settings_title"
+            app:title="@string/settings_title"
             app:titleTextColor="@android:color/white"/>
 
         <TextView
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="@string/activity_settings_general"
+            android:text="@string/settings_general"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="16dp"
-                android:text="@string/activity_settings_distanceunit"
+                android:text="@string/settings_distanceunit"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="@string/activity_settings_account"
+            android:text="@string/settings_account"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="16dp"
-                android:text="@string/activity_settings_signout"
+                android:text="@string/settings_signout"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
@@ -106,7 +106,7 @@
                 android:layout_below="@id/settings_signout_text"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
-                android:text="@string/activity_settings_logout_description"
+                android:text="@string/settings_logout_description"
                 android:textSize="15sp" />
 
         </RelativeLayout>
@@ -116,7 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="@string/activity_settings_other"
+            android:text="@string/settings_other"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="16dp"
-                android:text="@string/activity_settings_helpfeedback"
+                android:text="@string/settings_helpfeedback"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
@@ -147,7 +147,7 @@
                 android:layout_below="@id/settings_help_text"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
-                android:text="@string/activity_settings_help"
+                android:text="@string/settings_help"
                 android:textSize="15sp" />
 
         </RelativeLayout>
@@ -173,7 +173,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="16dp"
-                android:text="@string/activity_settings_opensourcelibraries"
+                android:text="@string/settings_opensourcelibraries"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
@@ -183,7 +183,7 @@
                 android:layout_below="@id/settings_libs_text"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
-                android:text="@string/activity_settings_fosslibraries"
+                android:text="@string/settings_fosslibraries"
                 android:textSize="15sp" />
 
         </RelativeLayout>
@@ -209,7 +209,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="16dp"
-                android:text="@string/activity_settings_about"
+                android:text="@string/settings_about"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
@@ -219,7 +219,7 @@
                 android:layout_below="@id/settings_about_text"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
-                android:text="@string/activity_settings_aboutdeveloper"
+                android:text="@string/settings_aboutdeveloper"
                 android:textSize="15sp" />
 
         </RelativeLayout>
@@ -245,7 +245,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="16dp"
-                android:text="@string/settings_activity_license"
+                android:text="@string/settings_license"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
@@ -255,7 +255,7 @@
                 android:layout_below="@id/settings_license_text"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
-                android:text="@string/settings_activity_license_and_credits"
+                android:text="@string/settings_license_and_credits"
                 android:textSize="15sp" />
 
         </RelativeLayout>

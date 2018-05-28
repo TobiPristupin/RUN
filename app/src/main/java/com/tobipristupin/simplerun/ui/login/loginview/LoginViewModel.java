@@ -10,27 +10,27 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.auth.FirebaseAuthManager;
 import com.tobipristupin.simplerun.auth.AuthManager;
-import com.tobipristupin.simplerun.interfaces.ErrorType;
 import com.tobipristupin.simplerun.utils.EmailValidator;
 import com.tobipristupin.simplerun.utils.LogWrapper;
-import com.tobipristupin.simplerun.utils.VoidLiveAction;
+import com.tobipristupin.simplerun.utils.SingleLiveEvent;
+import com.tobipristupin.simplerun.utils.VoidSingleLiveEvent;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 public class LoginViewModel extends ViewModel {
 
-    private VoidLiveAction intentToMainActivityAction = new VoidLiveAction();
-    private VoidLiveAction googleSignInIntentAction = new VoidLiveAction();
-    private VoidLiveAction showLoginErrorToast = new VoidLiveAction();
-    private VoidLiveAction showGoogleSignInErrorToast = new VoidLiveAction();
-    private VoidLiveAction openForgotPasswordPage = new VoidLiveAction();
-    private VoidLiveAction openNewAccountPage = new VoidLiveAction();
+    private VoidSingleLiveEvent intentToMainActivityAction = new VoidSingleLiveEvent();
+    private VoidSingleLiveEvent googleSignInIntentAction = new VoidSingleLiveEvent();
+    private SingleLiveEvent<Integer> showErrorToastAction = new SingleLiveEvent<>();
+    private VoidSingleLiveEvent openForgotPasswordPage = new VoidSingleLiveEvent();
+    private VoidSingleLiveEvent openNewAccountPage = new VoidSingleLiveEvent();
     private MutableLiveData<Boolean> showLoadingAnimation = new MutableLiveData<>();
-    private MutableLiveData<ErrorType.EmailLogin> emailError = new MutableLiveData<>();
-    private MutableLiveData<ErrorType.PasswordLogin> passwordError = new MutableLiveData<>();
+    private MutableLiveData<Integer> emailError = new MutableLiveData<>();
+    private MutableLiveData<Integer> passwordError = new MutableLiveData<>();
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private static final String TAG = "LoginViewModel";
@@ -88,7 +88,7 @@ public class LoginViewModel extends ViewModel {
     private void onGoogleSignInFailed(GoogleSignInResult result){
         LogWrapper.info(TAG, "HandleGoogleSignInResult: Failed. Status code " + result.getStatus().getStatusCode());
         showLoadingAnimation.postValue(false);
-        showGoogleSignInErrorToast.call();
+        showErrorToast(R.string.login_google_error);
     }
 
     private void authenticateGoogleLogin(GoogleSignInAccount account){
@@ -115,30 +115,30 @@ public class LoginViewModel extends ViewModel {
 
         showLoadingAnimation.postValue(false);
         if (e instanceof FirebaseAuthInvalidCredentialsException) {
-            passwordError.postValue(ErrorType.PasswordLogin.INVALID_CREDENTIALS);
+            passwordError.postValue(R.string.all_invalid_credentials);
         }
         if (e instanceof FirebaseAuthInvalidUserException) {
-            emailError.postValue(ErrorType.EmailLogin.USERNAME_DOESNT_EXIST);
+            emailError.postValue(R.string.all_username_doesnt_exist);
         } else {
-            showLoginErrorToast.call();
+            showErrorToast(R.string.login_error);
         }
     }
 
     private boolean fieldsAreValid(String email, String password){
         if (email.isEmpty()){
-            emailError.postValue(ErrorType.EmailLogin.REQUIRED_FIELD);
+            emailError.postValue(R.string.all_required_field);
             return false;
         }
         if (password.isEmpty()){
-            passwordError.postValue(ErrorType.PasswordLogin.REQUIRED_FIELD);
+            passwordError.postValue(R.string.all_required_field);
             return false;
         }
         if (!EmailValidator.isValid(email)){
-            emailError.postValue(ErrorType.EmailLogin.INVALID_EMAIL);
+            emailError.postValue(R.string.all_invalid_email);
             return false;
         }
         if (password.length() <= 6){
-            passwordError.postValue(ErrorType.PasswordLogin.SHORT_PASSWORD);
+            passwordError.postValue(R.string.all_short_password);
             return false;
         }
 
@@ -151,7 +151,11 @@ public class LoginViewModel extends ViewModel {
         compositeDisposable.clear();
     }
 
-    public VoidLiveAction getSendIntentToMainActivityAction() {
+    private void showErrorToast(int resId){
+        showErrorToastAction.setValue(resId);
+    }
+
+    public VoidSingleLiveEvent getSendIntentToMainActivityAction() {
         return intentToMainActivityAction;
     }
 
@@ -159,31 +163,27 @@ public class LoginViewModel extends ViewModel {
         return showLoadingAnimation;
     }
 
-    public VoidLiveAction getGoogleSignInIntentAction() {
+    public VoidSingleLiveEvent getGoogleSignInIntentAction() {
         return googleSignInIntentAction;
     }
 
-    public VoidLiveAction getShowLoginErrorToast() {
-        return showLoginErrorToast;
+    public SingleLiveEvent<Integer> getShowErrorToast() {
+        return showErrorToastAction;
     }
 
-    public VoidLiveAction getShowGoogleSignInErrorToastAction() {
-        return showGoogleSignInErrorToast;
-    }
-
-    public VoidLiveAction getOpenForgotPasswordPageAction() {
+    public VoidSingleLiveEvent getOpenForgotPasswordPageAction() {
         return openForgotPasswordPage;
     }
 
-    public VoidLiveAction getOpenNewAccountPageAction() {
+    public VoidSingleLiveEvent getOpenNewAccountPageAction() {
         return openNewAccountPage;
     }
 
-    public MutableLiveData<ErrorType.EmailLogin> getEmailError() {
+    public MutableLiveData<Integer> getEmailError() {
         return emailError;
     }
 
-    public MutableLiveData<ErrorType.PasswordLogin> getPasswordError() {
+    public MutableLiveData<Integer> getPasswordError() {
         return passwordError;
     }
 

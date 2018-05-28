@@ -19,6 +19,7 @@ import com.crashlytics.android.Crashlytics;
 import com.squareup.picasso.Picasso;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseAppCompatActivity;
+import com.tobipristupin.simplerun.data.repository.FirebaseRepository;
 import com.tobipristupin.simplerun.ui.sharedui.AboutDialog;
 import com.tobipristupin.simplerun.ui.history.HistoryFragmentView;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
@@ -101,6 +102,8 @@ public class MainActivityView extends BaseAppCompatActivity implements MainView 
 
     @Override
     public void initViews() {
+        //FIXME
+        new FirebaseRepository().clear();
         initDrawerLayout();
         initNavHeader();
         setSupportActionBar(R.id.main_toolbar, R.drawable.ic_navigation_menu);

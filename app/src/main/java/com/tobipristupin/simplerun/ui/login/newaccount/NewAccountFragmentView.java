@@ -2,11 +2,12 @@ package com.tobipristupin.simplerun.ui.login.newaccount;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,45 +15,42 @@ import android.widget.Button;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.tobipristupin.simplerun.R;
-import com.tobipristupin.simplerun.interfaces.ErrorType;
+import com.tobipristupin.simplerun.databinding.FragmentNewAccountBinding;
+import com.tobipristupin.simplerun.ui.login.Page;
+import com.tobipristupin.simplerun.ui.login.PageChanger;
 import com.tobipristupin.simplerun.ui.sharedui.ToastyWrapper;
 import com.tobipristupin.simplerun.ui.login.BaseLoginFragment;
 import com.tobipristupin.simplerun.ui.login.LoginActivity;
-import com.tobipristupin.simplerun.ui.main.MainActivityView;
 import com.wang.avi.AVLoadingIndicatorView;
 
-public class NewAccountFragmentView extends BaseLoginFragment implements NewAccountView {
+import es.dmoral.toasty.Toasty;
 
-    private static final int RC_SIGN_IN = 1379;
-    private View rootView;
+public class NewAccountFragmentView extends BaseLoginFragment  {
+
+    private static final int GOOGLE_SIGN_IN_INTENT_CODE = 1379;
+    private NewAccountViewModel viewModel;
+    private FragmentNewAccountBinding binding;
+    private PageChanger pageChanger;
 
     private TextInputLayout emailLayout;
     private TextInputLayout passwordLayout;
     private TextInputLayout passwordLayout2;
     private Button createAccountButton;
     private AVLoadingIndicatorView loadingIndicator;
-    private NewAccountPresenter presenter;
-
-    private ToastyWrapper createAccountToast = new ToastyWrapper();
-    private ToastyWrapper weakPasswordToast = new ToastyWrapper();
-    private ToastyWrapper accountCollisionToast = new ToastyWrapper();
-    private ToastyWrapper googleSignInToast = new ToastyWrapper();
+    private ToastyWrapper toastyWrapper = new ToastyWrapper();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_new_account, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_account, container, false);
 
-        emailLayout = rootView.findViewById(R.id.new_account_email);
-        passwordLayout = rootView.findViewById(R.id.new_account_password1);
-        passwordLayout2 = rootView.findViewById(R.id.new_account_password2);
-        loadingIndicator = rootView.findViewById(R.id.new_account_loading_indicator);
-        createAccountButton = rootView.findViewById(R.id.new_account_create_account_button);
-
-        presenter = new NewAccountPresenter(this);
+        emailLayout = binding.newAccountEmail;
+        passwordLayout = binding.newAccountPassword1;
+        passwordLayout2 = binding.newAccountPassword2;
+        loadingIndicator = binding.newAccountLoadingIndicator;
+        createAccountButton = binding.newAccountCreateAccountButton;
 
         setLayoutErrorReset(emailLayout, passwordLayout, passwordLayout2);
 
@@ -61,68 +59,115 @@ public class NewAccountFragmentView extends BaseLoginFragment implements NewAcco
         initGoogleLogIn();
         initReturnButton();
 
-        return rootView;
+        return binding.getRoot();
     }
 
     @Override
-    public void enableEmailError(ErrorType.EmailLogin type) {
-        emailLayout.setErrorEnabled(true);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        viewModel = obtainViewModel(this, NewAccountViewModel.class);
+        bindViewModel();
+    }
 
-        switch (type) {
-            case INVALID_EMAIL :
-                emailLayout.setError(getString(R.string.all_invalid_email));
-                break;
-            case REQUIRED_FIELD :
-                emailLayout.setError(getString(R.string.all_required_field));
-                break;
-            default :
-                emailLayout.setError(getString(R.string.all_error));
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            pageChanger = (PageChanger) getActivity();
+        } catch (ClassCastException e){
+            throw new RuntimeException("Parent Activity must implement PageChanger and GoogleApiClient " +
+                    "interfaces");
         }
     }
 
     @Override
-    public void enablePasswordError(ErrorType.PasswordLogin type) {
-        enablePasswordViewError(passwordLayout, type);
-    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-    @Override
-    public void enablePassword2Error(ErrorType.PasswordLogin type) {
-        enablePasswordViewError(passwordLayout2, type);
-    }
-
-    private void enablePasswordViewError(TextInputLayout view, ErrorType.PasswordLogin type){
-        view.setErrorEnabled(true);
-
-        switch (type) {
-            case REQUIRED_FIELD :
-                view.setError(getString(R.string.all_required_field));
-                break;
-            case SHORT_PASSWORD :
-                view.setError(getString(R.string.all_short_password));
-                break;
-            case INVALID_CREDENTIALS :
-                view.setError(getString(R.string.all_invalid_credentials));
-                break;
-            case PASSWORD_DONT_MATCH :
-                view.setError(getString(R.string.all_passwords_dont_match));
-                break;
-            default :
-                view.setError(getString(R.string.all_error));
+        if (requestCode == GOOGLE_SIGN_IN_INTENT_CODE){
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            viewModel.onGoogleSignInResult(result);
         }
     }
 
-    @Override
-    public void sendIntentMainActivity() {
-        Intent intent = new Intent(getContext(), MainActivityView.class);
-        //Flags prevent user from returning to LoginActivity when pressing back button
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+    private void initCreateAccountButton() {
+        createAccountButton.setOnClickListener(view -> {
+            final String email = emailLayout.getEditText().getText().toString().trim();
+            final String password = passwordLayout.getEditText().getText().toString().trim();
+            final String password2 = passwordLayout2.getEditText().getText().toString().trim();
+
+            viewModel.onCreateAccountClick(email, password, password2);
+        });
+
     }
 
-    @Override
+    private void initGoogleLogIn(){
+        binding.newAccountGoogleButton.setOnClickListener(view -> viewModel.onGoogleLogInClick());
+    }
+
+    private void initReturnButton(){
+        binding.newAccountReturn.setOnClickListener(view -> pageChanger.changeTo(Page.LOGIN));
+    }
+
+    private void bindViewModel() {
+        bindEditTextErrors();
+        bindMainActivityIntent();
+        bindLoading();
+        bindToasts();
+        bindGoogleSignInIntent();
+    }
+
+    private void bindGoogleSignInIntent() {
+        viewModel.getSendGoogleSignInIntent().observe(this, aVoid -> {
+            GoogleApiClient apiClient = ((LoginActivity) getActivity()).getClient();
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
+            startActivityForResult(signInIntent, GOOGLE_SIGN_IN_INTENT_CODE);
+        });
+    }
+
+    private void bindToasts() {
+        viewModel.getShowErrorToast().observe(this, (resId) -> {
+            toastyWrapper.show(Toasty.warning(getContext(), getString(resId)));
+        });
+    }
+
+    private void bindLoading() {
+        viewModel.getLoading().observe(this, (enable) -> {
+            if (enable){
+                startLoadingAnimation();
+            } else {
+                stopLoadingAnimation();
+            }
+        });
+    }
+
+    private void bindMainActivityIntent() {
+        viewModel.getSendIntentMainActivity().observe(this, (aVoid -> {
+            sendMainActivityIntent();
+        }));
+    }
+
+    private void bindEditTextErrors() {
+        viewModel.getEmailError().observe(this, (resId) -> {
+            setEditTextError(emailLayout, resId);
+        });
+
+        viewModel.getPasswordError().observe(this, (resId) -> {
+            setEditTextError(passwordLayout, resId);
+        });
+
+        viewModel.getPassword2Error().observe(this, (resId) -> {
+            setEditTextError(passwordLayout2, resId);
+        });
+    }
+
+    private void setEditTextError(TextInputLayout editText, Integer resId) {
+        editText.setErrorEnabled(true);
+        editText.setError(getString(resId));
+    }
+
     public void startLoadingAnimation() {
-        //Fade out animation
+        //Fade out
         createAccountButton.animate().alpha(0.0f).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -133,75 +178,9 @@ public class NewAccountFragmentView extends BaseLoginFragment implements NewAcco
         });
     }
 
-    @Override
     public void stopLoadingAnimation() {
         //Fade in
         loadingIndicator.smoothToHide();
         createAccountButton.animate().alpha(1.0f);
-    }
-
-    @Override
-    public void showCreateAccountErrorToast() {
-        String str = getString(R.string.new_account_fragment_view_account_error_toast);
-        createAccountToast.showWarning(getContext(), str);
-    }
-
-    @Override
-    public void showWeakPasswordErrorToast() {
-        String str = getString(R.string.new_account_fragment_view_password_toast);
-        weakPasswordToast.showWarning(getContext(), str);
-    }
-
-    @Override
-    public void showUserCollisionToast() {
-        String str = getString(R.string.new_account_fragment_view_collision_toast);
-        accountCollisionToast.showWarning(getContext(), str);
-    }
-
-    @Override
-    public void sendGoogleSignInIntent() {
-        GoogleApiClient apiClient = ((LoginActivity) getActivity()).getClient();
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    @Override
-    public void showGoogleSignInFailedToast() {
-        String str = getString(R.string.new_account_fragment_view_auth_failed_toast);
-        googleSignInToast.showWarning(getContext(), str);
-    }
-
-    private void initCreateAccountButton() {
-        createAccountButton.setOnClickListener(view -> {
-            final String email = emailLayout.getEditText().getText().toString().trim();
-            final String password = passwordLayout.getEditText().getText().toString().trim();
-            final String password2 = passwordLayout2.getEditText().getText().toString().trim();
-
-            presenter.onCreateAccountButtonClick(email, password, password2);
-        });
-
-    }
-
-    private void initGoogleLogIn(){
-        SignInButton signInButton = rootView.findViewById(R.id.new_account_google_button);
-        signInButton.setOnClickListener(view -> presenter.onGoogleLogInClick());
-
-    }
-
-    // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN){
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            presenter.onGoogleSignInResult(result);
-        }
-    }
-
-    private void initReturnButton(){
-        Button button = rootView.findViewById(R.id.new_account_return);
-        final ViewPager viewPager = getActivity().findViewById(R.id.login_viewpager);
-        button.setOnClickListener(view -> viewPager.setCurrentItem(1));
     }
 }

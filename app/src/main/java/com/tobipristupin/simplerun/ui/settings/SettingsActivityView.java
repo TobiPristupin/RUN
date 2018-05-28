@@ -101,9 +101,9 @@ public class SettingsActivityView extends BaseAppCompatActivity implements Setti
     @Override
     public void showSignOutDialog(final DialogInterface.OnClickListener onClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivityView.this);
-        builder.setMessage(R.string.settings_activity_view_signoutdialog_title);
-        builder.setPositiveButton(R.string.settings_activity_view_signoutdialog_positive, onClickListener);
-        builder.setNegativeButton(R.string.settings_activity_view_signoutdialog_negative, null);
+        builder.setMessage(R.string.settings_signoutdialog_title);
+        builder.setPositiveButton(R.string.settings_signoutdialog_positive, onClickListener);
+        builder.setNegativeButton(R.string.settings_signoutdialog_negative, null);
         builder.create().show();
     }
 
@@ -125,11 +125,11 @@ public class SettingsActivityView extends BaseAppCompatActivity implements Setti
         intent.setData(Uri.parse("mailto:"));
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{mailTo});
 
-        String subject = getString(R.string.settings_activity_view_email_subject);
+        String subject = getString(R.string.settings_email_subject);
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
 
-        String bodyString = "\n\n\n\n" + getString(R.string.settings_acttivity_view_email_bodyversion) + " " + BuildConfig.VERSION_NAME;
-        bodyString += "\n" + getString(R.string.settings_acttivity_view_email_body_desc);
+        String bodyString = "\n\n\n\n" + getString(R.string.settings_email_bodyversion) + " " + BuildConfig.VERSION_NAME;
+        bodyString += "\n" + getString(R.string.settings_email_body_desc);
 
         intent.putExtra(Intent.EXTRA_TEXT, bodyString);
 
@@ -142,7 +142,7 @@ public class SettingsActivityView extends BaseAppCompatActivity implements Setti
 
     @Override
     public void showNoEmailAppError() {
-        noEmailErrorToasty.showWarning(SettingsActivityView.this, getString(R.string.settings_activity_view_noemailerror_toast));
+        noEmailErrorToasty.showWarning(SettingsActivityView.this, getString(R.string.settings_noemailerror));
     }
 
     @Override
@@ -160,7 +160,7 @@ public class SettingsActivityView extends BaseAppCompatActivity implements Setti
     @Override
     public void showLicenseDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivityView.this);
-        builder.setTitle(getString(R.string.settings_activity_license));
+        builder.setTitle(getString(R.string.settings_license));
         builder.setMessage(getText(R.string.license_dialog));
         builder.show();
     }

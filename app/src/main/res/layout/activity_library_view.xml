@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        app:title="@string/activity_library_title"
+        app:title="@string/library_title"
         app:titleTextColor="@android:color/white" />
 
     <android.support.v7.widget.RecyclerView

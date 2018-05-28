@@ -62,12 +62,12 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
 
     @Override
     public void showAddedRunSuccessfullyToast() {
-        addedRunToasty.showSuccess(EditorActivityView.this, getString(R.string.editor_activityview_added), Toast.LENGTH_SHORT);
+        addedRunToasty.showSuccess(EditorActivityView.this, getString(R.string.editor_added), Toast.LENGTH_SHORT);
     }
 
     @Override
     public void showInvalidFieldsToast() {
-        invalidFieldToasty.showWarning(EditorActivityView.this, getString(R.string.editor_activityview_fillin), Toast.LENGTH_SHORT);
+        invalidFieldToasty.showWarning(EditorActivityView.this, getString(R.string.editor_fillin), Toast.LENGTH_SHORT);
     }
 
     @Override
@@ -123,7 +123,7 @@ public class EditorActivityView extends BaseAppCompatActivity implements EditorV
 
     @Override
     public void setActionBarEditTitle() {
-        getSupportActionBar().setTitle(R.string.editor_activity_view_toolbar_edit);
+        getSupportActionBar().setTitle(R.string.editor_toolbar_edit);
     }
 
     @Override

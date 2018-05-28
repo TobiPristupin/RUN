@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:background="@color/colorPrimary"
-        app:title="@string/editor_activity_view_title"
+        app:title="@string/editor_title"
         app:titleTextColor="@android:color/white" />
 
 
@@ -49,7 +49,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@id/editor_image_distance"
-                android:text="@string/activity_editor_distance"
+                android:text="@string/editor_distance"
                 android:textSize="16sp" />
 
             <TextView
@@ -84,7 +84,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@id/editor_image_time"
-                android:text="@string/activity_editor_time"
+                android:text="@string/editor_time"
                 android:textSize="16sp" />
 
             <TextView
@@ -119,7 +119,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@id/editor_image_date"
-                android:text="@string/activity_editor_date"
+                android:text="@string/editor_date"
                 android:textSize="16sp" />
 
             <TextView
@@ -155,7 +155,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@id/editor_image_rating"
-                android:text="@string/activity_editor_rating"
+                android:text="@string/editor_rating"
                 android:textSize="16sp" />
 
             <TextView

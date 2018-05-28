@@ -63,7 +63,7 @@
          android:layout_height="wrap_content"
          android:layout_marginTop="8dp"
          android:alpha="0"
-         android:text="@string/fragment_history_empty"
+         android:text="@string/history_empty"
          android:textColor="@android:color/black"
          android:textSize="24sp"
          android:textStyle="bold"

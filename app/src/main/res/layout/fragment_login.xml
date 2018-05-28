@@ -37,7 +37,7 @@
             android:layout_marginBottom="48dp"
             android:layout_marginStart="16dp"
             android:background="@android:color/transparent"
-            android:text="@string/fragment_login_forgot"
+            android:text="@string/login_forgot"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="15sp"
@@ -106,7 +106,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusedByDefault="true"
-                android:hint="@string/activity_settings_emailhint"
+                android:hint="@string/settings_emailhint"
                 android:inputType="textEmailAddress"
                 android:textColor="@android:color/white" />
 
@@ -136,7 +136,7 @@
                 android:id="@+id/login_password_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/fragment_new_account_passwordhint"
+                android:hint="@string/new_account_passwordhint"
                 android:inputType="textPassword"
                 android:textColor="@android:color/white" />
 

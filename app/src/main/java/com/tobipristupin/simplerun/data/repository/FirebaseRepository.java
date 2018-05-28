@@ -29,6 +29,11 @@ public class FirebaseRepository implements Repository<Run> {
 
     private static final String TAG = "FirebaseRepository";
 
+    //FIXME
+    public void clear(){
+        observable = null;
+    }
+
     @Override
     public void add(Run run) {
         DatabaseReference ref = runsDatabaseRef.push();

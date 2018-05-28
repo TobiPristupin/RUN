@@ -17,14 +17,11 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.tobipristupin.simplerun.R;
 import com.tobipristupin.simplerun.app.BaseFragment;
 import com.tobipristupin.simplerun.data.repository.FirebaseRepository;
@@ -208,7 +205,7 @@ public class StatsFragmentActivitiesView extends BaseFragment implements StatsAc
     @Override
     public void setPieChartData(List<PieEntry> pieEntries) {
         addLabelsToPieData(pieEntries);
-        PieDataSet set = new PieDataSet(pieEntries, getString(R.string.stats_fragment_activities_view_piechart_label));
+        PieDataSet set = new PieDataSet(pieEntries, getString(R.string.stats_activities_piechart_label));
         set.setValueFormatter(new PercentFormatter());
 
         List<Integer> colors = new ArrayList<>();
@@ -249,7 +246,7 @@ public class StatsFragmentActivitiesView extends BaseFragment implements StatsAc
     }
 
     private void setChartData(List<BarEntry> barData, BarChart chart){
-        BarDataSet barDataSet = new BarDataSet(barData, getString(R.string.stats_fragment_activities_view_barchart_label));
+        BarDataSet barDataSet = new BarDataSet(barData, getString(R.string.stats_activities_barchart_label));
         barDataSet.setValueTextSize(10);
         barDataSet.setColor(getResources().getColor(R.color.DarkOrange));
         barDataSet.setValueFormatter((value, entry, dataSetIndex, viewPortHandler) -> String.valueOf((int) value));
