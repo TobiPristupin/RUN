@@ -14,8 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/LightGrey"
-        android:orientation="vertical"
-        tools:context=".ui.editor.EditorActivityView">
+        android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/editor_toolbar"
@@ -25,95 +24,108 @@
             app:title="@string/editor_title"
             app:titleTextColor="@android:color/white" />
 
-
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:id="@+id/editor_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="15dp"
             android:alpha="0"
             tools:alpha="1"
-            android:background="@drawable/mild_rounded_button"
-            android:elevation="5dp"
-            android:orientation="vertical">
+            app:cardElevation="5dp"
+            app:cardCornerRadius="20dp"
+            android:layout_margin="15dp">
 
-            <RelativeLayout
-                android:id="@+id/editor_distance_view"
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/EditorItemHeight"
-                android:background="?attr/selectableItemBackground">
+                android:layout_height="match_parent">
+
+                <View
+                    android:id="@+id/editor_distance_view"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/EditorItemHeight"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <ImageView
                     android:id="@+id/editor_image_distance"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
-                    android:src="@drawable/ic_road" />
+                    android:src="@drawable/ic_road"
+                    app:layout_constraintBottom_toBottomOf="@+id/editor_distance_view"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/editor_distance_view"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@id/editor_image_distance"
                     android:text="@string/editor_distance"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/editor_distance_view"
+                    app:layout_constraintStart_toEndOf="@+id/editor_image_distance"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/editor_distance_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="30dp"
+                    android:layout_marginEnd="32dp"
                     android:text="@{model.distance}"
-                    tools:text="@string/all_empty_field"/>
+                    tools:text="@string/all_empty_field"
+                    app:layout_constraintBottom_toBottomOf="@+id/editor_distance_view"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/editor_time_view"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/EditorItemHeight"
-                android:background="?attr/selectableItemBackground">
+                <View
+                    android:id="@+id/editor_time_view"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/EditorItemHeight"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editor_distance_view"/>
 
                 <ImageView
                     android:id="@+id/editor_image_time"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
-                    android:src="@drawable/ic_timer" />
+                    android:src="@drawable/ic_timer"
+                    app:layout_constraintBottom_toBottomOf="@+id/editor_time_view"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/editor_time_view" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@id/editor_image_time"
                     android:text="@string/editor_time"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/editor_time_view"
+                    app:layout_constraintStart_toEndOf="@+id/editor_image_time"
+                    app:layout_constraintTop_toTopOf="@+id/editor_time_view" />
 
                 <TextView
                     android:id="@+id/editor_time_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="30dp"
+                    android:layout_marginEnd="32dp"
                     android:text="@{model.time}"
-                    tools:text="@string/all_empty_field" />
+                    tools:text="@string/all_empty_field"
+                    app:layout_constraintBottom_toBottomOf="@+id/editor_time_view"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/editor_time_view" />
 
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/editor_date_view"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/EditorItemHeight"
-                android:background="?attr/selectableItemBackground">
+                <View
+                    android:id="@+id/editor_date_view"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/EditorItemHeight"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editor_time_view"/>
 
                 <ImageView
                     android:id="@+id/editor_image_date"
@@ -121,70 +133,80 @@
                     android:layout_height="40dp"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginBottom="8dp"
                     android:layout_marginStart="20dp"
-                    android:src="@drawable/ic_date_range" />
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/ic_date_range"
+                    app:layout_constraintBottom_toBottomOf="@+id/editor_date_view"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/editor_date_view" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@id/editor_image_date"
                     android:text="@string/editor_date"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/editor_date_view"
+                    app:layout_constraintStart_toEndOf="@+id/editor_image_date"
+                    app:layout_constraintTop_toTopOf="@+id/editor_date_view" />
 
                 <TextView
                     android:id="@+id/editor_date_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="30dp"
+                    android:layout_marginEnd="32dp"
                     android:text="@{model.date}"
-                    tools:text="@string/all_empty_field" />
+                    tools:text="@string/all_empty_field"
+                    app:layout_constraintBottom_toBottomOf="@+id/editor_date_view"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/editor_date_view"/>
 
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/editor_rating_view"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/EditorItemHeight"
-                android:background="?attr/selectableItemBackground">
+                <View
+                    android:id="@+id/editor_rating_view"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/EditorItemHeight"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editor_date_view"/>
 
                 <ImageView
                     android:id="@+id/editor_image_rating"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     android:src="@drawable/ic_stars"
-                    android:transitionName="fab_editor_transition" />
+                    app:layout_constraintBottom_toBottomOf="@+id/editor_rating_view"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/editor_rating_view" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@id/editor_image_rating"
                     android:text="@string/editor_rating"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/editor_rating_view"
+                    app:layout_constraintStart_toEndOf="@+id/editor_image_rating"
+                    app:layout_constraintTop_toTopOf="@+id/editor_rating_view" />
 
                 <TextView
                     android:id="@+id/editor_rating_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="30dp"
+                    android:layout_marginEnd="32dp"
                     android:text="@{model.rating}"
-                    tools:text="@string/all_empty_field" />
+                    tools:text="@string/all_empty_field"
+                    app:layout_constraintBottom_toBottomOf="@+id/editor_rating_view"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/editor_rating_view" />
 
-            </RelativeLayout>
+            </android.support.constraint.ConstraintLayout>
 
 
-        </LinearLayout>
+        </android.support.v7.widget.CardView>
+
 
     </LinearLayout>
-
 </layout>
