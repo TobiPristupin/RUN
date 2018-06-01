@@ -1,5 +1,6 @@
 package com.tobipristupin.simplerun.ui.login.loginview;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
@@ -164,7 +165,7 @@ public class LoginViewModel extends ViewModel {
         return intentToMainActivityAction;
     }
 
-    public MutableLiveData<Boolean> getShowLoadingAnimation() {
+    public LiveData<Boolean> getShowLoadingAnimation() {
         return showLoadingAnimation;
     }
 
@@ -184,11 +185,11 @@ public class LoginViewModel extends ViewModel {
         return openNewAccountPage;
     }
 
-    public MutableLiveData<Integer> getEmailError() {
+    public LiveData<Integer> getEmailError() {
         return emailError;
     }
 
-    public MutableLiveData<Integer> getPasswordError() {
+    public LiveData<Integer> getPasswordError() {
         return passwordError;
     }
 

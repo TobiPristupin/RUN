@@ -64,7 +64,7 @@
     <string name="all_metric">Metric</string>
     <string name="all_imperial">Imperial</string>
     <string name="editor_added">Successfully Added</string>
-    <string name="editor_fillin">Fill in all the fields</string>
+    <string name="editor_fillin_fields">Fill in all the fields</string>
     <string name="forgot_password_recovery_sent">Recovery email sent</string>
     <string name="forgot_password_recovery_failed">Email not sent. Please check your internet connection or try again</string>
     <string name="forgot_password_toomanyrequests">Too many requests sent. Please try again later</string>

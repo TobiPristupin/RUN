@@ -52,7 +52,7 @@
     <string name="all_metric">Métrico Decimal</string>
     <string name="all_imperial">Imperial</string>
     <string name="editor_added">Añadida con éxito</string>
-    <string name="editor_fillin">Llena todos los campos</string>
+    <string name="editor_fillin_fields">Llena todos los campos</string>
     <string name="forgot_password_recovery_sent">Email de recuperación enviado</string>
     <string name="forgot_password_recovery_failed">Email no enviado. Por favor revisa tu conneción a internet y prueba de nuevo</string>
     <string name="forgot_password_toomanyrequests">Demasiadas peticiones. Por favor prueba de nuevo mas tarde</string>

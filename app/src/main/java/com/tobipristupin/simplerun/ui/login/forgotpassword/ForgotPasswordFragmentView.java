@@ -39,6 +39,7 @@ public class ForgotPasswordFragmentView extends BaseLoginFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_forgot_password, container, false);
+        binding.setLifecycleOwner(this);
 
         loadingIndicator = binding.forgotPasswordLoadingIndicator;
         emailLayout = binding.forgotPasswordEmail;

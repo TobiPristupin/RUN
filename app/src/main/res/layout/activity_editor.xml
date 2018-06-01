@@ -1,176 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/LightGrey"
-    android:orientation="vertical"
-    tools:context=".ui.editor.EditorActivityView">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/editor_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:background="@color/colorPrimary"
-        app:title="@string/editor_title"
-        app:titleTextColor="@android:color/white" />
-
+    <data>
+        <variable
+            name="model"
+            type="com.tobipristupin.simplerun.ui.editor.EditorViewModel"/>
+    </data>
 
     <LinearLayout
-        android:id="@+id/editor_container"
+        android:id="@+id/content_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="15dp"
-        android:alpha="0"
-        android:background="@drawable/mild_rounded_button"
-        android:elevation="5dp"
-        android:orientation="vertical">
+        android:background="@color/LightGrey"
+        android:orientation="vertical"
+        tools:context=".ui.editor.EditorActivityView">
 
-        <RelativeLayout
-            android:id="@+id/editor_distance_view"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/editor_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/EditorItemHeight"
-            android:background="?attr/selectableItemBackground">
+            android:layout_height="?actionBarSize"
+            android:background="@color/colorPrimary"
+            app:title="@string/editor_title"
+            app:titleTextColor="@android:color/white" />
 
-            <ImageView
-                android:id="@+id/editor_image_distance"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:src="@drawable/ic_road" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@id/editor_image_distance"
-                android:text="@string/editor_distance"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/editor_distance_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="30dp"
-                android:text="@string/all_empty_field" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/editor_time_view"
+        <LinearLayout
+            android:id="@+id/editor_container"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/EditorItemHeight"
-            android:background="?attr/selectableItemBackground">
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:alpha="0"
+            tools:alpha="1"
+            android:background="@drawable/mild_rounded_button"
+            android:elevation="5dp"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/editor_image_time"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:src="@drawable/ic_timer" />
+            <RelativeLayout
+                android:id="@+id/editor_distance_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/EditorItemHeight"
+                android:background="?attr/selectableItemBackground">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@id/editor_image_time"
-                android:text="@string/editor_time"
-                android:textSize="16sp" />
+                <ImageView
+                    android:id="@+id/editor_image_distance"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/ic_road" />
 
-            <TextView
-                android:id="@+id/editor_time_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="30dp"
-                android:text="@string/all_empty_field" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@id/editor_image_distance"
+                    android:text="@string/editor_distance"
+                    android:textSize="16sp" />
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/editor_distance_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="30dp"
+                    android:text="@{model.distance}"
+                    tools:text="@string/all_empty_field"/>
 
-        <RelativeLayout
-            android:id="@+id/editor_date_view"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/EditorItemHeight"
-            android:background="?attr/selectableItemBackground">
+            </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/editor_image_date"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:src="@drawable/ic_date_range" />
+            <RelativeLayout
+                android:id="@+id/editor_time_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/EditorItemHeight"
+                android:background="?attr/selectableItemBackground">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@id/editor_image_date"
-                android:text="@string/editor_date"
-                android:textSize="16sp" />
+                <ImageView
+                    android:id="@+id/editor_image_time"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/ic_timer" />
 
-            <TextView
-                android:id="@+id/editor_date_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="30dp"
-                android:text="@string/all_empty_field" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@id/editor_image_time"
+                    android:text="@string/editor_time"
+                    android:textSize="16sp" />
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/editor_time_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="30dp"
+                    android:text="@{model.time}"
+                    tools:text="@string/all_empty_field" />
 
-        <RelativeLayout
-            android:id="@+id/editor_rating_view"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/EditorItemHeight"
-            android:background="?attr/selectableItemBackground">
+            </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/editor_image_rating"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:src="@drawable/ic_stars"
-                android:transitionName="fab_editor_transition" />
+            <RelativeLayout
+                android:id="@+id/editor_date_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/EditorItemHeight"
+                android:background="?attr/selectableItemBackground">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@id/editor_image_rating"
-                android:text="@string/editor_rating"
-                android:textSize="16sp" />
+                <ImageView
+                    android:id="@+id/editor_image_date"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/ic_date_range" />
 
-            <TextView
-                android:id="@+id/editor_rating_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="30dp"
-                android:text="@string/all_empty_field" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@id/editor_image_date"
+                    android:text="@string/editor_date"
+                    android:textSize="16sp" />
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/editor_date_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="30dp"
+                    android:text="@{model.date}"
+                    tools:text="@string/all_empty_field" />
 
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/editor_rating_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/EditorItemHeight"
+                android:background="?attr/selectableItemBackground">
+
+                <ImageView
+                    android:id="@+id/editor_image_rating"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/ic_stars"
+                    android:transitionName="fab_editor_transition" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@id/editor_image_rating"
+                    android:text="@string/editor_rating"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/editor_rating_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="30dp"
+                    android:text="@{model.rating}"
+                    tools:text="@string/all_empty_field" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
 
     </LinearLayout>
 
-
-</LinearLayout>
+</layout>

@@ -1,6 +1,7 @@
 package com.tobipristupin.simplerun.app;
 
 import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Build;
 import android.support.v4.app.Fragment;
@@ -68,5 +69,8 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         return ViewModelProviders.of(fragmentActivity).get(c);
     }
 
+    protected <T extends ViewModel> T obtainViewModel(FragmentActivity fragment, Class<T> c, ViewModelProvider.Factory factory){
+        return ViewModelProviders.of(fragment, factory).get(c);
+    }
 
 }

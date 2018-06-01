@@ -310,7 +310,7 @@ public class HistoryFragmentView extends BaseFragment implements HistoryView {
         Intent intent = new Intent(getContext(), EditorActivityView.class);
 
         if (runToEdit != null){
-            intent.putExtra(EditorActivityView.INTENT_KEY, runToEdit);
+            intent.putExtra(EditorActivityView.RUN_TO_EDIT, runToEdit);
         }
 
         startActivity(intent);
@@ -340,11 +340,11 @@ public class HistoryFragmentView extends BaseFragment implements HistoryView {
         if (activated){
             spinnerLayout.setBackgroundColor(getResources().getColor(R.color.actionMode));
             dateSpinner.setBackgroundColor(getResources().getColor(R.color.actionMode));
-            ((BaseAppCompatActivity) getActivity()).changeStatusBarColor(R.color.colorPrimary);
+            changeStatusBarColor(R.color.colorPrimary);
         } else {
             spinnerLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             dateSpinner.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            ((BaseAppCompatActivity) getActivity()).changeStatusBarColor(R.color.colorPrimary);
+            changeStatusBarColor(android.R.color.transparent);
         }
 
     }

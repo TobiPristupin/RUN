@@ -176,6 +176,11 @@ public class RunUtils {
         return timeText;
     }
 
+    //This really is here just to keep it consistent
+    public static String ratingToString(int rating){
+        return String.valueOf(rating);
+    }
+
     /**
      *
      * @param date in unix timestamp

@@ -45,7 +45,7 @@ public class LoginFragmentView extends BaseLoginFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
-        binding.setModel(viewModel);
+        binding.setLifecycleOwner(this);
 
         emailLayout = binding.loginEmail;
         passwordLayout = binding.loginPassword;

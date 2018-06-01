@@ -25,6 +25,10 @@ public abstract class BaseFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(resId);
     }
 
+    protected void changeStatusBarColor(int resId){
+        getActivity().getWindow().setStatusBarColor(getResources().getColor(resId));
+    }
+
     protected <T extends ViewModel> T obtainViewModel(Fragment fragment, Class<T> c){
         return ViewModelProviders.of(fragment).get(c);
     }

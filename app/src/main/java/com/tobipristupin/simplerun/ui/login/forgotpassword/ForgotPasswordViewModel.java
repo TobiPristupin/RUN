@@ -1,5 +1,6 @@
 package com.tobipristupin.simplerun.ui.login.forgotpassword;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
@@ -87,11 +88,11 @@ public class ForgotPasswordViewModel extends ViewModel {
         showErrorToastAction.setValue(resId);
     }
 
-    public MutableLiveData<Integer> getEmailError() {
+    public LiveData<Integer> getEmailError() {
         return emailError;
     }
 
-    public MutableLiveData<Boolean> getLoading() {
+    public LiveData<Boolean> getLoading() {
         return loading;
     }
 
