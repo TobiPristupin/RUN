@@ -3,7 +3,15 @@ Simple Running is an Android application that let's users track their running
 with a high level of customization and visualize their trends and evolution in varied ways.
 
 Anyone is welcome to contribute. Especially if you could fix some bugs for me.
- 
+
+
+<a href='https://play.google.com/store/apps/details?id=com.tobipristupin.simplerun&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+
+
+
+
+## License
+```
 MIT License
 
 Copyright (c) 2018 Tobias Pristupin
@@ -27,3 +35,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 SIMPLE RUNNING IS NOT LIABLE FOR ANY DAMAGE OR LOSS OF DATA
+```
